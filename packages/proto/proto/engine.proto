@@ -100,7 +100,7 @@ message GenerationRequest {
 
   // --- Basket selection (no degree program active) ---
   repeated string basic_pinned_courses = 2;
-  uint32 basic_electives_count = 3;
+  uint32 additional_electives_count = 3;
   repeated string basic_excluded_categories = 4;
 
   // --- Shared selection / context ---

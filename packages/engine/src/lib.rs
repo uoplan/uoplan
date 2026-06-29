@@ -407,7 +407,7 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
     // This removes the separate basic generation branch — there is one code path.
     let level_buckets = level_buckets_from(&req.level_buckets);
     let language_buckets = language_buckets_from(&req.language_buckets);
-    let basket_mode = !req.basic_pinned_courses.is_empty() || req.basic_electives_count > 0;
+    let basket_mode = !req.basic_pinned_courses.is_empty() || req.additional_electives_count > 0;
 
     let mut forced_courses = req.forced_courses.clone();
     let mut remaining_requirements: Vec<pools::RemainingRequirement> = req
@@ -422,7 +422,7 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
         })
         .collect();
     let mut prereq_eligible_courses = req.prereq_eligible_courses.clone();
-    let mut courses_this_semester = req.courses_this_semester as usize;
+    let courses_this_semester = req.courses_this_semester as usize;
 
     if basket_mode {
         for code in &req.basic_pinned_courses {
@@ -430,9 +430,12 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
                 forced_courses.push(code.clone());
             }
         }
-        courses_this_semester = req.basic_pinned_courses.len() + req.basic_electives_count as usize;
-
-        if req.basic_electives_count > 0 {
+        // `courses_this_semester` (N) is the cart cap + requirement-overflow
+        // target; the M additional electives below are reserved on a separate
+        // budget and are NOT folded in. N is always set explicitly by callers
+        // (default 5) and is honoured verbatim — N < cart caps the cart in
+        // `advanced.rs`, and N == 0 schedules no cart courses.
+        if req.additional_electives_count > 0 {
             let pool = electives::expand_elective_pool(&electives::ElectivePoolParams {
                 data,
                 constraints: &constraints,
@@ -453,11 +456,11 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
                 }
             }
             remaining_requirements.push(pools::RemainingRequirement {
-                requirement_id: "__basket_electives__".to_string(),
+                requirement_id: pools::ADDITIONAL_ELECTIVES_ID.to_string(),
                 req_type: "free_elective".to_string(),
                 title: Some("Electives".to_string()),
                 candidate_courses: pool,
-                credits_needed: req.basic_electives_count as f64
+                credits_needed: req.additional_electives_count as f64
                     * pools::DEFAULT_CREDITS_PER_COURSE,
             });
         }
@@ -549,14 +552,14 @@ mod tests {
     #[test]
     fn request_response_roundtrip() {
         let req = GenerationRequest {
-            basic_electives_count: 3,
+            additional_electives_count: 3,
             completed_courses: vec!["ITI 1120".to_string()],
             current_seed: 7,
             ..Default::default()
         };
         let bytes = req.encode_to_vec();
         let decoded = GenerationRequest::decode(bytes.as_slice()).unwrap();
-        assert_eq!(decoded.basic_electives_count, 3);
+        assert_eq!(decoded.additional_electives_count, 3);
         assert_eq!(decoded.completed_courses, vec!["ITI 1120".to_string()]);
         assert_eq!(decoded.current_seed, 7);
     }
@@ -643,7 +646,8 @@ mod tests {
 
         let req = GenerationRequest {
             basic_pinned_courses: vec![pinned_code.clone()],
-            basic_electives_count: 0,
+            additional_electives_count: 0,
+            courses_this_semester: 1,
             include_closed_components: true,
             current_seed: 12345,
             first_seed: 12345,

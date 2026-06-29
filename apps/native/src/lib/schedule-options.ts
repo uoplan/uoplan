@@ -35,11 +35,17 @@ export interface ScheduleOptions {
   /** Course-level buckets allowed for elective requirement pools. */
   electiveLevelBuckets: number[];
   /**
-   * Additional elective courses to schedule beyond the pinned basket (web's
-   * "how many courses this semester" minus the basket). 0 keeps the native
-   * default of scheduling the basket only.
+   * Cap on how many of the user's cart (basket) courses are scheduled. When this
+   * exceeds the cart size the remainder is filled from the student's program
+   * requirements (advanced mode). Cart-only cap; settable to 0.
    */
-  basicElectivesCount: number;
+  coursesThisSemester: number;
+  /**
+   * Free elective courses generated ON TOP of {@link coursesThisSemester} — not
+   * deducted from it. Applies in both basic and advanced modes. 0 schedules no
+   * additional electives.
+   */
+  additionalElectivesCount: number;
   /** Subject categories (e.g. "CSI", "MAT") excluded from elective picking. */
   basicExcludedCategories: string[];
   /** Specific course codes the generator must never schedule. */
@@ -64,6 +70,8 @@ export const DEFAULT_GENERATION_MAX_END_MINUTES = 22 * 60; // 22:00
 export const DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS = [1000, 2000];
 export const DEFAULT_BASIC_LEVEL_BUCKETS: CourseLevelBucket[] = ["undergrad"];
 export const DEFAULT_BASIC_LANGUAGE_BUCKETS: CourseLanguageBucket[] = ["en", "other"];
+/** Default cart-cap "Courses this semester" (web parity — packages/store/src/generationDefaults.ts). */
+export const DEFAULT_COURSES_THIS_SEMESTER = 5;
 /** A day is "avoided" when a blocked window covers this full span. */
 const AVOID_DAY_START_MINUTES = 8 * 60 + 30; // 8:30
 const AVOID_DAY_END_MINUTES = 22 * 60; // 22:00
@@ -75,7 +83,8 @@ export const DEFAULT_SCHEDULE_OPTIONS: ScheduleOptions = {
   blockedTimes: [],
   optimizationPriorities: defaultOptimizationPriorities(),
   electiveLevelBuckets: [...DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS],
-  basicElectivesCount: 0,
+  coursesThisSemester: DEFAULT_COURSES_THIS_SEMESTER,
+  additionalElectivesCount: 0,
   basicExcludedCategories: [],
   blacklistedCourses: [],
   levelBuckets: [...DEFAULT_BASIC_LEVEL_BUCKETS],
@@ -145,9 +154,15 @@ export function parseScheduleOptions(text: string): ScheduleOptions {
     blockedTimes,
     optimizationPriorities: normalizeOptimizationPriorities(o.optimizationPriorities),
     electiveLevelBuckets: parseElectiveLevelBuckets(o.electiveLevelBuckets),
-    basicElectivesCount: Math.max(
+    coursesThisSemester: Math.max(
       0,
-      Math.round(num(o.basicElectivesCount, DEFAULT_SCHEDULE_OPTIONS.basicElectivesCount)),
+      Math.round(num(o.coursesThisSemester, DEFAULT_SCHEDULE_OPTIONS.coursesThisSemester)),
+    ),
+    additionalElectivesCount: Math.max(
+      0,
+      Math.round(
+        num(o.additionalElectivesCount, DEFAULT_SCHEDULE_OPTIONS.additionalElectivesCount),
+      ),
     ),
     basicExcludedCategories: strArray(o.basicExcludedCategories),
     blacklistedCourses: strArray(o.blacklistedCourses),

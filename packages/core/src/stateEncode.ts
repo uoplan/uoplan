@@ -91,7 +91,7 @@ const OPT_SENTINEL_BASE = 0xfffffff0; // Safely inside uint32 space
 export interface EncodeInput {
   wizardMode: "basic" | "advanced" | null;
   basketCourses: string[];
-  basicElectivesCount: number;
+  additionalElectivesCount: number;
   basicExcludedCategories: string[];
 
   selectedTermId: string | null;
@@ -132,7 +132,7 @@ export interface EncodeInput {
 export interface DecodedState {
   wizardMode: "basic" | "advanced" | null;
   basketCourses: string[];
-  basicElectivesCount: number;
+  additionalElectivesCount: number;
   basicExcludedCategories: string[];
 
   selectedTermId: string | null;
@@ -257,7 +257,7 @@ export function encodeState(
     basicPinnedCourses: input.basketCourses
       .map(encodeCourseCode)
       .filter((i): i is number => i !== undefined),
-    basicElectivesCount: input.basicElectivesCount,
+    additionalElectivesCount: input.additionalElectivesCount,
     basicExcludedCategoryIndices: input.basicExcludedCategories
       .map(encodeDiscipline)
       .filter((i): i is number => i !== undefined),
@@ -525,7 +525,7 @@ export function decodeState(
           ? "advanced"
           : null,
     basketCourses,
-    basicElectivesCount: state.basicElectivesCount,
+    additionalElectivesCount: state.additionalElectivesCount,
     basicExcludedCategories: state.basicExcludedCategoryIndices
       .map((i) => (i < indices.disciplines.length ? indices.disciplines[i] : null))
       .filter((c): c is string => c !== null),

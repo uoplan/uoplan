@@ -487,7 +487,7 @@ describe("generateScheduleVariants", () => {
           avoidedDays: ["Fr"],
           blockedTimes: [{ day: "Mo", startMinutes: 11 * 60, endMinutes: 12 * 60 }],
           electiveLevelBuckets: [1000, 2000, 5000],
-          basicElectivesCount: 2,
+          additionalElectivesCount: 2,
           basicExcludedCategories: ["PHI"],
           blacklistedCourses: ["MAT 1320"],
           levelBuckets: ["undergrad"],
@@ -534,7 +534,7 @@ describe("generateScheduleVariants", () => {
     expect(req.includeClosedComponents).toBe(true);
     expect(req.virtualSectionsOnly).toBe(true);
     expect(req.electiveLevelBuckets).toEqual([1000, 2000, 5000]);
-    expect(req.basicElectivesCount).toBe(2);
+    expect(req.additionalElectivesCount).toBe(2);
     expect(req.basicExcludedCategories).toEqual(["PHI"]);
     expect(req.blacklistedCourses).toEqual(["MAT 1320"]);
     expect(req.levelBuckets).toEqual(["undergrad"]);

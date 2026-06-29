@@ -49,13 +49,13 @@ describe("generateScheduleFromDecodedState — mode selection", () => {
       engine,
       decoded({
         wizardMode: "basic",
-        basicElectivesCount: 3,
+        additionalElectivesCount: 3,
         basketCourses: [normalizeCourseCode("CSI 2110")],
       }),
       fakeCache([]),
       constraints,
     );
-    expect(getRequest()!.basicElectivesCount).toBe(3);
+    expect(getRequest()!.additionalElectivesCount).toBe(3);
     expect(getRequest()!.basicPinnedCourses).toEqual(["CSI 2110"]);
   });
 });
@@ -183,7 +183,7 @@ describe("generateScheduleFromDecodedState — advanced mode with a real program
       constraints,
     );
     expect(getRequest()!.remainingRequirements.length).toBeGreaterThan(0);
-    expect(getRequest()!.basicElectivesCount).toBe(0);
+    expect(getRequest()!.additionalElectivesCount).toBe(0);
     expect(result).not.toBeNull();
     expect(result!.schedule.enrollments.map((e) => e.courseCode)).toEqual(["CSI 1000"]);
     expect(result!.colorMap).toEqual({ "CSI 1000": 0 });

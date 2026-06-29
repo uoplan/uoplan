@@ -1888,6 +1888,9 @@ msgstr "Voir les détails"
 msgid "generationOptions.count.label"
 msgstr "Cours optionnels ce trimestre (en plus)"
 
+msgid "generationOptions.coursesThisSemester.label"
+msgstr "Cours ce trimestre"
+
 msgid "generationOptions.courses.label"
 msgstr "Cours souhaités"
 

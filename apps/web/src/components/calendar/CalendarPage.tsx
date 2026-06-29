@@ -29,7 +29,7 @@ import {
 } from "@tabler/icons-react";
 import {
   useActiveProgram,
-  useBasicElectives,
+  useAdditionalElectives,
   useCalendarView,
   useDataCache,
   useGetShareUrl,
@@ -174,7 +174,7 @@ export function CalendarPage() {
   const cache = useDataCache();
   const professorRatings = useProfessorRatings();
   const basketCourses = useBasketCourses();
-  const { basicElectivesCount } = useBasicElectives();
+  const { additionalElectivesCount } = useAdditionalElectives();
   const { selectedTermId } = useTermSelection();
   const program = useActiveProgram();
 
@@ -217,7 +217,7 @@ export function CalendarPage() {
 
   const canGoPrevious = canGoToPreviousSeed(currentSeed, lowestVisitedSeed);
   const canUseSeedNavigation =
-    hasProgram || canGenerateBasicSchedule(basketCourses.length, basicElectivesCount);
+    hasProgram || canGenerateBasicSchedule(basketCourses.length, additionalElectivesCount);
 
   const [controlsOpen, setControlsOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);

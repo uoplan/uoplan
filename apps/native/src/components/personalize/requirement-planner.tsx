@@ -9,7 +9,6 @@ import { AppIcon } from "@/components/app-icon";
 import { Spacing, Surface } from "@/constants/theme";
 import {
   getRequirementPriorityForIds,
-  setCoursesThisSemester,
   setRequirementAssignment,
   setRequirementPriorityForIds,
   type PersonalizeRequirementSelections,
@@ -164,51 +163,6 @@ function PriorityPicker({
   );
 }
 
-function CoursesThisSemesterControl({
-  selections,
-  onChange,
-}: {
-  selections: PersonalizeRequirementSelections;
-  onChange: (selections: PersonalizeRequirementSelections) => void;
-}) {
-  const count = selections.coursesThisSemester;
-  return (
-    <View style={styles.loadControl}>
-      <View style={styles.loadCopy}>
-        <Text size="sm" weight="bold">
-          Courses to schedule
-        </Text>
-        <Text size="xs" dimmed>
-          Set the course load for the schedule generator.
-        </Text>
-      </View>
-      <View style={styles.stepper}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Schedule fewer courses"
-          onPress={() => onChange(setCoursesThisSemester(selections, count - 1))}
-          hitSlop={5}
-          style={styles.stepperButton}
-        >
-          <AppIcon name="minus" size={14} color={Surface.label} weight="semibold" />
-        </Pressable>
-        <Text size="md" weight="bold">
-          {count}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Schedule more courses"
-          onPress={() => onChange(setCoursesThisSemester(selections, count + 1))}
-          hitSlop={5}
-          style={styles.stepperButton}
-        >
-          <AppIcon name="plus" size={14} color={Surface.label} weight="semibold" />
-        </Pressable>
-      </View>
-    </View>
-  );
-}
-
 function RequirementCard({
   requirement,
   candidates,
@@ -312,8 +266,6 @@ export function RequirementPlanner({
 
   return (
     <View style={styles.container}>
-      <CoursesThisSemesterControl selections={selections} onChange={onChange} />
-
       {actionable.length > 0 ? (
         <View style={styles.section}>
           <Text size="xs" weight="bold" color={Surface.accent}>
@@ -351,36 +303,6 @@ export function RequirementPlanner({
 const styles = StyleSheet.create({
   container: {
     gap: Spacing.three,
-  },
-  loadControl: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.three,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-    borderRadius: 20,
-    backgroundColor: Surface.card,
-    padding: Spacing.three,
-  },
-  loadCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: Spacing.half,
-  },
-  stepper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.two,
-  },
-  stepperButton: {
-    width: 38,
-    height: 38,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-    borderRadius: 999,
-    backgroundColor: Surface.subtle,
   },
   section: {
     gap: Spacing.two,

@@ -93,21 +93,21 @@ describe("lockCourseForAllSchedulesFromSwap / unlockCourseForAllSchedulesFromSwa
   it("pins and unpins a course in basic mode", () => {
     testStore.setState({ calendarMode: "basic" });
     testStore.setState({
-      basicElectivesCount: 3,
+      additionalElectivesCount: 3,
       currentSchedule: makeSchedule("CSI 2132"),
     });
 
     testStore.getState().lockCourseForAllSchedulesFromSwap(0);
     expect(testStore.getState().basketCourses).toEqual(["CSI 2132"]);
-    expect(testStore.getState().basicElectivesCount).toBe(2);
+    expect(testStore.getState().additionalElectivesCount).toBe(2);
 
     testStore.getState().lockCourseForAllSchedulesFromSwap(0);
     expect(testStore.getState().basketCourses).toEqual(["CSI 2132"]);
-    expect(testStore.getState().basicElectivesCount).toBe(2);
+    expect(testStore.getState().additionalElectivesCount).toBe(2);
 
     testStore.getState().unlockCourseForAllSchedulesFromSwap(0);
     expect(testStore.getState().basketCourses).toEqual([]);
-    expect(testStore.getState().basicElectivesCount).toBe(3);
+    expect(testStore.getState().additionalElectivesCount).toBe(3);
   });
 
   it("pins and unpins across constrained requirements in advanced mode", () => {

@@ -8,6 +8,10 @@ export function makeGenerationOptionsProps(
   overrides: Partial<GenerationOptionsFieldsProps> = {},
 ): GenerationOptionsFieldsProps {
   return {
+    coursesThisSemesterValue: 5,
+    onCoursesThisSemesterChange: vi.fn(),
+    coursesThisSemesterMin: 0,
+    coursesThisSemesterMax: 10,
     countValue: 5,
     onCountChange: vi.fn(),
     countMin: 1,

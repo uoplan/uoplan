@@ -77,7 +77,7 @@ fn ci_runner() -> bool {
 /// repro (term 2271, 23 electives, default options, no transcript).
 fn default_basic_request(electives: u32) -> GenerationRequest {
     GenerationRequest {
-        basic_electives_count: electives,
+        additional_electives_count: electives,
         include_closed_components: false,
         level_buckets: vec!["undergrad".to_string()],
         language_buckets: vec!["en".to_string(), "other".to_string()],

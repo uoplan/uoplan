@@ -58,8 +58,8 @@ export function useCoursesThisSemester() {
 }
 
 /** Basic-mode elective-slot count plus its setter. */
-export function useBasicElectives() {
-  const basicElectivesCount = useAppStore((s) => s.basicElectivesCount);
-  const setBasicElectivesCount = useAppStore((s) => s.setBasicElectivesCount);
-  return { basicElectivesCount, setBasicElectivesCount };
+export function useAdditionalElectives() {
+  const additionalElectivesCount = useAppStore((s) => s.additionalElectivesCount);
+  const setAdditionalElectivesCount = useAppStore((s) => s.setAdditionalElectivesCount);
+  return { additionalElectivesCount, setAdditionalElectivesCount };
 }

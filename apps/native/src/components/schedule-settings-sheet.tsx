@@ -226,6 +226,8 @@ export function ScheduleSettingsSheet({
 
   const additionalElectivesMin = 0;
   const additionalElectivesMax = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - basketCount);
+  const coursesThisSemesterMin = 0;
+  const coursesThisSemesterMax = SCHEDULE_COURSE_COUNT_MAX;
 
   // First-year credit cap only applies when there are 1000-level credits to limit
   // (same condition the web uses); it lives in the Advanced card.
@@ -378,13 +380,22 @@ export function ScheduleSettingsSheet({
             {/* Course count — always visible. */}
             <Section title="Courses this term">
               <Stepper
+                label="Courses this semester"
+                value={options.coursesThisSemester}
+                min={coursesThisSemesterMin}
+                max={coursesThisSemesterMax}
+                step={1}
+                format={(v) => `${v}`}
+                onChange={(v) => set("coursesThisSemester", v)}
+              />
+              <Stepper
                 label="Electives this semester (additional)"
-                value={options.basicElectivesCount}
+                value={options.additionalElectivesCount}
                 min={additionalElectivesMin}
                 max={additionalElectivesMax}
                 step={1}
                 format={(v) => `${v}`}
-                onChange={(v) => set("basicElectivesCount", v)}
+                onChange={(v) => set("additionalElectivesCount", v)}
               />
               {totalFirstYearCredits > FIRST_YEAR_CREDIT_CAP ? (
                 <View style={styles.warning}>

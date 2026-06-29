@@ -17,8 +17,9 @@ use crate::pools::{
     build_pool_caps, build_requirement_pools, candidate_pool_weight, canonical_group_token,
     compute_courses_per_pool, enumerate_single_redistributions, group_token_prefix,
     is_broad_elective_pool_type, is_elective_requirement_type, is_group_token,
-    is_within_elective_level_cap, virtual_schedule_filter_applies, RemainingRequirement,
-    RequirementPool,
+    is_within_elective_level_cap, pool_course_cap, virtual_schedule_filter_applies,
+    RemainingRequirement, RequirementPool, ADDITIONAL_ELECTIVES_ID, CART_POOL_ID,
+    DEFAULT_CREDITS_PER_COURSE,
 };
 use crate::prereq::prerequisites_contain_non_course;
 use crate::rng::{scramble_seed, shuffle_in_place, weighted_random_pick_index, Rng};
@@ -357,11 +358,25 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
     // Explicit non-honours picks claim budget before any implicit honours thesis.
     let explicit_honours_count = honours_selected.len();
 
+    // Forced (cart) courses are routed by the cart-cap path below, never by the
+    // explicit-union pin path. They may ALSO appear in `constrained_per_requirement`
+    // purely so placed cart courses keep their requirement attribution
+    // (`requirement_id_for_pinned`); excluding them here keeps that attribution
+    // hint from turning into an uncapped explicit pin (which would defeat the cap).
+    let forced_norm_set: HashSet<String> = params
+        .forced_courses
+        .iter()
+        .map(|c| normalize_course_code(c))
+        .collect();
+
     // explicit union (non-honours constrained, schedulable, eligible)
     let mut explicit_union: Vec<String> = Vec::new();
     let mut explicit_set: HashSet<String> = HashSet::new();
     for code in &unique_constrained {
         if data.is_honours_project(code) {
+            continue;
+        }
+        if forced_norm_set.contains(&normalize_course_code(code)) {
             continue;
         }
         if eff_sched(code, false).is_none()
@@ -439,6 +454,18 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
     let pin_all_explicit = !explicit_union.is_empty() && explicit_union.len() < effective_target;
     let explicit_only = explicit_union.len() >= effective_target && effective_target > 0;
 
+    // Cart cap (`courses_this_semester` = N): when the user's cart (forced
+    // courses) exceeds the budget left after honours/explicit pins, the cart is
+    // routed through a capped highest-priority `__cart__` pool below instead of
+    // being hard-pinned, so the engine selects a conflict-feasible N-subset.
+    // When N >= cart this is false and the forced courses pin exactly as before.
+    let forced_capacity = effective_target.saturating_sub(if pin_all_explicit {
+        explicit_union.len()
+    } else {
+        0
+    });
+    let cart_capped = !explicit_only && forced_pinned.len() > forced_capacity;
+
     // Mark forced courses as virtual-filter exempt now that the implicit pass has run.
     for code in &forced_pinned {
         let norm = normalize_course_code(code);
@@ -456,7 +483,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         }
     }
     for code in &forced_pinned {
-        if !pinned.contains(code) {
+        if !cart_capped && !pinned.contains(code) {
             pinned.push(code.clone());
         }
     }
@@ -487,6 +514,17 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         .filter(|c| !data.is_honours_project(c))
         .count();
     let remaining_needed = effective_target.saturating_sub(non_honours_pinned_count);
+
+    // The M "additional electives" (synthesized `__additional_electives__` pool)
+    // are reserved on a budget separate from `remaining_needed` so the
+    // structured requirement pools can never starve them. Detect the request
+    // here so the selection pass runs even for an M-only request (N exhausted by
+    // pins → remaining_needed == 0).
+    let additional_reserved = effective_remaining
+        .iter()
+        .find(|r| r.requirement_id == ADDITIONAL_ELECTIVES_ID)
+        .map(|r| (r.credits_needed / DEFAULT_CREDITS_PER_COURSE).ceil() as usize)
+        .unwrap_or(0);
 
     // Seed-independent selection context. Building `sel_candidates` (the eligibility
     // scan over every elective candidate) is ~99% of a generation's cost, and it
@@ -551,7 +589,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
         )
     };
 
-    if remaining_needed > 0 {
+    if remaining_needed > 0 || additional_reserved > 0 {
         // Build pools with pinned/selected credits subtracted.
         let all_pools = build_requirement_pools(&effective_remaining);
         let mut pools: Vec<RequirementPool> = all_pools
@@ -685,13 +723,65 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             .collect();
         pools.retain(|p| candidates_by_requirement.contains_key(&p.requirement_id));
 
-        let courses_per_pool = compute_courses_per_pool(&pools, remaining_needed);
-        let pool_caps = build_pool_caps(&pools);
+        // Cart cap: inject the forced (cart) courses as a synthetic highest-priority
+        // `__cart__` pool. They already passed `has_valid_section_combos` when
+        // `forced_pinned` was built, so they bypass the candidate eligibility scan
+        // above (matching forced-course semantics: the user's explicit cart picks
+        // are always allowed). The pick pass then selects a conflict-feasible
+        // `forced_capacity`-subset.
+        if cart_capped && !forced_pinned.is_empty() {
+            pools.push(RequirementPool {
+                requirement_id: CART_POOL_ID.to_string(),
+                req_type: "course".to_string(),
+                label: "Cart".to_string(),
+                candidate_courses: forced_pinned.clone(),
+                credits_needed: forced_capacity as f64 * DEFAULT_CREDITS_PER_COURSE,
+                min_courses: 0,
+            });
+            candidates_by_requirement.insert(CART_POOL_ID.to_string(), forced_pinned.clone());
+        }
+
+        // Reserve the cart (N-capped) and additional-electives (M) budgets on pots
+        // separate from the structured-requirement allocation. The cart consumes
+        // part of `remaining_needed` (it is highest priority, so the rest of the
+        // N budget is what's left for program pools); the M electives are ON TOP.
+        // Each cap is clamped to its schedulable candidate count so the pick pass
+        // can always satisfy the quota.
+        let cap_for = |id: &str| -> usize {
+            pools
+                .iter()
+                .find(|p| p.requirement_id == id)
+                .map(pool_course_cap)
+                .unwrap_or(0)
+                .min(candidates_by_requirement.get(id).map_or(0, Vec::len))
+        };
+        let cart_cap = cap_for(CART_POOL_ID);
+        let additional_cap = cap_for(ADDITIONAL_ELECTIVES_ID);
+        let budgeted_pools: Vec<RequirementPool> = pools
+            .iter()
+            .filter(|p| {
+                p.requirement_id != CART_POOL_ID && p.requirement_id != ADDITIONAL_ELECTIVES_ID
+            })
+            .cloned()
+            .collect();
+        let others_budget = remaining_needed.saturating_sub(cart_cap);
+        let mut courses_per_pool = compute_courses_per_pool(&budgeted_pools, others_budget);
+        if cart_cap > 0 {
+            courses_per_pool.insert(CART_POOL_ID.to_string(), cart_cap);
+        }
+        if additional_cap > 0 {
+            courses_per_pool.insert(ADDITIONAL_ELECTIVES_ID.to_string(), additional_cap);
+        }
+        let pool_caps = build_pool_caps(&budgeted_pools);
         let redistribution_alts =
-            enumerate_single_redistributions(&courses_per_pool, &pools, &pool_caps);
+            enumerate_single_redistributions(&courses_per_pool, &budgeted_pools, &pool_caps);
 
         let mut high_level_pool_ids: HashSet<String> = HashSet::new();
         for pool in &pools {
+            if pool.requirement_id == CART_POOL_ID || pool.requirement_id == ADDITIONAL_ELECTIVES_ID
+            {
+                continue;
+            }
             if is_broad_elective_pool_type(&pool.req_type) {
                 continue;
             }
@@ -2113,5 +2203,224 @@ mod tests {
         assert_eq!(schedule.len(), 2);
         assert!(codes.contains("ADM 1340"));
         assert!(codes.contains("HON 4900"));
+    }
+
+    /// Build the `__additional_electives__` pool exactly as `lib.rs` synthesizes
+    /// it: a `free_elective` requirement carrying `m * 3` credits (so its course
+    /// cap is `m`).
+    fn additional_electives(m: usize, candidates: Vec<&str>) -> RemainingRequirement {
+        RemainingRequirement {
+            requirement_id: ADDITIONAL_ELECTIVES_ID.to_string(),
+            req_type: "free_elective".to_string(),
+            title: Some("Electives".to_string()),
+            candidate_courses: candidates.into_iter().map(str::to_string).collect(),
+            credits_needed: m as f64 * DEFAULT_CREDITS_PER_COURSE,
+        }
+    }
+
+    #[test]
+    fn additional_electives_are_reserved_on_top_of_a_full_structured_budget() {
+        // N = 1 fills exactly one structured requirement (CSI 1100); the two
+        // additional electives must still be scheduled on their own budget rather
+        // than being starved by the structured-first pool fill.
+        let data = scheduled_data(&[
+            ("CSI 1100", Some((9 * 60, 10 * 60, false))),
+            ("MAT 1100", Some((10 * 60, 11 * 60, false))),
+            ("PHY 1100", Some((11 * 60, 12 * 60, false))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 1;
+        params.prereq_eligible_courses = vec![
+            "CSI 1100".to_string(),
+            "MAT 1100".to_string(),
+            "PHY 1100".to_string(),
+        ];
+        params.remaining_requirements = vec![
+            remaining("core", "course", vec!["CSI 1100"]),
+            additional_electives(2, vec!["MAT 1100", "PHY 1100"]),
+        ];
+
+        let result = generate_advanced(params);
+
+        let schedule = result
+            .schedule
+            .expect("structured course + reserved electives should timetable");
+        let codes: HashSet<&str> = schedule.iter().map(|e| e.course_code.as_str()).collect();
+        assert_eq!(schedule.len(), 3, "1 structured + 2 reserved electives");
+        assert!(codes.contains("CSI 1100"));
+        assert!(codes.contains("MAT 1100"));
+        assert!(codes.contains("PHY 1100"));
+    }
+
+    #[test]
+    fn additional_electives_run_even_when_target_is_zero() {
+        // N = 0 (no structured budget) but M = 2: the selection pass must still
+        // run and place the two electives.
+        let data = scheduled_data(&[
+            ("MAT 1100", Some((10 * 60, 11 * 60, false))),
+            ("PHY 1100", Some((11 * 60, 12 * 60, false))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 0;
+        params.prereq_eligible_courses = vec!["MAT 1100".to_string(), "PHY 1100".to_string()];
+        params.remaining_requirements = vec![additional_electives(2, vec!["MAT 1100", "PHY 1100"])];
+
+        let result = generate_advanced(params);
+
+        let schedule = result
+            .schedule
+            .expect("electives-only request should timetable");
+        assert_eq!(schedule.len(), 2);
+    }
+
+    #[test]
+    fn additional_electives_are_capped_at_available_candidates() {
+        // M = 3 requested but only two schedulable candidates exist: the pool
+        // must be clamped to two so the pick pass never fails on an impossible
+        // quota.
+        let data = scheduled_data(&[
+            ("MAT 1100", Some((10 * 60, 11 * 60, false))),
+            ("PHY 1100", Some((11 * 60, 12 * 60, false))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 0;
+        params.prereq_eligible_courses = vec!["MAT 1100".to_string(), "PHY 1100".to_string()];
+        params.remaining_requirements = vec![additional_electives(3, vec!["MAT 1100", "PHY 1100"])];
+
+        let result = generate_advanced(params);
+
+        let schedule = result
+            .schedule
+            .expect("over-requested electives should clamp, not fail");
+        assert_eq!(schedule.len(), 2);
+    }
+
+    #[test]
+    fn cart_is_capped_when_it_exceeds_courses_this_semester() {
+        // Cart of 4 courses, N = 2: only two of the cart courses should be
+        // scheduled (a conflict-free subset), never all four.
+        let data = scheduled_data(&[
+            ("CSI 1100", Some((9 * 60, 10 * 60, false))),
+            ("MAT 1100", Some((10 * 60, 11 * 60, false))),
+            ("PHY 1100", Some((11 * 60, 12 * 60, false))),
+            ("CHM 1100", Some((12 * 60, 13 * 60, false))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 2;
+        params.forced_courses = vec![
+            "CSI 1100".to_string(),
+            "MAT 1100".to_string(),
+            "PHY 1100".to_string(),
+            "CHM 1100".to_string(),
+        ];
+
+        let result = generate_advanced(params);
+
+        let schedule = result
+            .schedule
+            .expect("a 2-subset of the cart should timetable");
+        assert_eq!(schedule.len(), 2, "cart capped at N = 2");
+        // Every scheduled course must come from the cart.
+        let cart: HashSet<&str> = ["CSI 1100", "MAT 1100", "PHY 1100", "CHM 1100"]
+            .into_iter()
+            .collect();
+        for entry in &schedule {
+            assert!(cart.contains(entry.course_code.as_str()));
+        }
+    }
+
+    #[test]
+    fn cart_under_cap_pins_all_and_fills_requirements() {
+        // Cart of 1, N = 2, with a program requirement available: the cart course
+        // pins and the remaining slot fills from the requirement pool (cart is NOT
+        // routed through the capped pool when N >= cart).
+        let data = scheduled_data(&[
+            ("CSI 1100", Some((9 * 60, 10 * 60, false))),
+            ("MAT 1100", Some((10 * 60, 11 * 60, false))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 2;
+        params.forced_courses = vec!["CSI 1100".to_string()];
+        params.prereq_eligible_courses = vec!["MAT 1100".to_string()];
+        params.remaining_requirements = vec![remaining("core", "course", vec!["MAT 1100"])];
+
+        let result = generate_advanced(params);
+
+        assert_eq!(
+            result.pinned,
+            vec!["CSI 1100"],
+            "cart course pins when under cap"
+        );
+        let schedule = result
+            .schedule
+            .expect("cart + requirement fill should timetable");
+        let codes: HashSet<&str> = schedule.iter().map(|e| e.course_code.as_str()).collect();
+        assert_eq!(schedule.len(), 2);
+        assert!(codes.contains("CSI 1100"));
+        assert!(codes.contains("MAT 1100"));
+    }
+
+    #[test]
+    fn cart_cap_with_zero_target_schedules_nothing() {
+        // N = 0 with a non-empty cart: nothing from the cart is scheduled.
+        let data = scheduled_data(&[
+            ("CSI 1100", Some((9 * 60, 10 * 60, false))),
+            ("MAT 1100", Some((10 * 60, 11 * 60, false))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 0;
+        params.forced_courses = vec!["CSI 1100".to_string(), "MAT 1100".to_string()];
+
+        let result = generate_advanced(params);
+
+        assert!(result.pinned.is_empty(), "no cart course pins at N = 0");
+        let empty = result.schedule.is_none_or(|s| s.is_empty());
+        assert!(empty, "N = 0 schedules nothing from the cart");
+    }
+
+    #[test]
+    fn cart_course_in_constrained_is_attributed_but_still_capped() {
+        // A cart course routed through `forced_courses` may ALSO be listed in
+        // `constrained_per_requirement` as an attribution hint. When under cap it
+        // pins and keeps its requirement attribution; it must never become an
+        // uncapped explicit pin.
+        let data = scheduled_data(&[("CSI 1100", Some((9 * 60, 10 * 60, false)))]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+        params.courses_this_semester = 3;
+        params.forced_courses = vec!["CSI 1100".to_string()];
+        params.constrained_per_requirement_raw =
+            BTreeMap::from([("core".to_string(), vec!["CSI 1100".to_string()])]);
+
+        let result = generate_advanced(params);
+
+        assert_eq!(result.pinned, vec!["CSI 1100"]);
+        assert_eq!(
+            result.chosen_to_requirement.get("CSI 1100"),
+            Some(&"core".to_string()),
+            "pinned cart course keeps its requirement attribution",
+        );
+        let schedule = result.schedule.expect("cart course should timetable");
+        assert_eq!(schedule.len(), 1, "scheduled exactly once, not duplicated");
     }
 }

@@ -56,7 +56,6 @@ export interface PersonalizeRequirementSelections {
   selectedPerRequirement: Record<string, string[]>;
   constrainedPerRequirement: Record<string, string[]>;
   requirementPriorities: Record<string, number>;
-  coursesThisSemester: number;
   /**
    * Requirement slots the student has manually edited. Auto-assignment (which
    * mirrors the web planner) fills every other eligible requirement, but never
@@ -66,14 +65,11 @@ export interface PersonalizeRequirementSelections {
   requirementSlotsUserTouched: Record<string, true>;
 }
 
-export const DEFAULT_COURSES_THIS_SEMESTER = 5;
-
 export const DEFAULT_REQUIREMENT_SELECTIONS: PersonalizeRequirementSelections = {
   selectedOptionsPerRequirement: {},
   selectedPerRequirement: {},
   constrainedPerRequirement: {},
   requirementPriorities: {},
-  coursesThisSemester: DEFAULT_COURSES_THIS_SEMESTER,
   requirementSlotsUserTouched: {},
 };
 
@@ -106,7 +102,6 @@ export interface PersonalizeRequirementsReadout {
   selectedPerRequirement?: Record<string, string[]>;
   constrainedPerRequirement?: Record<string, string[]>;
   requirementPriorities?: Record<string, number>;
-  coursesThisSemester?: number;
   projectedRemainingCount?: number;
 }
 
@@ -126,7 +121,6 @@ export interface PersonalizeAdvancedRequirements {
   selectedPerRequirement: Record<string, string[]>;
   constrainedPerRequirement: Record<string, string[]>;
   requirementPriorities: Record<string, number>;
-  coursesThisSemester: number;
   prereqEligibleCourses: string[];
 }
 
@@ -156,10 +150,6 @@ function cloneSelections(
     selectedPerRequirement: cloneStringRecord(selections?.selectedPerRequirement ?? {}),
     constrainedPerRequirement: cloneStringRecord(selections?.constrainedPerRequirement ?? {}),
     requirementPriorities: { ...(selections?.requirementPriorities ?? {}) },
-    coursesThisSemester: Math.max(
-      0,
-      Math.trunc(selections?.coursesThisSemester ?? DEFAULT_COURSES_THIS_SEMESTER),
-    ),
     requirementSlotsUserTouched: { ...(selections?.requirementSlotsUserTouched ?? {}) },
   };
 }
@@ -275,16 +265,6 @@ export function setRequirementPriorityForIds(
     else next.requirementPriorities[requirementId] = value;
   }
   return next;
-}
-
-export function setCoursesThisSemester(
-  selections: PersonalizeRequirementSelections,
-  coursesThisSemester: number,
-): PersonalizeRequirementSelections {
-  return {
-    ...cloneSelections(selections),
-    coursesThisSemester: Math.max(0, Math.trunc(coursesThisSemester)),
-  };
 }
 
 export function getRequirementPriorityForIds(
@@ -633,7 +613,6 @@ export function computePersonalizeRequirements(
     selectedPerRequirement: autoAssignment.selectedPerRequirement,
     constrainedPerRequirement: selections.constrainedPerRequirement,
     requirementPriorities: selections.requirementPriorities,
-    coursesThisSemester: selections.coursesThisSemester,
     projectedRemainingCount: projectedRemainingCount(state.tree, mergedSelections, cache),
   };
 }
@@ -684,7 +663,6 @@ export function buildPersonalizeAdvancedRequirements(input: {
     selectedPerRequirement: autoAssignment.selectedPerRequirement,
     constrainedPerRequirement: selections.constrainedPerRequirement,
     requirementPriorities: selections.requirementPriorities,
-    coursesThisSemester: selections.coursesThisSemester,
     prereqEligibleCourses: buildPrereqEligibleCourses({
       program,
       remainingRequirements: effectiveRemaining,
@@ -697,6 +675,9 @@ export function buildPersonalizeAdvancedRequirements(input: {
 export function buildAdvancedRequestInputFromPersonalize(input: {
   requirements: PersonalizeAdvancedRequirements;
   constraints: AdvancedRequestInput["constraints"];
+  coursesThisSemester: number;
+  additionalElectivesCount: number;
+  forcedCourses?: string[];
   includeClosedComponents: boolean;
   virtualSectionsOnly: boolean;
   optimizationPriorities: AdvancedRequestInput["optimizationPriorities"];
@@ -719,8 +700,9 @@ export function buildAdvancedRequestInputFromPersonalize(input: {
     constrainedPerRequirementRaw: requirements.constrainedPerRequirement,
     selectedPerRequirement: requirements.selectedPerRequirement,
     selectedOptionsPerRequirement: requirements.selectedOptionsPerRequirement,
-    coursesThisSemester: requirements.coursesThisSemester,
-    forcedCourses: [],
+    coursesThisSemester: input.coursesThisSemester,
+    additionalElectivesCount: input.additionalElectivesCount,
+    forcedCourses: input.forcedCourses ?? [],
     levelBuckets: input.levelBuckets ?? (["undergrad", "grad"] satisfies CourseLevelBucket[]),
     languageBuckets:
       input.languageBuckets ?? (["en", "fr", "other"] satisfies CourseLanguageBucket[]),

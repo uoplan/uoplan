@@ -95,7 +95,8 @@ interface CommonRequestInput {
 
 export interface BasicRequestInput extends CommonRequestInput {
   basketCourses: string[];
-  basicElectivesCount: number;
+  additionalElectivesCount: number;
+  coursesThisSemester: number;
   basicExcludedCategories: string[];
   studentPrograms: string[];
   frenchImmersionStream: boolean;
@@ -109,6 +110,7 @@ export interface AdvancedRequestInput extends CommonRequestInput {
   selectedPerRequirement: Record<string, string[]>;
   selectedOptionsPerRequirement: Record<string, number>;
   coursesThisSemester: number;
+  additionalElectivesCount: number;
   forcedCourses: string[];
   frenchImmersionStream: boolean;
   basicExcludedCategories: string[];
@@ -338,7 +340,7 @@ export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): G
   const common = buildCommonGenerationRequestFields(input, cache);
   return {
     basicPinnedCourses: input.basketCourses,
-    basicElectivesCount: input.basicElectivesCount,
+    additionalElectivesCount: input.additionalElectivesCount,
     basicExcludedCategories: common.basicExcludedCategories,
     completedCourses: common.completedCourses,
     studentPrograms: input.studentPrograms,
@@ -348,7 +350,7 @@ export function buildBasicRequest(input: BasicRequestInput, cache: DataCache): G
     selectedOptionsPerRequirement: {},
     constrainedPerRequirement: {},
     requirementPriorities: {},
-    coursesThisSemester: 0,
+    coursesThisSemester: input.coursesThisSemester,
     prereqEligibleCourses: [],
     forcedCourses: [],
     ...buildSharedGenerationRequestFields(common),
@@ -362,7 +364,7 @@ export function buildAdvancedRequest(
   const common = buildCommonGenerationRequestFields(input, cache);
   return {
     basicPinnedCourses: [],
-    basicElectivesCount: 0,
+    additionalElectivesCount: input.additionalElectivesCount,
     basicExcludedCategories: common.basicExcludedCategories,
     completedCourses: common.completedCourses,
     studentPrograms: [],

@@ -11,7 +11,6 @@ import {
   cacheWithPerCourseVirtualFilter,
   diagnoseTimetableFailure,
   gateRemainingByPriority,
-  isGroupToken,
   normalizeCourseCode,
   resolveDesiredCourses,
   runAdvancedGeneration,
@@ -56,34 +55,9 @@ function sumCompletedFirstYearCredits(
   }, 0);
 }
 
-function countSelectedGenerationCourses(
-  constrainedPerRequirement: Record<string, string[]>,
-  standaloneCourses: readonly string[],
-  completedCourses: readonly string[],
-): number {
-  const completed = new Set(completedCourses.map((code) => normalizeCourseCode(code)));
-  const selected = new Set<string>();
-  let groupTokenSlots = 0;
-  const add = (code: string) => {
-    if (isGroupToken(code)) {
-      groupTokenSlots += 1;
-      return;
-    }
-    const norm = normalizeCourseCode(code);
-    if (completed.has(norm)) return;
-    selected.add(norm);
-  };
-  for (const codes of Object.values(constrainedPerRequirement)) {
-    for (const code of codes) add(code);
-  }
-  for (const code of standaloneCourses) add(code);
-  return selected.size + groupTokenSlots;
-}
-
 function clampAdditionalElectiveCount(count: number, selectedCount: number): number {
   const max = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - selectedCount);
-  const min = selectedCount > 0 ? 0 : 1;
-  return Math.max(min, Math.min(max, count));
+  return Math.max(0, Math.min(max, count));
 }
 
 function buildActiveFilterHints(opts: {
@@ -200,6 +174,7 @@ export async function generateSchedulesAction(
     selectedOptionsPerRequirement,
     constrainedPerRequirement: rawConstrainedPerRequirement,
     coursesThisSemester,
+    additionalElectivesCount,
     completedCourses,
     basketCourses,
     basicExcludedCategories,
@@ -346,12 +321,17 @@ export async function generateSchedulesAction(
     effectiveConstrainedPerRequirement[reqId] = out;
   }
 
-  const selectedElectivesCount = countSelectedGenerationCourses(
-    effectiveConstrainedPerRequirement,
-    desiredResolution.standalone,
-    completedCourses,
-  );
-  const advancedCoursesThisSemester = coursesThisSemester + selectedElectivesCount;
+  // The cart (basket) is the highest-priority capped pool: route the WHOLE
+  // resolved cart through `forcedCourses` so `coursesThisSemester` (N) caps how
+  // many cart courses are scheduled. Courses that also map to a requirement stay
+  // in the constrained map purely for attribution (the engine excludes forced
+  // courses from the explicit-union pin path, so this never defeats the cap).
+  const resolvedCart = [
+    ...new Set([
+      ...desiredResolution.standalone,
+      ...Object.values(desiredResolution.assigned).flat(),
+    ]),
+  ];
 
   const advancedInput: AdvancedRequestInput = {
     constraints,
@@ -362,8 +342,9 @@ export async function generateSchedulesAction(
     constrainedPerRequirementRaw: effectiveConstrainedPerRequirement,
     selectedPerRequirement,
     selectedOptionsPerRequirement,
-    coursesThisSemester: advancedCoursesThisSemester,
-    forcedCourses: desiredResolution.standalone,
+    coursesThisSemester,
+    additionalElectivesCount,
+    forcedCourses: resolvedCart,
     levelBuckets,
     languageBuckets,
     electiveLevelBuckets,
@@ -395,7 +376,10 @@ export async function generateSchedulesAction(
     languageBuckets,
   });
 
-  const optionalSlotsNeeded = advancedCoursesThisSemester - pinned.length;
+  // Total courses the engine aims to schedule: the cart-cap / requirement-fill
+  // target (N) plus the additional electives generated on top (M).
+  const advancedTargetCount = coursesThisSemester + additionalElectivesCount;
+  const optionalSlotsNeeded = advancedTargetCount - pinned.length;
   if (filteredOptionalPool.length < optionalSlotsNeeded) {
     const swapPool = [...new Set([...pinned, ...filteredOptionalPool])];
     return {
@@ -409,7 +393,7 @@ export async function generateSchedulesAction(
         {
           emptyPools: poolDiagnostics?.emptyPools ?? [],
           totalAvailable: poolDiagnostics?.totalAvailable ?? swapPool.length,
-          totalNeeded: poolDiagnostics?.totalNeeded ?? advancedCoursesThisSemester,
+          totalNeeded: poolDiagnostics?.totalNeeded ?? advancedTargetCount,
           timetableFailure: null as unknown as TimetableFailureDiagnostics,
           activeFilterHints: filterHints,
         },
@@ -423,7 +407,7 @@ export async function generateSchedulesAction(
       poolDiagnostics,
       pinned,
       filteredOptionalPool,
-      advancedCoursesThisSemester,
+      advancedTargetCount,
       diagCache,
       constraints,
       filterHints,
@@ -457,7 +441,8 @@ async function handleBasicGeneration(
 ): Promise<GenerateSchedulesResult | null> {
   const {
     basketCourses,
-    basicElectivesCount,
+    additionalElectivesCount,
+    coursesThisSemester,
     basicExcludedCategories,
     levelBuckets,
     languageBuckets,
@@ -479,8 +464,8 @@ async function handleBasicGeneration(
   } = input;
 
   const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
-  const effectiveBasicElectivesCount = clampAdditionalElectiveCount(
-    basicElectivesCount,
+  const effectiveAdditionalElectivesCount = clampAdditionalElectiveCount(
+    additionalElectivesCount,
     basketCourses.length,
   );
 
@@ -497,7 +482,8 @@ async function handleBasicGeneration(
   const basicInput: BasicRequestInput = {
     constraints,
     basketCourses,
-    basicElectivesCount: effectiveBasicElectivesCount,
+    additionalElectivesCount: effectiveAdditionalElectivesCount,
+    coursesThisSemester,
     basicExcludedCategories,
     completedCourses,
     studentPrograms,
@@ -519,10 +505,12 @@ async function handleBasicGeneration(
   const swapPool = [...new Set([...basketCourses, ...optionalPool])];
 
   if (!schedule) {
+    // `coursesThisSemester` (N) caps how many cart courses are scheduled.
+    const scheduledCartTarget = Math.min(coursesThisSemester, basketCourses.length);
     const timetableFailure = diagnoseTimetableFailure({
       pinnedCourseCodes: basketCourses,
       optionalCourseCodes: optionalPool,
-      targetCount: basketCourses.length + effectiveBasicElectivesCount,
+      targetCount: scheduledCartTarget + effectiveAdditionalElectivesCount,
       cache: cacheWithPerCourseVirtualFilter(
         cache,
         includeClosedComponents,
@@ -544,7 +532,7 @@ async function handleBasicGeneration(
         details: {
           emptyPools: [],
           totalAvailable: basketCourses.length + optionalPool.length,
-          totalNeeded: basketCourses.length + effectiveBasicElectivesCount,
+          totalNeeded: scheduledCartTarget + effectiveAdditionalElectivesCount,
           timetableFailure,
         },
       },
