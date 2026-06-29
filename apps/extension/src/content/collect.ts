@@ -127,6 +127,7 @@ export function scanSections(doc: Document): SectionRow[] {
       days: cell(3),
       instructor: cell(5),
       status: cells[6]?.querySelector("img")?.getAttribute("alt") ?? "",
+      anchorId: tr.id || undefined,
     });
   }
 

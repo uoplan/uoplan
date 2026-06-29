@@ -11,6 +11,7 @@ import { scanSections } from "./collect";
  */
 
 const BADGE_CLASS = "uoplan-grade-badge";
+const POPOVER_ID = "uoplan-grade-popover";
 const DONE_ATTR = "data-uoplan-grade";
 const PILL_ID = "uoplan-status-pill";
 
@@ -26,20 +27,90 @@ function setPill(doc: Document, text: string): void {
   pill.textContent = `uoPlan · ${text}`;
 }
 
-function badgeText(code: string, b: GradeBadge): string {
-  const parts = [code];
+function badgeText(b: GradeBadge): string {
+  const parts: string[] = [];
   if (b.letter) parts.push(b.letter);
   if (b.gpa !== null) parts.push(b.gpa.toFixed(2));
   if (b.aPlusPct !== null) parts.push(`${Math.round(b.aPlusPct)}% A+`);
-  return parts.join(" · ");
+  return parts.join(" · ") || "grades";
 }
 
-function makeBadge(code: string, b: GradeBadge): HTMLElement {
-  const el = document.createElement("span");
+function stat(label: string, value: string): string {
+  return `<div class="uoplan-pop-stat"><span class="uoplan-pop-num">${value}</span><span class="uoplan-pop-lab">${label}</span></div>`;
+}
+
+/** Build the popover inner HTML for a course's grade summary. */
+function popoverHtml(code: string, b: GradeBadge): string {
+  const max = Math.max(1, ...b.bars.map((bar) => bar.count));
+  const bars = b.bars
+    .map((bar) => {
+      const h = Math.round((bar.count / max) * 100);
+      return `<div class="uoplan-pop-bar"><div class="uoplan-pop-fill" style="height:${h}%;background:${bar.color}"></div><div class="uoplan-pop-tick">${bar.grade}</div></div>`;
+    })
+    .join("");
+  const stats = [
+    b.gpa !== null
+      ? stat("mean GPA", `${b.gpa.toFixed(2)}${b.letter ? ` (${b.letter})` : ""}`)
+      : "",
+    b.aPlusPct !== null ? stat("A+", `${Math.round(b.aPlusPct)}%`) : "",
+    b.passPct !== null ? stat("pass", `${b.passPct}%`) : "",
+    stat("grades", b.count.toLocaleString()),
+    b.profCount > 0 ? stat("profs", String(b.profCount)) : "",
+  ].join("");
+  return `<div class="uoplan-pop-head">${code}</div><div class="uoplan-pop-stats">${stats}</div><div class="uoplan-pop-chart">${bars}</div>`;
+}
+
+let popover: HTMLElement | null = null;
+let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
+function ensurePopover(doc: Document): HTMLElement {
+  popover ??= doc.getElementById(POPOVER_ID);
+  if (!popover) {
+    popover = doc.createElement("div");
+    popover.id = POPOVER_ID;
+    popover.addEventListener("mouseenter", () => clearTimeout(hideTimer));
+    popover.addEventListener("mouseleave", () => hidePopover());
+    doc.body?.append(popover);
+  }
+  return popover;
+}
+
+function hidePopover(): void {
+  hideTimer = setTimeout(() => popover?.classList.remove("uoplan-pop-show"), 120);
+}
+
+function showPopover(doc: Document, anchor: HTMLElement, code: string, b: GradeBadge): void {
+  clearTimeout(hideTimer);
+  const pop = ensurePopover(doc);
+  pop.innerHTML = popoverHtml(code, b);
+  pop.classList.add("uoplan-pop-show");
+  const r = anchor.getBoundingClientRect();
+  const top = r.bottom + 6;
+  const left = Math.min(Math.max(8, r.left), (doc.defaultView?.innerWidth ?? 1024) - 248);
+  pop.style.top = `${top}px`;
+  pop.style.left = `${left}px`;
+}
+
+function makeBadge(doc: Document, code: string, b: GradeBadge): HTMLElement {
+  const el = doc.createElement("span");
   el.className = BADGE_CLASS;
-  el.textContent = badgeText(code, b);
+  el.tabIndex = 0;
+  el.textContent = badgeText(b);
   el.title = `uoPlan grades — ${code}: ${b.count} grades`;
+  const open = () => showPopover(doc, el, code, b);
+  el.addEventListener("mouseenter", open);
+  el.addEventListener("focus", open);
+  el.addEventListener("mouseleave", hidePopover);
+  el.addEventListener("blur", hidePopover);
   return el;
+}
+
+/** Element to physically attach the badge to: a TR routes to its first cell. */
+function badgeHost(anchor: HTMLElement): HTMLElement {
+  if (anchor.tagName === "TR") {
+    return (anchor.querySelector("td") as HTMLElement | null) ?? anchor;
+  }
+  return anchor;
 }
 
 /** Element to attach the badge to for a given row (those with an anchor id). */
@@ -117,9 +188,10 @@ async function apply(doc: Document, log?: (m: string) => void): Promise<void> {
       continue; // skip phantom/template rows
     }
     detail.push(`${row.anchorId}=shown`);
-    if (anchor.querySelector(`.${BADGE_CLASS}`) || anchor.getAttribute(DONE_ATTR)) continue;
-    anchor.setAttribute(DONE_ATTR, "1");
-    anchor.append(makeBadge(code, badge));
+    const host = badgeHost(anchor);
+    if (host.querySelector(`.${BADGE_CLASS}`) || host.getAttribute(DONE_ATTR)) continue;
+    host.setAttribute(DONE_ATTR, "1");
+    host.append(makeBadge(doc, code, badge));
     injected++;
   }
   log?.(`overlay: injected ${injected} badges [${detail.join(", ")}]`);

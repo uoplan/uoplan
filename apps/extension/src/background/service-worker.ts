@@ -7,9 +7,12 @@ import type { LoadedGrades } from "../shared/grades";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import {
   aPlusPercent,
+  buildGradeHistogramModel,
   countedMass,
   distributionGpa,
   gpaToLetterGrade,
+  GRADE_VIZ_COLORS,
+  normalizeGradeVizDistribution,
 } from "@uoplan/core/gradeDistribution";
 
 /**
@@ -75,17 +78,37 @@ async function getGrades(): Promise<LoadedGrades> {
   }
 }
 
+/** Distinct professors with grade data for a course, across all terms. */
+function profCountFor(grades: LoadedGrades, normalized: string): number {
+  const termMap = grades.lookups.byCourseTermName.get(normalized as never);
+  if (!termMap) return 0;
+  const names = new Set<string>();
+  for (const byName of termMap.values()) for (const name of byName.keys()) names.add(name);
+  return names.size;
+}
+
 /** Build a {@link GradeBadge} from a course-aggregate distribution, or null. */
 function badgeFor(grades: LoadedGrades, code: string): GradeBadge | undefined {
-  const dist = grades.lookups.aggregateByCourse.get(normalizeCourseCode(code));
+  const normalized = normalizeCourseCode(code);
+  const dist = grades.lookups.aggregateByCourse.get(normalized);
   if (!dist) return undefined;
   const count = countedMass(dist);
   if (count <= 0) return undefined;
+  const gpa = distributionGpa(dist);
+  const viz = normalizeGradeVizDistribution(dist);
+  const bars: GradeBadge["bars"] = viz
+    ? buildGradeHistogramModel(viz)
+        .displayBars.filter((bar) => bar.key !== "DR")
+        .map((bar) => ({ grade: bar.key, count: bar.count, color: GRADE_VIZ_COLORS[bar.bucketId] }))
+    : [];
   return {
-    gpa: distributionGpa(dist),
-    letter: gpaToLetterGrade(distributionGpa(dist)),
+    gpa,
+    letter: gpaToLetterGrade(gpa),
     aPlusPct: aPlusPercent(dist),
+    passPct: viz ? Math.round(viz.passingPercent) : null,
     count,
+    bars,
+    profCount: profCountFor(grades, normalized),
   };
 }
 

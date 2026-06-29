@@ -82,6 +82,15 @@ export interface DomEvent extends EventContext {
 /** Anything the background relays to the dev log-sink. */
 export type SinkEvent = LogEvent | NetEvent | DomEvent;
 
+/** One bar of the compact grade histogram rendered in a popover. */
+export interface GradeHistBar {
+  /** Bar key: "FAIL" or a letter grade (D … A+). */
+  grade: string;
+  count: number;
+  /** uoPlan viz colour for the bar. */
+  color: string;
+}
+
 /** Compact grade summary for one course code, sent content ← background. */
 export interface GradeBadge {
   /** Mean GPA across all professor rows for the course, or null. */
@@ -90,8 +99,14 @@ export interface GradeBadge {
   letter: string | null;
   /** Percentage of A+ grades, 0–100, or null. */
   aPlusPct: number | null;
+  /** Percentage of graded students who passed, 0–100, or null. */
+  passPct: number | null;
   /** Total counted grade mass behind the distribution. */
   count: number;
+  /** Distribution histogram (Fail + D…A+), for the popover chart. */
+  bars: GradeHistBar[];
+  /** Number of distinct professors with grade data for the course. */
+  profCount: number;
 }
 
 /** Commands sent toward the background or content scripts. */
