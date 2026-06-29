@@ -25,7 +25,7 @@ async function captureWebScreenshots() {
       if (screen.seed && !sParam) {
         console.warn(`! no seed "${screen.seed}" for ${screen.id} — run capture-seed.mjs first`);
       }
-      await gotoSettled(page, webUrl(screen.webRoute, sParam), { settleMs: 2200 });
+      await gotoSettled(page, webUrl(screen.webRoute, sParam), { settleMs: 5000 });
       const out = path.join(OUT_DIR, `${screen.id}.png`);
       await screenshot(page, out);
       console.log(`✓ ${screen.id} → ${path.relative(MARKETING_DIR, out)}`);

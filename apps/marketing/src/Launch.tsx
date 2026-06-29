@@ -3,6 +3,7 @@ import * as THREE from "three";
 import {
   AbsoluteFill,
   Audio,
+  Sequence,
   continueRender,
   delayRender,
   staticFile,
@@ -25,6 +26,7 @@ const clamp = (x: number, a: number, b: number) => Math.max(a, Math.min(b, x));
 const norm = (t: number, a: number, b: number) => clamp((t - a) / (b - a), 0, 1);
 const lerp = (a: number, b: number, u: number) => a + (b - a) * u;
 const eoCubic = (u: number) => 1 - Math.pow(1 - u, 3);
+const eioCubic = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
 const rad = (d: number) => (d * Math.PI) / 180;
 
 type Scene = (typeof SCENES)[number];
@@ -86,14 +88,19 @@ const Scene3D: React.FC<{ iphone: THREE.Object3D | null }> = ({ iphone }) => {
   const sh = isLaptop
     ? { opacity: 0.32, scale: 13, blur: 6.5, far: 3.2 }
     : { opacity: 0.5, scale: 9, blur: 3, far: 4.5 };
-  // Little 360 on the handed-off devices: hold ~1s, then one smooth eased turn
-  // to flash the full body, landing back at the pose yaw.
+  // 360 on the handed-off devices: one smooth eased turn that spans the entire
+  // scene — starts spinning the moment the device appears and lands back at the
+  // pose yaw right as it leaves, so there's no pause before or after.
   const local = sc ? t - sc.start : 0;
   const isDevice =
     sc &&
     (sc.device.kind === "pixel" || sc.device.kind === "iphone" || sc.device.kind === "tablet");
-  const spin = isDevice ? 360 * eoCubic(norm(local, 1.0, 2.6)) : 0;
+  const spin = isDevice && sc ? 360 * norm(local, 0, sc.end - sc.start) : 0;
   const yaw = (p?.yaw ?? 0) + spin;
+  // Reset the screen clip to the top at the start of each scene: OffthreadVideo
+  // is composition-clocked, so map each device into a Sequence starting at the
+  // scene cut.
+  const sF = sc ? Math.round(sc.start * fps) : 0;
 
   return (
     <AbsoluteFill>
@@ -121,11 +128,13 @@ const Scene3D: React.FC<{ iphone: THREE.Object3D | null }> = ({ iphone }) => {
         />
         {sc && (
           <group rotation={[rad(p.tilt), rad(yaw), rad(p.roll)]} position={[x, y, 0]} scale={s}>
-            {sc.device.kind === "iphone" ? (
-              <IphoneStage scene={iphone} video={sc.device.video} />
-            ) : (
-              <DeviceModel kind={sc.device.kind as any} video={sc.device.video} />
-            )}
+            <Sequence from={sF} layout="none">
+              {sc.device.kind === "iphone" ? (
+                <IphoneStage scene={iphone} video={sc.device.video} />
+              ) : (
+                <DeviceModel kind={sc.device.kind as any} video={sc.device.video} />
+              )}
+            </Sequence>
           </group>
         )}
       </ThreeCanvas>
@@ -391,8 +400,7 @@ const Outro: React.FC<{ t: number }> = ({ t }) => {
           opacity: a(1.6),
         }}
       >
-        Models — iPhone 17 Pro by Ranguel, iPad by DatSketch, MacBook by sugcx · CC BY 4.0 · Pixel
-        by Google
+        iPhone 17 Pro by Ranguel, iPad by DatSketch, MacBook by sugcx · CC BY 4.0 · Pixel by Google
       </div>
     </AbsoluteFill>
   );
