@@ -3108,7 +3108,7 @@ msgstr "MPC {gpa} · {volume} notes"
 
 #: apps/web/src/components/trends/SeasonBarCard.tsx:39
 msgid "trends.chart.season.desc"
-msgstr "Variation de la mesure choisie entre l'automne, l'hiver et le printemps-été."
+msgstr "Variation de la mesure choisie entre l'automne, l'hiver et l'été."
 
 #: apps/web/src/components/trends/SeasonBarCard.tsx:38
 msgid "trends.chart.season.title"
@@ -3245,7 +3245,7 @@ msgid "trends.season.fall"
 msgstr "Automne"
 
 msgid "trends.season.springSummer"
-msgstr "Printemps/été"
+msgstr "Été"
 
 msgid "trends.season.winter"
 msgstr "Hiver"
