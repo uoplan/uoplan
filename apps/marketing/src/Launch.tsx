@@ -6,6 +6,7 @@ import {
   Sequence,
   continueRender,
   delayRender,
+  prefetch,
   staticFile,
   useCurrentFrame,
   useVideoConfig,
@@ -15,7 +16,7 @@ import { ContactShadows } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Studio } from "./ThreePhone";
 import { PhoneModel } from "./PhoneModel";
-import { DeviceModel } from "./DeviceModel";
+import { DeviceModel, preloadDeviceGlbs } from "./DeviceModel";
 import { SCENES, FLIP_AT, CUTS, CUT_HALF, OUTRO_START } from "./timeline.mjs";
 
 const INK = "#111113";
@@ -108,7 +109,7 @@ const Scene3D: React.FC<{ iphone: THREE.Object3D | null }> = ({ iphone }) => {
         width={width}
         height={height}
         camera={{ fov: 30, position: [0, 0, 9.5], near: 0.1, far: 100 }}
-        gl={{ antialias: true, preserveDrawingBuffer: true, alpha: true }}
+        gl={{ antialias: true, preserveDrawingBuffer: false, alpha: true }}
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
           gl.toneMappingExposure = 1.18;
@@ -127,7 +128,12 @@ const Scene3D: React.FC<{ iphone: THREE.Object3D | null }> = ({ iphone }) => {
           color="#1a1714"
         />
         {sc && (
-          <group rotation={[rad(p.tilt), rad(yaw), rad(p.roll)]} position={[x, y, 0]} scale={s}>
+          <group
+            key={sc.start}
+            rotation={[rad(p.tilt), rad(yaw), rad(p.roll)]}
+            position={[x, y, 0]}
+            scale={s}
+          >
             <Sequence from={sF} layout="none">
               {sc.device.kind === "iphone" ? (
                 <IphoneStage scene={iphone} video={sc.device.video} />
@@ -290,10 +296,11 @@ const SceneText: React.FC = () => {
 };
 
 const Dissolve: React.FC<{ t: number }> = ({ t }) => {
+  const FADE = 0.12;
   let op = 0;
   for (const b of CUTS as number[]) {
     const d = Math.abs(t - b);
-    if (d < CUT_HALF) op = Math.max(op, 1 - d / CUT_HALF);
+    if (d < CUT_HALF) op = Math.max(op, clamp((CUT_HALF - d) / FADE, 0, 1));
   }
   if (t < (CUTS as number[])[0]) op = 1;
   if (op <= 0.001) return null;
@@ -441,8 +448,21 @@ const useIphoneModel = (): THREE.Object3D | null => {
   return model;
 };
 
+const useDeviceModels = () => {
+  const [handle] = useState(() => delayRender("device-files"));
+  useEffect(() => {
+    const videos = [...new Set(SCENES.map((s) => s.device.video))];
+    const frees = videos.map((v) => prefetch(staticFile(v)));
+    Promise.all([preloadDeviceGlbs(), ...frees.map((f) => f.waitUntilDone())])
+      .then(() => continueRender(handle))
+      .catch(() => continueRender(handle));
+    return () => frees.forEach((f) => f.free());
+  }, [handle]);
+};
+
 export const Launch: React.FC = () => {
   useFonts();
+  useDeviceModels();
   const iphone = useIphoneModel();
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();

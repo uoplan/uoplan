@@ -40,7 +40,7 @@ export const SCENES = [
     start: 16.2,
     end: 23.0,
     device: { kind: "laptop", video: "videos/schedule-web.mp4" },
-    pose: { x: -1.55, y: -0.1, s: 0.84, yaw: -8, tilt: 7, roll: 0 },
+    pose: { x: -2.15, y: -0.1, s: 0.84, yaw: -8, tilt: 7, roll: 0 },
     text: {
       side: "right",
       anim: "slideR",
@@ -59,14 +59,14 @@ export const SCENES = [
     start: 27.6,
     end: 32.2,
     device: { kind: "iphone", video: "videos/schedule-ios.mp4" },
-    pose: { x: -1.55, y: -0.05, s: 1.0, yaw: 14, tilt: -7, roll: 2 },
+    pose: { x: -1.7, y: -0.55, s: 1.18, yaw: 16, tilt: 7, roll: 5 },
     text: { side: "right", anim: "slideR", pre: "and on", flip: ["iOS"] },
   },
   {
     start: 32.2,
     end: 36.8,
     device: { kind: "tablet", video: "videos/trends-ipad.mp4" },
-    pose: { x: -0.7, y: 0.0, s: 0.8, yaw: 14, tilt: -7, roll: -3 },
+    pose: { x: -0.55, y: 0.0, s: 1.0, yaw: 14, tilt: 0, roll: -3 },
     text: { side: "right", anim: "slideR", pre: "and on", flip: ["iPadOS"] },
   },
 ];
@@ -76,7 +76,7 @@ export const CUTS = [
   ...SCENES.slice(1).map((s) => s.start),
   SCENES[SCENES.length - 1].end,
 ];
-export const CUT_HALF = 0.16;
+export const CUT_HALF = 0.26;
 export const FLIP_AT = [2.4, 4.6];
 export const OUTRO_START = 36.8;
 

@@ -55,6 +55,25 @@ const CFG: Record<Exclude<DeviceKind, "iphone">, Cfg> = {
 };
 
 const loaderCache = new Map<string, THREE.Object3D>();
+export function preloadDeviceGlbs(): Promise<void> {
+  return Promise.all(
+    Object.values(CFG).map(
+      (c) =>
+        new Promise<void>((res) => {
+          if (loaderCache.has(c.url)) return res();
+          new GLTFLoader().load(
+            staticFile(c.url),
+            (g) => {
+              loaderCache.set(c.url, g.scene);
+              res();
+            },
+            undefined,
+            () => res(),
+          );
+        }),
+    ),
+  ).then(() => undefined);
+}
 function useGlb(url: string): THREE.Object3D | null {
   const [obj, setObj] = useState<THREE.Object3D | null>(() => loaderCache.get(url) ?? null);
   useEffect(() => {
