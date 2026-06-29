@@ -3108,7 +3108,7 @@ msgstr "GPA {gpa} · {volume} grades"
 
 #: apps/web/src/components/trends/SeasonBarCard.tsx:39
 msgid "trends.chart.season.desc"
-msgstr "How the selected metric varies between Fall, Winter, and Spring/Summer."
+msgstr "How the selected metric varies between Fall, Winter, and Summer."
 
 #: apps/web/src/components/trends/SeasonBarCard.tsx:38
 msgid "trends.chart.season.title"
@@ -3245,7 +3245,7 @@ msgid "trends.season.fall"
 msgstr "Fall"
 
 msgid "trends.season.springSummer"
-msgstr "Spring/Summer"
+msgstr "Summer"
 
 msgid "trends.season.winter"
 msgstr "Winter"
