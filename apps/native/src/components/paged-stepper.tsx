@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Easing,
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
@@ -9,6 +10,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { AppIcon } from "@/components/app-icon";
 import { useFloatingControlsBottom } from "@/components/redesign/fab";
 import { GlassSurface } from "@/components/glass-surface";
 import { StepDots } from "@/components/step-dots";
@@ -37,6 +39,12 @@ interface PagedStepperProps {
 function clampIndex(index: number, count: number): number {
   return Math.min(Math.max(index, 0), Math.max(count - 1, 0));
 }
+
+/**
+ * One-time-per-launch guard for the swipe "peek" hint (see {@link PagedStepper}).
+ * Module-scoped so navigating away and back doesn't replay it; resets on reload.
+ */
+let hasPlayedSwipePeek = false;
 
 /** Approx. height of the floating dots pill (dots + vertical padding). */
 const DOTS_PILL_HEIGHT = 34;
@@ -109,6 +117,30 @@ export function PagedStepper({
     }
   }, [pageWidth, activeIndex]);
 
+  // First time the pager is shown this launch, gently nudge page 0 sideways and
+  // back so the horizontal swipe gesture is discoverable: it reveals a sliver of
+  // the next step, then springs home. Plays once per app launch and only while
+  // sitting on the first step.
+  const peekTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  useEffect(() => {
+    if (hasPlayedSwipePeek) return;
+    if (steps.length <= 1 || pageWidth <= 0 || activeIndex !== 0) return;
+    hasPlayedSwipePeek = true;
+    const peekDistance = Math.min(56, pageWidth * 0.16);
+    peekTimers.current = [
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ x: peekDistance, y: 0, animated: true });
+      }, 600),
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+      }, 1050),
+    ];
+    return () => {
+      for (const timer of peekTimers.current) clearTimeout(timer);
+      peekTimers.current = [];
+    };
+  }, [pageWidth, activeIndex, steps.length]);
+
   const handleMomentumEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (pageWidth <= 0) return;
     const nextIndex = clampIndex(
@@ -177,9 +209,59 @@ export function PagedStepper({
             pageWidth={pageWidth > 0 ? pageWidth : 1}
             onDotPress={(index) => moveTo(index)}
           />
+          {activeIndex === 0 && steps.length > 1 ? <SwipeHintChevron /> : null}
         </GlassSurface>
       </View>
     </View>
+  );
+}
+
+/**
+ * Subtle, gently-drifting right chevron rendered beside the dots on the first
+ * step to signal that the pages are horizontally swipeable. Decorative — hidden
+ * from screen readers, which already get the tablist semantics from the dots.
+ */
+function SwipeHintChevron() {
+  const drift = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(drift, {
+          toValue: 1,
+          duration: 720,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(drift, {
+          toValue: 0,
+          duration: 720,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [drift]);
+
+  return (
+    <Animated.View
+      testID="swipe-hint"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={[
+        styles.swipeHint,
+        {
+          opacity: drift.interpolate({ inputRange: [0, 1], outputRange: [0.5, 1] }),
+          transform: [
+            { translateX: drift.interpolate({ inputRange: [0, 1], outputRange: [0, 5] }) },
+          ],
+        },
+      ]}
+    >
+      <AppIcon name="chevron.right" size={15} color={Surface.accent} weight="semibold" />
+    </Animated.View>
   );
 }
 
@@ -229,5 +311,10 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.two,
     borderRadius: 999,
     overflow: "hidden",
+  },
+  swipeHint: {
+    marginLeft: Spacing.two,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

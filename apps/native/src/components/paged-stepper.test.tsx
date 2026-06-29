@@ -119,6 +119,23 @@ describe("PagedStepper", () => {
     );
   });
 
+  it("hides the swipe hint after leaving the first step", async () => {
+    const { getByTestId, queryByTestId } = await renderWithSafeArea(
+      <PagedStepper
+        steps={[
+          { key: "term", title: "Term", content: <Text>Choose a term</Text> },
+          { key: "requirements", title: "Requirements", content: <Text>Fill requirements</Text> },
+        ]}
+      />,
+    );
+
+    expect(queryByTestId("swipe-hint", { includeHiddenElements: true })).toBeTruthy();
+
+    await fireEvent.press(getByTestId("step-dot-1"));
+
+    expect(queryByTestId("swipe-hint", { includeHiddenElements: true })).toBeNull();
+  });
+
   it("keeps the bottom bar dedicated to step dots", async () => {
     const { getByTestId, queryByLabelText } = await renderWithSafeArea(
       <PagedStepper

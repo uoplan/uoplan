@@ -224,7 +224,7 @@ export function ScheduleSettingsSheet({
     });
   }, [options.frenchImmersionStream, bundle, schedulesByTerm]);
 
-  const additionalElectivesMin = basketCount > 0 ? 0 : 1;
+  const additionalElectivesMin = 0;
   const additionalElectivesMax = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - basketCount);
 
   // First-year credit cap only applies when there are 1000-level credits to limit
