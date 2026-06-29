@@ -25,9 +25,13 @@
   // `.native.tsx` variants; it is a plain `.ts` (not `.native.ts`, which would
   // break ui's own `moduleSuffixes: [".web", ""]` typecheck) so it falls outside
   // the `*.native.ts` glob and is listed explicitly.
+  // apps/marketing is an isolated Remotion launch-video project (excluded from the
+  // pnpm workspace; its own node_modules + lockfile, different toolchain). It is not
+  // part of the app/site import graph, so exclude it from dead-code/duplication checks.
   "ignorePatterns": [
     "apps/cli/**",
     "apps/native/**",
+    "apps/marketing/**",
     "packages/ui/src/**/*.native.tsx",
     "packages/ui/src/**/*.native.ts",
     "packages/ui/src/nativeTheme.ts",

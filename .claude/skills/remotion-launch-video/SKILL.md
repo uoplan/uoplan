@@ -1,0 +1,208 @@
+---
+name: remotion-launch-video
+description: Use when creating or editing a code-rendered launch / promo / demo video for an app (Remotion + a real 3D phone showing app screens), e.g. the apps/marketing "Launch" composition. Covers the fixed-pose shot system, GLB material fixes (see-through buttons, screen, glare, Dynamic Island), studio lighting, tracking contact shadows, original audio synthesis, Remotion + three async-load gotchas, the verify-with-stills workflow, and the uoplan.party branding rules.
+---
+
+# Remotion launch / app-demo videos
+
+Build premium, "app-ad"-style launch videos entirely in code (no After Effects / DaVinci):
+a real **3D phone** holds a sequence of fixed product-photography poses, each showing a
+light-mode app screen beside a flip-word headline, cut together with quick cross-dissolves
+over an **original synthesized** soundtrack.
+
+This skill captures the non-obvious lessons from building `apps/marketing` (the `Launch`
+composition). **Read it before making a new ad or changing the existing one** — most of
+these were learned the hard way and are easy to regress.
+
+## Where it lives & how to run
+
+- Project: **`apps/marketing/`** — an **isolated** Remotion project, deliberately **NOT a
+  pnpm workspace member** (`!apps/marketing` in `pnpm-workspace.yaml`). Remotion/react ship
+  a fresh version most days, which trips the repo's 1-week `minimumReleaseAge` gate and
+  would break every root `pnpm install`. It keeps its own `node_modules` + lockfile.
+- Install standalone: `cd apps/marketing && pnpm install --ignore-workspace`.
+- The iPhone GLB is **git-ignored** (~24 MB); download it per `public/models/README.md`.
+- Run: `pnpm audio` (synth soundtrack) → `pnpm render`. `pnpm studio` to scrub.
+- **`--gl=angle` is mandatory** on every `remotion still` / `remotion render` here — the
+  default GL backend can't draw the three.js scene headlessly. (Baked into the npm scripts.)
+
+## Mental model: a sequence of SHOTS, not one move
+
+The single most important art-direction lesson: **do not fly one phone continuously around
+the screen.** It reads as janky and "3D-demo-ish." Instead, compose **distinct fixed
+product poses** (like an iPhone ad's hero frames) and **cut** between them with fast
+cross-dissolves. Within a shot the only motion is a slow, **monotonic** dolly-in (scale
+creeps up) plus a barely-there upward drift — the phone never turns, reverses, or changes
+direction. This is what makes it feel intentional and expensive.
+
+Reference poses that work: `3/4 right`, `3/4 left` (held low), `tight head-on close-up`,
+`centered + lifted closer`. Vary which side the caption sits on and the caption's entrance
+animation so each shot feels different.
+
+## Single source of truth: `timeline.mjs`
+
+All timing, structure, **and** audio cues live in one `.mjs` file imported by both the
+composition and the audio synth, so **picture and sound can never drift**. It exports
+`FPS/DURATION_S/WIDTH/HEIGHT`, a `SCENES[]` array (each scene carries a fixed
+`pose {yaw,tilt,roll,x,y,s}` + `text {side,place?,anim,pre,flip[]}` + `screen` index),
+`CUTS`, `CUT_HALF`, `FLIP_AT`, `OUTRO_START`, `SCREENS`, and derived `SFX`/`MUSIC` cue
+objects. **Change cue times only here**; regenerate audio afterward (`pnpm audio`).
+
+## Pose system (`scenePose` in `Launch.tsx`)
+
+- `pose`: `yaw` (Y turn°), `tilt` (X°, negative looks up at it), `roll` (Z°), `x`/`y` (world
+  units on the z=0 plane), `s` (scale). Camera is `fov 30 @ z=9.5`.
+- Per shot: `y += u*0.1` (slow drift up), `s *= lerp(0.99, 1.035, u)` (slow push-in), where
+  `u` is 0→1 progress across the shot. `brightness` stays 1 (cuts are an overlay, below).
+- **Phones may run partly off-frame** (crop the bottom of a big close-up) — that's good, it
+  reads as a real product shot. But a LEFT-side phone must keep its **top edge below the
+  top-left `uoplan.party` wordmark** (`x[76,300], y[60,100]`) even after the upward drift.
+  Verify left-phone clearance at both the shot's start AND end frames.
+- Camera geometry cheat-sheet (fov 30 @ z=9.5): ~**211.8 px per world unit**; frame
+  half-height ≈ 2.55 world, half-width ≈ 4.52 world at z=0. Model is `MODEL_FIT_HEIGHT≈4`
+  tall at `s=1`, so its half-height ≈ `2·s`.
+
+## Captions (`SceneText` / `FlipWord`)
+
+- Captions sit **beside or below** the phone — **never over the screen** (text on the app
+  screen looks cheap and fights the UI). Lead-in line in `DM Mono Medium` uppercase (muted
+  warm grey), headline in `DM Serif` (near-black), with one word that "flips" through
+  alternatives (odometer roll: outgoing blurs up & out, incoming rolls up from below).
+- Give each shot a **different single-direction entrance** (`rise` / `slideL` / `slideR` /
+  `fade`) with no settle-back, so cuts feel fresh.
+- Layout containers: `side:"left"` → left rail; `"right"` → right rail; `"center"` +
+  `place:"below"` → bottom band; `place:"over"` → dead-center (used for the outro, not over
+  the phone).
+
+## Cross-dissolve cuts (`Dissolve`)
+
+Cuts are a full-frame `PAPER`-colored overlay that ramps `0→1→0` within `CUT_HALF` seconds
+of each boundary in `CUTS` (a fast, almost-cut dissolve through the paper backdrop). Hold
+the paper opaque before the first reveal. The wordmark renders **above** the dissolve so
+cuts don't make it blink.
+
+## The 3D phone — GLB gotchas (the expensive lessons)
+
+The Sketchfab iPhone GLB needs real fixing in `PhoneModel.tsx`'s `traverse`. Inspect a new
+GLB's materials first (parse the JSON chunk) — names and quirks vary.
+
+1. **Double-sided body → see-through buttons/port.** The GLB ships **every** material
+   `doubleSided=true` (several `alphaMode=BLEND`). Double-sided back-faces on the solid
+   shell let the **far-side volume buttons / charging port / rails bleed "through" the
+   bezel** at 3/4 angles. Fix: `harden()` every kept body material → `side=FrontSide`,
+   `depthTest=true`, `depthWrite=true`, `transparent=false`, `opacity=1`. (If a model's
+   normals are inverted, FrontSide can punch holes — fall back to `DoubleSide` but keep
+   depthWrite/depthTest. Always verify at an angle.) **Then mind the angle:** even with
+   correct depth, a steep yaw (≳20°) exposes the FAR rail as a foreshortened sliver whose
+   side button sits right next to the black bezel and _reads_ as "buttons bleeding through"
+   even though it's physically correct. Keep the button-side yaw shallow (~≤16°) so the far
+   rail collapses to a thin clean edge. Distinguish the two: a button floating **on the
+   black bezel, detached from the rail silhouette** = real depth bug (material fix); a button
+   **on a thin far-rail edge** = just a too-steep angle (pose fix).
+2. **The app screen** = a `MeshBasicMaterial` (unlit, `toneMapped:false`) mapped to the
+   screenshot, swapped onto the `OLED` mesh. Use **real depth** (`depthTest/Write:true` +
+   small `polygonOffset`), **not** `depthTest:false`/`renderOrder:999` — painting the app on
+   top of everything is what makes rails appear to bleed through. Use `side:BackSide`: after
+   the 180° Y model flip the screen's back-face points at the camera on front views (shows
+   the app) and is culled on back views (app never bleeds onto the rear shell).
+3. **Texture mirroring.** The 180° flip views the screen UVs from behind (mirrored app);
+   un-mirror with `wrapS=RepeatWrapping`, `repeat.x=-1`, `offset.x=1` (and `flipY=false`,
+   `SRGBColorSpace`).
+4. **Fake glare → hide the cover glass.** The front `Glass` material (roughness 0 +
+   transmission 1) mirrors the studio softboxes as a hard rectangle that reads as fake
+   "glare" on the screen. **Hide that mesh** (`visible=false`); the unlit OLED already draws
+   the app crisply. Also hide `OLED_off`.
+5. **Solid-black Dynamic Island.** The front-camera / lens / bezel materials are shiny, so a
+   reflective "camera ring" shows through. Replace them (`Plastic_LED`, `Camera_*`,
+   `Display_Frame`) with a flat matte near-black `MeshStandardMaterial` (`#050505`,
+   `roughness≈0.94`) so the island reads as one solid black pill.
+6. **Spin about the centroid.** Center the model at the pivot **inside** the rotation group
+   (`position={[-center.x,-center.y,-center.z]}` nested under the rotation), else it swings
+   around an offset origin and the motion looks wrong. Normalize size via
+   `MODEL_FIT_HEIGHT / bbox.size.y`.
+
+## Lighting (`Studio` in `ThreePhone.tsx`)
+
+Silver titanium needs studio lighting, not a default ambient. Use a bright neutral **key**
+(upper front-right) to carve the specular, a subtle cool **rim** from back-left for edge
+separation, a soft **fill** from below-front, plus a drei `<Environment>` with a few
+neutral **`<Lightformer>` softboxes** on a dark field for soft metallic reflections. Keep
+them **large + moderate (not blown out)** so the rails read silver without hard hotspots.
+
+## Contact shadow MUST track the phone (`Launch.tsx`)
+
+`ContactShadows` is a flat horizontal catch-plane. A **single fixed plane slices through the
+phone** whenever the device sits low in frame. Instead, position it **per-pose, just below
+the device**: `shadowY = pose.y - 2.0*pose.s - 0.12`, rendered every frame (a lifted closer
+gets grounded; low close-ups let the shadow fall off-frame, which is fine for "floating"
+shots). **Do not** set drei's `frames={1}` (it caches one render → wrong as the phone moves);
+omit `frames` so it redraws each Remotion frame.
+
+## Audio — synthesize it (no copyright)
+
+`scripts/make-audio.mjs` builds an **original** stereo WAV from oscillators/noise (kick +
+sidechain pad + bass + arp + riser + resolve chord) and SFX, with cue times **derived from
+`timeline.mjs`**. Sound-design lessons:
+
+- A **soft airy swish** rides each cut (noise through a gentle band, panned L→R) — keep it
+  well below the harsh frequency band.
+- The caption/flip accent is a **quiet, muted woody tick** (low-passed click + short ~180 Hz
+  body), **NOT a bright "ding"** — a too-loud chime on every word flip was a repeated note.
+- One **warm low impact** on the outro. Master with `tanh` soft-limit + normalize +
+  global fade in/out.
+
+## Remotion + three async-load gotchas
+
+- Gate every async asset with `delayRender`/`continueRender`: **fonts** (FontFace), **screen
+  textures** (TextureLoader), and the **GLB** (GLTFLoader). Always `continueRender` in the
+  error path too, or a failed load hangs the render.
+- **Still-render commit lag:** r3f draws once per Remotion frame, but the model `<primitive>`
+  attaches via an async re-render _after_ that draw — so stills can screenshot an empty
+  canvas. Fix: in `PhoneModel`, once the prepared scene is committed, force a synchronous
+  `gl.render(scene, camera)` and only then resolve a dedicated `delayRender("phone-onscreen")`
+  handle. Canvas needs `gl={{ preserveDrawingBuffer: true }}` so the forced draw survives to
+  the screenshot.
+- `remotion.config.ts`: `setVideoImageFormat("jpeg")`, `setOverwriteOutput(true)`, modest
+  `setConcurrency(4)`.
+
+## Verify-with-stills workflow (do this every iteration)
+
+Renders are slow and feedback is visual, so **inspect stills before full renders**:
+
+1. Render a still at each shot's **mid-frame**: `pnpm exec remotion still src/index.ts Launch
+out/t_<N>.png --frame=<N> --gl=angle`.
+2. To check bezel bleed / shadow slicing closely, **crop with ffmpeg** (ImageMagick may not
+   be installed): `ffmpeg -i out/t_N.png -vf "crop=W:H:X:Y" out/crop.png`. For a 3/4-right
+   shot the **far side is the LEFT bezel** (and vice-versa) — crop that screen edge to see
+   if buttons bleed through.
+3. Only when stills look right, **full render**, then `ffprobe` it (expect 1920×1080, 30fps,
+   ~24s, h264 + aac) and extract a couple of **encoded** frames to confirm end-to-end.
+4. Copy the deliverable out, then **delete temp stills/crops**.
+
+Identical byte sizes across renders of the same frame confirm the render is deterministic.
+
+## Branding & content rules (uoplan)
+
+- **Light mode only.** Warm-paper background, **all-black headlines**, warm-grey lead-ins.
+  **No blue accents** anywhere in the video chrome.
+- The wordmark / CTA is **`uoplan.party`** — never the bare/stylized product name.
+- App screenshots must be **light-mode** captures (personalize / explore / schedule / trends).
+- The only third-party asset is the **CC BY 4.0 iPhone model** — show
+  `iPhone 17 Pro by Ranguel · CC BY 4.0` small + low in the outro and record it in
+  `CREDITS.md`. All audio is original/synthesized.
+- Avoid decorative blurred "blobs" as background accents (use a faint masked dot-grid +
+  subtle grain instead).
+
+## Quick reference
+
+| Need                     | Where / value                                                       |
+| ------------------------ | ------------------------------------------------------------------- |
+| Add/retime a scene       | `src/timeline.mjs` `SCENES[]` (then `pnpm audio`)                   |
+| Pose a phone             | `pose {yaw,tilt,roll,x,y,s}`; camera fov 30 @ z=9.5; ~211.8 px/unit |
+| Stop see-through buttons | `harden()` body mats → `FrontSide` + depth (`PhoneModel.tsx`)       |
+| Kill screen glare        | hide the `Glass` mesh                                               |
+| Solid Dynamic Island     | matte near-black on `Plastic_LED`/`Camera_*`/`Display_Frame`        |
+| Shadow slicing the phone | track it: `shadowY = pose.y - 2.0*pose.s - 0.12`, no `frames` prop  |
+| Headless render fails    | add `--gl=angle`                                                    |
+| Empty canvas in stills   | force `gl.render` + `preserveDrawingBuffer` + `delayRender` gate    |
+| Render                   | `pnpm render` → `out/launch-video.mp4`; verify with `ffprobe`       |

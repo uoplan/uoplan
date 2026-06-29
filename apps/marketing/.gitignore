@@ -1,0 +1,14 @@
+node_modules/
+out/
+*.log
+.DS_Store
+
+# Regenerable soundtrack — synthesize with `pnpm audio` (scripts/make-audio.mjs)
+public/master.wav
+
+# Large 3D model (~24 MB) — NOT committed. Download it manually, see
+# public/models/README.md
+public/models/*.glb
+
+# Generated store screenshots — regenerable via capture harness. NOT committed.
+store-listings/*/screenshots/
