@@ -143,7 +143,7 @@ async function handleCommand(command: Command): Promise<unknown> {
         const byCode: Record<string, GradeBadge> = {};
         for (const code of command.codes) {
           const badge = badgeFor(grades, code);
-          if (badge) byCode[normalizeCourseCode(code)] = badge;
+          if (badge) byCode[code] = badge;
         }
         reporter.info(
           `grades-for-courses: ${command.codes.length} codes → ${Object.keys(byCode).length} matched (src ${grades.baseUrl})`,
