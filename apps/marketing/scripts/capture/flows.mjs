@@ -37,29 +37,32 @@ async function typeSlow(locator, text, perKey = 120) {
 }
 
 const FLOWS = {
-  // Explore: search the catalogue, watch results filter, open a result.
+  // Explore: search the catalogue, watch results filter, swap query, browse.
   async explore(page) {
-    await sleep(800);
+    await sleep(700);
     const search = page.getByPlaceholder(/Search/i).first();
     if (await search.isVisible().catch(() => false)) {
-      await typeSlow(search, "calculus");
+      await typeSlow(search, "csi");
+      await sleep(1100);
+      await search.click();
+      await page.keyboard.press("Meta+A");
+      await page.keyboard.press("Backspace");
+      await sleep(500);
+      await typeSlow(search, "eng");
       await sleep(1200);
     }
-    await smoothScrollTo(page, 700, 2000);
-    await sleep(600);
-    await smoothScrollTo(page, 1500, 2000);
+    // Stay near the top — only a short browse, never reaching the footer.
+    await smoothScrollTo(page, 420, 1800);
     await sleep(900);
   },
 
-  // Trends: glide down the decade chart and discipline comparisons.
+  // Trends: glide through the decade chart and discipline cards (top region only).
   async trends(page) {
     await sleep(900);
-    await smoothScrollTo(page, 650, 2200);
+    await smoothScrollTo(page, 520, 2200);
     await sleep(900);
-    await smoothScrollTo(page, 1400, 2200);
+    await smoothScrollTo(page, 980, 2000);
     await sleep(900);
-    await smoothScrollTo(page, 2100, 2000);
-    await sleep(700);
   },
 
   // Schedule: reveal the generated week, then cycle through alternatives.

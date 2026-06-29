@@ -1,13 +1,21 @@
 # Credits & attribution
 
-## 3D model
+## 3D models
 
 **iPhone 17 Pro** — by **Ranguel**
 https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec
 Licensed under **CC BY 4.0** (https://creativecommons.org/licenses/by/4.0/).
 
-Used as `public/models/iphone.glb` to render the device in the launch video.
-No changes were made to the model geometry; it is lit and animated at render time.
+**Apple iPad Pro** — Sketchfab
+https://sketchfab.com/3d-models/apple-ipad-pro-e5ffb3c80b2d4d6690249f8ee2bdafbe
+Licensed under **CC BY 4.0** (https://creativecommons.org/licenses/by/4.0/).
+
+**MacBook Pro 16" (Silver)** — Sketchfab, **CC BY 4.0**.
+
+**Pixel 10** — official Google device model (de-Draco'd for the renderer).
+
+Used as `public/models/{iphone,ipad,pixel,macbook}.glb` to render the devices in the launch
+video. No changes were made to the model geometry; they are lit and animated at render time.
 
 ## Audio
 
