@@ -51,7 +51,7 @@ function makeInput(overrides: Partial<EncodeInput> = {}): EncodeInput {
   return {
     wizardMode: null,
     basketCourses: [],
-    basicElectivesCount: 0,
+    additionalElectivesCount: 0,
     basicExcludedCategories: [],
     selectedTermId: "202509",
     firstYear: null,

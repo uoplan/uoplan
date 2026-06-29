@@ -112,52 +112,67 @@ test("surfaces an overflow status when desired courses exceed a partly-consumed 
     .toBeInTheDocument();
 });
 
-test("counts desired advanced courses toward the displayed semester total", async () => {
-  const { store } = await renderAdvanced({ basketCourses: ["CSI 2110"], coursesThisSemester: 1 });
+test("binds the courses-this-semester and additional-electives fields independently", async () => {
+  const { store } = await renderAdvanced({
+    basketCourses: ["CSI 2110"],
+    coursesThisSemester: 3,
+    additionalElectivesCount: 2,
+  });
 
-  const count = page.getByLabelText("Electives this semester (additional)");
-  await expect.element(count).toHaveValue("1");
+  const courses = page.getByLabelText("Courses this semester");
+  const electives = page.getByLabelText("Electives this semester (additional)");
+  await expect.element(courses).toHaveValue("3");
+  await expect.element(electives).toHaveValue("2");
 
-  await count.fill("0");
+  await courses.fill("5");
+  expect(store.getState().coursesThisSemester).toBe(5);
+  expect(store.getState().additionalElectivesCount).toBe(2);
 
-  expect(store.getState().coursesThisSemester).toBe(0);
+  await electives.fill("4");
+  expect(store.getState().additionalElectivesCount).toBe(4);
+  expect(store.getState().coursesThisSemester).toBe(5);
 });
 
-test("does not clamp additional electives during basket auto-assignment reconciliation", async () => {
+test("allows both counts to be set to zero", async () => {
+  const { store } = await renderAdvanced({
+    coursesThisSemester: 3,
+    additionalElectivesCount: 2,
+  });
+
+  await page.getByLabelText("Courses this semester").fill("0");
+  await page.getByLabelText("Electives this semester (additional)").fill("0");
+
+  expect(store.getState().coursesThisSemester).toBe(0);
+  expect(store.getState().additionalElectivesCount).toBe(0);
+});
+
+test("preserves the counts through basket auto-assignment reconciliation", async () => {
   const { store } = await renderAdvanced({
     basketCourses: ["CSI 2120"],
     constrainedPerRequirement: { "req-csi": ["CSI 2110"] },
     autoConstrainedPerRequirement: { "req-csi": ["CSI 2110"] },
     coursesThisSemester: 1,
+    additionalElectivesCount: 2,
   });
 
   await expect
     .poll(() => store.getState().constrainedPerRequirement["req-csi"])
     .toEqual(["CSI 2120"]);
   expect(store.getState().coursesThisSemester).toBe(1);
+  expect(store.getState().additionalElectivesCount).toBe(2);
 });
 
-test("caps additional electives at zero when there are no remaining requirement pools", async () => {
-  const { store } = await renderAdvanced({ remainingRequirements: [], coursesThisSemester: 2 });
-
-  await expect.poll(() => store.getState().coursesThisSemester).toBe(0);
-  await expect
-    .element(page.getByLabelText("Electives this semester (additional)"))
-    .toHaveValue("0");
-});
-
-test("counts group-token picks against the advanced additional-elective cap", async () => {
-  const highCapacityRequirement: RemainingRequirement[] = [
-    {
-      ...remainingRequirements[0],
-      creditsNeeded: 30,
-    },
-  ];
+test("caps both counts at the schedule maximum", async () => {
   const { store } = await renderAdvanced({
-    remainingRequirements: highCapacityRequirement,
-    constrainedPerRequirement: { "req-csi": ["group:CSI~a", "group:CSI~b"] },
-    coursesThisSemester: SCHEDULE_COURSE_COUNT_MAX,
+    additionalElectivesCount: 0,
+    coursesThisSemester: 0,
   });
 
-  await expect.poll(() => store.getState().coursesThisSemester).toBe(8);
+  await page.getByLabelText("Courses this semester").fill(String(SCHEDULE_COURSE_COUNT_MAX + 5));
+  await page
+    .getByLabelText("Electives this semester (additional)")
+    .fill(String(SCHEDULE_COURSE_COUNT_MAX + 5));
+
+  expect(store.getState().coursesThisSemester).toBe(SCHEDULE_COURSE_COUNT_MAX);
+  expect(store.getState().additionalElectivesCount).toBe(SCHEDULE_COURSE_COUNT_MAX);
 });

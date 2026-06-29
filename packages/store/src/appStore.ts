@@ -15,7 +15,7 @@ import {
   DEFAULT_BASIC_LEVEL_BUCKETS,
 } from "./electiveEligibility";
 import {
-  DEFAULT_BASIC_ELECTIVES_COUNT,
+  DEFAULT_ADDITIONAL_ELECTIVES_COUNT,
   DEFAULT_COURSES_THIS_SEMESTER,
   DEFAULT_GENERATION_LIMIT_FIRST_YEAR_CREDITS,
   DEFAULT_GENERATION_MAX_END_MINUTES,
@@ -29,7 +29,7 @@ function createPlannerStateDefaults() {
   return {
     basketCourses: [],
     compareRefs: [],
-    basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
+    additionalElectivesCount: DEFAULT_ADDITIONAL_ELECTIVES_COUNT,
     basicExcludedCategories: [],
     completedCourses: [],
     remainingRequirements: [],

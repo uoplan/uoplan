@@ -49,12 +49,18 @@ interface AdvancedOptionsDisclosure {
 
 export interface GenerationOptionsFieldsProps {
   /**
-   * Supplementary content rendered above the count input — the sidebars pass the embedded basket
+   * Supplementary content rendered above the count inputs — the sidebars pass the embedded basket
    * here, which now hosts the "courses you want" add-search field.
    */
   coursesSlot?: ReactNode;
 
-  /** "How many courses this semester" number input. */
+  /** "Courses this semester" (N) — the cart cap that overflows into program requirements. */
+  coursesThisSemesterValue: number;
+  onCoursesThisSemesterChange: (n: number) => void;
+  coursesThisSemesterMin: number;
+  coursesThisSemesterMax: number;
+
+  /** "Electives this semester (additional)" (M) — electives generated on top of N. */
   countValue: number;
   onCountChange: (n: number) => void;
   countMin: number;
@@ -257,6 +263,20 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
       {props.coursesSlot}
 
       <NumberInput
+        label={tr("generationOptions.coursesThisSemester.label")}
+        value={props.coursesThisSemesterValue}
+        onChange={(v) => {
+          if (typeof v !== "number" || Number.isNaN(v)) return;
+          capturePreference("courses_this_semester");
+          props.onCoursesThisSemesterChange(Math.trunc(v));
+        }}
+        min={props.coursesThisSemesterMin}
+        max={props.coursesThisSemesterMax}
+        radius="md"
+        data-testid="courses-this-semester-input"
+      />
+
+      <NumberInput
         label={tr("generationOptions.count.label")}
         value={props.countValue}
         onChange={(v) => {
@@ -267,6 +287,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
         min={props.countMin}
         max={props.countMax}
         radius="md"
+        data-testid="additional-electives-input"
       />
 
       {props.belowCount}

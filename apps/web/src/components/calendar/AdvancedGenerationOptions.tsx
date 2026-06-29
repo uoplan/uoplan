@@ -1,12 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { Alert } from "@mantine/core";
 import {
-  buildRequirementPools,
-  isGroupToken,
-  normalizeCourseCode,
-  poolCourseCap,
-} from "@uoplan/core";
-import { useCoursesThisSemester, useRequirementActions } from "../../store/hooks";
+  useAdditionalElectives,
+  useCoursesThisSemester,
+  useRequirementActions,
+} from "../../store/hooks";
 import { tr, useTr } from "../../i18n";
 import { computeFirstYearCredits } from "../../lib/generation/advancedGenerationDerivations";
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
@@ -16,36 +14,6 @@ import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
 import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
 import { useSharedGenerationOptions } from "./generationOptions/useSharedGenerationOptions";
 import { useRequirementAssignmentState } from "../requirements/useRequirementAssignmentState";
-
-function countSelectedElectiveCourses(
-  constrainedPerRequirement: Record<string, string[]>,
-  autoConstrainedPerRequirement: Record<string, string[]>,
-  assignedBasketCourses: Record<string, string[]>,
-  standaloneBasketCourses: string[],
-): number {
-  const selected = new Set<string>();
-  let groupTokenSlots = 0;
-  const add = (code: string) => {
-    if (isGroupToken(code)) {
-      groupTokenSlots += 1;
-      return;
-    }
-    selected.add(normalizeCourseCode(code));
-  };
-  for (const [reqId, codes] of Object.entries(constrainedPerRequirement)) {
-    const autoNorms = new Set(
-      (autoConstrainedPerRequirement[reqId] ?? []).map((code) => normalizeCourseCode(code)),
-    );
-    for (const code of codes) {
-      if (!autoNorms.has(normalizeCourseCode(code))) add(code);
-    }
-  }
-  for (const codes of Object.values(assignedBasketCourses)) {
-    for (const code of codes) add(code);
-  }
-  for (const code of standaloneBasketCourses) add(code);
-  return selected.size + groupTokenSlots;
-}
 
 export function AdvancedGenerationOptions() {
   useTr();
@@ -92,12 +60,12 @@ export function AdvancedGenerationOptions() {
     completedRequirementsList,
     unassignedCompletedCourses,
     constrainedPerRequirement,
-    autoConstrainedPerRequirement,
     selectedPerRequirement,
     selectedOptionsPerRequirement,
     filteredPrereqEligibleCourses,
   } = useRequirementAssignmentState();
   const { coursesThisSemester, setCoursesThisSemester } = useCoursesThisSemester();
+  const { additionalElectivesCount, setAdditionalElectivesCount } = useAdditionalElectives();
   const { setConstrainedForRequirement, applyDesiredAutoAssignments } = useRequirementActions();
 
   const { total: totalFirstYearCredits, warn: warnFirstYearLimit } = computeFirstYearCredits(
@@ -108,7 +76,7 @@ export function AdvancedGenerationOptions() {
 
   // Resolve the unified "courses you want" list against the same requirement universe the engine
   // schedules against, via the shared hook so the embedded cart and generation never diverge.
-  const { resolution, effectiveRemainingRequirements } = useBasketResolution();
+  const { resolution } = useBasketResolution();
 
   // Reflect the resolved assignments into the constrained-picks map so each desired course shows up
   // as a locked course inside its requirement (just like a manual pick). The action preserves manual
@@ -119,47 +87,10 @@ export function AdvancedGenerationOptions() {
     // oxlint-disable-next-line react/exhaustive-deps
   }, [assignedKey, applyDesiredAutoAssignments]);
 
-  const selectedElectivesCount = useMemo(
-    () =>
-      countSelectedElectiveCourses(
-        constrainedPerRequirement,
-        autoConstrainedPerRequirement,
-        resolution.assigned,
-        resolution.standalone,
-      ),
-    [
-      constrainedPerRequirement,
-      autoConstrainedPerRequirement,
-      resolution.assigned,
-      resolution.standalone,
-    ],
-  );
-
-  const totalElectivesNeeded = useMemo(() => {
-    const pools = buildRequirementPools(effectiveRemainingRequirements);
-    return pools.reduce((sum, pool) => sum + poolCourseCap(pool), 0);
-  }, [effectiveRemainingRequirements]);
-
-  const additionalElectivesMax = Math.min(
-    Math.max(0, totalElectivesNeeded - selectedElectivesCount),
-    Math.max(0, SCHEDULE_COURSE_COUNT_MAX - selectedElectivesCount),
-  );
-
+  const coursesThisSemesterMin = 0;
+  const coursesThisSemesterMax = SCHEDULE_COURSE_COUNT_MAX;
   const additionalElectivesMin = 0;
-
-  useEffect(() => {
-    const next = Math.max(
-      additionalElectivesMin,
-      Math.min(additionalElectivesMax, coursesThisSemester),
-    );
-    if (coursesThisSemester === next) return;
-    setCoursesThisSemester(next);
-  }, [additionalElectivesMax, additionalElectivesMin, coursesThisSemester, setCoursesThisSemester]);
-
-  const additionalElectivesCount = Math.max(
-    additionalElectivesMin,
-    Math.min(coursesThisSemester, additionalElectivesMax),
-  );
+  const additionalElectivesMax = SCHEDULE_COURSE_COUNT_MAX;
 
   const advancedPicksCount = useMemo(
     () => Object.values(constrainedPerRequirement).filter((codes) => codes.length > 0).length,
@@ -170,14 +101,19 @@ export function AdvancedGenerationOptions() {
     <AdvancedGenerationOptionsView
       fields={{
         coursesSlot: <BasketContents variant="embedded" />,
+        coursesThisSemesterValue: coursesThisSemester,
+        onCoursesThisSemesterChange: (n) => {
+          const next = Math.max(coursesThisSemesterMin, Math.min(coursesThisSemesterMax, n));
+          if (next === coursesThisSemester) return;
+          setCoursesThisSemester(next);
+        },
+        coursesThisSemesterMin,
+        coursesThisSemesterMax,
         countValue: additionalElectivesCount,
         onCountChange: (n) => {
-          const nextAdditional = Math.max(
-            additionalElectivesMin,
-            Math.min(additionalElectivesMax, n),
-          );
-          if (nextAdditional === coursesThisSemester) return;
-          setCoursesThisSemester(nextAdditional);
+          const next = Math.max(additionalElectivesMin, Math.min(additionalElectivesMax, n));
+          if (next === additionalElectivesCount) return;
+          setAdditionalElectivesCount(next);
         },
         countMin: additionalElectivesMin,
         countMax: additionalElectivesMax,

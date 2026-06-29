@@ -58,7 +58,7 @@ function baseInput(overrides: Partial<GenerateSchedulesInput> = {}): GenerateSch
   return {
     mode: "advanced",
     basketCourses: [],
-    basicElectivesCount: 1,
+    additionalElectivesCount: 1,
     basicExcludedCategories: [],
     completedCourses: [],
     studentPrograms: [],
@@ -93,7 +93,7 @@ function baseInput(overrides: Partial<GenerateSchedulesInput> = {}): GenerateSch
 }
 
 describe("generateSchedulesAction review fixes", () => {
-  it("counts group-token constrained picks toward the advanced engine target", async () => {
+  it("sends coursesThisSemester to the advanced engine target verbatim", async () => {
     const engine = new RecordingEngine();
 
     await generateSchedulesAction(
@@ -109,13 +109,15 @@ describe("generateSchedulesAction review fixes", () => {
             satisfiedBy: [],
           },
         ],
-        coursesThisSemester: 0,
+        coursesThisSemester: 3,
       }),
       cache,
       engine,
     );
 
-    expect(engine.requests[0]?.coursesThisSemester).toBe(2);
+    // N ("Courses this semester") is the engine target sent verbatim; the user's
+    // constrained group-token picks no longer silently inflate it.
+    expect(engine.requests[0]?.coursesThisSemester).toBe(3);
   });
 
   it("clamps stale basic additional electives before sending the engine request", async () => {
@@ -125,13 +127,13 @@ describe("generateSchedulesAction review fixes", () => {
       baseInput({
         mode: "basic",
         basketCourses: ["CSI 2110", "CSI 2120"],
-        basicElectivesCount: SCHEDULE_COURSE_COUNT_MAX,
+        additionalElectivesCount: SCHEDULE_COURSE_COUNT_MAX,
       }),
       cache,
       engine,
     );
 
-    expect(engine.requests[0]?.basicElectivesCount).toBe(SCHEDULE_COURSE_COUNT_MAX - 2);
+    expect(engine.requests[0]?.additionalElectivesCount).toBe(SCHEDULE_COURSE_COUNT_MAX - 2);
   });
 
   it("forwards the professor-rating map to the basic engine request when enabled", async () => {

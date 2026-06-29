@@ -6,6 +6,18 @@ use std::collections::BTreeMap;
 use crate::model::course_level;
 
 pub const DEFAULT_CREDITS_PER_COURSE: f64 = 3.0;
+
+/// Synthesized requirement id for the "additional electives" pool (the `M`
+/// free electives generated *on top* of the `courses_this_semester` target).
+/// Its budget is reserved separately so structured requirement pools can never
+/// starve it. Recognized by `advanced.rs` during allocation.
+pub const ADDITIONAL_ELECTIVES_ID: &str = "__additional_electives__";
+
+/// Synthesized requirement id for the cart pool used when the user's cart
+/// exceeds the `courses_this_semester` cap (`N < cart`): the cart courses
+/// become a highest-priority capped candidate pool instead of hard pins, so the
+/// engine selects a conflict-feasible `N`-subset.
+pub const CART_POOL_ID: &str = "__cart__";
 pub const LEVEL_WEIGHT_BASE: f64 = 2.0;
 const NON_COURSE_PREREQ_PENALTY: f64 = 0.3;
 const UNKNOWN_LEVEL_FLOOR: f64 = 0.01;

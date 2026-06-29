@@ -254,7 +254,7 @@ fn bench_basic_pinned(c: &mut Criterion) {
         let pinned: Vec<String> = ds.schedulable.iter().take(n).cloned().collect();
         let request = GenerationRequest {
             basic_pinned_courses: pinned,
-            basic_electives_count: 0,
+            additional_electives_count: 0,
             include_closed_components: true,
             current_seed: 12_345,
             first_seed: 12_345,
@@ -281,7 +281,7 @@ fn bench_basic_electives(c: &mut Criterion) {
     group.sample_size(30);
     for &n in &[1u32, 3, 5, 10] {
         let request = GenerationRequest {
-            basic_electives_count: n,
+            additional_electives_count: n,
             level_buckets: vec!["undergrad".to_string()],
             language_buckets: vec!["en".to_string(), "other".to_string()],
             elective_level_buckets: vec![1000, 2000, 3000, 4000],

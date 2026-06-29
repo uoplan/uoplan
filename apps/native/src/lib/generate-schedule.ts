@@ -374,6 +374,9 @@ function buildSeedRequest(prep: GenerationPrep, seed: number) {
       buildAdvancedRequestInputFromPersonalize({
         requirements: prep.advancedRequirementsForRequest,
         constraints: prep.constraints,
+        coursesThisSemester: o.coursesThisSemester,
+        additionalElectivesCount: o.additionalElectivesCount,
+        forcedCourses: prep.schedulableBasket,
         includeClosedComponents: o.includeClosedComponents,
         virtualSectionsOnly: o.virtualSectionsOnly,
         optimizationPriorities: o.optimizationPriorities,
@@ -392,7 +395,8 @@ function buildSeedRequest(prep: GenerationPrep, seed: number) {
   return buildBasicRequest(
     {
       basketCourses: prep.schedulableBasket,
-      basicElectivesCount: o.basicElectivesCount,
+      coursesThisSemester: o.coursesThisSemester,
+      additionalElectivesCount: o.additionalElectivesCount,
       basicExcludedCategories: o.basicExcludedCategories,
       studentPrograms: [],
       frenchImmersionStream: o.frenchImmersionStream,

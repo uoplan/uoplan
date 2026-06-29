@@ -21,7 +21,7 @@ export {
   useScheduleGeneration,
   useScheduleResultMaps,
   useCoursesThisSemester,
-  useBasicElectives,
+  useAdditionalElectives,
 } from "./useScheduleGeneration";
 export { useSeedNavigation } from "./useSeedNavigation";
 export { useScheduleSwaps } from "./useScheduleSwaps";

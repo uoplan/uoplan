@@ -86,7 +86,7 @@ export interface AppState {
    * share-state or localStorage — compare ids travel in the compare route URL.
    */
   compareRefs: CompareRef[];
-  basicElectivesCount: number;
+  additionalElectivesCount: number;
   basicExcludedCategories: string[];
 
   catalogue: Catalogue | null;
@@ -235,7 +235,7 @@ export interface AppActions {
   toggleCompare: (ref: CompareRef) => void;
   /** Empty the compare tray. */
   clearCompare: () => void;
-  setBasicElectivesCount: (count: number) => void;
+  setAdditionalElectivesCount: (count: number) => void;
   setBasicExcludedCategories: (categories: string[]) => void;
   generateBasicSchedules: () => Promise<void>;
 

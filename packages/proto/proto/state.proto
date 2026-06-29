@@ -82,7 +82,7 @@ message OptimizationPriority {
 message ShareableState {
   WizardMode wizard_mode = 1;
   repeated uint32 basic_pinned_courses = 2 [packed = true];
-  uint32 basic_electives_count = 3;
+  uint32 additional_electives_count = 3;
   repeated uint32 basic_excluded_category_indices = 4 [packed = true];
 
   optional uint32 selected_term_id = 5;

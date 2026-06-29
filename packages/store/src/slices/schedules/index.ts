@@ -9,7 +9,7 @@ import {
   transferSwapColor,
 } from "@uoplan/core";
 import { basicElectivesAfterPinnedDelta } from "../../basicCalendarPins";
-import { DEFAULT_BASIC_ELECTIVES_COUNT } from "../../generationDefaults";
+import { DEFAULT_ADDITIONAL_ELECTIVES_COUNT } from "../../generationDefaults";
 import {
   DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS,
   DEFAULT_BASIC_LANGUAGE_BUCKETS,
@@ -176,7 +176,7 @@ export const createSchedulesSlice =
       resetBasicCalendarSettings: () =>
         set({
           basketCourses: [],
-          basicElectivesCount: DEFAULT_BASIC_ELECTIVES_COUNT,
+          additionalElectivesCount: DEFAULT_ADDITIONAL_ELECTIVES_COUNT,
           basicExcludedCategories: [],
           completedCourses: [],
           frenchImmersionStream: false,
@@ -400,7 +400,7 @@ export const createSchedulesSlice =
           currentSchedule,
           cache,
           basketCourses,
-          basicElectivesCount,
+          additionalElectivesCount,
           currentPoolMap,
           chosenCourseToRequirementId,
           remainingRequirements,
@@ -420,7 +420,7 @@ export const createSchedulesSlice =
           }
           set({
             basketCourses: [...basketCourses, canonical],
-            basicElectivesCount: basicElectivesAfterPinnedDelta(basicElectivesCount, 1),
+            additionalElectivesCount: basicElectivesAfterPinnedDelta(additionalElectivesCount, 1),
             generationError: null,
             generationOptionsDirty: true,
           });
@@ -482,8 +482,12 @@ export const createSchedulesSlice =
       },
 
       unlockCourseForAllSchedulesFromSwap: (enrollmentIndex) => {
-        const { currentSchedule, basketCourses, basicElectivesCount, constrainedPerRequirement } =
-          get();
+        const {
+          currentSchedule,
+          basketCourses,
+          additionalElectivesCount,
+          constrainedPerRequirement,
+        } = get();
         if (!currentSchedule) return;
         const enrollment = currentSchedule.enrollments[enrollmentIndex];
         if (!enrollment) return;
@@ -494,8 +498,8 @@ export const createSchedulesSlice =
           if (next.length === basketCourses.length) return;
           set({
             basketCourses: next,
-            basicElectivesCount: basicElectivesAfterPinnedDelta(
-              basicElectivesCount,
+            additionalElectivesCount: basicElectivesAfterPinnedDelta(
+              additionalElectivesCount,
               next.length - basketCourses.length,
             ),
             generationError: null,

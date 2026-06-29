@@ -1888,6 +1888,9 @@ msgstr "View details"
 msgid "generationOptions.count.label"
 msgstr "Electives this semester (additional)"
 
+msgid "generationOptions.coursesThisSemester.label"
+msgstr "Courses this semester"
+
 msgid "generationOptions.courses.label"
 msgstr "Courses you want"
 

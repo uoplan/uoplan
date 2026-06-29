@@ -135,7 +135,7 @@ export function decodedState(over: Partial<DecodedState> = {}): DecodedState {
   return {
     wizardMode: "basic",
     basketCourses: [],
-    basicElectivesCount: 0,
+    additionalElectivesCount: 0,
     basicExcludedCategories: [],
     selectedTermId: null,
     firstYear: null,

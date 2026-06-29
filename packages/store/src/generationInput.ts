@@ -17,7 +17,7 @@ import type { GenerateSchedulesMode } from "./services";
 export type GenerateSchedulesInput = Pick<
   AppState,
   | "basketCourses"
-  | "basicElectivesCount"
+  | "additionalElectivesCount"
   | "basicExcludedCategories"
   | "completedCourses"
   | "studentPrograms"
@@ -60,7 +60,7 @@ export function pickGenerateSchedulesInput(
   return {
     mode,
     basketCourses: state.basketCourses,
-    basicElectivesCount: state.basicElectivesCount,
+    additionalElectivesCount: state.additionalElectivesCount,
     basicExcludedCategories: state.basicExcludedCategories,
     completedCourses: state.completedCourses,
     studentPrograms: state.studentPrograms,

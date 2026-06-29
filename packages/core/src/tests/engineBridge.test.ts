@@ -54,7 +54,8 @@ function basicInput(over: Partial<BasicRequestInput> = {}): BasicRequestInput {
     currentSeed: 7,
     firstSeed: 1,
     basketCourses: ["CSI 2110"],
-    basicElectivesCount: 2,
+    coursesThisSemester: 5,
+    additionalElectivesCount: 2,
     basicExcludedCategories: ["seminar"],
     studentPrograms: ["CS"],
     frenchImmersionStream: false,
@@ -102,6 +103,7 @@ function advancedInput(over: Partial<AdvancedRequestInput> = {}): AdvancedReques
     selectedPerRequirement: { r1: ["CSI 1100"] },
     selectedOptionsPerRequirement: { r1: 0 },
     coursesThisSemester: 5,
+    additionalElectivesCount: 2,
     forcedCourses: ["CSI 1100"],
     frenchImmersionStream: true,
     basicExcludedCategories: [],
@@ -113,13 +115,13 @@ describe("buildBasicRequest", () => {
   it("produces a basket request with basic fields populated and advanced fields empty", () => {
     const req = buildBasicRequest(basicInput(), fakeCache([]));
     expect(req.basicPinnedCourses).toEqual(["CSI 2110"]);
-    expect(req.basicElectivesCount).toBe(2);
+    expect(req.additionalElectivesCount).toBe(2);
     expect(req.studentPrograms).toEqual(["CS"]);
     // advanced-only fields are zeroed out
     expect(req.remainingRequirements).toEqual([]);
     expect(req.requirementTree).toEqual([]);
     expect(req.selectedPerRequirement).toEqual({});
-    expect(req.coursesThisSemester).toBe(0);
+    expect(req.coursesThisSemester).toBe(5);
     expect(req.forcedCourses).toEqual([]);
   });
 
@@ -190,9 +192,10 @@ describe("buildBasicRequest", () => {
 describe("buildAdvancedRequest", () => {
   it("produces an advanced request and maps requirement structures", () => {
     const req = buildAdvancedRequest(advancedInput(), fakeCache([]));
-    // basic-only fields zeroed
+    // basic-pinned is empty in advanced mode; M (additional electives) is now
+    // forwarded in both modes.
     expect(req.basicPinnedCourses).toEqual([]);
-    expect(req.basicElectivesCount).toBe(0);
+    expect(req.additionalElectivesCount).toBe(2);
     expect(req.studentPrograms).toEqual([]);
     // remaining requirements mapped through
     expect(req.remainingRequirements).toHaveLength(1);
@@ -318,7 +321,7 @@ describe("engine runners (encode → engine → decode)", () => {
     };
     const result = runBasicGeneration(engine, basicInput(), fakeCache([sched]));
     expect(received!.basicPinnedCourses).toEqual(["CSI 2110"]);
-    expect(received!.basicElectivesCount).toBe(2);
+    expect(received!.additionalElectivesCount).toBe(2);
     expect(result.schedule?.enrollments[0].courseCode).toBe("CSI 2110");
   });
 
@@ -333,7 +336,7 @@ describe("engine runners (encode → engine → decode)", () => {
     };
     runAdvancedGeneration(engine, advancedInput(), fakeCache([]));
     expect(received!.basicPinnedCourses).toEqual([]);
-    expect(received!.basicElectivesCount).toBe(0);
+    expect(received!.additionalElectivesCount).toBe(2);
     expect(received!.remainingRequirements).toHaveLength(1);
   });
 

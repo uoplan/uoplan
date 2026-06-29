@@ -2,7 +2,12 @@ import { useEffect, useMemo } from "react";
 import { Box, Button, MultiSelect, Stack, Text } from "@mantine/core";
 import { IconFileUpload } from "@tabler/icons-react";
 import { getCourseCredits, normalizeCourseCode } from "@uoplan/core";
-import { useBasicElectives, useCompletedCourses, useScheduleGeneration } from "../../store/hooks";
+import {
+  useAdditionalElectives,
+  useCompletedCourses,
+  useCoursesThisSemester,
+  useScheduleGeneration,
+} from "../../store/hooks";
 import { BasketContents } from "../basket/BasketContents";
 import { createCourseOptions } from "../shared/CourseSelect";
 import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
@@ -20,7 +25,7 @@ export function BasicCalendarSidebarControls() {
   const {
     cache,
     basketCourses,
-    basicElectivesCount,
+    additionalElectivesCount,
     basicExcludedCategories,
     levelBuckets,
     languageBuckets,
@@ -57,7 +62,8 @@ export function BasicCalendarSidebarControls() {
     setGoodBreaksParams,
   } = useSharedGenerationOptions();
 
-  const { setBasicElectivesCount } = useBasicElectives();
+  const { setAdditionalElectivesCount } = useAdditionalElectives();
+  const { coursesThisSemester, setCoursesThisSemester } = useCoursesThisSemester();
   const { markBasicSettingsChanged } = useScheduleGeneration();
   const { setCompletedCourses } = useCompletedCourses();
   const analytics = useAnalytics();
@@ -85,32 +91,43 @@ export function BasicCalendarSidebarControls() {
   }, [cache, completedCourses, basketCourses]);
   const additionalElectivesMax = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - basketCourses.length);
   const additionalElectivesMin = 0;
+  const coursesThisSemesterMin = 0;
+  const coursesThisSemesterMax = SCHEDULE_COURSE_COUNT_MAX;
 
   useEffect(() => {
     const next = Math.max(
       additionalElectivesMin,
-      Math.min(additionalElectivesMax, basicElectivesCount),
+      Math.min(additionalElectivesMax, additionalElectivesCount),
     );
-    if (next === basicElectivesCount) return;
-    setBasicElectivesCount(next);
+    if (next === additionalElectivesCount) return;
+    setAdditionalElectivesCount(next);
     markBasicSettingsChanged();
   }, [
     additionalElectivesMax,
     additionalElectivesMin,
-    basicElectivesCount,
+    additionalElectivesCount,
     markBasicSettingsChanged,
-    setBasicElectivesCount,
+    setAdditionalElectivesCount,
   ]);
 
   return (
     <>
       <GenerationOptionsFields
         coursesSlot={<BasketContents variant="embedded" />}
-        countValue={basicElectivesCount}
+        coursesThisSemesterValue={coursesThisSemester}
+        onCoursesThisSemesterChange={(count) => {
+          const next = Math.max(coursesThisSemesterMin, Math.min(coursesThisSemesterMax, count));
+          if (next === coursesThisSemester) return;
+          setCoursesThisSemester(next);
+          markBasicSettingsChanged();
+        }}
+        coursesThisSemesterMin={coursesThisSemesterMin}
+        coursesThisSemesterMax={coursesThisSemesterMax}
+        countValue={additionalElectivesCount}
         onCountChange={(count) => {
           const next = Math.max(additionalElectivesMin, Math.min(additionalElectivesMax, count));
-          if (next === basicElectivesCount) return;
-          setBasicElectivesCount(next);
+          if (next === additionalElectivesCount) return;
+          setAdditionalElectivesCount(next);
           markBasicSettingsChanged();
         }}
         countMin={additionalElectivesMin}

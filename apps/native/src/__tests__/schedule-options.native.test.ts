@@ -43,7 +43,8 @@ describe("schedule-options", () => {
           { kind: "prefer_professor_rating", enabled: false },
         ],
         electiveLevelBuckets: [3000, 4000],
-        basicElectivesCount: 3,
+        coursesThisSemester: 4,
+        additionalElectivesCount: 3,
         basicExcludedCategories: ["CSI", "MAT"],
         blacklistedCourses: ["PHI 1101"],
         levelBuckets: ["undergrad", "grad"],
@@ -60,7 +61,7 @@ describe("schedule-options", () => {
       const parsed = parseScheduleOptions(
         JSON.stringify({ minStartMinutes: 9 * 60, maxEndMinutes: 18 * 60 }),
       );
-      expect(parsed.basicElectivesCount).toBe(0);
+      expect(parsed.additionalElectivesCount).toBe(0);
       expect(parsed.basicExcludedCategories).toEqual([]);
       expect(parsed.blacklistedCourses).toEqual([]);
       expect(parsed.levelBuckets).toEqual(["undergrad"]);
@@ -82,10 +83,12 @@ describe("schedule-options", () => {
 
     it("coerces a bogus elective count to a non-negative integer default", () => {
       expect(
-        parseScheduleOptions(JSON.stringify({ basicElectivesCount: -4 })).basicElectivesCount,
+        parseScheduleOptions(JSON.stringify({ additionalElectivesCount: -4 }))
+          .additionalElectivesCount,
       ).toBe(0);
       expect(
-        parseScheduleOptions(JSON.stringify({ basicElectivesCount: 2.7 })).basicElectivesCount,
+        parseScheduleOptions(JSON.stringify({ additionalElectivesCount: 2.7 }))
+          .additionalElectivesCount,
       ).toBe(3);
     });
 

@@ -31,7 +31,7 @@ test("caps basic additional electives by the courses already in the basket", asy
   const { store } = await renderWithProviders(<BasicCalendarSidebarControls />, {
     initialState: {
       basketCourses,
-      basicElectivesCount: 1,
+      additionalElectivesCount: 1,
     },
   });
 
@@ -40,7 +40,7 @@ test("caps basic additional electives by the courses already in the basket", asy
 
   await count.fill(String(SCHEDULE_COURSE_COUNT_MAX));
 
-  await expect.poll(() => store.getState().basicElectivesCount).toBe(additionalMax);
+  await expect.poll(() => store.getState().additionalElectivesCount).toBe(additionalMax);
 });
 
 test("clamps a stale basic additional-elective count when the basket already uses slots", async () => {
@@ -49,9 +49,25 @@ test("clamps a stale basic additional-elective count when the basket already use
   const { store } = await renderWithProviders(<BasicCalendarSidebarControls />, {
     initialState: {
       basketCourses,
-      basicElectivesCount: SCHEDULE_COURSE_COUNT_MAX,
+      additionalElectivesCount: SCHEDULE_COURSE_COUNT_MAX,
     },
   });
 
-  await expect.poll(() => store.getState().basicElectivesCount).toBe(additionalMax);
+  await expect.poll(() => store.getState().additionalElectivesCount).toBe(additionalMax);
+});
+
+test("binds courses-this-semester independently and allows zero", async () => {
+  const { store } = await renderWithProviders(<BasicCalendarSidebarControls />, {
+    initialState: {
+      coursesThisSemester: 4,
+      additionalElectivesCount: 2,
+    },
+  });
+
+  const courses = page.getByLabelText("Courses this semester");
+  await expect.element(courses).toHaveValue("4");
+
+  await courses.fill("0");
+  expect(store.getState().coursesThisSemester).toBe(0);
+  expect(store.getState().additionalElectivesCount).toBe(2);
 });

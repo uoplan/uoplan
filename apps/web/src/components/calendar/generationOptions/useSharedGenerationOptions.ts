@@ -5,7 +5,7 @@ import { useCompletedCourses } from "../../../store/hooks/useCompletedCourses";
 import { useDataCache } from "../../../store/hooks/useDataset";
 import { useGenerationConstraints } from "../../../store/hooks/useGenerationConstraints";
 import { useProgramSelection } from "../../../store/hooks/useProgramSelection";
-import { useBasicElectives } from "../../../store/hooks/useScheduleGeneration";
+import { useAdditionalElectives } from "../../../store/hooks/useScheduleGeneration";
 
 /**
  * Rich generation-options projection for the calendar sidebars: the shared generation
@@ -18,7 +18,7 @@ export function useSharedGenerationOptions() {
   const cache = useDataCache();
   const { completedCourses } = useCompletedCourses();
   const { basketCourses, setBasketCourses } = useBasketSelection();
-  const { basicElectivesCount } = useBasicElectives();
+  const { additionalElectivesCount } = useAdditionalElectives();
   const { frenchImmersionStream, setFrenchImmersionStream } = useProgramSelection();
   const constraints = useGenerationConstraints();
 
@@ -43,7 +43,7 @@ export function useSharedGenerationOptions() {
     cache,
     completedCourses,
     basketCourses,
-    basicElectivesCount,
+    additionalElectivesCount,
     frenchImmersionStream,
     ...constraints,
     allCategories,

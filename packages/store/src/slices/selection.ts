@@ -70,7 +70,7 @@ interface SelectionSlice {
   removeFromBasket: AppStore["removeFromBasket"];
   toggleBasket: AppStore["toggleBasket"];
   clearBasket: AppStore["clearBasket"];
-  setBasicElectivesCount: AppStore["setBasicElectivesCount"];
+  setAdditionalElectivesCount: AppStore["setAdditionalElectivesCount"];
   setBasicExcludedCategories: AppStore["setBasicExcludedCategories"];
   setProgram: AppStore["setProgram"];
   setMinorProgram: AppStore["setMinorProgram"];
@@ -113,8 +113,8 @@ export const createSelectionSlice: StateCreator<AppStore, [], [], SelectionSlice
     );
   },
   clearBasket: () => get().setBasketCourses([]),
-  setBasicElectivesCount: (count) =>
-    set({ basicElectivesCount: count, generationOptionsDirty: true }),
+  setAdditionalElectivesCount: (count) =>
+    set({ additionalElectivesCount: count, generationOptionsDirty: true }),
   setBasicExcludedCategories: (categories) =>
     set({ basicExcludedCategories: categories, generationOptionsDirty: true }),
 
