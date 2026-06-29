@@ -8,6 +8,11 @@
     "render": "remotion render src/index.ts Launch out/launch-video.mp4 --codec=h264 --gl=angle",
     "still": "remotion still src/index.ts Launch out/still.png --gl=angle",
     "audio": "node scripts/make-audio.mjs",
+    "capture:seed": "node scripts/capture/capture-seed.mjs",
+    "capture:screenshots:web": "node scripts/capture/screenshots-web.mjs",
+    "capture:screenshots:ios": "node scripts/capture/screenshots-ios.mjs",
+    "capture:screenshots:android": "node scripts/capture/screenshots-android.mjs",
+    "capture:videos:web": "node scripts/capture/videos-web.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

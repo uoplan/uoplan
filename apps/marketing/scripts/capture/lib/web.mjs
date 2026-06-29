@@ -36,7 +36,7 @@ export function webUrl(route, sParam) {
 }
 
 /** Navigate + let the SPA settle (data load, layout, fonts). */
-export async function gotoSettled(page, url, { settleMs = 5000 } = {}) {
+export async function gotoSettled(page, url, { settleMs = 1500 } = {}) {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts?.ready);
   await sleep(settleMs);

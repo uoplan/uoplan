@@ -93,35 +93,6 @@ export async function tap(x, y) {
   await adb(["shell", "input", "tap", String(x), String(y)]).catch(() => {});
 }
 
-export async function swipe(x1, y1, x2, y2, ms = 600) {
-  await adb([
-    "shell",
-    "input",
-    "swipe",
-    String(Math.round(x1)),
-    String(Math.round(y1)),
-    String(Math.round(x2)),
-    String(Math.round(y2)),
-    String(ms),
-  ]).catch(() => {});
-}
-
-/** Record screen until stop() is called; pulls the mp4 to outPath. */
-export async function recordVideo(outPath) {
-  const remote = "/data/local/tmp/uoplan-rec.mp4";
-  const { spawn } = await import("node:child_process");
-  const child = spawn(ADB, ["shell", "screenrecord", "--bit-rate", "8000000", remote], {
-    stdio: "ignore",
-  });
-  await sleep(600);
-  return async function stop() {
-    child.kill("SIGINT");
-    await new Promise((resolve) => child.on("close", resolve));
-    await sleep(800);
-    await adb(["pull", remote, outPath]).catch(() => {});
-  };
-}
-
 /** Physical screen size in px, e.g. { w: 1080, h: 2400 }. */
 export async function screenSize() {
   const out = await capture(ADB, ["shell", "wm", "size"]).catch(() => "");

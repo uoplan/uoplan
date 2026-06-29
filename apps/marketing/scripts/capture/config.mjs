@@ -73,7 +73,7 @@ export const SCREENS = [
  * uses an AVD name. `dir` is the destination under store-listings.
  */
 export const IOS_BUCKETS = [
-  { id: "iphone-6.9", deviceName: "iPhone 17 Pro", dir: "ios/screenshots/iphone-6.9" },
+  { id: "iphone-6.9", deviceName: "iPhone 16 Pro", dir: "ios/screenshots/iphone-6.9" },
   { id: "ipad-13", deviceName: "iPad Pro 13-inch (M4)", dir: "ios/screenshots/ipad-13" },
 ];
 
