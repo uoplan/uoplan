@@ -227,9 +227,9 @@ feeds the ad's videos and the store screenshots:
   **No blue accents** anywhere in the video chrome.
 - The wordmark / CTA is **`uoplan.party`** — never the bare/stylized product name.
 - App screenshots must be **light-mode** captures (personalize / explore / schedule / trends).
-- The third-party assets are **CC BY 4.0 device models** (iPhone, iPad, MacBook; Pixel from
-  Google) — credit `iPhone 17 Pro by Ranguel · CC BY 4.0` small + low in the outro and record
-  all four in `CREDITS.md`. All audio is original/synthesized.
+- The third-party assets are **CC BY 4.0 device models** (iPhone by Ranguel, iPad by
+  DatSketch, MacBook by sugcx; Pixel from Google) — credit each small + low in the outro and
+  record all four in `CREDITS.md`. All audio is original/synthesized.
 - Avoid decorative blurred "blobs" as background accents (use a faint masked dot-grid +
   subtle grain instead).
 
