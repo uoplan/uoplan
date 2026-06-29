@@ -26,7 +26,7 @@ async function recordWebFlow(flow, seeds) {
 
   const { browser, context, page } = await openWeb({ recordDir: rawDir });
   const sParam = flow.seed ? seeds[flow.seed] : undefined;
-  await gotoSettled(page, webUrl(flow.route, sParam), { settleMs: 5000 });
+  await gotoSettled(page, webUrl(flow.route, sParam), { settleMs: 1800 });
   await runFlow(flow.id, page);
   await sleep(400);
   await page.close();
@@ -40,13 +40,9 @@ async function recordWebFlow(flow, seeds) {
 
 async function transcode(webmPath, outPath) {
   ensureDir(path.dirname(outPath));
-  // Trim the static settle prefix (data-load wait, no skeleton) so the mapped
-  // clip opens on the loaded page mid-motion. Even dimensions + yuv420p for broad
-  // decoder support (three.js VideoTexture).
+  // Even dimensions + yuv420p for broad decoder support (three.js VideoTexture).
   await run(ffmpegPath(), [
     "-y",
-    "-ss",
-    "4.5",
     "-i",
     webmPath,
     "-c:v",

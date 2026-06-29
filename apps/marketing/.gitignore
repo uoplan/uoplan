@@ -6,9 +6,16 @@ out/
 # Regenerable soundtrack — synthesize with `pnpm audio` (scripts/make-audio.mjs)
 public/master.wav
 
-# Large 3D model (~24 MB) — NOT committed. Download it manually, see
+# Large 3D models (~24 MB each) — NOT committed. Download/build manually, see
 # public/models/README.md
 public/models/*.glb
+
+# Captured app-flow clips for the ad — regenerable via the capture harness
+# (scripts/capture). NOT committed.
+public/videos/
+
+# Signed Android app bundle (~77 MB) — release artifact, NOT committed.
+store-listings/android/release/*.aab
 
 # Generated store screenshots — regenerable via capture harness. NOT committed.
 store-listings/*/screenshots/

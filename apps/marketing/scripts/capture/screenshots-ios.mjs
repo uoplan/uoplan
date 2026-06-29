@@ -16,22 +16,17 @@ import { sleep } from "./lib/util.mjs";
 import { NATIVE_SEED_FILES } from "./seeds.mjs";
 import { SCREENS, IOS_BUCKETS, STORE_LISTINGS_DIR, MARKETING_DIR } from "./config.mjs";
 
-const SETTLE = { schedule: 12000, default: 3500 };
+const SETTLE = { schedule: 7000, default: 3500 };
 
-/** Dismiss the Expo dev-client LogBox / error toast if one is showing. Tapping
- * the toast expands the full LogBox, which has a labelled "Dismiss" button;
- * fall back to tapping the collapse "X" at bottom-right by coordinate. */
+/** Dismiss the Expo dev-client LogBox / error toast if one is showing. */
 async function dismissDevToast(udid) {
   const tree = await idb.describeAll(udid).catch(() => []);
-  const toast = tree.find(
-    (el) => el.AXLabel && /expo-notifications|error reading|warning|log\b/i.test(el.AXLabel),
+  const close = tree.find(
+    (el) => el.AXLabel && /close|dismiss/i.test(el.AXLabel) && el.frame?.y > 700,
   );
-  if (toast?.frame) {
-    const { x, width, y, height } = toast.frame;
+  if (close) {
+    const { x, width, y, height } = close.frame;
     await idb.tap(udid, x + width / 2, y + height / 2).catch(() => {});
-    await sleep(600);
-    const dismissed = await idb.tapLabel(udid, /^Dismiss/i, { timeoutMs: 2000 }).catch(() => false);
-    if (!dismissed) await idb.tap(udid, 100, 816).catch(() => {});
     await sleep(400);
   }
 }
