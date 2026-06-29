@@ -20392,7 +20392,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 34,
               "A": 72,
@@ -23204,7 +23204,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 102,
               "A": 112,
@@ -27602,7 +27602,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 25,
               "A": 218,
@@ -43922,7 +43922,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 77,
               "A": 66,
@@ -72565,7 +72565,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 14,
               "A": 42,
@@ -115819,7 +115819,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 115,
               "A": 110,
@@ -117006,8 +117006,8 @@
       "components": {
         "LEC": [
           {
-            "section": "DA00-LEC FullSess.",
-            "sectionCode": "DA00",
+            "section": "SLC1-LEC FullSess.",
+            "sectionCode": "SLC1",
             "component": "LEC",
             "session": null,
             "times": [],
@@ -137462,7 +137462,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Eucharia Uranta-Okonkwo",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -169222,7 +169222,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -176079,7 +176079,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176090,7 +176090,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176101,7 +176101,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176112,7 +176112,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -181256,7 +181256,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -181298,7 +181298,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -181338,7 +181338,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -181389,7 +181389,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -181400,7 +181400,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -181442,7 +181442,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -181482,7 +181482,7 @@
                 "startMinutes": 480,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -205782,7 +205782,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 88,
               "A": 86,
@@ -208754,7 +208754,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Heather Rideout-Massie",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-03-25"
@@ -211278,7 +211278,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 232,
               "A": 535,
@@ -213659,13 +213659,13 @@
               },
               {
                 "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 780,
+                "endMinutes": 950,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-04-16",
-                  "2027-04-16"
+                  "2027-04-23",
+                  "2027-04-23"
                 ]
               }
             ],
@@ -213710,13 +213710,13 @@
               },
               {
                 "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 780,
+                "endMinutes": 950,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-04-16",
-                  "2027-04-16"
+                  "2027-04-23",
+                  "2027-04-23"
                 ]
               }
             ],
@@ -213761,13 +213761,13 @@
               },
               {
                 "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 780,
+                "endMinutes": 950,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-04-16",
-                  "2027-04-16"
+                  "2027-04-23",
+                  "2027-04-23"
                 ]
               }
             ],
@@ -213809,7 +213809,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-03-01",
-                  "2027-04-16"
+                  "2027-04-13"
                 ]
               },
               {
@@ -213820,7 +213820,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-03-01",
-                  "2027-04-16"
+                  "2027-04-13"
                 ]
               },
               {
@@ -213831,7 +213831,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-03-01",
-                  "2027-04-16"
+                  "2027-04-13"
                 ]
               },
               {
@@ -213842,7 +213842,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-03-01",
-                  "2027-04-16"
+                  "2027-04-13"
                 ]
               },
               {
@@ -213853,7 +213853,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-03-01",
-                  "2027-04-16"
+                  "2027-04-13"
                 ]
               }
             ],
@@ -220459,7 +220459,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 349,
               "A": 590,
@@ -220499,7 +220499,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 349,
               "A": 590,
@@ -220539,7 +220539,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 349,
               "A": 590,
@@ -220657,7 +220657,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 23,
               "A": 32,
@@ -220719,7 +220719,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 54,
               "A": 58,
@@ -225027,7 +225027,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 45,
               "A": 8,
@@ -225287,7 +225287,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 94,
               "A": 12,
@@ -225536,7 +225536,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 27,
               "A": 36,
@@ -225862,7 +225862,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 10,
               "A": 85,
@@ -226034,7 +226034,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 50,
               "A": 125,
@@ -231206,7 +231206,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -246050,7 +246050,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Krzysztof Duniewicz",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -246061,7 +246061,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Krzysztof Duniewicz",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"

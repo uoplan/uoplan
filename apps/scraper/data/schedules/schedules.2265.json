@@ -17604,48 +17604,6 @@
     },
     {
       "subject": "DCL",
-      "catalogNumber": "5722",
-      "courseCode": "DCL 5722",
-      "title": "Méthodologie de la recherche et de la rédaction juridiques (+1 combined)",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "A00-LEC Term",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Mistrale Goudreau",
-                "meetingDates": [
-                  "2026-07-02",
-                  "2026-08-12"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Mistrale Goudreau",
-                "meetingDates": [
-                  "2026-07-02",
-                  "2026-08-12"
-                ]
-              }
-            ],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "DCL",
       "catalogNumber": "5740",
       "courseCode": "DCL 5740",
       "title": "La durabilité et le droit (+1 combined)",
@@ -17849,6 +17807,48 @@
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "DCL",
+      "catalogNumber": "7712",
+      "courseCode": "DCL 7712",
+      "title": "Problèmes choisis de droit et technologie (+1 combined)",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "AA00-LEC Term",
+            "sectionCode": "AA00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "Mistrale Goudreau",
+                "meetingDates": [
+                  "2026-07-02",
+                  "2026-08-12"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 960,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "Mistrale Goudreau",
+                "meetingDates": [
+                  "2026-07-02",
+                  "2026-08-12"
                 ]
               }
             ],
@@ -23433,7 +23433,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 36,
               "A": 11,
@@ -32691,7 +32691,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 14,
               "A": 16,
@@ -33147,7 +33147,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3877,
               "A": 1475,
@@ -33805,7 +33805,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 206,
               "A": 165,
@@ -34402,7 +34402,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1135,
               "A": 543,
@@ -45678,6 +45678,46 @@
       "components": {
         "LEC": [
           {
+            "section": "V200-LEC Term",
+            "sectionCode": "V200",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 1110,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-07-08",
+                  "2026-08-12"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 290,
+              "A": 1198,
+              "A-": 999,
+              "B+": 184,
+              "B": 34,
+              "C+": 8,
+              "C": 4,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "DR": 1,
+              "EIN": 1,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 3
+            }
+          },
+          {
             "section": "X200-LEC Term",
             "sectionCode": "X200",
             "component": "LEC",
@@ -46426,6 +46466,46 @@
       "components": {
         "LEC": [
           {
+            "section": "V200-LEC Term",
+            "sectionCode": "V200",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1110,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-07-09",
+                  "2026-08-13"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 396,
+              "A": 987,
+              "A-": 830,
+              "B+": 322,
+              "B": 92,
+              "C+": 33,
+              "C": 15,
+              "D+": 1,
+              "D": 0,
+              "E": 0,
+              "F": 1,
+              "DR": 0,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 3
+            }
+          },
+          {
             "section": "X200-LEC Term",
             "sectionCode": "X200",
             "component": "LEC",
@@ -46647,6 +46727,46 @@
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
+          {
+            "section": "V200-LEC Term",
+            "sectionCode": "V200",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 1110,
+                "endMinutes": 1220,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-07-07",
+                  "2026-08-11"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 464,
+              "A": 1015,
+              "A-": 925,
+              "B+": 286,
+              "B": 60,
+              "C+": 13,
+              "C": 1,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "DR": 0,
+              "EIN": 1,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 2
+            }
+          },
           {
             "section": "X200-LEC Term",
             "sectionCode": "X200",
@@ -51419,7 +51539,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 545,
               "A": 1017,
@@ -51667,7 +51787,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 27,
               "A": 50,

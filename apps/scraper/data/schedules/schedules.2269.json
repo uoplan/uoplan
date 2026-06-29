@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11102,
-  "totalWithSchedules": 3234,
+  "totalWithSchedules": 3235,
   "schedules": [
     {
       "subject": "ADM",
@@ -2455,7 +2455,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 241,
               "A": 445,
@@ -11424,7 +11424,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 145,
               "A": 130,
@@ -18720,7 +18720,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andra Smith",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -18731,7 +18731,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andra Smith",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -22914,7 +22914,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ],
         "LAB": [
@@ -23216,7 +23216,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "A16-LAB FullSess.",
@@ -25781,7 +25781,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 9,
               "A": 21,
@@ -29853,7 +29853,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 31,
               "A": 36,
@@ -30494,7 +30494,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 8,
               "A": 26,
@@ -34315,7 +34315,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 277,
               "A": 279,
@@ -36109,7 +36109,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "B00-LAB FullSess.",
@@ -40091,7 +40091,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 34,
               "A": 83,
@@ -41115,7 +41115,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kin Chan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -50473,7 +50473,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2180,
               "A": 1732,
@@ -61488,7 +61488,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "B00-LEC FullSess.",
@@ -65502,7 +65502,7 @@
       "subject": "CML",
       "catalogNumber": "3233",
       "courseCode": "CML 3233",
-      "title": "Labour Law I (+1 combined)",
+      "title": "Labour Law I",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -65535,7 +65535,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 15,
               "A": 37,
@@ -65628,7 +65628,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3,
               "A": 10,
@@ -65741,7 +65741,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 55,
               "A": 230,
@@ -66047,7 +66047,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 39,
@@ -66774,7 +66774,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3,
               "A": 27,
@@ -68459,7 +68459,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Kelly Keenan",
+                "instructor": "KELLY KEENAN",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -75467,7 +75467,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 16,
               "A": 28,
@@ -82228,7 +82228,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 752,
               "A": 520,
@@ -82969,7 +82969,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 219,
               "A": 167,
@@ -84458,7 +84458,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3,
               "A": 12,
@@ -87204,7 +87204,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 101,
               "A": 97,
@@ -87544,6 +87544,46 @@
               }
             ],
             "status": "Closed",
+            "distribution": {
+              "A+": 28,
+              "A": 42,
+              "A-": 52,
+              "B+": 57,
+              "B": 59,
+              "C+": 70,
+              "C": 33,
+              "D+": 47,
+              "D": 12,
+              "E": 10,
+              "F": 6,
+              "DR": 5,
+              "EIN": 14,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 9
+            }
+          },
+          {
+            "section": "A05-LAB FullSess.",
+            "sectionCode": "A05",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 1140,
+                "endMinutes": 1280,
+                "virtual": false,
+                "instructor": "Christopher Kinsley",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open",
             "distribution": {
               "A+": 28,
               "A": 42,
@@ -92754,7 +92794,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -95113,7 +95153,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "B00-LEC FullSess.",
@@ -97828,7 +97868,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 82,
               "A": 152,
@@ -98341,7 +98381,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 59,
               "A": 134,
@@ -99903,7 +99943,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 5,
               "A": 18,
@@ -100158,7 +100198,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 26,
               "A": 42,
@@ -101524,7 +101564,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 27,
               "A": 34,
@@ -102061,50 +102101,10 @@
       "subject": "DTI",
       "catalogNumber": "6300",
       "courseCode": "DTI 6300",
-      "title": "Topics in Digital Transformation and Innovation (+3 combined)",
+      "title": "Topics in Digital Transformation and Innovation",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
-          {
-            "section": "A00-LEC FullSess.",
-            "sectionCode": "A00",
-            "component": "LEC",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 780,
-                "endMinutes": 950,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Closed",
-            "distribution": {
-              "A+": 49,
-              "A": 31,
-              "A-": 14,
-              "B+": 2,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "DR": 5,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
           {
             "section": "B00-LEC FullSess.",
             "sectionCode": "B00",
@@ -102152,7 +102152,7 @@
             "session": null,
             "times": [
               {
-                "day": "Mo",
+                "day": "Tu",
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
@@ -110646,7 +110646,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 73,
               "A": 105,
@@ -112507,7 +112507,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 113,
               "A": 250,
@@ -112637,7 +112637,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 25,
               "A": 13,
@@ -113631,7 +113631,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 59,
               "A": 43,
@@ -113749,7 +113749,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 82,
               "A": 69,
@@ -115541,7 +115541,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 71,
               "A": 50,
@@ -119099,7 +119099,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1,
               "A": 1,
@@ -120874,7 +120874,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -133881,7 +133881,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -135838,7 +135838,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Magalie Civil",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -135849,7 +135849,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Magalie Civil",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -137922,7 +137922,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Marie-Claude Dansereau",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -157179,7 +157179,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1117,
               "A": 958,
@@ -157219,7 +157219,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1117,
               "A": 958,
@@ -157461,7 +157461,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1117,
               "A": 958,
@@ -157501,7 +157501,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1117,
               "A": 958,
@@ -165491,6 +165491,17 @@
                   "2026-09-09",
                   "2026-12-09"
                 ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
               }
             ],
             "status": "Closed",
@@ -172815,7 +172826,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 728,
               "A": 345,
@@ -173498,7 +173509,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -175573,7 +175584,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 121,
               "A": 50,
@@ -177207,7 +177218,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -177218,7 +177229,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -177842,7 +177853,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -177853,7 +177864,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -180595,7 +180606,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -180606,7 +180617,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -180699,7 +180710,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -207565,7 +207576,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 76,
               "A": 129,
@@ -208549,7 +208560,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 15,
               "A": 42,
@@ -219122,7 +219133,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 396,
               "A": 987,
@@ -225848,7 +225859,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2191,
               "A": 1688,
@@ -227438,7 +227449,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 211,
               "A": 6,
@@ -227753,7 +227764,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 156,
               "A": 96,
@@ -227848,7 +227859,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 153,
               "A": 95,
@@ -228119,7 +228130,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 30,
               "A": 41,
@@ -228368,7 +228379,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 18,
               "A": 31,
@@ -228463,7 +228474,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 105,
               "A": 103,
@@ -228635,7 +228646,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 61,
               "A": 37,
@@ -228818,7 +228829,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 78,
               "A": 24,
@@ -228990,7 +229001,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 24,
               "A": 17,
@@ -229107,7 +229118,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 285,
               "A": 38,
@@ -229202,7 +229213,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 71,
               "A": 92,
@@ -245516,6 +245527,68 @@
     },
     {
       "subject": "PHY",
+      "catalogNumber": "5322",
+      "courseCode": "PHY 5322",
+      "title": "Biological Physics",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 840,
+                "endMinutes": 990,
+                "virtual": true,
+                "instructor": "Robert Boyd",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 840,
+                "endMinutes": 915,
+                "virtual": true,
+                "instructor": "Thomas Brabec",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 4,
+              "A": 3,
+              "A-": 0,
+              "B+": 1,
+              "B": 4,
+              "C+": 0,
+              "C": 2,
+              "D+": 1,
+              "D": 1,
+              "E": 2,
+              "F": 0,
+              "DR": 1,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "PHY",
       "catalogNumber": "5332",
       "courseCode": "PHY 5332",
       "title": "Nonlinear Optics",
@@ -249363,7 +249436,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 27,
               "A": 55,
@@ -253649,7 +253722,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 477,
               "A": 364,
@@ -253691,7 +253764,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 477,
               "A": 364,
@@ -263431,7 +263504,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 952,
               "A": 679,
@@ -263673,7 +263746,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 952,
               "A": 679,
@@ -267743,7 +267816,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 8,
               "A": 20,
