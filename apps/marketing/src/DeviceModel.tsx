@@ -32,7 +32,12 @@ const CFG: Record<Exclude<DeviceKind, "iphone">, Cfg> = {
   tablet: {
     url: "models/ipad.glb",
     isScreen: (m) => m === "screen",
-    hide: (m) => m === "glass",
+    hide: (m, mesh) =>
+      m === "glass" ||
+      m === "apple_pencil" ||
+      m === "apple_pencil.001" ||
+      m === "Line" ||
+      /pencil|^line$|^text$/i.test(mesh),
     rot: [0, 0, 0],
     fitH: 4.4,
     mirrorX: true,

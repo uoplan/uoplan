@@ -41,10 +41,17 @@ async function record(flow, udid, tag) {
   await ios.openUrl(udid, `uoplan:/${flow.path}`);
   await idb.confirmOpen(udid);
   await sleep(flow.settle);
-  // Dismiss any RN dev LogBox toast (e.g. "[expo-notifications] Error reading
-  // persisted…") so it never bleeds into the ad footage. Tap its ✕ (bottom-right).
-  await idb.tap(udid, 374, 840).catch(() => {});
-  await sleep(500);
+  // Dismiss the RN dev LogBox toast ("[expo-notifications] Error reading
+  // persisted…") once so it never covers the liquid-glass tab bar. Its ✕ overlaps
+  // the Trends tab, so tap exactly once — extra taps would fall through and switch
+  // tabs once the toast is gone.
+  // Clear the RN dev LogBox toast ("[expo-notifications] Error reading persisted…")
+  // so it never covers the liquid-glass tab bar: tap it to expand the detail view,
+  // then hit its "Dismiss" button (bottom-left). This removes it for good.
+  await idb.tap(udid, 200, 819).catch(() => {});
+  await sleep(700);
+  await idb.tap(udid, 100, 820).catch(() => {});
+  await sleep(800);
   const out = path.join(VIDEOS_DIR, `${flow.id}-${tag}.mp4`);
   const stop = await ios.recordVideo(udid, out);
   await flow.gesture(udid);

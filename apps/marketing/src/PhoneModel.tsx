@@ -13,7 +13,7 @@ const TEX_FLIP_Y = false;
 // The 180° Y flip makes us view the screen UVs from behind, mirroring the app;
 // negating U un-mirrors it so text reads correctly.
 const TEX_MIRROR_X = true;
-const TEX_ROT = 0; // radians
+const TEX_ROT = Math.PI; // radians — new GLB screen UVs are 180° rotated
 const TEX_CENTER: [number, number] = [0.5, 0.5];
 
 function orientTexture(tex: THREE.Texture) {
@@ -55,10 +55,9 @@ export const PhoneModel: React.FC<{
         polygonOffset: true,
         polygonOffsetFactor: -1,
         polygonOffsetUnits: -1,
-        // BackSide: after the 180° flip, the screen's back face points at the
-        // camera on front views (shows the app) and is culled on back/spin
-        // views (so the app never bleeds onto the phone's rear shell).
-        side: THREE.BackSide,
+        // DoubleSide: the screen plane draws on both front and rear views and
+        // always writes depth, so the body shell occludes the far-side rails.
+        side: THREE.DoubleSide,
       }),
     [],
   );
@@ -68,11 +67,29 @@ export const PhoneModel: React.FC<{
     const s = scene.clone(true);
     s.updateMatrixWorld(true);
 
-    // The GLB ships EVERY material as doubleSided=true; several are alphaMode=BLEND.
-    // Double-sided back-faces on the solid body shell are what let the far-side volume
-    // buttons / charging port / side rails bleed "through" the bezel at 3/4 angles.
-    // Hardening every kept material to single-sided, depth-correct, fully-opaque
-    // rendering makes the body occlude properly so nothing shows through.
+    // The GLB packs three phones (silver "Cube", blue "Cube.001", orange "Cube.002").
+    // Keep only the silver one — remove the blue/orange subtrees before sizing.
+    const toRemove: THREE.Object3D[] = [];
+    s.traverse((o) => {
+      const m = o as THREE.Mesh;
+      const matName = m.isMesh
+        ? Array.isArray(m.material)
+          ? m.material[0]?.name
+          : (m.material as THREE.Material)?.name
+        : "";
+      const blueOrange = /^(blue|blue1|orange|orange1|back_side_b|back_side_o)$/.test(
+        matName ?? "",
+      );
+      if (o.name.includes("001") || o.name.includes("002") || blueOrange) toRemove.push(o);
+    });
+    toRemove.forEach((o) => {
+      o.parent?.remove(o);
+      const m = o as THREE.Mesh;
+      if (m.isMesh) m.visible = false;
+    });
+
+    // Single-sided, depth-correct, fully-opaque so the body reads as a solid (the
+    // stock GLB is all double-sided + some BLEND, which lets back-faces bleed through).
     const harden = (m: THREE.Material) => {
       m.side = THREE.FrontSide;
       m.depthTest = true;
@@ -89,35 +106,30 @@ export const PhoneModel: React.FC<{
       mesh.receiveShadow = true;
       const mat = mesh.material as THREE.Material | THREE.Material[];
       const name = Array.isArray(mat) ? mat[0]?.name : mat?.name;
-      if (name === "OLED") {
+      if (name === "screen") {
         mesh.material = screenMat;
-      } else if (name === "OLED_off") {
+      } else if (name === "glass") {
+        // Front cover glass mirrors the softboxes as fake glare; hide it — the unlit
+        // screen already draws the app crisply.
         mesh.visible = false;
-      } else if (name === "Glass") {
-        // Front cover glass: roughness 0 + transmission 1 makes it a perfect mirror
-        // of the studio softboxes — that hard rectangle reads as fake "glare" on the
-        // screen. Hide it; the unlit OLED already draws the app crisply on top.
-        mesh.visible = false;
-      } else if (
-        name === "Plastic_LED" ||
-        name === "Camera_Lens" ||
-        name === "Camera_sapphire_miror" ||
-        name === "Camera_filter" ||
-        name === "Camera_mirror_filter" ||
-        name === "Display_Frame"
-      ) {
-        // Dynamic-Island front camera + bezel. The stock materials are shiny
-        // (a bright white LED / a mirror-smooth sapphire lens) so a reflective
-        // "camera ring" shows through. Force flat matte near-black so the island
-        // reads as one solid black pill and the bezel doesn't catch hotspots.
+      } else if (name === "black_frame") {
+        // Black bezel rim, biased toward the camera so it always paints over the rails.
+        mesh.material = new THREE.MeshStandardMaterial({
+          color: new THREE.Color(0x050505),
+          metalness: 0,
+          roughness: 0.94,
+          polygonOffset: true,
+          polygonOffsetFactor: -3,
+          polygonOffsetUnits: -3,
+        });
+      } else if (name === "lens") {
         mesh.material = new THREE.MeshStandardMaterial({
           color: new THREE.Color(0x050505),
           metalness: 0,
           roughness: 0.94,
         });
       } else if (mat) {
-        // Body, rails, buttons, port, antenna, back glass, camera plate: keep their
-        // stock look but cull back-faces and enforce depth so they read as a solid.
+        // Silver body, rails, buttons, back glass: keep stock look, harden.
         (Array.isArray(mat) ? mat : [mat]).forEach(harden);
       }
     });

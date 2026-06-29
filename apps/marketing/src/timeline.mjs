@@ -16,7 +16,7 @@ export const SCENES = [
     start: 2.2,
     end: 9.4,
     device: { kind: "laptop", video: "videos/explore-web.mp4" },
-    pose: { x: 0.0, y: -0.2, s: 1.0, yaw: -16, tilt: 9, roll: 0 },
+    pose: { x: -1.55, y: -0.2, s: 0.82, yaw: -16, tilt: 9, roll: 0 },
     text: {
       side: "right",
       anim: "slideR",
@@ -28,7 +28,7 @@ export const SCENES = [
     start: 9.4,
     end: 16.2,
     device: { kind: "laptop", video: "videos/trends-web.mp4" },
-    pose: { x: 0.2, y: -0.2, s: 1.02, yaw: 14, tilt: 9, roll: 0 },
+    pose: { x: 1.55, y: -0.2, s: 0.82, yaw: 14, tilt: 9, roll: 0 },
     text: {
       side: "left",
       anim: "slideL",
@@ -40,10 +40,10 @@ export const SCENES = [
     start: 16.2,
     end: 23.0,
     device: { kind: "laptop", video: "videos/schedule-web.mp4" },
-    pose: { x: 0.0, y: -0.1, s: 1.04, yaw: -8, tilt: 7, roll: 0 },
+    pose: { x: -1.55, y: -0.1, s: 0.84, yaw: -8, tilt: 7, roll: 0 },
     text: {
       side: "right",
-      anim: "rise",
+      anim: "slideR",
       pre: "schedules from your",
       flip: ["program", "transcript", "credits"],
     },
@@ -59,15 +59,15 @@ export const SCENES = [
     start: 27.6,
     end: 32.2,
     device: { kind: "iphone", video: "videos/schedule-ios.mp4" },
-    pose: { x: -1.9, y: -0.5, s: 1.16, yaw: 22, tilt: 7, roll: 7 },
+    pose: { x: -1.9, y: -0.5, s: 1.16, yaw: 16, tilt: 6, roll: 3 },
     text: { side: "right", anim: "slideR", pre: "and on", flip: ["iOS"] },
   },
   {
     start: 32.2,
     end: 36.8,
     device: { kind: "tablet", video: "videos/trends-ipad.mp4" },
-    pose: { x: 0.0, y: 0.4, s: 0.92, yaw: -8, tilt: 5, roll: -3 },
-    text: { side: "center", place: "below", anim: "rise", pre: "and on", flip: ["iPadOS"] },
+    pose: { x: -0.5, y: -0.1, s: 0.82, yaw: 12, tilt: 6, roll: -3 },
+    text: { side: "right", anim: "slideR", pre: "and on", flip: ["iPadOS"] },
   },
 ];
 

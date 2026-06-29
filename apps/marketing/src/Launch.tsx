@@ -78,7 +78,14 @@ const Scene3D: React.FC<{ iphone: THREE.Object3D | null }> = ({ iphone }) => {
   const s = p ? p.s * lerp(0.99, 1.035, u) : 0.5;
   const x = p?.x ?? 999;
   const y = (p?.y ?? 0) + u * 0.1;
-  const shadowY = y - 2.0 * s - 0.12;
+  const isLaptop = sc?.device.kind === "laptop";
+  // Lay the contact shadow flat under the device. Laptops are wide + short, so
+  // they need a larger, softer, lighter pool sitting at the deck; handhelds get a
+  // tight pool just under the body.
+  const shadowY = y - (isLaptop ? 1.05 : 2.05) * s - 0.1;
+  const sh = isLaptop
+    ? { opacity: 0.32, scale: 13, blur: 6.5, far: 3.2 }
+    : { opacity: 0.5, scale: 9, blur: 3, far: 4.5 };
   // Little 360 on the handed-off devices: hold ~1s, then one smooth eased turn
   // to flash the full body, landing back at the pose yaw.
   const local = sc ? t - sc.start : 0;
@@ -95,15 +102,20 @@ const Scene3D: React.FC<{ iphone: THREE.Object3D | null }> = ({ iphone }) => {
         height={height}
         camera={{ fov: 30, position: [0, 0, 9.5], near: 0.1, far: 100 }}
         gl={{ antialias: true, preserveDrawingBuffer: true, alpha: true }}
+        onCreated={({ gl }) => {
+          gl.toneMapping = THREE.ACESFilmicToneMapping;
+          gl.toneMappingExposure = 1.18;
+          gl.outputColorSpace = THREE.SRGBColorSpace;
+        }}
         style={{ position: "absolute", inset: 0 }}
       >
         <Studio />
         <ContactShadows
           position={[x, shadowY, 0]}
-          opacity={0.5}
-          scale={9}
-          blur={3}
-          far={4.5}
+          opacity={sh.opacity}
+          scale={sh.scale}
+          blur={sh.blur}
+          far={sh.far}
           resolution={512}
           color="#1a1714"
         />
@@ -146,7 +158,14 @@ const FlipWord: React.FC<{ words: string[]; local: number; size: number; align: 
     willChange: "transform, opacity, filter",
   };
   return (
-    <div style={{ position: "relative", height: size * 1.12, width: "100%", overflow: "hidden" }}>
+    <div
+      style={{
+        position: "relative",
+        height: Math.round(size * 1.12),
+        width: "100%",
+        overflow: "hidden",
+      }}
+    >
       {idx > 0 && tr < 1 && (
         <span
           style={{
@@ -366,13 +385,14 @@ const Outro: React.FC<{ t: number }> = ({ t }) => {
           right: 0,
           textAlign: "center",
           fontFamily: "DM Mono",
-          fontSize: 19,
+          fontSize: 17,
           letterSpacing: "0.04em",
           color: MUTED,
           opacity: a(1.6),
         }}
       >
-        iPhone 17 Pro by Ranguel · CC BY 4.0
+        Models — iPhone 17 Pro by Ranguel, iPad by DatSketch, MacBook by sugcx · CC BY 4.0 · Pixel
+        by Google
       </div>
     </AbsoluteFill>
   );

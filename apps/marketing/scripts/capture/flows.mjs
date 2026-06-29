@@ -56,12 +56,12 @@ const FLOWS = {
     await sleep(900);
   },
 
-  // Trends: glide through the decade chart and discipline cards (top region only).
+  // Trends: a small reveal of the decade chart + discipline cards (never the footer).
   async trends(page) {
+    await sleep(1000);
+    await smoothScrollTo(page, 160, 2200);
     await sleep(900);
-    await smoothScrollTo(page, 520, 2200);
-    await sleep(900);
-    await smoothScrollTo(page, 980, 2000);
+    await smoothScrollTo(page, 360, 2000);
     await sleep(900);
   },
 
