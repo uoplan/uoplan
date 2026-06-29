@@ -7,26 +7,27 @@
 
 import { sleep } from "./lib/util.mjs";
 
-/** Smoothly scroll the window to an absolute Y over `ms`, easing in/out. */
-async function smoothScrollTo(page, targetY, ms = 1800) {
+/** Continuously scroll from top to ~bottom over the whole beat, easing, so the
+ *  page is always moving (no stop-and-sit at the bottom). */
+async function scrollThrough(page, ms = 6000, frac = 0.92) {
   await page.evaluate(
-    ([y, dur]) =>
+    (dur) =>
       new Promise((resolve) => {
-        const startY = window.scrollY;
-        const dist = y - startY;
+        window.scrollTo(0, 0);
+        const max = Math.max(0, document.body.scrollHeight - window.innerHeight) * 0.92;
         const t0 = performance.now();
         const ease = (p) => (p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2);
         function step(now) {
           const p = Math.min(1, (now - t0) / dur);
-          window.scrollTo(0, startY + dist * ease(p));
+          window.scrollTo(0, max * ease(p));
           if (p < 1) requestAnimationFrame(step);
           else resolve();
         }
         requestAnimationFrame(step);
       }),
-    [targetY, ms],
+    ms,
   );
-  await sleep(ms + 150);
+  await sleep(120);
 }
 
 /** Type into an element character-by-character so the keystrokes are visible. */
@@ -37,59 +38,48 @@ async function typeSlow(locator, text, perKey = 120) {
 }
 
 const FLOWS = {
-  // Explore: search the catalogue, watch results filter, swap query, browse.
+  // Explore: two quick searches (so it reads as "search anything"), then a
+  // continuous browse that lasts the rest of the beat.
   async explore(page) {
-    await sleep(700);
     const search = page.getByPlaceholder(/Search/i).first();
     if (await search.isVisible().catch(() => false)) {
-      await typeSlow(search, "csi");
-      await sleep(1100);
-      await search.click();
-      await page.keyboard.press("Meta+A");
-      await page.keyboard.press("Backspace");
-      await sleep(500);
-      await typeSlow(search, "eng");
-      await sleep(1200);
+      await typeSlow(search, "eng", 110);
+      await sleep(900);
+      await search.fill("");
+      await sleep(300);
+      await typeSlow(search, "calc", 110);
+      await sleep(900);
+      await search.fill("");
+      await sleep(400);
     }
-    // Stay near the top — only a short browse, never reaching the footer.
-    await smoothScrollTo(page, 420, 1800);
-    await sleep(900);
+    await scrollThrough(page, 5200);
   },
 
-  // Trends: a small reveal of the decade chart + discipline cards (never the footer).
+  // Trends: one slow, continuous reveal of the dashboard across the whole beat.
   async trends(page) {
-    await sleep(1000);
-    await smoothScrollTo(page, 160, 2200);
-    await sleep(900);
-    await smoothScrollTo(page, 360, 2000);
-    await sleep(900);
+    await scrollThrough(page, 6400);
   },
 
-  // Schedule: reveal the generated week, then cycle through alternatives.
+  // Schedule: reveal the generated week, then cycle alternatives through the beat.
   async schedule(page) {
-    await sleep(1200);
+    await sleep(800);
     const next = page.getByRole("button", { name: /Next/i }).first();
     for (let i = 0; i < 4; i += 1) {
       if (await next.isVisible().catch(() => false)) {
         await next.click().catch(() => {});
-        await sleep(1600);
+        await sleep(1500);
       }
     }
   },
 
-  // Customize: open the basket/options and tweak the plan.
+  // Customize: open options and tweak, then scroll the rail continuously.
   async customize(page) {
-    await sleep(900);
-    // Cycle a couple of alternatives, then scroll the options rail.
     const next = page.getByRole("button", { name: /Next/i }).first();
     if (await next.isVisible().catch(() => false)) {
       await next.click().catch(() => {});
-      await sleep(1400);
+      await sleep(900);
     }
-    await smoothScrollTo(page, 900, 2200);
-    await sleep(1000);
-    await smoothScrollTo(page, 1700, 2200);
-    await sleep(900);
+    await scrollThrough(page, 6000);
   },
 };
 
