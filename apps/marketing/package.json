@@ -1,0 +1,28 @@
+{
+  "name": "marketing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts Launch out/launch-video.mp4 --codec=h264 --gl=angle",
+    "still": "remotion still src/index.ts Launch out/still.png --gl=angle",
+    "audio": "node scripts/make-audio.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/drei": "10.0.6",
+    "@react-three/fiber": "9.1.2",
+    "@remotion/cli": "4.0.481",
+    "@remotion/three": "4.0.481",
+    "@types/three": "0.171.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "remotion": "4.0.481",
+    "three": "0.171.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.4",
+    "typescript": "5.7.3"
+  }
+}

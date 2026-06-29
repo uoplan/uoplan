@@ -78,6 +78,9 @@ const LAYERS: Record<string, string[]> = {
     "@uoplan/calendar",
   ],
   scraper: ["@uoplan/proto", "@uoplan/core"],
+  // Isolated Remotion launch-video project (deliberately NOT a pnpm workspace
+  // member); it must never depend on any @uoplan/* package, so its allow-list is empty.
+  marketing: [],
 };
 
 const WORKSPACE_GLOBS = ["apps", "packages"];

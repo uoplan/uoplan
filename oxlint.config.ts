@@ -26,6 +26,7 @@ export default defineConfig({
     "packages/i18n/src/locales/**/messages.ts",
     "apps/notifications/**",
     "apps/native/**",
+    "apps/marketing/**",
     "worker-configuration.d.ts",
   ],
   rules: {

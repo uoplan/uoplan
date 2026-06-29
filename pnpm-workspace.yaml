@@ -1,5 +1,12 @@
 packages:
   - apps/*
+  # apps/marketing is an ISOLATED Remotion launch-video project — deliberately NOT a
+  # workspace member. It depends on heavy, frequently/freshly-published Remotion +
+  # three + react-three packages that trip the repo-wide 1-week `minimumReleaseAge`
+  # gate (e.g. remotion/react ship a new version most days), which would break every
+  # root `pnpm install`. It keeps its own node_modules + lockfile and is run/installed
+  # standalone via `--ignore-workspace` (see apps/marketing/README.md).
+  - "!apps/marketing"
   - packages/*
 
 minimumReleaseAge: 10080
