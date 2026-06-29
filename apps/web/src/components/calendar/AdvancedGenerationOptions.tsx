@@ -145,7 +145,7 @@ export function AdvancedGenerationOptions() {
     Math.max(0, SCHEDULE_COURSE_COUNT_MAX - selectedElectivesCount),
   );
 
-  const additionalElectivesMin = additionalElectivesMax === 0 || selectedElectivesCount > 0 ? 0 : 1;
+  const additionalElectivesMin = 0;
 
   useEffect(() => {
     const next = Math.max(

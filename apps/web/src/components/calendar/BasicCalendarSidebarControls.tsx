@@ -84,7 +84,7 @@ export function BasicCalendarSidebarControls() {
     return total;
   }, [cache, completedCourses, basketCourses]);
   const additionalElectivesMax = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - basketCourses.length);
-  const additionalElectivesMin = basketCourses.length > 0 ? 0 : 1;
+  const additionalElectivesMin = 0;
 
   useEffect(() => {
     const next = Math.max(

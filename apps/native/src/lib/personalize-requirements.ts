@@ -157,7 +157,7 @@ function cloneSelections(
     constrainedPerRequirement: cloneStringRecord(selections?.constrainedPerRequirement ?? {}),
     requirementPriorities: { ...(selections?.requirementPriorities ?? {}) },
     coursesThisSemester: Math.max(
-      1,
+      0,
       Math.trunc(selections?.coursesThisSemester ?? DEFAULT_COURSES_THIS_SEMESTER),
     ),
     requirementSlotsUserTouched: { ...(selections?.requirementSlotsUserTouched ?? {}) },
@@ -283,7 +283,7 @@ export function setCoursesThisSemester(
 ): PersonalizeRequirementSelections {
   return {
     ...cloneSelections(selections),
-    coursesThisSemester: Math.max(1, Math.trunc(coursesThisSemester)),
+    coursesThisSemester: Math.max(0, Math.trunc(coursesThisSemester)),
   };
 }
 
