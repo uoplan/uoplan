@@ -81,13 +81,13 @@ export interface TrendsOverview {
 
 const SEASON_LABEL: Record<TermSeason, string> = {
   winter: "Winter",
-  springSummer: "Spring/Summer",
+  springSummer: "Summer",
   fall: "Fall",
 };
 
 const COURSE_CARD_SEASON_LABEL: Record<TermSeason, string> = {
   winter: "Winter",
-  springSummer: "Spring/summer",
+  springSummer: "Summer",
   fall: "Fall",
 };
 

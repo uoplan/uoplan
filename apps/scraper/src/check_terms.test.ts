@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  findNewTerms,
-  normalizeTermName,
-  parseTermDropdown,
-  sortTerms,
-  termsListsEqual,
-} from "./terms/check.ts";
+import { findNewTerms, parseTermDropdown, sortTerms, termsListsEqual } from "./terms/check.ts";
+import { normalizeTermName } from "./terms/normalize.ts";
 
 describe("normalizeTermName", () => {
   it("collapses Spring/Summer to Summer", () => {

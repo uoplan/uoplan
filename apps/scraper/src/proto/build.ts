@@ -26,6 +26,7 @@ import {
 } from "../schedules/predictInstructors.ts";
 import type { GradesCourseInput, ScheduleFileInput } from "../schedules/predictInstructors.ts";
 import { parseTermIdToNumber } from "./shared.ts";
+import { normalizeTermName } from "../terms/normalize.ts";
 
 interface RateMyProfessorInput {
   id?: string;
@@ -109,7 +110,7 @@ export async function main(): Promise<void> {
     DataProto.TermsData.encode({
       terms: (terms.terms ?? []).map((t) => ({
         termId: parseTermIdToNumber(String(t.termId ?? "")),
-        name: t.name,
+        name: normalizeTermName(t.name),
       })),
     }).finish(),
   );

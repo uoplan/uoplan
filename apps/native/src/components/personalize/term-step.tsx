@@ -16,6 +16,10 @@ export function TermStep({ options, value, onChange, reminders }: TermStepProps)
   const contentInset = usePagedStepperContentInset();
   const selected = options.find((option) => option.value === value) ?? null;
   const featured = options.slice(0, 4);
+  // Only surface the search field when there are more terms than the featured
+  // grid shows, and let it search just the terms not already on a card.
+  const overflowTerms = options.slice(4);
+  const showFindAnother = overflowTerms.length > 0;
 
   return (
     <View style={[styles.root, { paddingBottom: contentInset }]}>
@@ -55,19 +59,21 @@ export function TermStep({ options, value, onChange, reminders }: TermStepProps)
         </View>
       ) : null}
 
-      <View style={styles.field}>
-        <Text style={styles.fieldLabel}>Find another term</Text>
-        <SearchableSelect
-          title="Term"
-          options={options}
-          value={value}
-          onChange={onChange}
-          placeholder="Select your term…"
-          searchPlaceholder="Search terms"
-          emptyMessage="No terms match your search."
-          clearable={false}
-        />
-      </View>
+      {showFindAnother ? (
+        <View style={styles.field}>
+          <Text style={styles.fieldLabel}>Find another term</Text>
+          <SearchableSelect
+            title="Term"
+            options={overflowTerms}
+            value={value}
+            onChange={onChange}
+            placeholder="Select your term…"
+            searchPlaceholder="Search terms"
+            emptyMessage="No terms match your search."
+            clearable={false}
+          />
+        </View>
+      ) : null}
 
       {reminders ? <View style={styles.reminders}>{reminders}</View> : null}
     </View>

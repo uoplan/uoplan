@@ -120,11 +120,8 @@ describe("PagedStepper", () => {
   });
 
   it("keeps the bottom bar dedicated to step dots", async () => {
-    const onPrimary = jest.fn();
     const { getByTestId, queryByLabelText } = await renderWithSafeArea(
       <PagedStepper
-        primaryLabel="Show me my schedule"
-        onPrimary={onPrimary}
         steps={[
           { key: "term", title: "Term", content: <Text>Choose a term</Text> },
           { key: "requirements", title: "Requirements", content: <Text>Fill requirements</Text> },
@@ -137,7 +134,6 @@ describe("PagedStepper", () => {
     await fireEvent.press(getByTestId("step-dot-1"));
 
     expect(queryByLabelText("Show me my schedule")).toBeNull();
-    expect(onPrimary).not.toHaveBeenCalled();
   });
 });
 

@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text } from "@uoplan/ui";
 
 import { AppIcon, type IconName } from "@/components/app-icon";
-import { GlassSurface, glassAvailable } from "@/components/glass-surface";
+import { GlassSurface } from "@/components/glass-surface";
 import { Spacing, Surface } from "@/constants/theme";
 
 interface FabProps {
@@ -121,34 +121,24 @@ export function FabStack({ children, bottomOffset = 0 }: FabStackProps) {
  * so the cart FAB and the pager/options bar sit on the SAME baseline on each
  * platform (otherwise they float at different heights).
  *
- * The FAB floats a small gap above each platform's tab bar, but the two bars
- * are anchored differently, so the math differs:
- *
  * - Android (`app-tabs-android.tsx`) is a flat custom bar laid out as a normal
  *   flow sibling BELOW the screen content (`TabSlot` is `flex: 1`, the bar
  *   sits under it). This screen's content area therefore already ENDS at the
  *   bar's top edge — `bottom: 0` is that edge — and the bar absorbs the bottom
- *   safe-area inset via its own padding. So the controls only need a small gap;
- *   adding the bar height or the inset here would double-count and float them
- *   far too high.
- * - iOS uses a real `UITabBar` that overlays the content (content runs full
- *   bleed underneath it), so `bottom: 0` is the screen's bottom edge, under the
- *   bar. On iOS 26+ the bar is a floating capsule that leaves the bottom-right
- *   corner clear, so the controls just clear the home-indicator inset. On legacy
- *   iOS the full-width bar must additionally be cleared.
+ *   safe-area inset via its own padding. So the controls only need a small gap.
+ * - iOS uses a real `UITabBar` (a floating Liquid-Glass capsule on iOS 26+, a
+ *   full-width bar on older iOS). In BOTH cases the tab screen runs full-bleed
+ *   under the bar and UIKit already folds the bar into that screen's bottom
+ *   safe-area inset, so `insets.bottom` lands at the bar's top edge — the
+ *   controls just add a small gap on top. (Adding the bar height again here
+ *   double-counts and floats the controls far too high on legacy iOS.)
  */
 export function useFloatingControlsBottom(): number {
   const insets = useSafeAreaInsets();
-  return Platform.OS === "android"
-    ? Spacing.three
-    : glassAvailable
-      ? insets.bottom + Spacing.three
-      : insets.bottom + IOS_LEGACY_TAB_BAR_HEIGHT + Spacing.three;
+  return Platform.OS === "android" ? Spacing.three : insets.bottom + Spacing.three;
 }
 
 const SIZE = 56;
-/** Legacy iOS `UITabBar` height (above the safe-area inset) the FAB must clear. */
-const IOS_LEGACY_TAB_BAR_HEIGHT = 49;
 
 /**
  * Vertical distance one FAB occupies in a {@link FabStack} (button + the stack's

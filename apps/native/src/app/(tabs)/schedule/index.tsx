@@ -303,9 +303,6 @@ export default function ScheduleScreen() {
             paddingHorizontal: Spacing.two,
           }}
         >
-          {skippedCourses && skippedCourses.length > 0 ? (
-            <SkippedCoursesBanner courses={skippedCourses} />
-          ) : null}
           <WeekCalendar
             events={displayedEvents}
             availableHeight={calendarHeight}
@@ -419,20 +416,6 @@ function SkippedCoursesNotice({ courses }: { courses: SkippedCourse[] }) {
       <Text dimmed size="sm" align="center">
         We built your schedule without {single ? "it" : "them"}.
       </Text>
-    </View>
-  );
-}
-
-/** Slim inline banner shown above a generated calendar when courses were skipped. */
-function SkippedCoursesBanner({ courses }: { courses: SkippedCourse[] }) {
-  return (
-    <View style={styles.skipBanner}>
-      <AppIcon name="exclamationmark.circle" size={15} color={Surface.dimmed} />
-      <View style={styles.skipBannerText}>
-        <Text dimmed size="sm">
-          Left out {skipPhrases(courses).join("; ")}.
-        </Text>
-      </View>
     </View>
   );
 }
@@ -663,20 +646,5 @@ const styles = StyleSheet.create({
     backgroundColor: Surface.card,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: Surface.border,
-  },
-  skipBanner: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.one,
-    marginBottom: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-    borderRadius: 12,
-    backgroundColor: Surface.subtle,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Surface.border,
-  },
-  skipBannerText: {
-    flex: 1,
   },
 });

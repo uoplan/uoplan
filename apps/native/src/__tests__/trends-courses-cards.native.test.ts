@@ -90,7 +90,7 @@ describe("trends courses card view-models", () => {
   it("compares fall, winter, and spring/summer GPA for the selected course", () => {
     const seasons = courseSeasonComparison(grades, "ITI 1120");
 
-    expect(seasons.map((season) => season.label)).toEqual(["Fall", "Winter", "Spring/summer"]);
+    expect(seasons.map((season) => season.label)).toEqual(["Fall", "Winter", "Summer"]);
     expect(seasons.map((season) => season.value)).toEqual([9.6, 3.4, 6.4]);
     expect(seasons.map((season) => season.volume)).toEqual([100, 100, 100]);
   });
