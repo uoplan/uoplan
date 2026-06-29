@@ -112,7 +112,11 @@ async function apply(doc: Document, log?: (m: string) => void): Promise<void> {
       detail.push(`${row.kind}:${row.anchorId ?? "no-id"}=missing`);
       continue;
     }
-    detail.push(`${row.anchorId}=${anchor.offsetParent === null ? "hidden" : "shown"}`);
+    if (anchor.offsetParent === null) {
+      detail.push(`${row.anchorId}=hidden`);
+      continue; // skip phantom/template rows
+    }
+    detail.push(`${row.anchorId}=shown`);
     if (anchor.querySelector(`.${BADGE_CLASS}`) || anchor.getAttribute(DONE_ATTR)) continue;
     anchor.setAttribute(DONE_ATTR, "1");
     anchor.append(makeBadge(code, badge));

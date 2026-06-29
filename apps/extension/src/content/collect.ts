@@ -108,7 +108,7 @@ export function scanSections(doc: Document): SectionRow[] {
       days: rowText(doc, `MTG_DAYTIME$${index}`),
       instructor: rowText(doc, `MTG_INSTR$${index}`),
       status: statusImg?.alt ?? "",
-      anchorId: `MTG_CLASSNAME$${index}`,
+      anchorId: `MTG_CLASS_NBR$${index}`,
     });
   }
 
