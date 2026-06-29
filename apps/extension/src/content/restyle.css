@@ -14,9 +14,26 @@ html::before {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 5px;
   background: #8ec5ff;
   z-index: 2147483647;
+  pointer-events: none;
+}
+
+/* Always-visible "uoPlan active" status pill (top frame). */
+#uoplan-status-pill {
+  position: fixed;
+  top: 8px;
+  right: 10px;
+  z-index: 2147483647;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #8ec5ff;
+  color: #102a43;
+  font:
+    600 12px/1.4 system-ui,
+    sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   pointer-events: none;
 }
 

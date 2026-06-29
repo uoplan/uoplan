@@ -12,6 +12,19 @@ import { scanSections } from "./collect";
 
 const BADGE_CLASS = "uoplan-grade-badge";
 const DONE_ATTR = "data-uoplan-grade";
+const PILL_ID = "uoplan-status-pill";
+
+/** Always-visible proof the overlay is alive in the top frame; updates with status. */
+function setPill(doc: Document, text: string): void {
+  if (doc.defaultView !== doc.defaultView?.top) return; // top frame only
+  let pill = doc.getElementById(PILL_ID);
+  if (!pill) {
+    pill = doc.createElement("div");
+    pill.id = PILL_ID;
+    doc.body?.append(pill);
+  }
+  pill.textContent = `uoPlan · ${text}`;
+}
 
 function badgeText(code: string, b: GradeBadge): string {
   const parts = [code];
@@ -66,15 +79,18 @@ async function apply(doc: Document, log?: (m: string) => void): Promise<void> {
       .map((el) => el.id)
       .filter((id) => /CLASS|CRSE|REGFORM|MTG|SUBJECT|P_/i.test(id))
       .slice(0, 25);
+    setPill(doc, "active · no courses here");
     log?.(`overlay: 0 rows (probe ids: ${ids.join(", ") || "none"})`);
     return;
   }
   const codes = [...new Set(rows.map((r) => r.courseCode as string))];
   const byCode = await fetchBadges(codes);
+  const matched = Object.keys(byCode).length;
+  setPill(doc, `${rows.length} courses · ${matched} graded`);
   log?.(
-    `overlay: ${rows.length} rows, ${codes.length} codes [${codes.slice(0, 8).join(",")}] → ${Object.keys(byCode).length} matched`,
+    `overlay: ${rows.length} rows, ${codes.length} codes [${codes.slice(0, 8).join(",")}] → ${matched} matched`,
   );
-  if (Object.keys(byCode).length === 0) return;
+  if (matched === 0) return;
 
   let injected = 0;
   for (const row of rows) {
