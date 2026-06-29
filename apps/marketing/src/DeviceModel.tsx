@@ -32,12 +32,7 @@ const CFG: Record<Exclude<DeviceKind, "iphone">, Cfg> = {
   tablet: {
     url: "models/ipad.glb",
     isScreen: (m) => m === "screen",
-    hide: (m, mesh) =>
-      m === "glass" ||
-      m === "apple_pencil" ||
-      m === "apple_pencil.001" ||
-      m === "Line" ||
-      /pencil|^line$|^text$/i.test(mesh),
+    hide: (m) => m === "glass",
     rot: [0, 0, 0],
     fitH: 4.4,
     mirrorX: true,
@@ -55,25 +50,6 @@ const CFG: Record<Exclude<DeviceKind, "iphone">, Cfg> = {
 };
 
 const loaderCache = new Map<string, THREE.Object3D>();
-export function preloadDeviceGlbs(): Promise<void> {
-  return Promise.all(
-    Object.values(CFG).map(
-      (c) =>
-        new Promise<void>((res) => {
-          if (loaderCache.has(c.url)) return res();
-          new GLTFLoader().load(
-            staticFile(c.url),
-            (g) => {
-              loaderCache.set(c.url, g.scene);
-              res();
-            },
-            undefined,
-            () => res(),
-          );
-        }),
-    ),
-  ).then(() => undefined);
-}
 function useGlb(url: string): THREE.Object3D | null {
   const [obj, setObj] = useState<THREE.Object3D | null>(() => loaderCache.get(url) ?? null);
   useEffect(() => {

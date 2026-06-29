@@ -1,21 +1,21 @@
-# 3D model — manual download required
+# 3D models — manual download required
 
-The launch video renders a real **iPhone 17 Pro** GLB. It is **git-ignored** (a ~24 MB
-binary), so you must download it once before rendering.
+The launch video renders four real device GLBs (iPhone, iPad, Pixel, MacBook). They are
+**git-ignored** (large binaries), so download them once before rendering. Save each with
+the exact filename below into this folder.
 
-## Get it
+| Device  | File          | Source                                                                                   | License   |
+| ------- | ------------- | ---------------------------------------------------------------------------------------- | --------- |
+| iPhone  | `iphone.glb`  | iPhone 17 Pro by Ranguel — <https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec> | CC BY 4.0 |
+| iPad    | `ipad.glb`    | Apple iPad Pro — <https://sketchfab.com/3d-models/apple-ipad-pro-e5ffb3c80b2d4d6690249f8ee2bdafbe> | CC BY 4.0 |
+| Pixel   | `pixel.glb`   | Pixel 10 — official Google model (de-Draco'd via `npx @gltf-transform/cli dedup`)        | —         |
+| MacBook | `macbook.glb` | MacBook Pro 16" Silver                                                                    | CC BY 4.0 |
 
-Download **"iPhone 17 Pro" by Ranguel** from Sketchfab and save it in this folder as
-`iphone.glb`:
+Steps for each Sketchfab model: open the link → **Download 3D Model** → **glTF Binary
+(`.glb`)** → save/rename to `apps/marketing/public/models/<file>`. CC BY 4.0:
+<https://creativecommons.org/licenses/by/4.0/>.
 
-- Model: <https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec>
-- License: **CC BY 4.0** — <https://creativecommons.org/licenses/by/4.0/>
-
-Steps:
-
-1. Open the link → **Download 3D Model** → choose **glTF Binary (`.glb`)**.
-2. Save / rename it to exactly `apps/marketing/public/models/iphone.glb`.
-
-The composition loads it via `staticFile("models/iphone.glb")` (`src/Launch.tsx`). No
-geometry is modified — it is re-lit and posed at render time. Attribution appears
-on-screen in the outro and is recorded in `../../CREDITS.md`.
+The composition loads each via `staticFile("models/*.glb")` and `DeviceModel.tsx` finds the
+screen mesh, swaps in the captured app video, and hides glass/glare. No geometry is
+modified — devices are re-lit and posed at render time. Attribution appears on-screen in
+the outro and is recorded in `../../CREDITS.md`.

@@ -16,7 +16,7 @@ import { VIDEOS_DIR, MARKETING_DIR, IOS_BUCKETS } from "./config.mjs";
 
 // Logical-point swipe lane for a 6.9" iPhone (402×874): scroll up the centre.
 const FLOWS = [
-  { id: "schedule", path: "/schedule", settle: 13000, gesture: holdStill },
+  { id: "schedule", path: "/schedule", settle: 7000, gesture: cycleSchedule },
   { id: "explore", path: "/explore", settle: 3500, gesture: scrollDown },
   { id: "trends", path: "/trends", settle: 3500, gesture: scrollDown },
   { id: "course", path: "/explore/course/MAT%201322", settle: 3500, gesture: scrollDown },
@@ -29,15 +29,11 @@ async function scrollDown(udid) {
   }
 }
 
-// Keep one generated schedule on screen for ~6s with gentle vertical nudges (never
-// crossing weeks) so the recorder emits a multi-second clip instead of one dedup'd
-// static frame, and it never jumps mid-360 spin in the ad.
-async function holdStill(udid) {
-  for (let i = 0; i < 5; i += 1) {
-    await idb.swipe(udid, 200, 540, 200, 510, 700);
-    await sleep(500);
-    await idb.swipe(udid, 200, 510, 200, 540, 700);
-    await sleep(500);
+async function cycleSchedule(udid) {
+  await sleep(1500);
+  for (let i = 0; i < 4; i += 1) {
+    await idb.tapLabel(udid, "Next schedule").catch(() => {});
+    await sleep(1500);
   }
 }
 
@@ -45,11 +41,10 @@ async function record(flow, udid, tag) {
   await ios.openUrl(udid, `uoplan:/${flow.path}`);
   await idb.confirmOpen(udid);
   await sleep(flow.settle);
-  // Dismiss the RN dev LogBox toast ("[expo-notifications] Error reading persisted…")
-  // via its ✕ (bottom-right) so it never covers the controls/tab bar. Tap exactly the
-  // ✕ — not the tab bar — so we stay on the recorded route.
-  await idb.tap(udid, 372, 820).catch(() => {});
-  await sleep(1200);
+  // Dismiss any RN dev LogBox toast (e.g. "[expo-notifications] Error reading
+  // persisted…") so it never bleeds into the ad footage. Tap its ✕ (bottom-right).
+  await idb.tap(udid, 374, 840).catch(() => {});
+  await sleep(500);
   const out = path.join(VIDEOS_DIR, `${flow.id}-${tag}.mp4`);
   const stop = await ios.recordVideo(udid, out);
   await flow.gesture(udid);

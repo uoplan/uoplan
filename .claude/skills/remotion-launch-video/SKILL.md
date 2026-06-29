@@ -1,6 +1,6 @@
 ---
 name: remotion-launch-video
-description: Use when creating or editing a code-rendered launch / promo / demo video for an app (Remotion + a real 3D phone showing app screens), e.g. the apps/marketing "Launch" composition. Covers the fixed-pose shot system, GLB material fixes (see-through buttons, screen, glare, Dynamic Island), studio lighting, tracking contact shadows, original audio synthesis, Remotion + three async-load gotchas, the verify-with-stills workflow, and the uoplan.party branding rules.
+description: Use when creating or editing a code-rendered launch / promo / demo video for an app (Remotion + a real 3D phone showing app screens), e.g. the apps/marketing "Launch" composition. Covers the fixed-pose shot system, multi-device staging (laptop/tablet/Pixel/iPhone), live app-video on 3D screens via useOffthreadVideoTexture, the automated capture harness (seed→drive→record on sim/emulator/web), GLB material fixes (see-through buttons, screen, glare, Dynamic Island), studio lighting, tracking contact shadows, original audio synthesis, Remotion + three async-load gotchas, the verify-with-stills workflow, and the uoplan.party branding rules.
 ---
 
 # Remotion launch / app-demo videos
@@ -181,15 +181,55 @@ out/t_<N>.png --frame=<N> --gl=angle`.
 
 Identical byte sizes across renders of the same frame confirm the render is deterministic.
 
+## Multi-device staging + live app video (the 45s rework)
+
+The current `Launch` is a **multi-device** piece: it opens on the desktop **web** app (laptop
+hero), then hands the SAME product across devices — "now on Android" (Pixel) → "and on iOS"
+(iPhone GLB) → "and on iPadOS" (iPad). Each device runs a **live captured app clip** mapped
+onto its 3D screen, not a static screenshot.
+
+- **`DeviceModel.tsx`** drives every device from a **real GLB** (`models/{iphone,ipad,pixel,macbook}.glb`),
+  iPhone via `PhoneModel`, the others via a generic `GlbDevice` loader. A per-model `CFG`
+  picks the **screen mesh** (iPad mat `screen`, MacBook mesh `ScreenImage`, Pixel mat
+  `m_DisplayW*`), meshes to **hide** (glass/glare: iPad `glass`, Pixel `m_Glass`), upright
+  `rot`, `fitH`, and a `mirrorX`/`flipY` texture transform. `timeline.mjs` `SCENES[]` each
+  pick `device.{kind,video}` + a fixed pose; only the active device mounts per frame.
+- **Orient by stills, one knob at a time:** GLTFLoader auto-uprights, but the screen UV
+  handedness varies. If you see the device **back** (logo), add `rot:[0,π,0]`. Then fix the
+  texture: mirrored text → toggle `mirrorX`; upside-down → toggle `flipY`. Render frame 750
+  and eyeball before the full pass. Pixel needed `rot π` + `mirrorX:false`+`flipY:false`;
+  iPad `mirrorX:true`; MacBook `flipY:true`.
+- **Live video on a mesh** = `useOffthreadVideoTexture({src: staticFile("videos/x.mp4")})`
+  from `@remotion/three`. **Gotcha:** the screen renders WHITE unless you wire it imperatively —
+  swap a `MeshBasicMaterial` onto the screen mesh, set `mat.map = tex`, and force a synchronous
+  `gl.render(scene,camera)` in a `useEffect([tex])`. JSX `map={tex}` alone won't redraw in time.
+- **Video paths**: clips live in `public/videos/` (gitignored, regenerable) → reference as
+  `videos/<name>.mp4`, not the bare filename, or you 404.
+- **De-Draco the Pixel** once (`npx @gltf-transform/cli dedup`) so no runtime decoder is needed.
+- **Crop dev-build toasts** out of captured footage (the iOS clip had an `[expo-notifications]`
+  LogBox toast in the bottom ~25%): `ffmpeg -vf "crop=W:H:0:0"`. Prefer release sim builds.
+
+## Capture harness (regenerable footage + store screenshots)
+
+`scripts/capture/` seeds a realistic state, drives each platform, and records. Same backbone
+feeds the ad's videos and the store screenshots:
+- **Web**: Playwright on the live dev server, 1440×900 → laptop clips.
+- **iOS/iPad**: `simctl io recordVideo` while `idb` swipes; deep-link `uoplan:/<path>`; use the
+  **release** sim build (dev shows LogBox toasts). iPhone 17 Pro / iOS 26 only.
+- **Android**: `adb screenrecord` + `adb input swipe`; emulator is slow (~40s cold start, schedule
+  gen ~40s). Pixel skin is irrelevant for video — only the screen content textures the 3D model.
+- Run: `node scripts/capture/videos-{web,ios,android}.mjs`. Verify each clip is non-trivial
+  size + spot-check a frame (a ~140K mp4 = static/blank screen).
+
 ## Branding & content rules (uoplan)
 
 - **Light mode only.** Warm-paper background, **all-black headlines**, warm-grey lead-ins.
   **No blue accents** anywhere in the video chrome.
 - The wordmark / CTA is **`uoplan.party`** — never the bare/stylized product name.
 - App screenshots must be **light-mode** captures (personalize / explore / schedule / trends).
-- The only third-party asset is the **CC BY 4.0 iPhone model** — show
-  `iPhone 17 Pro by Ranguel · CC BY 4.0` small + low in the outro and record it in
-  `CREDITS.md`. All audio is original/synthesized.
+- The third-party assets are **CC BY 4.0 device models** (iPhone, iPad, MacBook; Pixel from
+  Google) — credit `iPhone 17 Pro by Ranguel · CC BY 4.0` small + low in the outro and record
+  all four in `CREDITS.md`. All audio is original/synthesized.
 - Avoid decorative blurred "blobs" as background accents (use a faint masked dot-grid +
   subtle grain instead).
 
@@ -198,6 +238,11 @@ Identical byte sizes across renders of the same frame confirm the render is dete
 | Need                     | Where / value                                                       |
 | ------------------------ | ------------------------------------------------------------------- |
 | Add/retime a scene       | `src/timeline.mjs` `SCENES[]` (then `pnpm audio`)                   |
+| Stage a 2nd/3rd device   | `device.{kind,video}` per scene; `DeviceModel.tsx` CFG (real GLB per kind) |
+| Wrong-facing GLB device  | screen back/logo → `rot:[0,π,0]`; text mirrored → `mirrorX`; upside-down → `flipY` |
+| Live app on a 3D screen  | `useOffthreadVideoTexture` + memo material + `gl.render` in effect  |
+| White device screen      | set `mat.map=tex` imperatively + force redraw (not JSX `map=`)      |
+| Recapture footage        | `scripts/capture/videos-{web,ios,android}.mjs`; clips → `public/videos/` |
 | Pose a phone             | `pose {yaw,tilt,roll,x,y,s}`; camera fov 30 @ z=9.5; ~211.8 px/unit |
 | Stop see-through buttons | `harden()` body mats → `FrontSide` + depth (`PhoneModel.tsx`)       |
 | Kill screen glare        | hide the `Glass` mesh                                               |
