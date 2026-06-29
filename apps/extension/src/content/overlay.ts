@@ -48,7 +48,16 @@ function anchorFor(doc: Document, row: SectionRow): HTMLElement | null {
 }
 
 function rowsWithCodes(doc: Document): SectionRow[] {
-  return scanSections(doc).filter((r) => r.courseCode);
+  const out: SectionRow[] = [];
+  const seen = new Set<string>();
+  for (const r of scanSections(doc)) {
+    if (!r.courseCode) continue;
+    const key = `${r.kind}:${r.courseCode}:${r.classNbr}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(r);
+  }
+  return out;
 }
 
 async function fetchBadges(codes: string[]): Promise<Record<string, GradeBadge>> {
@@ -93,18 +102,23 @@ async function apply(doc: Document, log?: (m: string) => void): Promise<void> {
   if (matched === 0) return;
 
   let injected = 0;
+  const detail: string[] = [];
   for (const row of rows) {
     const code = row.courseCode as string;
     const badge = byCode[code];
     if (!badge) continue;
     const anchor = anchorFor(doc, row);
-    if (!anchor || anchor.querySelector(`.${BADGE_CLASS}`)) continue;
-    if (anchor.getAttribute(DONE_ATTR)) continue;
+    if (!anchor) {
+      detail.push(`${row.kind}:${row.anchorId ?? "no-id"}=missing`);
+      continue;
+    }
+    detail.push(`${row.anchorId}=${anchor.offsetParent === null ? "hidden" : "shown"}`);
+    if (anchor.querySelector(`.${BADGE_CLASS}`) || anchor.getAttribute(DONE_ATTR)) continue;
     anchor.setAttribute(DONE_ATTR, "1");
     anchor.append(makeBadge(code, badge));
     injected++;
   }
-  if (injected > 0) log?.(`overlay: injected ${injected} badges`);
+  log?.(`overlay: injected ${injected} badges [${detail.join(", ")}]`);
 }
 
 /** Debounced re-apply so PeopleSoft partial-page reloads keep their badges. */
