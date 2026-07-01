@@ -10984,7 +10984,7 @@
       "title": "Musculoskeletal Biomechanics",
       "credits": 3,
       "description": "Study of the physical and mechanical structures of human tissues from the locomotive system. An in-depth look at their mechanical properties and at both their functional and structural limits. The kinematics and kinetics of human motion will also be studied for particular applications.",
-      "component": "Laboratory, LecturePrerequisite: APA 2114 or APA 2315.",
+      "component": "Lecture, LaboratoryPrerequisite: APA 2114 or APA 2315.",
       "prereqText": "APA 2114 or APA 2315",
       "prerequisites": {
         "type": "or_group",
@@ -17295,16 +17295,12 @@
       "title": "Aides auditives I",
       "credits": 3,
       "description": "Dimensions acoustiques et électroacoustiques des systèmes d'amplification et des technologies pour les personnes expérimentant des difficultés auditives.",
-      "component": "Cours magistralPréalables : AUD 5511, AUD 5521, AUD 5551, AUD 5613, REA 5703. Les cours AUD 5529 et AUD 5723 sont concomitants à AUD 5722.",
-      "prereqText": "AUD 5511, AUD 5521, AUD 5551, AUD 5613, REA 5703",
+      "component": "Cours magistralPréalables : AUD 5521, AUD 5551, AUD 5613.",
+      "prereqText": "AUD 5521, AUD 5551, AUD 5613",
       "prerequisites": {
         "type": "and_group",
-        "text": "AUD 5511, AUD 5521, AUD 5551, AUD 5613, REA 5703",
+        "text": "AUD 5521, AUD 5551, AUD 5613",
         "children": [
-          {
-            "type": "course",
-            "code": "AUD 5511"
-          },
           {
             "type": "course",
             "code": "AUD 5521"
@@ -17316,10 +17312,6 @@
           {
             "type": "course",
             "code": "AUD 5613"
-          },
-          {
-            "type": "course",
-            "code": "REA 5703"
           }
         ]
       }
@@ -25521,7 +25513,7 @@
       "title": "Physical Chemistry: Introduction to the Molecular Properties of Matter",
       "credits": 3,
       "description": "Introduction to the molecular interpretation of physico-chemical phenomena. Introduction to quantum mechanics, statistical mechanics andspectroscopy (vibrational, rotational, nmr). Kinetic theory of gases. Chemical kinetics (order of a reaction, Arrhenius equation, reaction mechanism). Surface chemistry, adsorption isotherms, structure of adsorbed layers, colloids, viscosity, diffusion, and sedimentation. Previously CHM 2130 and CHM 2136.",
-      "component": "Discussion Group, Lecture, LaboratoryPrerequisites: (CHM 1301 or CHM 1311), (MAT 1322 or MAT 1332), (PHY 1121 or PHY 1321 or PHY 1122 or PHY 1331).",
+      "component": "Discussion Group, Laboratory, LecturePrerequisites: (CHM 1301 or CHM 1311), (MAT 1322 or MAT 1332), (PHY 1121 or PHY 1321 or PHY 1122 or PHY 1331).",
       "aliases": [
         "CHM 2130",
         "CHM 2136"
@@ -41562,10 +41554,30 @@
     },
     {
       "code": "CTM 8113",
-      "title": "Special Topics in Cardiac Computed Tomography",
+      "title": "Special Topics in Cardiac Computed Tomography and Magnetic Resonance Imaging",
       "credits": 3,
-      "description": "Study of recent advances in cardiac CT imaging. Examine the basics of CT physics, CT instrumentation, calcium scoring, non-invasive coronary angiography, cardiac anatomy, function, viability and perfusion imaging, and valvular abnormalities.",
+      "description": "Study of recent advances in imaging, including cardiac imaging in CT and MRI. Examine the basics of MR and CT physics, CT and MR instrumentation, calcium scoring, non-invasive coronary angiography, cardiac anatomy, function, viability and perfusion imaging, and valvular abnormalities.",
       "component": "Lecture, Seminar"
+    },
+    {
+      "code": "CTM 81131",
+      "title": "Special Topics in Cardiac Computed Tomography Imaging (Part 1 of 2)",
+      "credits": 0,
+      "description": "Study of recent advances in cardiac CT imaging. Examine the basics of CT physics, CT instrumentation, calcium scoring, non-invasive coronary angiography, cardiac anatomy, function, viability and perfusion imaging, and valvular abnormalities. (Part 1 of 2).",
+      "component": "Seminar"
+    },
+    {
+      "code": "CTM 81132",
+      "title": "Special Topics in Cardiac Computed Tomography Imaging (Part 2 of 2)",
+      "credits": 3,
+      "description": "Study of recent advances in cardiac CT imaging. Examine the basics of CT physics, CT instrumentation, calcium scoring, non-invasive coronary angiography, cardiac anatomy, function, viability and perfusion imaging, and valvular abnormalities. (Part 2 of 2).",
+      "component": "SeminarPrerequisite: CTM 81131.",
+      "prereqText": "CTM 81131",
+      "prerequisites": {
+        "type": "course",
+        "code": "CTM 81131",
+        "text": "CTM 81131"
+      }
     },
     {
       "code": "CTM 8114",
@@ -41741,6 +41753,26 @@
       "credits": 3,
       "description": "Study of recent advances in cardiac imaging in MRI. Examine the basics of MR physics, MR instrumentation, non-invasive coronary angiography, cardiac anatomy, function, myocardial characterization, viability and perfusion imaging, valvular abnormalities, and tissue characterization. Course Component: Lecture, Seminar Pre-requisite(s): By permission of the course coordinator.",
       "component": "Lecture"
+    },
+    {
+      "code": "CTM 81351",
+      "title": "Special Topics in Cardiac Magnetic Resonance Imaging (Part 1 of 2)",
+      "credits": 0,
+      "description": "Study of recent advances in cardiac imaging in MRI. Examine the basics of MR physics, MR instrumentation, non-invasive coronary angiography, cardiac anatomy, function, myocardial characterization, viability and perfusion imaging, valvular abnormalities, and tissue characterization. (Part 1 of 2).",
+      "component": "Seminar"
+    },
+    {
+      "code": "CTM 81352",
+      "title": "Special Topics in Cardiac Magnetic Resonance Imaging (Part 2 of 2)",
+      "credits": 3,
+      "description": "Study of recent advances in cardiac imaging in MRI. Examine the basics of MR physics, MR instrumentation, non-invasive coronary angiography, cardiac anatomy, function, myocardial characterization, viability and perfusion imaging, valvular abnormalities, and tissue characterization. (Part 2 of 2).",
+      "component": "SeminarPrerequisite: CTM 81351.",
+      "prereqText": "CTM 81351",
+      "prerequisites": {
+        "type": "course",
+        "code": "CTM 81351",
+        "text": "CTM 81351"
+      }
     },
     {
       "code": "CTM 8501",
@@ -64167,11 +64199,11 @@
       "title": "Writing for Digital Media II",
       "credits": 3,
       "description": "Writing techniques and strategies appropriate to new media such as the web (including interactive hypertexts), social media, microblogging, instant messaging, and other platforms. Applications for journalism, communication, activism, government, marketing, and the arts will be considered.",
-      "component": "Discussion Group, LecturePrerequisite: ENG 2370 or permission from the instructor.",
-      "prereqText": "ENG 2370 or permission from the instructor",
+      "component": "Discussion Group, LecturePrerequisite: ENG 2370 or permission of the department.",
+      "prereqText": "ENG 2370 or permission of the department",
       "prerequisites": {
         "type": "or_group",
-        "text": "ENG 2370 or permission from the instructor",
+        "text": "ENG 2370 or permission of the department",
         "children": [
           {
             "type": "course",
@@ -64180,7 +64212,7 @@
           },
           {
             "type": "non_course",
-            "text": "permission from the instructor",
+            "text": "permission of the department",
             "kind": "permission"
           }
         ]
@@ -92385,7 +92417,7 @@
       "title": "Mathématiques discrètes pour l'informatique",
       "credits": 3,
       "description": "Introduction aux structures discrètes comme base de l'informatique. Logique des propositions. Structures fondamentales: fonctions, relations, ensembles. Principes de base du dénombrement: argument de comptage, principe des tiroirs, permutations et combinaisons. Introduction aux structures d'une démonstration mathématique: directe, par l'absurde, cas par cas, par récurrence. Éléments de la théorie des graphes: isomorphisme, cycles arbres, graphes orientés. Les exemples seront principalement choisis dans le domaine de l'informatique.",
-      "component": "Groupe de discussion, Cours magistralPréalable : MAT 1718/Math. 4U de l'Ontario Fonctions avancées (MHF4U) ou l'équiv. Ce cours ne peut être crédité pour un étudiant qui a déjà reçu les crédits pour MAT 2748. Les cours MAT 1748, MAT 1762 ne peuvent être combinés pour l'obtention de crédits.",
+      "component": "Cours magistral, Groupe de discussionPréalable : MAT 1718/Math. 4U de l'Ontario Fonctions avancées (MHF4U) ou l'équiv. Ce cours ne peut être crédité pour un étudiant qui a déjà reçu les crédits pour MAT 2748. Les cours MAT 1748, MAT 1762 ne peuvent être combinés pour l'obtention de crédits.",
       "prereqText": "MAT 1718/Math. 4U de l'Ontario Fonctions avancées (MHF4U) ou l'équiv",
       "prerequisites": {
         "type": "and_group",
@@ -106471,6 +106503,13 @@
     },
     {
       "code": "MHA 5330",
+      "title": "Human Resource Management in Health Care",
+      "credits": 3,
+      "description": "Focus on the major issues unique to effective health human resources management. Measuring needs and planning for the current and future supply of human resources. Recruitment, retention and development strategies to meet changing workforce conditions. Understanding the unique regulatory environments where professions are regulated by provincial laws and professional colleges. Labor relation issues and approaches in unionized environment. Funding, team work and inter-professional practice, scope of practice issues and organizational design. Interactions of organizational and professional accreditation mechanisms (such as professional colleges and associations, and accreditation bodies).",
+      "component": "Lecture"
+    },
+    {
+      "code": "MHA 5335",
       "title": "People management in Health Systems",
       "credits": 3,
       "description": "Working with partnerered health providers, develop strategic workforce plans, HHR optimization and analytics, inclusive recruitment and retention, as well as talent development.",
@@ -106519,10 +106558,17 @@
     },
     {
       "code": "MHA 6260",
+      "title": "Project Planning and Management",
+      "credits": 1.5,
+      "description": "Introduction to program planning and management of health management projects. Program planning and management methods including management of a project throughout its life cycle (identification, design, planning, realization and close-out).",
+      "component": "LectureMHA 6260 cannot be combined for credit with ADM 6260."
+    },
+    {
+      "code": "MHA 6266",
       "title": "Managing Projects in Complex Health Systems",
       "credits": 3,
       "description": "Project scope definition, resource planning, risk management, and change management frameworks.",
-      "component": "LectureMHA 6260 cannot be combined for credit with ADM 6260."
+      "component": "Lecture"
     },
     {
       "code": "MHA 6271",
@@ -106539,9 +106585,9 @@
     },
     {
       "code": "MHA 6301",
-      "title": "Epidemiology & Population Health",
-      "credits": 1.5,
-      "description": "Population health data, evaluating interventions, distribution and determinants of health-related events, such as disease outbreaks and Health inequities.",
+      "title": "Epidemiology and Population Health",
+      "credits": 3,
+      "description": "Understanding of the principles of epidemiology and research designs in the health related fields, and the ability to critically evaluate clinical, epidemiological, and health care management evidence in support of decision-making. Topics include: determining research designs most appropriate to specific research conditions; overview of epidemiologic approaches; important measures; issues related to validity, confounding effect, selection bias, misclassification bias, and effect modification; and general concepts related to population health.",
       "component": "LecturePrerequisite: MBA 5300 or MHA 5300",
       "prereqText": "MBA 5300 or MHA 5300",
       "prerequisites": {
@@ -106562,6 +106608,13 @@
       }
     },
     {
+      "code": "MHA 6303",
+      "title": "Epidemiology & Population Health",
+      "credits": 1.5,
+      "description": "Population health data, evaluating interventions, distribution and determinants of health-related events, such as disease outbreaks and Health inequities.",
+      "component": "Lecture"
+    },
+    {
       "code": "MHA 6312",
       "title": "Strategy, Governance, and Ethics",
       "credits": 3,
@@ -106570,6 +106623,13 @@
     },
     {
       "code": "MHA 6315",
+      "title": "Quality and Performance Management in Health Care",
+      "credits": 3,
+      "description": "Overview of approaches and tools used for managing, evaluating, and promoting quality in health care. Emphasizes the importance of context and stakeholder engagement in quality improvement and performance management initiatives. Topics include: important key theories and concepts related to quality; patient safety measures and practices; performance management; evidence-based management; and quality improvement strategies.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MHA 6316",
       "title": "Quality and Performance Management",
       "credits": 3,
       "description": "Principles of quality and safety, continuous improvement models, performance indicators, evaluation of quality of care and benchmarking.",
@@ -106577,6 +106637,13 @@
     },
     {
       "code": "MHA 6351",
+      "title": "Health Economics",
+      "credits": 3,
+      "description": "An economists’ perspective illuminating the systems behavior of Health-Care. Such insights inform strategies for managing/improving Health-care. The survey course introduces key concepts from economics (e.g., micro-economics, trade-offs, opportunity costs, efficiency, equity) that are pivotal to this illumination. The unique attributes of health-care (e.g., uncertainty of demand and information asymmetry) and the incentives (some perverse) that ensue are discussed. Indices of population health impact and their links to health economic valuation are covered, including cost-effectiveness and benefit-cost analysis.",
+      "component": "Lecture"
+    },
+    {
+      "code": "MHA 6356",
       "title": "Health Economics",
       "credits": 3,
       "description": "Demand and supply of health care, economic evaluation, funding models, economics of population health and interpreting policy trade-offs.",
@@ -109075,11 +109142,11 @@
       "title": "Composition I / Composition I",
       "credits": 3,
       "description": "Compositions de formes diverses et pour différents médias. / Composition in various forms and media.",
-      "component": "Tutoriel / TutorialPréalables: MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique. / Prerequisites: MUS 3307, MUS 3311, 3 course units from MUS 2191, MUS 2194, and permission of the School of Music.",
-      "prereqText": "MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique",
+      "component": "Tutoriel / TutorialPréalables : MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique. / Prerequisites: MUS 3307, MUS 3955, 3 course units from MUS 2191, MUS 2194, and permission of the School of Music.",
+      "prereqText": "MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique",
       "prerequisites": {
         "type": "and_group",
-        "text": "MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique",
+        "text": "MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique",
         "children": [
           {
             "type": "course",
@@ -109087,7 +109154,7 @@
           },
           {
             "type": "course",
-            "code": "MUS 3711"
+            "code": "MUS 3955"
           },
           {
             "type": "course",
@@ -109099,7 +109166,7 @@
           },
           {
             "type": "non_course",
-            "text": "MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique",
+            "text": "MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique",
             "credits": 3
           }
         ]
@@ -109110,11 +109177,11 @@
       "title": "Composition I (Partie 1 de 2) / Composition I (Part 1 of 2)",
       "credits": 0,
       "description": "Compositions de formes diverses et pour différents médias. (Partie 1 de 2) / Composition in various forms and media. (Part 1 of 2)",
-      "component": "Tutoriel / TutorialPréalables: MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique. / Prerequisites: MUS 3307, MUS 3311, 3 course units from MUS 2191, MUS 2194, and permission of the School of Music.",
-      "prereqText": "MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique",
+      "component": "Tutoriel / TutorialPréalables : MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique. / Prerequisites: MUS 3307, MUS 3955, 3 course units from MUS 2191, MUS 2194, and permission of the School of Music.",
+      "prereqText": "MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique",
       "prerequisites": {
         "type": "and_group",
-        "text": "MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique",
+        "text": "MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique",
         "children": [
           {
             "type": "course",
@@ -109122,7 +109189,7 @@
           },
           {
             "type": "course",
-            "code": "MUS 3711"
+            "code": "MUS 3955"
           },
           {
             "type": "course",
@@ -109134,7 +109201,7 @@
           },
           {
             "type": "non_course",
-            "text": "MUS 3707, MUS 3711, 3 crédits de cours parmi MUS 2591 et MUS 2594, et permission de l'École de musique",
+            "text": "MUS 3707, MUS 3955, 3 crédits de cours parmi MUS 2591, MUS 2594 et permission de l’École de musique",
             "credits": 3
           }
         ]
@@ -112867,7 +112934,7 @@
       "title": "Stage clinique touchant les soins aux enfants, axés sur la famille - maladies aiguës et chroniques",
       "credits": 3,
       "description": "Soins axés sur la famille d'enfants en situation de maladie aiguë et chronique. Stage en milieux de soins et milieux simulés.",
-      "component": "Laboratoire, StagePréalable : NSG2713. Le cours NSG3507 est concomitant à NSG 3707.",
+      "component": "Stage, LaboratoirePréalable : NSG2713. Le cours NSG3507 est concomitant à NSG 3707.",
       "prereqText": "NSG2713",
       "prerequisites": {
         "type": "course",
@@ -113987,7 +114054,7 @@
       "title": "Interventions thérapeutiques I",
       "credits": 3,
       "description": "Évaluation critique et interprétation des concepts et des cadres de référence comme partie intégrante de la pharmacothérapie, du counseling de niveau avancé et des thérapies complémentaires, pour des conditions communes à tous les âges de la vie. Développement, initiation, gestion et évaluation des plans de soins thérapeutiques qui intègrent les valeurs des clients, l'acceptabilité, les buts de la thérapie, l'analyse des différentes approches et les principes de la thérapie pharmacologique. Séminaire : 3 heures par semaine. Stage clinique : 6 heures par semaine.",
-      "component": "Séminaire, StageNSG 5370 est concomitant à NSG 5780. Cours pour étudiantes et étudiants IIP seulement."
+      "component": "Séminaire, StageNSG 5770 est concomitant à NSG 5780. Cours pour étudiantes et étudiants IIP seulement."
     },
     {
       "code": "NSG 5785",
@@ -143939,13 +144006,6 @@
       "component": "Cours magistral / LecturePermission du Département est requise. / Permission of the Department is required."
     },
     {
-      "code": "PSY 9998",
-      "title": "Examen général / Comprehensive Examination",
-      "credits": 0,
-      "description": "",
-      "component": "Recherche / ResearchPermission of the Department is required."
-    },
-    {
       "code": "RAD 6101",
       "title": "X-Ray Physics",
       "credits": 1,
@@ -152341,14 +152401,14 @@
       "title": "Introduction à la pratique théâtrale : Les métiers de la scène",
       "credits": 3,
       "description": "Introduction au théâtre en tant qu'art collaboratif avec une attention particulière à ses aspects scéniques. Des laboratoires hebdomadaires liant la théorie à la pratique.",
-      "component": "Cours magistral, Laboratoire"
+      "component": "Laboratoire, Cours magistral"
     },
     {
       "code": "THE 1501",
       "title": "Introduction à la pratique théâtrale : Les métiers des coulisses",
       "credits": 3,
       "description": "Introduction à la théorie, à la terminologie et à la pratique théâtrale avec un accent particulier sur la technique et la production de l'événement théâtral.",
-      "component": "Laboratoire, Cours magistral"
+      "component": "Cours magistral, Laboratoire"
     },
     {
       "code": "THE 1502",
@@ -154076,9 +154136,9 @@
     },
     {
       "code": "TMM 30091",
-      "title": "Laboratoire de recherche biomédicale (Partie 1 de 2) / LAB",
+      "title": "Laboratoire de recherche biomédicale (Partie 1 de 2) / Biomedical Research Laboratory (Part 1 of 2)",
       "credits": 0,
-      "description": "Introduction aux techniques et méthodes utilisées en recherche biomédicale. (Partie 1 de 2). / N",
+      "description": "Introduction aux techniques et méthodes utilisées en recherche biomédicale. (Partie 1 de 2). / Introduction to the techniques and methods used in biomedical research. (Part 1 of 2).",
       "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable: Réservé aux étudiants et étudiantes inscrits au programme de médecine moléculaire et translationnelle. / Prerequisite: Reserved for students registered in the Translational and Molecular Medicine program.",
       "prereqText": "Réservé aux étudiants et étudiantes inscrits au programme de médecine moléculaire et translationnelle",
       "prerequisites": {
@@ -154089,9 +154149,9 @@
     },
     {
       "code": "TMM 30092",
-      "title": "Laboratoire de recherche biomédicale (Partie 2 de 2) / LAB",
+      "title": "Laboratoire de recherche biomédicale (Partie 2 de 2) / Biomedical Research Laboratory (Part 2 of 2)",
       "credits": 9,
-      "description": "Introduction aux techniques et méthodes utilisées en recherche biomédicale. Un stage en laboratoire effectué sous la supervision d'un professeur de la Faculté de médecine. (Partie 2 de 2). / N",
+      "description": "Introduction aux techniques et méthodes utilisées en recherche biomédicale. Un stage en laboratoire effectué sous la supervision d'un professeur de la Faculté de médecine. (Partie 2 de 2). / Introduction to the techniques and methods used in biomedical research. A laboratory placement performed under the supervision of a professor from the Faculty of Medicine. (Part 2 of 2).",
       "component": "Groupe de discussion / Discussion Group, Laboratoire / LaboratoryPréalable: TMM30091. Réservé aux étudiants et étudiantes inscrits au programme de médecine moléculaire et translationnelle. / Prerequisite: TMM 30091. Reserved for students registered in the Translational and Molecular Medicine program.",
       "prereqText": "TMM30091",
       "prerequisites": {
@@ -154283,9 +154343,9 @@
     },
     {
       "code": "TMM 40121",
-      "title": "Projet de recherche (Partie 1 de 2) / LAB",
+      "title": "Projet de recherche (Partie 1 de 2) / Honours Research Project (Part 1 of 2)",
       "credits": 0,
-      "description": "Projet de recherche sous la supervision d'un professeur de la Faculté de médecine. À la fin de l'année académique, l'étudiant soumettra un rapport de recherché détaillé. (Partie 1 de 2) / N",
+      "description": "Projet de recherche sous la supervision d'un professeur de la Faculté de médecine. À la fin de l'année académique, l'étudiant soumettra un rapport de recherché détaillé. (Partie 1 de 2) / Research project under the supervision of a professor from the Faculty of Medicine. At the end of the academic year, the student will submit a detailed research report. (Part 1 of 2)",
       "component": "Laboratoire / LaboratoryPréalable : TMM 3009. / Prerequisite: TMM 3009, TMM 3101, TMM 3102, TMM 3103, TMM 3104. TMM 4950 is a corequisite for TMM 4012.",
       "prereqText": "TMM 3009",
       "prerequisites": {
@@ -154903,10 +154963,23 @@
       }
     },
     {
+      "code": "TMM 4925",
+      "title": "Méthodes avancées en recherche biomédicale - Techniques de culture cellulaire et biologie du cancer / Advanced Methods in Biomedical research - Techniques in Cell Culture and Cancer Biology",
+      "credits": 1.5,
+      "description": "Ce cours de méthodes avancées enseigne des compétences techniques en culture cellulaire et en biologie moléculaire utilisées dans la recherche sur le cancer, à travers un laboratoire basé sur la recherche dirigée. / This advanced methods course teaches technical skills in tissue culture and molecular biology used in cancer research, through a directed inquiry-based lab.",
+      "component": "Laboratoire / LaboratoryPréalable : TMM 3009. / Prerequisite: TMM 3009.",
+      "prereqText": "TMM 3009",
+      "prerequisites": {
+        "type": "course",
+        "code": "TMM 3009",
+        "text": "TMM 3009"
+      }
+    },
+    {
       "code": "TMM 4944",
-      "title": "STUD.LED.INV.TMM / REC",
+      "title": "Investigation menée par étudiant en MMT / Student-led investigation in TMM",
       "credits": 3,
-      "description": "Investigation menée par étudiant en MMT / N",
+      "description": "Ce cours conçu par l'étudiant explore des sujets innovants en médecine translationnelle et moléculaire, en mettant l'accent sur l'intégration de diverses approches pour relever les défis du monde réel. Les étudiants élaboreront leurs propres objectifs d'apprentissage pour s'attaquer aux problèmes de santé de la communauté. Grâce à des approches interdisciplinaires, les étudiants apprendront à intégrer les idées de la communauté, les perspectives de l'industrie et les stratégies organisationnelles pour créer des solutions ayant un impact sociétal tangible en s'engageant activement avec la communauté et les partenaires organisationnels. Grâce au mentorat du corps enseignant et de leurs pairs, les étudiants, individuellement ou en groupe, travailleront à cultiver des compétences en matière de recherche, de communication et de résolution de problèmes, adaptées à leurs objectifs académiques et professionnels individuels. / This student-designed course explores innovative topics in translational and molecular medicine, emphasizing the integration of diverse approaches to address real-world challenges. Students will craft their unique learning objectives to tackle community health concerns. Through interdisciplinary approaches, students will learn to incorporate community insights, industry perspectives, and organizational strategies to create solutions with tangible societal impact through actively engaging with community and organizational partners. With mentorship from faculty and peers, students, individually or in a group will work will cultivate skills in research, communication, and problem-solving, tailored to their individual academic and career goals.",
       "component": "Recherche / ResearchPréalable : TMM 3009. / Prerequisite: TMM 3009.",
       "prereqText": "TMM 3009",
       "prerequisites": {
@@ -154927,6 +155000,20 @@
         "code": "TMM 3009",
         "text": "TMM 3009"
       }
+    },
+    {
+      "code": "TMM 4951",
+      "title": "CoCreate Health : Sprint d'innovation pour l'impact sociétal I / CoCreate Health: Innovation Sprint for Societal Impact I",
+      "credits": 1.5,
+      "description": "CoCreate Health est un cours dynamique et interdisciplinaire de type hackathon conçu pour permettre aux étudiants de s'attaquer de manière collaborative aux défis sociétaux urgents en matière de santé et de bien-être. Au cours d'un sprint intensif, des étudiants issus de divers horizons universitaires forment des équipes d'innovation afin de co-créer des solutions ayant un impact réel. L’évaluation se fera sur la base S (satisfaisant) ou NS (non satisfaisant). / CoCreate Health is a dynamic, interdisciplinary hackathon-style course designed to empower students to collaboratively tackle pressing societal challenges in health and well-being. Over an intensive sprint, students from diverse academic backgrounds form innovation teams to co-create solutions with real-world impact. Grading will be on a S (satisfactory) or NS (non-satisfactory) basis.",
+      "component": "Séminaire / SeminarCe cours ne répond pas aux exigences du cours de méthodes avancées pour l'obtention du diplôme TMM. Les cours TMM 4951, TMM 4952 ne peuvent être combinés pour l’obtention de crédits. / This course does not meet the advanced method course requirements for the TMM degree. Courses TMM 4951, TMM 4952 cannot be combined for units."
+    },
+    {
+      "code": "TMM 4952",
+      "title": "CoCreate Health : Sprint d'innovation pour l'impact sociétal II / CoCreate Health: Innovation Sprint for Societal Impact II",
+      "credits": 1.5,
+      "description": "CoCreate Health est un cours dynamique et interdisciplinaire de type hackathon conçu pour permettre aux étudiants de s'attaquer de manière collaborative aux défis sociétaux urgents en matière de santé et de bien-être. Au cours d'un sprint intensif, des étudiants issus de divers horizons universitaires forment des équipes d'innovation afin de co-créer des solutions ayant un impact réel. L’évaluation se fera sur la base S (satisfaisant) ou NS (non satisfaisant). / CoCreate Health is a dynamic, interdisciplinary hackathon-style course designed to empower students to collaboratively tackle pressing societal challenges in health and well-being. Over an intensive sprint, students from diverse academic backgrounds form innovation teams to co-create solutions with real-world impact. Grading will be on a S (satisfactory) or NS (non-satisfactory) basis.",
+      "component": "Séminaire / SeminarCe cours ne répond pas aux exigences du cours de méthodes avancées pour l'obtention du diplôme TMM. Les cours TMM 4951, TMM 4952 ne peuvent être combinés pour l’obtention de crédits. / This course does not meet the advanced method course requirements for the TMM degree. Courses TMM 4951, TMM 4952 cannot be combined for units."
     },
     {
       "code": "TMM 5900",
@@ -163638,7 +163725,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses: 1",
+          "title": "Compulsory Courses 1",
           "options": [
             {
               "type": "pick",
@@ -163669,7 +163756,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -163679,7 +163766,7 @@
         },
         {
           "type": "and",
-          "title": "Comprehensive Examination:",
+          "title": "Comprehensive Examination",
           "options": [
             {
               "type": "course",
@@ -163689,7 +163776,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis Proposal:",
+          "title": "Thesis Proposal",
           "options": [
             {
               "type": "course",
@@ -163699,7 +163786,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -167244,7 +167331,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167270,7 +167357,7 @@
         },
         {
           "type": "and",
-          "title": "Projet de thèse :",
+          "title": "Projet de thèse",
           "options": [
             {
               "type": "course",
@@ -167280,7 +167367,7 @@
         },
         {
           "type": "and",
-          "title": "Thèse :",
+          "title": "Thèse",
           "options": [
             {
               "type": "course",
@@ -167290,7 +167377,7 @@
         },
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167316,7 +167403,7 @@
         },
         {
           "type": "and",
-          "title": "Mémoire :",
+          "title": "Mémoire",
           "options": [
             {
               "type": "course",
@@ -167326,7 +167413,7 @@
         },
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167353,7 +167440,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167379,7 +167466,7 @@
         },
         {
           "type": "and",
-          "title": "Projet de thèse :",
+          "title": "Projet de thèse",
           "options": [
             {
               "type": "course",
@@ -167389,7 +167476,7 @@
         },
         {
           "type": "and",
-          "title": "Thèse :",
+          "title": "Thèse",
           "options": [
             {
               "type": "course",
@@ -167399,7 +167486,7 @@
         },
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Cours obligatoires",
           "options": [
             {
               "type": "course",
@@ -167425,7 +167512,7 @@
         },
         {
           "type": "and",
-          "title": "Mémoire :",
+          "title": "Mémoire",
           "options": [
             {
               "type": "course",
@@ -167435,7 +167522,7 @@
         },
         {
           "type": "and",
-          "title": "Cours obligatoires : 1",
+          "title": "Cours obligatoires 1",
           "options": [
             {
               "type": "course",
@@ -167653,7 +167740,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "discipline_elective",
@@ -167694,7 +167781,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -167704,7 +167791,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -167714,7 +167801,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "discipline_elective",
@@ -167730,7 +167817,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -167740,7 +167827,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -167757,7 +167844,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -167944,7 +168031,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses (BMG):",
+          "title": "Compulsory Courses (BMG)",
           "options": [
             {
               "type": "course",
@@ -168057,7 +168144,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Course (BNF):",
+          "title": "Compulsory Course (BNF)",
           "options": [
             {
               "type": "course",
@@ -168068,7 +168155,7 @@
         },
         {
           "type": "and",
-          "title": "Seminars:",
+          "title": "Seminars",
           "options": [
             {
               "type": "course",
@@ -168083,7 +168170,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168100,7 +168187,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses: 1",
+          "title": "Compulsory Courses 1",
           "options": [
             {
               "type": "course",
@@ -168126,7 +168213,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168136,7 +168223,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168146,7 +168233,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -168167,7 +168254,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168177,7 +168264,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168369,7 +168456,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses (CHG):",
+          "title": "Compulsory Courses (CHG)",
           "options": [
             {
               "type": "course",
@@ -168390,7 +168477,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168401,7 +168488,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses (ISP):",
+          "title": "Compulsory Courses (ISP)",
           "options": [
             {
               "type": "course",
@@ -168412,7 +168499,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168429,7 +168516,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses: 1",
+          "title": "Compulsory Courses 1",
           "options": [
             {
               "type": "course",
@@ -168450,7 +168537,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168461,7 +168548,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168520,7 +168607,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -168561,7 +168648,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168571,7 +168658,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168581,7 +168668,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -168602,7 +168689,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168612,7 +168699,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168801,7 +168888,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses :",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "pick",
@@ -168832,7 +168919,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar :",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168842,7 +168929,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis :",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -168852,7 +168939,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "discipline_elective",
@@ -168868,7 +168955,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -168878,7 +168965,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -169025,7 +169112,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses (ELG):",
+          "title": "Compulsory Courses (ELG)",
           "options": [
             {
               "type": "elective",
@@ -169036,7 +169123,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses (ISP):",
+          "title": "Compulsory Courses (ISP)",
           "options": [
             {
               "type": "course",
@@ -169047,7 +169134,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -169097,7 +169184,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "elective",
@@ -169108,7 +169195,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -169119,7 +169206,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -169129,7 +169216,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "elective",
@@ -169140,7 +169227,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -169151,7 +169238,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -169499,7 +169586,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "pick",
@@ -169530,7 +169617,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -169540,7 +169627,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -169550,7 +169637,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "pick",
@@ -169581,7 +169668,7 @@
         },
         {
           "type": "and",
-          "title": "Seminar:",
+          "title": "Seminar",
           "options": [
             {
               "type": "course",
@@ -169591,7 +169678,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -169783,7 +169870,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -169948,7 +170035,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -169974,7 +170061,7 @@
         },
         {
           "type": "and",
-          "title": "Research Project:",
+          "title": "Research Project",
           "options": [
             {
               "type": "course",
@@ -169984,7 +170071,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -169994,7 +170081,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170020,7 +170107,7 @@
         },
         {
           "type": "and",
-          "title": "Research Paper:",
+          "title": "Research Paper",
           "options": [
             {
               "type": "course",
@@ -170030,7 +170117,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170051,7 +170138,7 @@
         },
         {
           "type": "and",
-          "title": "Optional Courses:",
+          "title": "Optional Courses",
           "options": [
             {
               "type": "discipline_elective",
@@ -170074,7 +170161,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170100,7 +170187,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis Proposal:",
+          "title": "Thesis Proposal",
           "options": [
             {
               "type": "course",
@@ -170110,7 +170197,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -170120,7 +170207,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170146,7 +170233,7 @@
         },
         {
           "type": "and",
-          "title": "Research Paper:",
+          "title": "Research Paper",
           "options": [
             {
               "type": "course",
@@ -170156,7 +170243,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170409,7 +170496,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170497,7 +170584,13 @@
               "type": "elective",
               "title": "6 classical language course units at the undergraduate level",
               "credits": 6
-            },
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Research Paper",
+          "options": [
             {
               "type": "course",
               "code": "MRP 6999"
@@ -170506,7 +170599,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170594,7 +170687,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -170604,7 +170697,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses: 1",
+          "title": "Compulsory Courses 1",
           "options": [
             {
               "type": "course",
@@ -170631,7 +170724,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170729,7 +170822,7 @@
         },
         {
           "type": "and",
-          "title": "Research Paper:",
+          "title": "Research Paper",
           "options": [
             {
               "type": "course",
@@ -170739,7 +170832,7 @@
         },
         {
           "type": "and",
-          "title": "Compulsory Courses:",
+          "title": "Compulsory Courses",
           "options": [
             {
               "type": "course",
@@ -170827,7 +170920,7 @@
         },
         {
           "type": "and",
-          "title": "Thesis:",
+          "title": "Thesis",
           "options": [
             {
               "type": "course",
@@ -170843,184 +170936,312 @@
       "slug": "graduate/master-arts-communication-specialization-science-society-policy",
       "requirements": [
         {
-          "type": "course",
-          "code": "CMN 5100",
-          "credits": 3
+          "type": "and",
+          "title": "Compulsory Course",
+          "options": [
+            {
+              "type": "course",
+              "code": "CMN 5100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ISP 5101",
+              "credits": 3
+            }
+          ]
         },
         {
-          "type": "course",
-          "code": "CMN 5132",
-          "credits": 3
+          "type": "and",
+          "title": "Seminar",
+          "options": [
+            {
+              "type": "group",
+              "title": "3 seminar course units specific to the student's chosen field of specialization:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CMN 5131",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CMN 5132",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "elective",
+              "title": "6 optional course units selected from the list of graduate courses in Communication OR from other graduate programs, subject to approval by the director of graduate studies in Communication",
+              "credits": 6
+            }
+          ]
         },
         {
-          "type": "course",
-          "code": "CMN 5105",
-          "credits": 3
+          "type": "and",
+          "title": "Research Proposal",
+          "options": [
+            {
+              "type": "course",
+              "code": "CMN 6990"
+            }
+          ]
         },
         {
-          "type": "course",
-          "code": "CMN 5110",
-          "credits": 3
+          "type": "and",
+          "title": "Thesis",
+          "options": [
+            {
+              "type": "course",
+              "code": "THM 7999"
+            }
+          ]
         },
         {
-          "type": "course",
-          "code": "CMN 5115",
-          "credits": 3
+          "type": "and",
+          "title": "Compulsory Course",
+          "options": [
+            {
+              "type": "course",
+              "code": "CMN 5100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ISP 5101",
+              "credits": 3
+            }
+          ]
         },
         {
-          "type": "course",
-          "code": "CMN 5120",
-          "credits": 3
+          "type": "and",
+          "title": "Seminar",
+          "options": [
+            {
+              "type": "group",
+              "title": "3 seminar course units specific to the student's chosen field of specialization:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "CMN 5131",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "CMN 5132",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "elective",
+              "title": "12 optional course units selected from the list of graduate courses in Communication OR from other graduate programs, subject to approval by the director of graduate studies in Communication",
+              "credits": 12
+            }
+          ]
         },
         {
-          "type": "course",
-          "code": "CMN 5133",
-          "credits": 3
+          "type": "and",
+          "title": "Research Proposal",
+          "options": [
+            {
+              "type": "course",
+              "code": "CMN 6990"
+            }
+          ]
         },
         {
-          "type": "course",
-          "code": "CMN 5140",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5142",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5150",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5155",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5160",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5161",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5165",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5170",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5190",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5195",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5900",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5995",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5100",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5131",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5105",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5115",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5130",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5133",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5135",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5136",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5140",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5141",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5142",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5150",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5155",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5195",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5170",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5900",
-          "credits": 3
-        },
-        {
-          "type": "course",
-          "code": "CMN 5995",
-          "credits": 3
+          "type": "and",
+          "title": "Research Paper",
+          "options": [
+            {
+              "type": "course",
+              "code": "MRP 6999"
+            },
+            {
+              "type": "course",
+              "code": "CMN 5100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5132",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5105",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5110",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5115",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5120",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5133",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5140",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5142",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5150",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5155",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5160",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5161",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5165",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5170",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5190",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5195",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5900",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5995",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5131",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5105",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5115",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5130",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5133",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5135",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5136",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5140",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5141",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5142",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5150",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5155",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5195",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5170",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5900",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 5995",
+              "credits": 3
+            }
+          ]
         }
       ]
     },
@@ -171213,7 +171434,7 @@
         },
         {
           "type": "and",
-          "title": "Project",
+          "title": "Research Paper",
           "options": [
             {
               "type": "course",
@@ -187444,7 +187665,7 @@
             {
               "type": "course",
               "code": "MHA 6260",
-              "credits": 3
+              "credits": 1.5
             },
             {
               "type": "course",
@@ -187454,7 +187675,7 @@
             {
               "type": "course",
               "code": "MHA 6301",
-              "credits": 1.5
+              "credits": 3
             },
             {
               "type": "course",
@@ -196714,7 +196935,7 @@
         {
           "type": "course",
           "code": "MHA 6301",
-          "credits": 1.5
+          "credits": 3
         },
         {
           "type": "course",
@@ -295828,10 +296049,6 @@
               "type": "course",
               "code": "ECH 3370",
               "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "FSS 4150"
             },
             {
               "type": "course",

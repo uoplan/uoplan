@@ -1,6 +1,6 @@
 {
   "termId": "2265",
-  "totalCourses": 11102,
+  "totalCourses": 11113,
   "totalWithSchedules": 883,
   "schedules": [
     {
@@ -2012,7 +2012,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -22706,7 +22706,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 21,
               "A": 37,
@@ -33271,7 +33271,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1714,
               "A": 377,
@@ -35634,7 +35634,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
