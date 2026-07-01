@@ -1,5 +1,48 @@
 # Changelog
 
+## [2.0.0](https://github.com/uoplan/uoplan/compare/uoplan-v1.0.1...uoplan-v2.0.0) (2026-07-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **web:** split code into modules, add browser tests, rework proto
+
+### Features
+
+* add uoplan cli base ([493c368](https://github.com/uoplan/uoplan/commit/493c36813d6653b5938f25ee593a6026b5477fbd))
+* add uoplan run command ([c727ea6](https://github.com/uoplan/uoplan/commit/c727ea64b0ce03f073ffedf5ed865b59b1bbf5e8))
+* **cli:** add course enrolment and deletion with cart ([aa34cec](https://github.com/uoplan/uoplan/commit/aa34cecfa0f9e6f2510b48e5b244359e8bb503c5))
+* **cli:** add course search and cart addition flow ([03dad01](https://github.com/uoplan/uoplan/commit/03dad01ca78ffade24ae781a03f59b50bc7e2bdf))
+* **cli:** add firefox support ([d0e938a](https://github.com/uoplan/uoplan/commit/d0e938ad5a83731c3f7fef653e7e43925f95c5e1))
+* **cli:** add publish script ([162a167](https://github.com/uoplan/uoplan/commit/162a1673cf7d182cbb3760cd7015c957884e045f))
+* **cli:** add run subcommand ([def9946](https://github.com/uoplan/uoplan/commit/def99468f684e4d1bc284502682e9973664aad64))
+* **cli:** add term selector ([413604b](https://github.com/uoplan/uoplan/commit/413604b8e397e72cbbec27d700698d1e8c04960f))
+* **cli:** add timing to cli run subcommand ([fe51f33](https://github.com/uoplan/uoplan/commit/fe51f33f280c8b2b8d17c0cb68ff46a2d6ed3d29))
+* **cli:** add update cache and version check logic ([e4d0ce2](https://github.com/uoplan/uoplan/commit/e4d0ce27e79ef76246cd39a2738c86168732c02f))
+* **cli:** add update subcommand ([0bc13da](https://github.com/uoplan/uoplan/commit/0bc13da96b17554f48f442c96f1149507d7c04d4))
+* **cli:** improve ux experience for cli ([b268561](https://github.com/uoplan/uoplan/commit/b2685611ec4378935936ba740a871d60d5f26ad7))
+* **cli:** make the cli crossplatform ([996e41f](https://github.com/uoplan/uoplan/commit/996e41f5a82bc591db49a21a02e145f1e1665671))
+* **cli:** make the cli log in experience better ([c490150](https://github.com/uoplan/uoplan/commit/c490150ed113fe11063a2a969602a285ab4a9938))
+* **cli:** match ux of rust port to original typescript ([99982a5](https://github.com/uoplan/uoplan/commit/99982a535146619b016a0f724ef8400a45798882))
+* **cli:** persist term selection across logins ([1ad72d7](https://github.com/uoplan/uoplan/commit/1ad72d735ae346428e31698944f1ab7a9698ce7c))
+* **cli:** replace typescript cli with rust implementation ([ed810c3](https://github.com/uoplan/uoplan/commit/ed810c3fed30b008fd0561e6157f03bcf28559cd))
+* **cli:** wire passive update check and update subcommand ([0bfc5d4](https://github.com/uoplan/uoplan/commit/0bfc5d43a0f9ba07e3b802e5cc1c92f2c4fcc4f4))
+
+
+### Bug Fixes
+
+* **cli:** match release-please tag scheme (uoplan-v*) for self-update ([686ca85](https://github.com/uoplan/uoplan/commit/686ca85df59489788647e1142bad95e1aa3db896))
+* **cli:** parse icsid properly ([4f84a59](https://github.com/uoplan/uoplan/commit/4f84a59f6807c22eea57b2a7b9116a3938984c77))
+* **cli:** pass session properly ([978dc55](https://github.com/uoplan/uoplan/commit/978dc55f54ac73586549e5110fbd907263308593))
+* **cli:** properly reuse term selection ([ccce826](https://github.com/uoplan/uoplan/commit/ccce82623acd007add475ee135168a171237559d))
+* **cli:** resolve various bugs with term persistence ([708b614](https://github.com/uoplan/uoplan/commit/708b614d550239ffba58038530da9ac7a1e2f0e7))
+* **cli:** update readme ([a2e0d5a](https://github.com/uoplan/uoplan/commit/a2e0d5a09c160bfad042da6aca7af2171c79942b))
+
+
+### Code Refactoring
+
+* **web:** split code into modules, add browser tests, rework proto ([ca2eca6](https://github.com/uoplan/uoplan/commit/ca2eca6fc820ac3e53d9af1d16c030e9b473d705))
+
 ## [1.0.1](https://github.com/uoplan/uoplan/compare/uoplan-v1.0.0...uoplan-v1.0.1) (2026-06-28)
 
 
