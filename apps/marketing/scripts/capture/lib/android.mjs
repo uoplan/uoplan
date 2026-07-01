@@ -27,8 +27,21 @@ async function bootedSerials() {
     .map((l) => l.split("\t")[0]);
 }
 
-/** Boot the named AVD if no emulator is up, and wait until it's ready. */
+/** Name of the AVD backing the currently-attached emulator, or "" if none. */
+async function runningAvd() {
+  return (await adbOut(["emu", "avd", "name"]).catch(() => "")).split("\n")[0].trim();
+}
+
+/** Boot the named AVD, replacing any other emulator already running, and wait
+ * until it's ready. Each bucket targets a distinct device, so a stale emulator
+ * left over from a previous bucket must be shut down or every bucket captures
+ * at the first device's resolution. */
 export async function ensureBooted(avd) {
+  const current = await runningAvd();
+  if (current && current !== avd) {
+    await adb(["emu", "kill"]).catch(() => {});
+    for (let i = 0; i < 30 && (await bootedSerials()).length > 0; i++) await sleep(1000);
+  }
   if ((await bootedSerials()).length === 0) {
     const { spawn } = await import("node:child_process");
     spawn(EMULATOR, ["-avd", avd, "-no-snapshot-save", "-no-boot-anim"], {
@@ -55,6 +68,9 @@ export async function ensureInstalled(apkPath) {
 
 /** Write apps/native's persistence seeds into the app's private files dir. */
 export async function seedDocuments(seedFiles) {
+  // On a fresh install the app's files/ dir doesn't exist until first launch, so
+  // create it (run-as works on debuggable builds) before copying the seeds in.
+  await adb(["shell", `run-as ${APP_ID} mkdir -p files`]).catch(() => {});
   for (const [name, value] of Object.entries(seedFiles)) {
     const json = JSON.stringify(value);
     const b64 = Buffer.from(json).toString("base64");

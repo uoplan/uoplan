@@ -17,7 +17,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Studio } from "./ThreePhone";
 import { PhoneModel } from "./PhoneModel";
 import { DeviceModel, preloadDeviceGlbs } from "./DeviceModel";
-import { SCENES, FLIP_AT, CUTS, CUT_HALF, OUTRO_START } from "./timeline.mjs";
+import { SCENES, FLIP_FRAC, CUTS, CUT_HALF, OUTRO_START } from "./timeline.mjs";
 
 const INK = "#111113";
 const MUTED = "#6a6760";
@@ -149,16 +149,20 @@ const Scene3D: React.FC<{ iphone: THREE.Object3D | null }> = ({ iphone }) => {
 };
 
 /* flip word */
-const FlipWord: React.FC<{ words: string[]; local: number; size: number; align: string }> = ({
-  words,
-  local,
-  size,
-  align,
-}) => {
+const FlipWord: React.FC<{
+  words: string[];
+  local: number;
+  dur: number;
+  size: number;
+  align: string;
+}> = ({ words, local, dur, size, align }) => {
+  // Breakpoints are proportional to the scene length so words spread across a
+  // long scene instead of the last word holding for many seconds.
+  const at = FLIP_FRAC.map((f) => f * dur);
   let idx = 0;
-  for (let i = 0; i < FLIP_AT.length; i++) if (local >= FLIP_AT[i]) idx = i + 1;
+  for (let i = 0; i < at.length; i++) if (local >= at[i]) idx = i + 1;
   idx = Math.min(idx, words.length - 1);
-  const slotStart = idx === 0 ? 0 : FLIP_AT[idx - 1];
+  const slotStart = idx === 0 ? 0 : at[idx - 1];
   const tr = eoCubic(norm(local - slotStart, 0, 0.32));
   const cell: React.CSSProperties = {
     position: "absolute",
@@ -229,6 +233,14 @@ const SceneText: React.FC = () => {
     const side = tx.side;
     const place = tx.place ?? "below";
     const align = side === "right" ? "right" : side === "left" ? "left" : "center";
+    // Laptop scenes have a wide screen that crosses the centre, so the side
+    // caption gets a tighter, edge-hugging box + smaller type to guarantee a
+    // clean gap from the screen. Handheld scenes keep the roomy big caption.
+    const isLaptop = sc.device.kind === "laptop";
+    const sideInset = isLaptop ? 120 : 150;
+    const sideWidth = isLaptop ? 520 : 760;
+    const preSize = isLaptop ? 27 : 31;
+    const flipSize = side === "center" ? 124 : isLaptop ? 104 : 132;
     const base: React.CSSProperties = {
       position: "absolute",
       display: "flex",
@@ -239,20 +251,20 @@ const SceneText: React.FC = () => {
     if (side === "left")
       container = {
         ...base,
-        left: 150,
+        left: sideInset,
         top: 0,
         bottom: 0,
-        width: 760,
+        width: sideWidth,
         alignItems: "flex-start",
         justifyContent: "center",
       };
     else if (side === "right")
       container = {
         ...base,
-        right: 150,
+        right: sideInset,
         top: 0,
         bottom: 0,
-        width: 760,
+        width: sideWidth,
         alignItems: "flex-end",
         justifyContent: "center",
       };
@@ -273,7 +285,7 @@ const SceneText: React.FC = () => {
         <div
           style={{
             fontFamily: "DM Mono Medium",
-            fontSize: 31,
+            fontSize: preSize,
             letterSpacing: "0.16em",
             textTransform: "uppercase",
             color: MUTED,
@@ -283,12 +295,7 @@ const SceneText: React.FC = () => {
         >
           {tx.pre}
         </div>
-        <FlipWord
-          words={tx.flip}
-          local={local}
-          size={side === "center" ? 124 : 132}
-          align={align}
-        />
+        <FlipWord words={tx.flip} local={local} dur={dur} size={flipSize} align={align} />
       </div>,
     );
   });

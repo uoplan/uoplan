@@ -45,10 +45,15 @@ async function record(flow, udid, tag) {
   await ios.openUrl(udid, `uoplan:/${flow.path}`);
   await idb.confirmOpen(udid);
   await sleep(flow.settle);
-  // Dismiss the RN dev LogBox toast ("[expo-notifications] Error reading persisted…")
-  // via its ✕ (bottom-right) so it never covers the controls/tab bar. Tap exactly the
-  // ✕ — not the tab bar — so we stay on the recorded route.
-  await idb.tap(udid, 372, 820).catch(() => {});
+  // Dismiss the RN dev LogBox toast (Debug builds only) via its ✕ so it never covers
+  // the app. Default coords suit the 402×874 iPhone; override IOS_DISMISS_X/Y per device
+  // (e.g. iPad). Opt-in via IOS_TOAST_DISMISS=1 — Release builds show no toast and this
+  // bottom-right tap would instead hit the basket/cart FAB.
+  if (process.env.IOS_TOAST_DISMISS === "1") {
+    const dx = Number(process.env.IOS_DISMISS_X ?? 372);
+    const dy = Number(process.env.IOS_DISMISS_Y ?? 820);
+    await idb.tap(udid, dx, dy).catch(() => {});
+  }
   await sleep(1200);
   const out = path.join(VIDEOS_DIR, `${flow.id}-${tag}.mp4`);
   const stop = await ios.recordVideo(udid, out);
@@ -66,7 +71,7 @@ async function main() {
   await ios.terminate(dev.udid);
   await ios.seedDocuments(dev.udid, NATIVE_SEED_FILES);
   await ios.launch(dev.udid);
-  await sleep(9000);
+  await sleep(Number(process.env.IOS_SETTLE_MS ?? 9000));
   for (const flow of FLOWS) {
     if (only.length === 0 || only.includes(flow.id)) await record(flow, dev.udid, tag);
   }

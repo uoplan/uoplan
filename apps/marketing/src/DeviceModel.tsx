@@ -18,6 +18,10 @@ type Cfg = {
   fitH: number;
   mirrorX: boolean;
   flipY: boolean;
+  // When set, frame/scale the device on its SCREEN mesh instead of the whole
+  // model, so the display fills the shot and off-screen chrome (e.g. a laptop
+  // keyboard) crops away. The value is the target world height of the screen.
+  screenFitH?: number;
 };
 const CFG: Record<Exclude<DeviceKind, "iphone">, Cfg> = {
   laptop: {
@@ -28,6 +32,7 @@ const CFG: Record<Exclude<DeviceKind, "iphone">, Cfg> = {
     fitH: 4.2,
     mirrorX: false,
     flipY: true,
+    screenFitH: 5.0,
   },
   tablet: {
     url: "models/ipad.glb",
@@ -104,13 +109,16 @@ const GlbDevice: React.FC<{ kind: Exclude<DeviceKind, "iphone">; video: string }
   const prepared = useMemo(() => {
     if (!scene) return null;
     const s = scene.clone(true);
+    let screenMesh: THREE.Mesh | null = null;
     s.traverse((o) => {
       const mesh = o as THREE.Mesh;
       if (!mesh.isMesh) return;
       const mat = mesh.material as THREE.Material | THREE.Material[];
       const mn = (Array.isArray(mat) ? mat[0]?.name : mat?.name) ?? "";
-      if (cfg.isScreen(mn, mesh.name)) mesh.material = screenMat;
-      else if (cfg.hide(mn, mesh.name)) mesh.visible = false;
+      if (cfg.isScreen(mn, mesh.name)) {
+        mesh.material = screenMat;
+        screenMesh = mesh;
+      } else if (cfg.hide(mn, mesh.name)) mesh.visible = false;
       else
         (Array.isArray(mat) ? mat : [mat]).forEach((m) => {
           if (m) {
@@ -119,12 +127,18 @@ const GlbDevice: React.FC<{ kind: Exclude<DeviceKind, "iphone">; video: string }
           }
         });
     });
-    const box = new THREE.Box3().setFromObject(s);
+    // Default: center + fit on the whole model. If screenFitH is set, frame on
+    // the screen mesh instead so the display fills the shot and the rest of the
+    // body (e.g. laptop keyboard) crops off the bottom.
+    const box = new THREE.Box3().setFromObject(
+      cfg.screenFitH && screenMesh ? screenMesh : s,
+    );
     const size = new THREE.Vector3();
     const c = new THREE.Vector3();
     box.getSize(size);
     box.getCenter(c);
-    return { object: s, center: c, fit: cfg.fitH / size.y };
+    const fit = (cfg.screenFitH ?? cfg.fitH) / size.y;
+    return { object: s, center: c, fit };
   }, [scene, screenMat, cfg]);
 
   if (tex) {

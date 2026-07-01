@@ -1,6 +1,6 @@
 ---
-name: remotion-launch-video
-description: Use when creating or editing a code-rendered launch / promo / demo video for an app (Remotion + a real 3D phone showing app screens), e.g. the apps/marketing "Launch" composition. Covers the fixed-pose shot system, multi-device staging (laptop/tablet/Pixel/iPhone), live app-video on 3D screens via useOffthreadVideoTexture, the automated capture harness (seed→drive→record on sim/emulator/web), GLB material fixes (see-through buttons, screen, glare, Dynamic Island), studio lighting, tracking contact shadows, original audio synthesis, Remotion + three async-load gotchas, the verify-with-stills workflow, and the uoplan.party branding rules.
+name: marketing-video
+description: Use when creating or editing a code-rendered launch / promo / demo video for an app (Remotion + real 3D devices showing the app), e.g. the apps/marketing "Launch" composition. Covers the fixed-pose shot system, continuous full-scene spins, multi-device staging (laptop/tablet/Pixel/iPhone) with clean hand-off cuts (no bleed-through), live app-video on 3D screens via useOffthreadVideoTexture, the automated capture harness (seed→drive→record on sim/emulator/web, settle pages first), GLB material fixes (see-through buttons, screen, glare, Dynamic Island), studio lighting, tracking contact shadows, original audio synthesis, Remotion + three async-load/preload gotchas, the verify-with-stills workflow, Discord <10MB downscale, and the uoplan.party branding rules.
 ---
 
 # Remotion launch / app-demo videos
@@ -31,9 +31,14 @@ these were learned the hard way and are easy to regress.
 The single most important art-direction lesson: **do not fly one phone continuously around
 the screen.** It reads as janky and "3D-demo-ish." Instead, compose **distinct fixed
 product poses** (like an iPhone ad's hero frames) and **cut** between them with fast
-cross-dissolves. Within a shot the only motion is a slow, **monotonic** dolly-in (scale
-creeps up) plus a barely-there upward drift — the phone never turns, reverses, or changes
-direction. This is what makes it feel intentional and expensive.
+cross-dissolves. **Web/laptop** shots hold a fixed pose with only a slow monotonic dolly-in
+(scale creeps up) + barely-there upward drift. **Handheld devices** (Pixel/iPhone/iPad) get
+one **continuous full-scene 360 spin** — they start turning the instant they appear and land
+back at the pose yaw right as they leave, so there is **no pause before or after** (eased,
+monotonic, exactly one revolution). The mirror trick: iPhone uses the **mirror** of the Pixel
+pose on the opposite side (tilted the other way), so the two hand-helds bookend symmetrically.
+Devices stay **upright** (don't lean the top away from camera); make them **bigger/closer**
+than feels safe — handhelds read better large. This is what makes it feel intentional.
 
 Reference poses that work: `3/4 right`, `3/4 left` (held low), `tight head-on close-up`,
 `centered + lifted closer`. Vary which side the caption sits on and the caption's entrance
@@ -62,6 +67,17 @@ objects. **Change cue times only here**; regenerate audio afterward (`pnpm audio
   half-height ≈ 2.55 world, half-width ≈ 4.52 world at z=0. Model is `MODEL_FIT_HEIGHT≈4`
   tall at `s=1`, so its half-height ≈ `2·s`.
 
+## Continuous handheld spin (no pause)
+
+The handheld devices (`pixel`/`iphone`/`tablet`) do **one full eased revolution per scene**:
+`yaw = pose.yaw + 360 * norm(t - sc.start, 0, sc.end - sc.start)`. It starts at the cut and
+lands exactly back on the pose yaw at the next cut — start-to-end, **no still pause** at
+either end (the user is explicit about this). Laptops do **not** spin (wide+short reads bad
+mid-turn). Two gotchas this fixes: (1) the live clip mustn't auto-advance mid-spin (use a
+**static** schedule week so the calendar doesn't jump weeks during the 360); (2) drop the
+roll on iPhone to the **mirror** of Pixel's (e.g. Pixel `roll:-5` ↔ iPhone `roll:5`) so they
+spin as mirror images.
+
 ## Captions (`SceneText` / `FlipWord`)
 
 - Captions sit **beside or below** the phone — **never over the screen** (text on the app
@@ -79,7 +95,24 @@ objects. **Change cue times only here**; regenerate audio afterward (`pnpm audio
 Cuts are a full-frame `PAPER`-colored overlay that ramps `0→1→0` within `CUT_HALF` seconds
 of each boundary in `CUTS` (a fast, almost-cut dissolve through the paper backdrop). Hold
 the paper opaque before the first reveal. The wordmark renders **above** the dissolve so
-cuts don't make it blink.
+cuts don't make it blink. Keep `CUT_HALF` a touch wide (≈0.26) so the paper is fully opaque
+across the device hand-off — that hides the half-frame where the old GLB unmounts and the new
+device's video texture is still warming up (see the bleed-through fix below).
+
+## Device hand-offs without bleed-through (the mac-flash fix)
+
+Cutting from one 3D device to the next, the **previous device flashed for a fraction of a
+frame** after the cut (e.g. the MacBook lid showed up over the Pixel). Cause: r3f's `Suspense`
+fell back to the **old** device while the next clip/GLB loaded, and a stale draw survived to
+the screenshot. The fix is "don't emit a frame until everything's ready, then remount clean":
+
+- **Preload all assets up front, gated by `delayRender`:** `prefetch(staticFile(v))` every
+  clip + `preloadDeviceGlbs()`, all under one `delayRender("device-files")` handle — the
+  render waits, so no scene ever shows a half-loaded device.
+- **Remount per scene:** `key={sc.start}` on the device `<group>` forces a fresh mount each
+  cut (no stale device leaking through Suspense).
+- **`preserveDrawingBuffer:false`** so a previous frame's pixels can't carry over.
+- Lean on the **wide cut** (CUT_HALF) so the paper is opaque during the swap.
 
 ## The 3D phone — GLB gotchas (the expensive lessons)
 
@@ -160,8 +193,10 @@ sidechain pad + bass + arp + riser + resolve chord) and SFX, with cue times **de
   attaches via an async re-render _after_ that draw — so stills can screenshot an empty
   canvas. Fix: in `PhoneModel`, once the prepared scene is committed, force a synchronous
   `gl.render(scene, camera)` and only then resolve a dedicated `delayRender("phone-onscreen")`
-  handle. Canvas needs `gl={{ preserveDrawingBuffer: true }}` so the forced draw survives to
-  the screenshot.
+  handle. The forced draw is what survives to the screenshot — so `preserveDrawingBuffer` is
+  **off** here (set it `false`): in a multi-device piece, preserving the buffer carries the
+  previous device's pixels into the next frame (back to the mac-flash bleed). Gate clips/GLBs
+  with `delayRender` so a device only mounts once everything's loaded.
 - `remotion.config.ts`: `setVideoImageFormat("jpeg")`, `setOverwriteOutput(true)`, modest
   `setConcurrency(4)`.
 
@@ -181,9 +216,9 @@ out/t_<N>.png --frame=<N> --gl=angle`.
 
 Identical byte sizes across renders of the same frame confirm the render is deterministic.
 
-## Multi-device staging + live app video (the 45s rework)
+## Multi-device staging + live app video (the multi-device rework)
 
-The current `Launch` is a **multi-device** piece: it opens on the desktop **web** app (laptop
+The current `Launch` is a ~40s **multi-device** piece: it opens on the desktop **web** app (laptop
 hero), then hands the SAME product across devices — "now on Android" (Pixel) → "and on iOS"
 (iPhone GLB) → "and on iPadOS" (iPad). Each device runs a **live captured app clip** mapped
 onto its 3D screen, not a static screenshot.
@@ -199,6 +234,13 @@ onto its 3D screen, not a static screenshot.
   texture: mirrored text → toggle `mirrorX`; upside-down → toggle `flipY`. Render frame 750
   and eyeball before the full pass. Pixel needed `rot π` + `mirrorX:false`+`flipY:false`;
   iPad `mirrorX:true`; MacBook `flipY:true`.
+- **Frame on the SCREEN, not the whole model** (`screenFitH`): a laptop framed on its full
+  bbox wastes half the shot on keyboard/base, so the app is small and hard to read. Set
+  `screenFitH` in the CFG to center + scale the device on its **screen mesh's** bbox instead —
+  the display fills the frame and the keyboard crops off the bottom (the user explicitly wants
+  the app close/legible, edge cropping is fine). MacBook uses `screenFitH:5.0` (≈80% of frame
+  height after the scene's pose `s`); leave it unset on handhelds (they're all screen already).
+  Pose `x`/`s` then fine-tune per scene since the pivot is now the screen center.
 - **Live video on a mesh** = `useOffthreadVideoTexture({src: staticFile("videos/x.mp4")})`
   from `@remotion/three`. **Gotcha:** the screen renders WHITE unless you wire it imperatively —
   swap a `MeshBasicMaterial` onto the screen mesh, set `mat.map = tex`, and force a synchronous
@@ -206,20 +248,50 @@ onto its 3D screen, not a static screenshot.
 - **Video paths**: clips live in `public/videos/` (gitignored, regenerable) → reference as
   `videos/<name>.mp4`, not the bare filename, or you 404.
 - **De-Draco the Pixel** once (`npx @gltf-transform/cli dedup`) so no runtime decoder is needed.
-- **Crop dev-build toasts** out of captured footage (the iOS clip had an `[expo-notifications]`
-  LogBox toast in the bottom ~25%): `ffmpeg -vf "crop=W:H:0:0"`. Prefer release sim builds.
+- **Remove dev-build toasts** from captured footage (Debug RN shows `[expo-notifications]` /
+  "Open debugger" LogBox toasts at the bottom). Two options: (a) tap the toast's ✕ during
+  capture (opt-in, coords vary per device — see harness env below); (b) **crop-and-pad**: crop
+  above the toasts then pad back to the original height with the app's sampled bg colour so the
+  aspect/size is unchanged — `ffmpeg -vf "crop=W:CROPH:0:0,pad=W:H:0:0:0xF6F4F2,format=yuv420p"`
+  (sample the paper bg from an empty region; uoplan's is `#F6F4F2`). Plain `crop` alone changes
+  the aspect and mis-fits the screen UV — prefer crop+pad. **Release sim builds have no toast
+  but are currently BROKEN** (`no such module 'UoplanEngineFFI'` — the Rust engine FFI isn't
+  built for Release), so capture on **Debug** and strip toasts instead.
 
 ## Capture harness (regenerable footage + store screenshots)
 
 `scripts/capture/` seeds a realistic state, drives each platform, and records. Same backbone
 feeds the ad's videos and the store screenshots:
-- **Web**: Playwright on the live dev server, 1440×900 → laptop clips.
-- **iOS/iPad**: `simctl io recordVideo` while `idb` swipes; deep-link `uoplan:/<path>`; use the
-  **release** sim build (dev shows LogBox toasts). iPhone 17 Pro / iOS 26 only.
-- **Android**: `adb screenrecord` + `adb input swipe`; emulator is slow (~40s cold start, schedule
-  gen ~40s). Pixel skin is irrelevant for video — only the screen content textures the 3D model.
+- **Web**: Playwright on the live dev server, 1440×900 → laptop clips. **Let each page settle
+  ~5s before capturing** so the clip never opens on a skeleton or a grade-data load flash.
+  The explore clip does **two searches** before scrolling down (reads as real browsing).
+- **iOS/iPad**: `simctl io recordVideo` while `idb` swipes; deep-link `uoplan:/<path>`; run the
+  **Debug** app (Release is broken — see above; Metro on :8081, seeds reliably via `simctl`).
+  Use plain **iPhone 17 Pro** (402×874) for phone clips — matches the gesture calibration + the
+  GLB; the larger Pro Max shifts every tap (the bottom-right toast-dismiss tap hits the cart FAB
+  and opens the Basket sheet). On iPad the toast ✕ overlaps the Basket FAB → don't tap; crop+pad.
+  The schedule clip is a **static week with several courses** — don't let the calendar
+  auto-advance weeks while the device 360-spins, and a fuller week looks better than a sparse one.
+- **Android**: `adb screenrecord` + `adb input swipe`; only a **debuggable (Debug) APK** can be
+  seeded (`run-as` — Release isn't debuggable), and `seedDocuments()` must `run-as … mkdir -p
+  files` first because a fresh install has no `files/` dir until first launch. The emulator is
+  slow: give the AVD **≥4 GB RAM** (`hw.ramSize=4096`, `vm.heapSize=512` in
+  `~/.android/avd/<avd>.avd/config.ini`) or the Debug bundle GC-thrashes on the splash ~90 s+.
+  The terminate+relaunch cold-reload is unreliable on a slow emulator (often captures the splash
+  twice) — **prefer manually capturing the already-warm app** (deep-link, then `screenrecord`).
+  Native has **no `?s=` deep-link hydration** — it only rehydrates from the persisted seed JSON
+  files. Pixel skin is irrelevant for video — only the screen content textures the 3D model.
+- **Harness env overrides**: `IOS_TOAST_DISMISS=1` + `IOS_DISMISS_X`/`IOS_DISMISS_Y` (default
+  372,820 for 402×874), `IOS_SETTLE_MS` (default 9000); `ANDROID_APK` (path to the APK variant),
+  `ANDROID_SETTLE_MS` (default 100000 — wait past the slow splash before deep-linking).
 - Run: `node scripts/capture/videos-{web,ios,android}.mjs`. Verify each clip is non-trivial
   size + spot-check a frame (a ~140K mp4 = static/blank screen).
+
+## Discord-friendly <10MB downscale
+
+The deliverable is full-quality; make a separate small copy for chat — don't change the
+pipeline. Two-pass libx264 (~1700k video + aac 128k) on the rendered mp4 lands ~9MB for a 40s
+1080p clip; redo it whenever you re-render. Verify with `ffprobe` the result is `<10MB`.
 
 ## Branding & content rules (uoplan)
 
@@ -239,15 +311,21 @@ feeds the ad's videos and the store screenshots:
 | ------------------------ | ------------------------------------------------------------------- |
 | Add/retime a scene       | `src/timeline.mjs` `SCENES[]` (then `pnpm audio`)                   |
 | Stage a 2nd/3rd device   | `device.{kind,video}` per scene; `DeviceModel.tsx` CFG (real GLB per kind) |
+| Laptop app too small     | frame on the screen: set `screenFitH` in CFG (keyboard crops off)   |
+| Spin a handheld 360      | `yaw = pose.yaw + 360*norm(t-start,0,dur)`; laptops stay fixed     |
+| Mirror two hand-helds    | iPhone pose = Pixel pose mirrored on the other side, flip the roll  |
 | Wrong-facing GLB device  | screen back/logo → `rot:[0,π,0]`; text mirrored → `mirrorX`; upside-down → `flipY` |
 | Live app on a 3D screen  | `useOffthreadVideoTexture` + memo material + `gl.render` in effect  |
 | White device screen      | set `mat.map=tex` imperatively + force redraw (not JSX `map=`)      |
-| Recapture footage        | `scripts/capture/videos-{web,ios,android}.mjs`; clips → `public/videos/` |
+| Prev device flashes      | `delayRender` prefetch+preloadGlb, per-scene `key`, drawBuffer false |
+| Calendar jumps mid-spin  | capture a STATIC week clip (no auto week-advance)                   |
+| Recapture footage        | `scripts/capture/videos-{web,ios,android}.mjs`; settle 5s; clips → `public/videos/` |
 | Pose a phone             | `pose {yaw,tilt,roll,x,y,s}`; camera fov 30 @ z=9.5; ~211.8 px/unit |
 | Stop see-through buttons | `harden()` body mats → `FrontSide` + depth (`PhoneModel.tsx`)       |
 | Kill screen glare        | hide the `Glass` mesh                                               |
 | Solid Dynamic Island     | matte near-black on `Plastic_LED`/`Camera_*`/`Display_Frame`        |
 | Shadow slicing the phone | track it: `shadowY = pose.y - 2.0*pose.s - 0.12`, no `frames` prop  |
 | Headless render fails    | add `--gl=angle`                                                    |
-| Empty canvas in stills   | force `gl.render` + `preserveDrawingBuffer` + `delayRender` gate    |
+| Empty canvas in stills   | force `gl.render` + `delayRender` gate (drawBuffer off, no bleed)   |
 | Render                   | `pnpm render` → `out/launch-video.mp4`; verify with `ffprobe`       |
+| Discord <10MB copy       | two-pass libx264 ~1700k + aac 128k on output (ffprobe to confirm)   |

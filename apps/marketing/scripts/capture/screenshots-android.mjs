@@ -14,13 +14,12 @@ import { sleep } from "./lib/util.mjs";
 import { NATIVE_SEED_FILES } from "./seeds.mjs";
 import { SCREENS, ANDROID_BUCKETS, STORE_LISTINGS_DIR, MARKETING_DIR } from "./config.mjs";
 
-const SETTLE = { schedule: 42000, default: 6000 };
+const SETTLE = { schedule: 60000, default: 11000 };
 
-/** Tap the RN warnings notification ("Open debugger…") X to dismiss it, if present. */
-async function dismissWarnToast(size) {
-  await android.tap(size.w - 70, size.h - 150);
-  await android.tap(size.w - 70, size.h - 150);
-}
+/** Capture screens directly. The debuggable-signed release APK shows one RN
+ * "Open debugger to view warnings" toast on cold boot; we tap its X once after
+ * launch. We must NOT tap per-screen — the old corner-tap landed on the
+ * grade-trends tab, hijacking every screen. */
 const APK =
   process.argv[3] ??
   process.env.UOPLAN_APK ??
@@ -50,7 +49,15 @@ async function captureBucket(bucket) {
   for (const screen of SCREENS) {
     await android.openUrl(`uoplan:/${screen.nativePath}`);
     await sleep(SETTLE[screen.seed] ?? SETTLE.default);
-    await dismissWarnToast(size);
+    // The debuggable-signed release APK re-shows a one-time "Open debugger to
+    // view warnings" LogBox toast on each navigation. Swipe it off-screen to
+    // dismiss (a corner tap risked landing on the bottom-nav trends tab and
+    // hijacking the screen).
+    await android.swipe(size.w * 0.6, size.h - 170, size.w * 0.04, size.h - 170, 350);
+    await sleep(1200);
+    // A late re-render (e.g. schedule generation finishing) can re-show the
+    // toast after the first swipe, so clear it once more just before capture.
+    await android.swipe(size.w * 0.6, size.h - 170, size.w * 0.04, size.h - 170, 350);
     await sleep(600);
     const out = path.join(outDir, `${screen.id}.png`);
     await android.screenshot(out);

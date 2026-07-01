@@ -11,10 +11,10 @@ import { sleep } from "./lib/util.mjs";
  *  page is always moving (no stop-and-sit at the bottom). */
 async function scrollThrough(page, ms = 6000, frac = 0.92) {
   await page.evaluate(
-    (dur) =>
+    ([dur, fr]) =>
       new Promise((resolve) => {
         window.scrollTo(0, 0);
-        const max = Math.max(0, document.body.scrollHeight - window.innerHeight) * 0.92;
+        const max = Math.max(0, document.body.scrollHeight - window.innerHeight) * fr;
         const t0 = performance.now();
         const ease = (p) => (p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2);
         function step(now) {
@@ -25,7 +25,7 @@ async function scrollThrough(page, ms = 6000, frac = 0.92) {
         }
         requestAnimationFrame(step);
       }),
-    ms,
+    [ms, frac],
   );
   await sleep(120);
 }
@@ -38,21 +38,48 @@ async function typeSlow(locator, text, perKey = 120) {
 }
 
 const FLOWS = {
-  // Explore: two quick searches (so it reads as "search anything"), then a
-  // continuous browse that lasts the rest of the beat.
+  // Explore: one search that resolves to a course, open it, browse the professor
+  // list, then click through to that course's satisfaction (feedback) page — a
+  // real "search → drill in → read reviews" browse, not two throwaway searches.
+  // Kept tight: the laptop screen shows the clip's first ~7s (no device spin), so
+  // every beat has to land quickly.
   async explore(page) {
     const search = page.getByPlaceholder(/Search/i).first();
     if (await search.isVisible().catch(() => false)) {
-      await typeSlow(search, "eng", 110);
-      await sleep(900);
-      await search.fill("");
-      await sleep(300);
-      await typeSlow(search, "calc", 110);
-      await sleep(900);
-      await search.fill("");
-      await sleep(400);
+      await typeSlow(search, "psy 1101", 95);
+      await sleep(1100); // dwell on the live results so they read
     }
-    await scrollThrough(page, 5200);
+    // Open the top course result (PSY 1101 — a big multi-professor course).
+    const course = page.locator('a[href*="/explore/course/"]').first();
+    if (await course.isVisible().catch(() => false)) {
+      await course.click().catch(() => {});
+      await page.waitForURL(/\/explore\/course\//, { timeout: 4000 }).catch(() => {});
+      await sleep(1400); // dwell on the course header + evaluations card
+    }
+    // Expand the top professor to reveal the per-term grade breakdown.
+    const prof = page.getByRole("button", { name: /Brenda Baird/i }).first();
+    if (await prof.isVisible().catch(() => false)) {
+      await prof.click().catch(() => {});
+      await sleep(1900); // dwell on the expanded breakdown
+    }
+    // Scroll slowly down the professor list (more profs + grade charts).
+    await scrollThrough(page, 3000, 0.42);
+    await sleep(500);
+    // Click through to the course's satisfaction / student-evaluations page.
+    // Hover first so TanStack Router preloads the route data (defaultPreload:
+    // "intent") — the click then navigates instantly with no blank flash.
+    const feedback = page.locator('a[href$="/feedback"]').first();
+    if (await feedback.isVisible().catch(() => false)) {
+      await feedback.hover().catch(() => {});
+      await sleep(700);
+      await feedback.click().catch(() => {});
+      await page.waitForURL(/\/feedback/, { timeout: 4000 }).catch(() => {});
+      await sleep(1300); // dwell on the satisfaction summary
+    }
+    // Ease slowly through just the top of the satisfaction charts — the overall
+    // sentiment + first survey trends tell the story; no need to reach the bottom.
+    await scrollThrough(page, 3400, 0.3);
+    await sleep(500);
   },
 
   // Trends: one slow, continuous reveal of the dashboard across the whole beat.

@@ -25,8 +25,13 @@ async function recordWebFlow(flow, seeds) {
   ensureDir(rawDir);
 
   const { browser, context, page } = await openWeb({ recordDir: rawDir });
+  // Playwright's recordVideo clock starts ~when the context is created; timestamp
+  // that origin so we can trim to the exact moment the flow begins (goto +
+  // networkidle + settle time is jittery, so a fixed prefix trim is unreliable).
+  const recStart = Date.now();
   const sParam = flow.seed ? seeds[flow.seed] : undefined;
   await gotoSettled(page, webUrl(flow.route, sParam), { settleMs: 5000 });
+  const flowStartSec = (Date.now() - recStart) / 1000;
   await runFlow(flow.id, page);
   await sleep(400);
   await page.close();
@@ -35,18 +40,22 @@ async function recordWebFlow(flow, seeds) {
 
   const webm = fs.readdirSync(rawDir).find((f) => f.endsWith(".webm"));
   if (!webm) throw new Error(`no recording produced for ${flow.id}`);
-  return path.join(rawDir, webm);
+  return { webmPath: path.join(rawDir, webm), flowStartSec };
 }
 
-async function transcode(webmPath, outPath) {
+async function transcode(webmPath, outPath, { trimStart, speed = 1 }) {
   ensureDir(path.dirname(outPath));
-  // Trim the static settle prefix (data-load wait, no skeleton) so the mapped
-  // clip opens on the loaded page mid-motion. Even dimensions + yuv420p for broad
-  // decoder support (three.js VideoTexture).
+  // Trim the settle prefix so the clip opens right as the flow begins (a small
+  // lead keeps the pre-typing UI visible for a beat). `speed` time-compresses
+  // the motion (setpts) so a long flow fits its scene's on-screen window. Even
+  // dimensions + yuv420p for broad decoder support (three.js VideoTexture).
+  const filters = [];
+  if (speed !== 1) filters.push(`setpts=PTS/${speed}`);
+  filters.push("scale=trunc(iw/2)*2:trunc(ih/2)*2");
   await run(ffmpegPath(), [
     "-y",
     "-ss",
-    "4.5",
+    String(Math.max(0, trimStart)),
     "-i",
     webmPath,
     "-c:v",
@@ -54,7 +63,7 @@ async function transcode(webmPath, outPath) {
     "-pix_fmt",
     "yuv420p",
     "-vf",
-    "scale=trunc(iw/2)*2:trunc(ih/2)*2",
+    filters.join(","),
     "-an",
     "-movflags",
     "+faststart",
@@ -69,9 +78,10 @@ async function main() {
     (f) => f.platform === "web" && (only.length === 0 || only.includes(f.id)),
   );
   for (const flow of webFlows) {
-    const webm = await recordWebFlow(flow, seeds);
+    const { webmPath, flowStartSec } = await recordWebFlow(flow, seeds);
     const out = path.join(VIDEOS_DIR, `${flow.id}-web.mp4`);
-    await transcode(webm, out);
+    // ~0.35s lead so a beat of the pre-flow UI shows before the first gesture.
+    await transcode(webmPath, out, { trimStart: flowStartSec - 0.35, speed: flow.speed });
     console.log(`✓ ${flow.id} → ${path.relative(MARKETING_DIR, out)}`);
   }
 }

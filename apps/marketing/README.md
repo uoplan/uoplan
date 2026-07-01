@@ -51,7 +51,7 @@ pnpm render       # -> out/launch-video.mp4  (1920x1080, 30fps, h264 + aac, ~24s
 
 A deep guide to the techniques (poses, GLB material fixes, Remotion async-load
 gotchas, the verify-with-stills workflow, branding rules) lives in the repo skill
-**`.claude/skills/remotion-launch-video/SKILL.md`** — read it before making a new ad.
+**`.claude/skills/marketing-video/SKILL.md`** — read it before making a new ad.
 
 ## Conventions
 

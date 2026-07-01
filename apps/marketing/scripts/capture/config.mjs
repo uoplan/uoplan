@@ -73,7 +73,7 @@ export const SCREENS = [
  * uses an AVD name. `dir` is the destination under store-listings.
  */
 export const IOS_BUCKETS = [
-  { id: "iphone-6.9", deviceName: "iPhone 17 Pro", dir: "ios/screenshots/iphone-6.9" },
+  { id: "iphone-6.9", deviceName: "iPhone 17 Pro Max", dir: "ios/screenshots/iphone-6.9" },
   { id: "ipad-13", deviceName: "iPad Pro 13-inch (M4)", dir: "ios/screenshots/ipad-13" },
 ];
 
@@ -94,7 +94,12 @@ export const WEB_VIEWPORT = { width: 1440, height: 900, deviceScaleFactor: 2 };
  * platform whose 3D model carries it in the timeline.
  */
 export const AD_FLOWS = [
-  { id: "explore", platform: "web", route: "/explore", durationMs: 9000 },
+  // `speed` time-compresses the transcoded clip (setpts) so a multi-step flow
+  // fits the fixed on-screen window of its scene. Laptops don't spin, so the
+  // explore scene shows the clip continuously from t=0 — the scene is sized to
+  // the whole search → course → professor → satisfaction story, played at
+  // natural speed (1.0) so viewers can digest each step.
+  { id: "explore", platform: "web", route: "/explore", durationMs: 9000, speed: 1.0 },
   { id: "trends", platform: "web", route: "/trends", durationMs: 9000 },
   { id: "schedule", platform: "web", route: "/schedule/", seed: "schedule", durationMs: 9000 },
   { id: "customize", platform: "web", route: "/schedule/", seed: "schedule", durationMs: 9000 },

@@ -12,18 +12,20 @@ import { sleep } from "./lib/util.mjs";
 import { NATIVE_SEED_FILES } from "./seeds.mjs";
 import { VIDEOS_DIR, MARKETING_DIR } from "./config.mjs";
 
-const APK = path.join(
-  MARKETING_DIR,
-  "..",
-  "native",
-  "android",
-  "app",
-  "build",
-  "outputs",
-  "apk",
-  "release",
-  "app-release.apk",
-);
+const APK =
+  process.env.ANDROID_APK ??
+  path.join(
+    MARKETING_DIR,
+    "..",
+    "native",
+    "android",
+    "app",
+    "build",
+    "outputs",
+    "apk",
+    "release",
+    "app-release.apk",
+  );
 const AVD = "uoplan_test";
 
 const FLOWS = [
@@ -59,7 +61,10 @@ async function main() {
   await android.terminate();
   await android.seedDocuments(NATIVE_SEED_FILES);
   await android.launch();
-  await sleep(40000);
+  // The app holds the splash until it finishes decoding the full protobuf dataset;
+  // on a RAM-starved AVD (1.5 GB) that GC-thrashes for ~90 s cold, so wait well past
+  // splash before deep-linking (override with ANDROID_SETTLE_MS).
+  await sleep(Number(process.env.ANDROID_SETTLE_MS ?? 100000));
   const size = await android.screenSize();
   for (const flow of FLOWS) {
     if (only.length === 0 || only.includes(flow.id)) await record(flow, size);
