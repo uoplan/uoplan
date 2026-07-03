@@ -262,6 +262,7 @@ onto its 3D screen, not a static screenshot.
 
 `scripts/capture/` seeds a realistic state, drives each platform, and records. Same backbone
 feeds the ad's videos and the store screenshots:
+
 - **Web**: Playwright on the live dev server, 1440×900 → laptop clips. **Let each page settle
   ~5s before capturing** so the clip never opens on a skeleton or a grade-data load flash.
   The explore clip does **two searches** before scrolling down (reads as real browsing).
@@ -274,7 +275,7 @@ feeds the ad's videos and the store screenshots:
   auto-advance weeks while the device 360-spins, and a fuller week looks better than a sparse one.
 - **Android**: `adb screenrecord` + `adb input swipe`; only a **debuggable (Debug) APK** can be
   seeded (`run-as` — Release isn't debuggable), and `seedDocuments()` must `run-as … mkdir -p
-  files` first because a fresh install has no `files/` dir until first launch. The emulator is
+files` first because a fresh install has no `files/` dir until first launch. The emulator is
   slow: give the AVD **≥4 GB RAM** (`hw.ramSize=4096`, `vm.heapSize=512` in
   `~/.android/avd/<avd>.avd/config.ini`) or the Debug bundle GC-thrashes on the splash ~90 s+.
   The terminate+relaunch cold-reload is unreliable on a slow emulator (often captures the splash
@@ -307,25 +308,25 @@ pipeline. Two-pass libx264 (~1700k video + aac 128k) on the rendered mp4 lands ~
 
 ## Quick reference
 
-| Need                     | Where / value                                                       |
-| ------------------------ | ------------------------------------------------------------------- |
-| Add/retime a scene       | `src/timeline.mjs` `SCENES[]` (then `pnpm audio`)                   |
-| Stage a 2nd/3rd device   | `device.{kind,video}` per scene; `DeviceModel.tsx` CFG (real GLB per kind) |
-| Laptop app too small     | frame on the screen: set `screenFitH` in CFG (keyboard crops off)   |
-| Spin a handheld 360      | `yaw = pose.yaw + 360*norm(t-start,0,dur)`; laptops stay fixed     |
-| Mirror two hand-helds    | iPhone pose = Pixel pose mirrored on the other side, flip the roll  |
-| Wrong-facing GLB device  | screen back/logo → `rot:[0,π,0]`; text mirrored → `mirrorX`; upside-down → `flipY` |
-| Live app on a 3D screen  | `useOffthreadVideoTexture` + memo material + `gl.render` in effect  |
-| White device screen      | set `mat.map=tex` imperatively + force redraw (not JSX `map=`)      |
-| Prev device flashes      | `delayRender` prefetch+preloadGlb, per-scene `key`, drawBuffer false |
-| Calendar jumps mid-spin  | capture a STATIC week clip (no auto week-advance)                   |
+| Need                     | Where / value                                                                       |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Add/retime a scene       | `src/timeline.mjs` `SCENES[]` (then `pnpm audio`)                                   |
+| Stage a 2nd/3rd device   | `device.{kind,video}` per scene; `DeviceModel.tsx` CFG (real GLB per kind)          |
+| Laptop app too small     | frame on the screen: set `screenFitH` in CFG (keyboard crops off)                   |
+| Spin a handheld 360      | `yaw = pose.yaw + 360*norm(t-start,0,dur)`; laptops stay fixed                      |
+| Mirror two hand-helds    | iPhone pose = Pixel pose mirrored on the other side, flip the roll                  |
+| Wrong-facing GLB device  | screen back/logo → `rot:[0,π,0]`; text mirrored → `mirrorX`; upside-down → `flipY`  |
+| Live app on a 3D screen  | `useOffthreadVideoTexture` + memo material + `gl.render` in effect                  |
+| White device screen      | set `mat.map=tex` imperatively + force redraw (not JSX `map=`)                      |
+| Prev device flashes      | `delayRender` prefetch+preloadGlb, per-scene `key`, drawBuffer false                |
+| Calendar jumps mid-spin  | capture a STATIC week clip (no auto week-advance)                                   |
 | Recapture footage        | `scripts/capture/videos-{web,ios,android}.mjs`; settle 5s; clips → `public/videos/` |
-| Pose a phone             | `pose {yaw,tilt,roll,x,y,s}`; camera fov 30 @ z=9.5; ~211.8 px/unit |
-| Stop see-through buttons | `harden()` body mats → `FrontSide` + depth (`PhoneModel.tsx`)       |
-| Kill screen glare        | hide the `Glass` mesh                                               |
-| Solid Dynamic Island     | matte near-black on `Plastic_LED`/`Camera_*`/`Display_Frame`        |
-| Shadow slicing the phone | track it: `shadowY = pose.y - 2.0*pose.s - 0.12`, no `frames` prop  |
-| Headless render fails    | add `--gl=angle`                                                    |
-| Empty canvas in stills   | force `gl.render` + `delayRender` gate (drawBuffer off, no bleed)   |
-| Render                   | `pnpm render` → `out/launch-video.mp4`; verify with `ffprobe`       |
-| Discord <10MB copy       | two-pass libx264 ~1700k + aac 128k on output (ffprobe to confirm)   |
+| Pose a phone             | `pose {yaw,tilt,roll,x,y,s}`; camera fov 30 @ z=9.5; ~211.8 px/unit                 |
+| Stop see-through buttons | `harden()` body mats → `FrontSide` + depth (`PhoneModel.tsx`)                       |
+| Kill screen glare        | hide the `Glass` mesh                                                               |
+| Solid Dynamic Island     | matte near-black on `Plastic_LED`/`Camera_*`/`Display_Frame`                        |
+| Shadow slicing the phone | track it: `shadowY = pose.y - 2.0*pose.s - 0.12`, no `frames` prop                  |
+| Headless render fails    | add `--gl=angle`                                                                    |
+| Empty canvas in stills   | force `gl.render` + `delayRender` gate (drawBuffer off, no bleed)                   |
+| Render                   | `pnpm render` → `out/launch-video.mp4`; verify with `ffprobe`                       |
+| Discord <10MB copy       | two-pass libx264 ~1700k + aac 128k on output (ffprobe to confirm)                   |

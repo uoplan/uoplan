@@ -56,7 +56,7 @@ export const HOME_BANNERS: readonly HomeBannerConfig[] = [
     variant: "info",
     icon: <IconBrandApple size={ICON_SIZE} />,
     idBase: "landing.banner.ios",
-    href: "https://testflight.apple.com/join/X43ekBMp",
+    href: "https://apps.apple.com/app/id6784867164",
   },
   {
     id: "github",

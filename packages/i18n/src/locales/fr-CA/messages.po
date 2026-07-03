@@ -2012,15 +2012,15 @@ msgstr "Une étoile sur GitHub."
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "landing.banner.ios.cta"
-msgstr "Ouvrir TestFlight"
+msgstr "Ouvrir l'App Store"
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "landing.banner.ios.text"
-msgstr "Maintenant sur iOS — joignez la bêta TestFlight."
+msgstr "Maintenant sur iOS. Téléchargez-la dans l'App Store."
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "landing.banner.ios.textShort"
-msgstr "Joignez la bêta iOS."
+msgstr "Téléchargez-la dans l'App Store."
 
 msgid "landing.explore.description"
 msgstr "Recherchez des cours et des professeurs avec les distributions de notes."

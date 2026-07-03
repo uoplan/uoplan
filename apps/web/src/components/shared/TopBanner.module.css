@@ -41,7 +41,7 @@
   --banner-strong-hover: color-mix(in srgb, var(--app-success) 88%, var(--app-text));
 }
 
-/* Blue band, e.g. the iOS TestFlight banner. Mirrors the success variant's
+/* Blue band, e.g. the iOS App Store banner. Mirrors the success variant's
    structure, swapped onto the info (blue) tokens. */
 .banner[data-variant="info"] {
   --banner-soft: var(--app-info-soft);

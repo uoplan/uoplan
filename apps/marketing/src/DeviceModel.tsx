@@ -130,9 +130,7 @@ const GlbDevice: React.FC<{ kind: Exclude<DeviceKind, "iphone">; video: string }
     // Default: center + fit on the whole model. If screenFitH is set, frame on
     // the screen mesh instead so the display fills the shot and the rest of the
     // body (e.g. laptop keyboard) crops off the bottom.
-    const box = new THREE.Box3().setFromObject(
-      cfg.screenFitH && screenMesh ? screenMesh : s,
-    );
+    const box = new THREE.Box3().setFromObject(cfg.screenFitH && screenMesh ? screenMesh : s);
     const size = new THREE.Vector3();
     const c = new THREE.Vector3();
     box.getSize(size);

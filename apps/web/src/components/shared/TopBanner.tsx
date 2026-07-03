@@ -24,7 +24,7 @@ export function TopBannerSlot({ children }: { children: ReactNode }) {
  * (personalize nudge / feedback), "neutral" (a high-contrast filled pill, e.g.
  * the post-personalization "change your personalization" banner or the GitHub
  * star nudge), "success" (green, e.g. the Android closed-test banner), or "info"
- * (blue, e.g. the iOS TestFlight banner).
+ * (blue, e.g. the iOS App Store banner).
  */
 export type TopBannerVariant = "accent" | "warning" | "neutral" | "success" | "info";
 
