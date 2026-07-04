@@ -25,7 +25,7 @@ const ROUTES: ReadonlyArray<{ name: string; path: string }> = [
   { name: "home", path: "/" },
   { name: "schedule", path: "/schedule" },
   { name: "explore", path: "/explore" },
-  { name: "graph", path: "/graph" },
+  { name: "graph", path: "/professor-graph" },
   { name: "trends", path: "/trends" },
 ];
 
