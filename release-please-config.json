@@ -1,6 +1,7 @@
 {
   "release-type": "node",
-  "bootstrap-sha": "9f990be60916924380ed8b3086bfa92b2fece729",
+  "bootstrap-sha": "c3b4a6503339322055c02d39e88438b2086b9777",
+  "last-release-sha": "c3b4a6503339322055c02d39e88438b2086b9777",
   "packages": {
     ".": {
       "prerelease": true,
