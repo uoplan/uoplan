@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as GraphRouteImport } from './routes/graph'
+import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as TrendsRouteRouteImport } from './routes/trends/route'
 import { Route as ScheduleRouteRouteImport } from './routes/schedule/route'
@@ -23,6 +25,7 @@ import { Route as TrendsIndexRouteImport } from './routes/trends/index'
 import { Route as ScheduleIndexRouteImport } from './routes/schedule/index'
 import { Route as PersonalizeIndexRouteImport } from './routes/personalize/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
+import { Route as VsCompetitorRouteImport } from './routes/vs/$competitor'
 import { Route as TrendsLeaderboardRouteImport } from './routes/trends/leaderboard'
 import { Route as TrendsFeedbackRouteImport } from './routes/trends/feedback'
 import { Route as TrendsDisciplinesRouteImport } from './routes/trends/disciplines'
@@ -52,9 +55,19 @@ const GraphRoute = GraphRouteImport.update({
   path: '/graph',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DonateRoute = DonateRouteImport.update({
   id: '/donate',
   path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChangelogRoute = ChangelogRouteImport.update({
@@ -106,6 +119,11 @@ const ExploreIndexRoute = ExploreIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ExploreRouteRoute,
+} as any)
+const VsCompetitorRoute = VsCompetitorRouteImport.update({
+  id: '/vs/$competitor',
+  path: '/vs/$competitor',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const TrendsLeaderboardRoute = TrendsLeaderboardRouteImport.update({
   id: '/leaderboard',
@@ -186,7 +204,9 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/trends': typeof TrendsRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
+  '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
+  '/features': typeof FeaturesRoute
   '/graph': typeof GraphRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
@@ -194,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
   '/trends/leaderboard': typeof TrendsLeaderboardRoute
+  '/vs/$competitor': typeof VsCompetitorRoute
   '/explore/': typeof ExploreIndexRoute
   '/personalize/': typeof PersonalizeIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
@@ -211,7 +232,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
+  '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
+  '/features': typeof FeaturesRoute
   '/graph': typeof GraphRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
@@ -219,6 +242,7 @@ export interface FileRoutesByTo {
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
   '/trends/leaderboard': typeof TrendsLeaderboardRoute
+  '/vs/$competitor': typeof VsCompetitorRoute
   '/explore': typeof ExploreIndexRoute
   '/personalize': typeof PersonalizeIndexRoute
   '/schedule': typeof ScheduleIndexRoute
@@ -241,7 +265,9 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRouteRouteWithChildren
   '/trends': typeof TrendsRouteRouteWithChildren
   '/changelog': typeof ChangelogRoute
+  '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
+  '/features': typeof FeaturesRoute
   '/graph': typeof GraphRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
@@ -249,6 +275,7 @@ export interface FileRoutesById {
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
   '/trends/leaderboard': typeof TrendsLeaderboardRoute
+  '/vs/$competitor': typeof VsCompetitorRoute
   '/explore/': typeof ExploreIndexRoute
   '/personalize/': typeof PersonalizeIndexRoute
   '/schedule/': typeof ScheduleIndexRoute
@@ -272,7 +299,9 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/trends'
     | '/changelog'
+    | '/compare'
     | '/donate'
+    | '/features'
     | '/graph'
     | '/privacy'
     | '/terms'
@@ -280,6 +309,7 @@ export interface FileRouteTypes {
     | '/trends/disciplines'
     | '/trends/feedback'
     | '/trends/leaderboard'
+    | '/vs/$competitor'
     | '/explore/'
     | '/personalize/'
     | '/schedule/'
@@ -297,7 +327,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/changelog'
+    | '/compare'
     | '/donate'
+    | '/features'
     | '/graph'
     | '/privacy'
     | '/terms'
@@ -305,6 +337,7 @@ export interface FileRouteTypes {
     | '/trends/disciplines'
     | '/trends/feedback'
     | '/trends/leaderboard'
+    | '/vs/$competitor'
     | '/explore'
     | '/personalize'
     | '/schedule'
@@ -326,7 +359,9 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/trends'
     | '/changelog'
+    | '/compare'
     | '/donate'
+    | '/features'
     | '/graph'
     | '/privacy'
     | '/terms'
@@ -334,6 +369,7 @@ export interface FileRouteTypes {
     | '/trends/disciplines'
     | '/trends/feedback'
     | '/trends/leaderboard'
+    | '/vs/$competitor'
     | '/explore/'
     | '/personalize/'
     | '/schedule/'
@@ -356,10 +392,13 @@ export interface RootRouteChildren {
   ScheduleRouteRoute: typeof ScheduleRouteRouteWithChildren
   TrendsRouteRoute: typeof TrendsRouteRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
+  CompareRoute: typeof CompareRoute
   DonateRoute: typeof DonateRoute
+  FeaturesRoute: typeof FeaturesRoute
   GraphRoute: typeof GraphRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
+  VsCompetitorRoute: typeof VsCompetitorRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -385,11 +424,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GraphRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/donate': {
       id: '/donate'
       path: '/donate'
       fullPath: '/donate'
       preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/changelog': {
@@ -461,6 +514,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/explore/'
       preLoaderRoute: typeof ExploreIndexRouteImport
       parentRoute: typeof ExploreRouteRoute
+    }
+    '/vs/$competitor': {
+      id: '/vs/$competitor'
+      path: '/vs/$competitor'
+      fullPath: '/vs/$competitor'
+      preLoaderRoute: typeof VsCompetitorRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/trends/leaderboard': {
       id: '/trends/leaderboard'
@@ -636,10 +696,13 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRouteRoute: ScheduleRouteRouteWithChildren,
   TrendsRouteRoute: TrendsRouteRouteWithChildren,
   ChangelogRoute: ChangelogRoute,
+  CompareRoute: CompareRoute,
   DonateRoute: DonateRoute,
+  FeaturesRoute: FeaturesRoute,
   GraphRoute: GraphRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
+  VsCompetitorRoute: VsCompetitorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

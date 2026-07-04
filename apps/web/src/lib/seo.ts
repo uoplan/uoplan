@@ -2,7 +2,7 @@ import seoPages from "./seo-pages.json";
 import { tr } from "../i18n";
 
 const SITE_ORIGIN = "https://uoplan.party";
-const SITE_NAME = "uoplan";
+const SITE_NAME = "uoPlan";
 const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
 type SeoPageId = keyof typeof seoPages;
@@ -110,8 +110,8 @@ function humanizeFacultyParam(param: string): string {
 
 function professorSeoTitle(name: string | null): string {
   return name
-    ? `${name} — uOttawa professor ratings & grades | uoplan`
-    : "uOttawa professor ratings & grades | uoplan";
+    ? `${name} — uOttawa professor ratings & grades | uoPlan`
+    : "uOttawa professor ratings & grades | uoPlan";
 }
 
 function localized(pageId: SeoPageId, field: "title" | "description" | "keywords"): string {
@@ -231,7 +231,7 @@ export function buildCourseHead({ courseCode, pathParam }: CourseHeadInput) {
 
   return buildDynamicHead({
     tabTitle: courseCode,
-    title: `${courseCode} — uOttawa grades, sections & professor ratings | uoplan`,
+    title: `${courseCode} — uOttawa grades, sections & professor ratings | uoPlan`,
     description: `Explore ${courseCode} grade distributions, sections, schedules, and professor ratings at the University of Ottawa.`,
     keywords: `${courseCode}, ${compactCode}, uOttawa course grades, uOttawa sections, uOttawa professor ratings`,
     canonicalPath: `/explore/course/${pathSegmentFromParam(pathParam)}`,
@@ -262,7 +262,7 @@ export function buildProgramHead({ slug, pathParam }: ProgramHeadInput) {
 
   return buildDynamicHead({
     tabTitle: programName,
-    title: `${programName} — uOttawa program requirements | uoplan`,
+    title: `${programName} — uOttawa program requirements | uoPlan`,
     description: `Explore ${programName} requirements, required courses, and grade data for University of Ottawa programs.`,
     keywords: `${programName}, uOttawa program requirements, University of Ottawa programs, uOttawa degree planner`,
     canonicalPath: `/explore/program/${pathFromSplatParam(pathParam)}`,
@@ -274,7 +274,7 @@ export function buildDisciplineHead(disciplineParam: string) {
 
   return buildDynamicHead({
     tabTitle: code,
-    title: `${code} — uOttawa courses & grades by discipline | uoplan`,
+    title: `${code} — uOttawa courses & grades by discipline | uoPlan`,
     description: `Explore ${code} courses at the University of Ottawa with grade distributions, sections, schedules, and professor ratings.`,
     keywords: `${code}, uOttawa ${code} courses, uOttawa course grades, University of Ottawa disciplines`,
     canonicalPath: `/explore/discipline/${pathSegmentFromParam(code.toLowerCase())}`,
@@ -287,7 +287,7 @@ export function buildFacultyHead(facultyParam: string) {
 
   return buildDynamicHead({
     tabTitle: facultyName,
-    title: `${facultyName} — uOttawa courses & grades | uoplan`,
+    title: `${facultyName} — uOttawa courses & grades | uoPlan`,
     description: `Explore ${facultyName} courses, disciplines, grade distributions, and professor ratings at the University of Ottawa.`,
     keywords: `${facultyName}, uOttawa courses, uOttawa course grades, University of Ottawa faculties`,
     canonicalPath: `/explore/faculty/${pathSegmentFromParam(facultyId)}`,
@@ -296,4 +296,70 @@ export function buildFacultyHead(facultyParam: string) {
 
 export function buildTabTitle(title: string) {
   return { meta: [{ title }] };
+}
+
+/** Maps each `/vs/<slug>` route param to its `seo-pages.json` entry. */
+const VS_PAGE_BY_SLUG: Record<string, SeoPageId> = {
+  uenroll: "vsUenroll",
+  uschedule: "vsUschedule",
+  "uo-grades": "vsUoGrades",
+  coursemapper: "vsCoursemapper",
+};
+
+function breadcrumbLd(trail: { name: string; path: string }[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: pageUrl(crumb.path),
+    })),
+  };
+}
+
+function withJsonLd<T extends { meta: readonly unknown[] }>(
+  head: T,
+  jsonLd: Record<string, unknown>,
+) {
+  return { ...head, meta: [...head.meta, { "script:ld+json": jsonLd }] };
+}
+
+/** Head for `/features`, with a Home → Features breadcrumb. */
+export function buildFeaturesHead() {
+  return withJsonLd(
+    buildPageHead("features"),
+    breadcrumbLd([
+      { name: "uoPlan", path: "/" },
+      { name: "Features", path: "/features" },
+    ]),
+  );
+}
+
+/** Head for `/compare`, with a Home → Compare breadcrumb. */
+export function buildCompareHead() {
+  return withJsonLd(
+    buildPageHead("compare"),
+    breadcrumbLd([
+      { name: "uoPlan", path: "/" },
+      { name: "Compare", path: "/compare" },
+    ]),
+  );
+}
+
+/** Head for the dynamic `/vs/$competitor` route (falls back to a bare title). */
+export function buildVsHead(slug: string) {
+  const pageId = VS_PAGE_BY_SLUG[slug];
+  if (!pageId) return buildTabTitle("uoPlan");
+
+  const page = seoPages[pageId];
+  return withJsonLd(
+    buildPageHead(pageId),
+    breadcrumbLd([
+      { name: "uoPlan", path: "/" },
+      { name: "Compare", path: "/compare" },
+      { name: page.tabTitle, path: page.canonicalPath },
+    ]),
+  );
 }

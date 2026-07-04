@@ -9,7 +9,7 @@ const templatePath = path.join(distDir, "index.html");
 const seoPagesPath = path.join(webRoot, "src/lib/seo-pages.json");
 
 const SITE_ORIGIN = "https://uoplan.party";
-const SITE_NAME = "uoplan";
+const SITE_NAME = "uoPlan";
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
 
 interface SeoPage {
@@ -76,7 +76,48 @@ function buildWebApplicationJsonLd() {
   };
 }
 
-function buildHeadInjection(page: SeoPage): string {
+function breadcrumbLd(trail: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: pageUrl(crumb.path),
+    })),
+  };
+}
+
+/**
+ * Static BreadcrumbList JSON-LD for the marketing / comparison pages so crawlers
+ * see the trail in the prerendered HTML (the client route heads emit the same
+ * structure at runtime). Returns null for pages that don't need a breadcrumb.
+ */
+function breadcrumbForPage(pageId: string, page: SeoPage) {
+  if (pageId === "features") {
+    return breadcrumbLd([
+      { name: SITE_NAME, path: "/" },
+      { name: "Features", path: "/features" },
+    ]);
+  }
+  if (pageId === "compare") {
+    return breadcrumbLd([
+      { name: SITE_NAME, path: "/" },
+      { name: "Compare", path: "/compare" },
+    ]);
+  }
+  if (pageId.startsWith("vs")) {
+    return breadcrumbLd([
+      { name: SITE_NAME, path: "/" },
+      { name: "Compare", path: "/compare" },
+      { name: page.tabTitle, path: page.canonicalPath },
+    ]);
+  }
+  return null;
+}
+
+function buildHeadInjection(page: SeoPage, pageId: string): string {
   const canonical = pageUrl(page.canonicalPath);
   const title = escapeHtml(page.title);
   const description = escapeAttr(page.description);
@@ -84,6 +125,13 @@ function buildHeadInjection(page: SeoPage): string {
 
   const websiteLd = JSON.stringify(buildWebsiteJsonLd(), null, 2);
   const appLd = JSON.stringify(buildWebApplicationJsonLd(), null, 2);
+  const breadcrumb = breadcrumbForPage(pageId, page);
+  const breadcrumbScript = breadcrumb
+    ? `
+    <script type="application/ld+json">
+${JSON.stringify(breadcrumb, null, 2)}
+    </script>`
+    : "";
 
   return `
     <meta name="keywords" content="${keywords}" />
@@ -105,13 +153,13 @@ ${websiteLd}
     </script>
     <script type="application/ld+json">
 ${appLd}
-    </script>`;
+    </script>${breadcrumbScript}`;
 }
 
-function injectPageMeta(html: string, page: SeoPage): string {
+function injectPageMeta(html: string, page: SeoPage, pageId: string): string {
   const tabTitle = escapeHtml(page.tabTitle);
   const description = escapeAttr(page.description);
-  const headInjection = buildHeadInjection(page);
+  const headInjection = buildHeadInjection(page, pageId);
 
   const out = html
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${tabTitle}</title>`)
@@ -136,7 +184,7 @@ function writePrerenderedPage(template: string, pageId: string, outFile: string)
   if (!page) {
     throw new Error(`Unknown SEO page id: ${pageId}`);
   }
-  const html = injectPageMeta(template, page);
+  const html = injectPageMeta(template, page, pageId);
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, html, "utf8");
   console.log(`prerender-seo: wrote ${path.relative(webRoot, outFile)}`);
@@ -150,6 +198,16 @@ if (!fs.existsSync(templatePath)) {
 const template = fs.readFileSync(templatePath, "utf8");
 
 writePrerenderedPage(template, "home", path.join(distDir, "index.html"));
+writePrerenderedPage(template, "features", path.join(distDir, "features", "index.html"));
+writePrerenderedPage(template, "compare", path.join(distDir, "compare", "index.html"));
+writePrerenderedPage(template, "vsUenroll", path.join(distDir, "vs", "uenroll", "index.html"));
+writePrerenderedPage(template, "vsUschedule", path.join(distDir, "vs", "uschedule", "index.html"));
+writePrerenderedPage(template, "vsUoGrades", path.join(distDir, "vs", "uo-grades", "index.html"));
+writePrerenderedPage(
+  template,
+  "vsCoursemapper",
+  path.join(distDir, "vs", "coursemapper", "index.html"),
+);
 writePrerenderedPage(template, "explore", path.join(distDir, "explore", "index.html"));
 writePrerenderedPage(template, "graph", path.join(distDir, "graph", "index.html"));
 writePrerenderedPage(template, "trends", path.join(distDir, "trends", "index.html"));

@@ -96,12 +96,18 @@ msgstr "journal des modifications"
 msgid "app.footer.commandCenter"
 msgstr "raccourcis"
 
+msgid "app.footer.compare"
+msgstr "comparatif"
+
 #: apps/web/src/components/shared/AppFooter.tsx:124
 msgid "app.footer.donate"
 msgstr "faire un don"
 
 msgid "app.footer.explore"
 msgstr "explorer"
+
+msgid "app.footer.features"
+msgstr "fonctionnalités"
 
 msgid "app.footer.feedbackPrompt"
 msgstr "écrivez-nous à"
@@ -881,17 +887,404 @@ msgstr "Ajouter au comparateur"
 msgid "compare.added"
 msgstr "Ajouté au comparateur"
 
+msgid "compare.category.access"
+msgstr "Langue et accessibilité"
+
+msgid "compare.category.data"
+msgstr "Couverture des données"
+
+msgid "compare.category.degree"
+msgstr "Planification du diplôme et des exigences"
+
+msgid "compare.category.enrolment"
+msgstr "Inscription"
+
+msgid "compare.category.explore"
+msgstr "Exploration des cours"
+
+msgid "compare.category.grades"
+msgstr "Notes et analyses"
+
+msgid "compare.category.notifications"
+msgstr "Notifications"
+
+msgid "compare.category.platforms"
+msgstr "Plateformes et applications"
+
+msgid "compare.category.prerequisites"
+msgstr "Préalables"
+
+msgid "compare.category.privacy"
+msgstr "Confidentialité et coût"
+
+msgid "compare.category.professors"
+msgstr "Professeurs et évaluations"
+
+msgid "compare.category.scheduling"
+msgstr "Planification et optimisation"
+
+msgid "compare.category.sharing"
+msgstr "Partage et exportation"
+
 msgid "compare.clear"
 msgstr "Effacer"
 
 msgid "compare.cta"
 msgstr "Comparer ({count})"
 
+msgid "compare.disclaimer"
+msgstr "Comparatif fondé sur l'information publique en date de juillet 2026. uoPlan n'est pas affilié à ces outils et leurs fonctionnalités peuvent changer."
+
 msgid "compare.empty.body"
 msgstr "Ajoutez des cours depuis l'explorateur pour les comparer côte à côte."
 
 msgid "compare.empty.title"
 msgstr "Choisissez au moins 2 éléments à comparer"
+
+msgid "compare.feature.ad-free.desc"
+msgstr "Aucune publicité ni traceur pour encombrer l'expérience."
+
+msgid "compare.feature.ad-free.name"
+msgstr "Sans publicité"
+
+msgid "compare.feature.android-app.desc"
+msgstr "Une application Android native sur Google Play."
+
+msgid "compare.feature.android-app.name"
+msgstr "Application Android"
+
+msgid "compare.feature.auto-enrol.desc"
+msgstr "Un outil en ligne de commande qui recherche et inscrit vos sections sur PeopleSoft."
+
+msgid "compare.feature.auto-enrol.name"
+msgstr "Inscription automatisée"
+
+msgid "compare.feature.auto-enrol.note.uoplan"
+msgstr "Grâce à l'outil en ligne de commande uoPlan à code ouvert."
+
+msgid "compare.feature.bilingual.desc"
+msgstr "Interface complète dans les deux langues officielles."
+
+msgid "compare.feature.bilingual.name"
+msgstr "Anglais et français"
+
+msgid "compare.feature.blocked-times.desc"
+msgstr "Réservez du temps pour le travail ou la vie et placez vos cours autour."
+
+msgid "compare.feature.blocked-times.name"
+msgstr "Plages bloquées"
+
+msgid "compare.feature.cli.desc"
+msgstr "Un outil de terminal pour les utilisateurs avancés et l'inscription automatique."
+
+msgid "compare.feature.cli.name"
+msgstr "Application en ligne de commande"
+
+msgid "compare.feature.command-palette.desc"
+msgstr "Accédez à tout à l'aide d'un raccourci clavier."
+
+msgid "compare.feature.command-palette.name"
+msgstr "Palette de commandes"
+
+msgid "compare.feature.completed-courses.desc"
+msgstr "Indiquez vos cours réussis pour ne planifier que ce qui reste."
+
+msgid "compare.feature.completed-courses.name"
+msgstr "Cours réussis"
+
+msgid "compare.feature.conflict-free.desc"
+msgstr "Générez des horaires hebdomadaires sans chevauchement de cours."
+
+msgid "compare.feature.conflict-free.name"
+msgstr "Horaires sans conflit"
+
+msgid "compare.feature.course-evaluations.desc"
+msgstr "Résultats des sondages de l'université, pas seulement des notes tierces."
+
+msgid "compare.feature.course-evaluations.name"
+msgstr "Évaluations officielles des cours"
+
+msgid "compare.feature.course-search.desc"
+msgstr "Recherche rapide dans le répertoire de l'Université d'Ottawa."
+
+msgid "compare.feature.course-search.name"
+msgstr "Recherche de cours et de profs"
+
+msgid "compare.feature.exclude-from-generation.desc"
+msgstr "Retirez des sections ou des professeurs précis des résultats."
+
+msgid "compare.feature.exclude-from-generation.name"
+msgstr "Exclure des sections"
+
+msgid "compare.feature.free.desc"
+msgstr "Aucun mur payant ni forfait premium."
+
+msgid "compare.feature.free.name"
+msgstr "Gratuit"
+
+msgid "compare.feature.fresh-data.desc"
+msgstr "Données de cours, de sections et de notes actualisées chaque session."
+
+msgid "compare.feature.fresh-data.name"
+msgstr "Données à jour"
+
+msgid "compare.feature.grade-distributions.desc"
+msgstr "Répartitions historiques des notes par cours et section."
+
+msgid "compare.feature.grade-distributions.name"
+msgstr "Répartition des notes"
+
+msgid "compare.feature.grade-distributions.note.uenroll"
+msgstr "uEnroll renvoie vers uo.grades.zone au lieu d'afficher les notes directement."
+
+msgid "compare.feature.grade-leaderboard.desc"
+msgstr "Classe les cours les plus faciles, les plus difficiles et les plus gonflés."
+
+msgid "compare.feature.grade-leaderboard.name"
+msgstr "Palmarès des notes"
+
+msgid "compare.feature.grade-trends.desc"
+msgstr "Suivez la MPC moyenne, le taux de A+ et le taux de réussite au fil des sessions."
+
+msgid "compare.feature.grade-trends.name"
+msgstr "Tendances des notes"
+
+msgid "compare.feature.grade-trends.note.uo-grades"
+msgstr "UO Grades montre l'historique par cours mais pas de tableaux de tendances à l'échelle de l'université."
+
+msgid "compare.feature.grades-in-planner.desc"
+msgstr "Consultez les données de notes directement dans le planificateur."
+
+msgid "compare.feature.grades-in-planner.name"
+msgstr "Notes pendant la planification"
+
+msgid "compare.feature.honours-detection.desc"
+msgstr "Reconnaît les cheminements spécialisés et leurs exigences supplémentaires."
+
+msgid "compare.feature.honours-detection.name"
+msgstr "Détection du programme spécialisé"
+
+msgid "compare.feature.ics-export.desc"
+msgstr "Ajoutez votre horaire à Google, Apple ou Outlook Calendar."
+
+msgid "compare.feature.ics-export.name"
+msgstr "Exportation calendrier (ICS)"
+
+msgid "compare.feature.installable-pwa.desc"
+msgstr "Installez-la sur votre écran d'accueil et utilisez-la hors ligne."
+
+msgid "compare.feature.installable-pwa.name"
+msgstr "Application installable (PWA)"
+
+msgid "compare.feature.instructor-prediction.desc"
+msgstr "Estime qui enseignera probablement une future section."
+
+msgid "compare.feature.instructor-prediction.name"
+msgstr "Prédiction du professeur"
+
+msgid "compare.feature.ios-app.desc"
+msgstr "Une application iPhone native sur l'App Store."
+
+msgid "compare.feature.ios-app.name"
+msgstr "Application iOS"
+
+msgid "compare.feature.language-filter.desc"
+msgstr "Trouvez les sections en anglais ou en français d'un cours."
+
+msgid "compare.feature.language-filter.name"
+msgstr "Filtrer par langue"
+
+msgid "compare.feature.live-section-status.desc"
+msgstr "Indique si une section est ouverte, complète ou sur liste d'attente."
+
+msgid "compare.feature.live-section-status.name"
+msgstr "Places disponibles en direct"
+
+msgid "compare.feature.multi-university.desc"
+msgstr "Couvre des établissements au-delà de l'Université d'Ottawa."
+
+msgid "compare.feature.multi-university.name"
+msgstr "Plusieurs universités"
+
+msgid "compare.feature.multi-university.note.coursemapper"
+msgstr "CourseMapper prend en charge plusieurs universités; uoPlan est conçu uniquement pour l'Université d'Ottawa."
+
+msgid "compare.feature.multi-year-catalogue.desc"
+msgstr "Parcourez les données de cours et de programmes sur plusieurs années."
+
+msgid "compare.feature.multi-year-catalogue.name"
+msgstr "Répertoire pluriannuel"
+
+msgid "compare.feature.multi-year-catalogue.note.uo-grades"
+msgstr "UO Grades couvre spécifiquement plusieurs années de données de notes."
+
+msgid "compare.feature.multiple-schedules.desc"
+msgstr "Parcourez plusieurs horaires valides et choisissez celui qui vous convient."
+
+msgid "compare.feature.multiple-schedules.name"
+msgstr "Plusieurs options d'horaire"
+
+msgid "compare.feature.new-term-alerts.desc"
+msgstr "Recevez une notification lorsque les données d'une nouvelle session sont publiées."
+
+msgid "compare.feature.new-term-alerts.name"
+msgstr "Alertes de nouvelle session"
+
+msgid "compare.feature.no-account.desc"
+msgstr "Commencez à planifier sans inscription."
+
+msgid "compare.feature.no-account.name"
+msgstr "Aucun compte requis"
+
+msgid "compare.feature.no-account.note.coursemapper"
+msgstr "CourseMapper demande de créer un compte pour toutes les fonctionnalités."
+
+msgid "compare.feature.open-source.desc"
+msgstr "Le code source complet est public sur GitHub."
+
+msgid "compare.feature.open-source.name"
+msgstr "Code ouvert"
+
+msgid "compare.feature.prereq-bilingual.desc"
+msgstr "Interprète les règles de préalables en français et en anglais."
+
+msgid "compare.feature.prereq-bilingual.name"
+msgstr "Préalables bilingues"
+
+msgid "compare.feature.prereq-checking.desc"
+msgstr "Signale les cours que vous ne pouvez pas encore suivre selon votre parcours."
+
+msgid "compare.feature.prereq-checking.name"
+msgstr "Vérification des préalables"
+
+msgid "compare.feature.prereq-checking.note.coursemapper"
+msgstr "CourseMapper cartographie les préalables mais ne les vérifie pas selon votre dossier."
+
+msgid "compare.feature.prereq-graph.desc"
+msgstr "Un arbre interactif montrant comment les cours se débloquent entre eux."
+
+msgid "compare.feature.prereq-graph.name"
+msgstr "Graphe visuel des préalables"
+
+msgid "compare.feature.priorities.desc"
+msgstr "Classez ce qui compte : moins de jours, matinées libres, journées compactes, et plus."
+
+msgid "compare.feature.priorities.name"
+msgstr "Priorités d'optimisation"
+
+msgid "compare.feature.prof-network.desc"
+msgstr "Explorez les liens entre professeurs par les cours partagés."
+
+msgid "compare.feature.prof-network.name"
+msgstr "Réseau des professeurs"
+
+msgid "compare.feature.prof-rating-pref.desc"
+msgstr "Orientez la génération vers les professeurs les mieux notés."
+
+msgid "compare.feature.prof-rating-pref.name"
+msgstr "Favoriser les meilleurs profs"
+
+msgid "compare.feature.prof-ratings.desc"
+msgstr "Évaluations étudiantes pour vous aider à choisir vos professeurs."
+
+msgid "compare.feature.prof-ratings.name"
+msgstr "Évaluations des professeurs"
+
+msgid "compare.feature.prof-ratings.note.uo-grades"
+msgstr "UO Grades combine les évaluations officielles et RateMyProfessors."
+
+msgid "compare.feature.prof-ratings.note.uschedule"
+msgstr "uSchedule affiche les notes de RateMyProfessors directement."
+
+msgid "compare.feature.prof-require-block.desc"
+msgstr "Filtrez la génération pour inclure ou éviter des professeurs précis."
+
+msgid "compare.feature.prof-require-block.name"
+msgstr "Exiger ou bloquer un professeur"
+
+msgid "compare.feature.program-requirements.desc"
+msgstr "Voyez exactement quels cours il reste à votre diplôme."
+
+msgid "compare.feature.program-requirements.name"
+msgstr "Exigences de programme"
+
+msgid "compare.feature.requirement-pools.desc"
+msgstr "Gère les cours au choix et les groupes d'options, pas seulement les cours fixes."
+
+msgid "compare.feature.requirement-pools.name"
+msgstr "Regroupements d'exigences"
+
+msgid "compare.feature.rich-preview.desc"
+msgstr "Les liens partagés affichent une image d'aperçu de l'horaire."
+
+msgid "compare.feature.rich-preview.name"
+msgstr "Aperçus enrichis"
+
+msgid "compare.feature.schedule-score.desc"
+msgstr "Une note chiffrée classant chaque horaire selon vos préférences."
+
+msgid "compare.feature.schedule-score.name"
+msgstr "Score de correspondance"
+
+msgid "compare.feature.section-browsing.desc"
+msgstr "Consultez les sections offertes, les horaires et les professeurs."
+
+msgid "compare.feature.section-browsing.name"
+msgstr "Consultation des sections"
+
+msgid "compare.feature.section-browsing.note.uo-grades"
+msgstr "UO Grades se concentre sur l'historique des notes plutôt que sur les sections en cours."
+
+msgid "compare.feature.share-link.desc"
+msgstr "Partagez votre horaire avec une seule adresse URL."
+
+msgid "compare.feature.share-link.name"
+msgstr "Lien partageable"
+
+msgid "compare.feature.swap-course.desc"
+msgstr "Échangez un cours contre une option comparable en un clic."
+
+msgid "compare.feature.swap-course.name"
+msgstr "Remplacer un cours"
+
+msgid "compare.feature.themes.desc"
+msgstr "Changez l'apparence selon vos préférences."
+
+msgid "compare.feature.themes.name"
+msgstr "Thèmes clair et sombre"
+
+msgid "compare.feature.time-day-limits.desc"
+msgstr "Fixez vos heures limites et vos jours de congé avant la génération."
+
+msgid "compare.feature.time-day-limits.name"
+msgstr "Limites d'heures et de jours"
+
+msgid "compare.feature.transcript-import.desc"
+msgstr "Importez votre relevé de l'Université d'Ottawa pour remplir vos cours réussis automatiquement."
+
+msgid "compare.feature.transcript-import.name"
+msgstr "Importation du relevé de notes"
+
+msgid "compare.feature.uenroll-import.desc"
+msgstr "Importez une sélection uEnroll existante dans uoPlan."
+
+msgid "compare.feature.uenroll-import.name"
+msgstr "Importer depuis uEnroll"
+
+msgid "compare.feature.web-app.desc"
+msgstr "Fonctionne dans tout navigateur moderne, sans installation."
+
+msgid "compare.feature.web-app.name"
+msgstr "Application Web"
+
+msgid "compare.hero.eyebrow"
+msgstr "comparatif"
+
+msgid "compare.hero.subtitle"
+msgstr "Comment uoPlan se compare à uEnroll, uSchedule, UO Grades et CourseMapper, fonctionnalité par fonctionnalité."
+
+msgid "compare.hero.title"
+msgstr "uoPlan vs les autres outils de l'Université d'Ottawa"
 
 msgid "compare.kind.course"
 msgstr "Cours"
@@ -904,6 +1297,21 @@ msgstr "Comparer"
 
 msgid "compare.page.title"
 msgstr "Comparer les cours"
+
+msgid "compare.product.coursemapper.tagline"
+msgstr "Cartes visuelles des préalables pour plusieurs universités."
+
+msgid "compare.product.uenroll.tagline"
+msgstr "Un générateur d'horaires sans conflit rapide pour l'Université d'Ottawa."
+
+msgid "compare.product.uo-grades.tagline"
+msgstr "Historique détaillé des notes et évaluations des professeurs."
+
+msgid "compare.product.uoplan.tagline"
+msgstr "Planifiez tout votre diplôme à l'Université d'Ottawa, puis créez l'horaire."
+
+msgid "compare.product.uschedule.tagline"
+msgstr "Génération d'horaires avec évaluations des professeurs intégrées."
 
 msgid "compare.remove"
 msgstr "Retirer"
@@ -944,11 +1352,29 @@ msgstr "Offert"
 msgid "compare.row.topRating"
 msgstr "Meilleure évaluation"
 
+msgid "compare.support.no"
+msgstr "Non"
+
+msgid "compare.support.partial"
+msgstr "Partiel"
+
+msgid "compare.support.yes"
+msgstr "Oui"
+
+msgid "compare.table.featureColumn"
+msgstr "Fonctionnalité"
+
 msgid "compare.value.none"
 msgstr "—"
 
 msgid "compare.value.noPrereqs"
 msgstr "Aucun"
+
+msgid "compare.vsLinks.cta"
+msgstr "uoPlan vs {name}"
+
+msgid "compare.vsLinks.title"
+msgstr "Vous préférez un face-à-face?"
 
 msgid "completedCourses.description"
 msgstr "Cours que vous avez terminés ou que vous suivez. Vous pouvez aussi téléverser votre relevé à l'étape 1."
@@ -1018,6 +1444,15 @@ msgstr "Premier cycle (0–4XXX)"
 
 msgid "constrainStep.virtualSectionsOnly"
 msgstr "Horaires virtuels seulement"
+
+msgid "cta.body"
+msgstr "Planifiez votre diplôme à l'Université d'Ottawa et générez un horaire sans conflit en quelques secondes."
+
+msgid "cta.plan"
+msgstr "Commencer à planifier"
+
+msgid "cta.title"
+msgstr "Prêt à créer votre horaire?"
 
 #: apps/web/src/routes/donate.tsx:122
 #: apps/web/src/routes/donate.tsx:135
@@ -1605,6 +2040,39 @@ msgstr "Consultez les répartitions de notes par cours, titre ou nom de professe
 
 msgid "explore.title"
 msgstr "Explorateur de cours"
+
+msgid "features.compareCallout.body"
+msgstr "Un comparatif de uoPlan et des autres outils de cours de l'Université d'Ottawa."
+
+msgid "features.compareCallout.cta"
+msgstr "Comparer tous les outils"
+
+msgid "features.compareCallout.title"
+msgstr "Voyez comment uoPlan se compare"
+
+msgid "features.hero.ctaCompare"
+msgstr "Comparer les outils"
+
+msgid "features.hero.ctaPlan"
+msgstr "Commencer à planifier"
+
+msgid "features.hero.eyebrow"
+msgstr "fonctionnalités"
+
+msgid "features.hero.subtitle"
+msgstr "De la cartographie des exigences aux horaires sans conflit : {count} fonctionnalités qui planifient votre diplôme, pas seulement votre semaine."
+
+msgid "features.hero.title"
+msgstr "Un seul outil pour tout votre diplôme à l'Université d'Ottawa"
+
+msgid "features.vs.body"
+msgstr "Voyez précisément comment uoPlan se mesure à chaque outil, fonctionnalité par fonctionnalité."
+
+msgid "features.vs.cardCta"
+msgstr "uoPlan vs {name}"
+
+msgid "features.vs.title"
+msgstr "Comparaisons individuelles"
 
 msgid "frenchImmersion.fls3500.body"
 msgstr "Vous devez réussir le test de certification FLS 3500 avant d’obtenir le diplôme avec la mention immersion française."
@@ -3337,3 +3805,51 @@ msgstr "Importer depuis uEnroll"
 
 msgid "uenrollImport.modal.warnings"
 msgstr "Certains cours n'ont pas été trouvés"
+
+msgid "vs.backToCompare"
+msgstr "Voir le comparatif complet"
+
+msgid "vs.gaps.empty"
+msgstr "{name} ne fait rien que uoPlan ne fasse pas."
+
+msgid "vs.gaps.title"
+msgstr "Là où {name} en fait plus"
+
+msgid "vs.hero.eyebrow"
+msgstr "Face-à-face"
+
+msgid "vs.hero.title"
+msgstr "uoPlan vs {name}"
+
+msgid "vs.hero.visit"
+msgstr "Visiter {name}"
+
+msgid "vs.intro.coursemapper"
+msgstr "CourseMapper illustre les préalables des cours sous forme de graphe interactif pour de nombreuses universités. uoPlan est conçu spécialement pour l'Université d'Ottawa : il vérifie les préalables selon votre propre dossier et y ajoute la planification du diplôme, la création d'horaires, les notes et les renseignements sur les professeurs."
+
+msgid "vs.intro.uenroll"
+msgstr "uEnroll est un générateur d'horaires rapide et à code ouvert pour l'Université d'Ottawa, et il est excellent. uoPlan offre la même génération sans conflit, puis va plus loin : il cartographie vos exigences de programme, importe votre relevé de notes et ajoute les notes et les évaluations des professeurs pour planifier tout votre programme, pas seulement la prochaine session."
+
+msgid "vs.intro.uo-grades"
+msgstr "UO Grades est la référence pour l'historique détaillé des notes et les évaluations officielles de l'Université d'Ottawa. uoPlan présente le même type de données sur les notes et les professeurs, mais l'intègre à un planificateur complet qui cartographie votre diplôme et crée des horaires sans conflit."
+
+msgid "vs.intro.uschedule"
+msgstr "uSchedule génère des horaires notés et affiche les évaluations des professeurs. uoPlan offre la même planification tenant compte des évaluations et y ajoute la planification du diplôme, l'importation du relevé de notes, les tendances des notes et le réseau des professeurs, le tout sans publicité et entièrement à code ouvert."
+
+msgid "vs.stats.competitorWins"
+msgstr "{name} en fait plus"
+
+msgid "vs.stats.ties"
+msgstr "À égalité"
+
+msgid "vs.stats.uoplanWins"
+msgstr "uoPlan en fait plus"
+
+msgid "vs.table.title"
+msgstr "uoPlan vs {name}, fonctionnalité par fonctionnalité"
+
+msgid "vs.ties.title"
+msgstr "À égalité avec {name}"
+
+msgid "vs.wins.title"
+msgstr "Là où uoPlan en fait plus"
