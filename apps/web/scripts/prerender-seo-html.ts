@@ -209,7 +209,7 @@ writePrerenderedPage(
   path.join(distDir, "vs", "coursemapper", "index.html"),
 );
 writePrerenderedPage(template, "explore", path.join(distDir, "explore", "index.html"));
-writePrerenderedPage(template, "graph", path.join(distDir, "graph", "index.html"));
+writePrerenderedPage(template, "graph", path.join(distDir, "professor-graph", "index.html"));
 writePrerenderedPage(template, "trends", path.join(distDir, "trends", "index.html"));
 writePrerenderedPage(
   template,

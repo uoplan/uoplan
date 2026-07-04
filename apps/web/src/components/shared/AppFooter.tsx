@@ -116,7 +116,7 @@ export function AppFooter() {
                   <Stack gap={10}>
                     <Text
                       component={Link}
-                      to="/graph"
+                      to="/professor-graph"
                       size="sm"
                       c="dimmed"
                       lh={1.45}

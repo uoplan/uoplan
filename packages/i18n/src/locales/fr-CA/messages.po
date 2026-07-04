@@ -1010,6 +1010,14 @@ msgstr "Recherche rapide dans le répertoire de l'Université d'Ottawa."
 msgid "compare.feature.course-search.name"
 msgstr "Recherche de cours et de profs"
 
+#: scripts/i18n/dynamic-keys.ts
+msgid "compare.feature.degree-map.desc"
+msgstr "Cartographiez tout votre diplôme sous forme de graphe par trimestre, avec les liens de préalables et les trimestres à venir que vous pouvez planifier."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "compare.feature.degree-map.name"
+msgstr "Carte du diplôme"
+
 msgid "compare.feature.exclude-from-generation.desc"
 msgstr "Retirez des sections ou des professeurs précis des résultats."
 
@@ -2356,14 +2364,14 @@ msgstr "Voir les détails"
 msgid "generationOptions.count.label"
 msgstr "Cours optionnels ce trimestre (en plus)"
 
-msgid "generationOptions.coursesThisSemester.label"
-msgstr "Cours ce trimestre"
-
 msgid "generationOptions.courses.label"
 msgstr "Cours souhaités"
 
 msgid "generationOptions.courses.placeholder"
 msgstr "Rechercher des cours…"
+
+msgid "generationOptions.coursesThisSemester.label"
+msgstr "Cours ce trimestre"
 
 #: apps/web/src/components/calendar/BasicCalendarSidebarControls.tsx:254
 msgid "generationOptions.moreOptions.heading"
@@ -2419,12 +2427,6 @@ msgstr "Force"
 
 msgid "graph.title"
 msgstr "Réseau de professeurs"
-
-msgid "landing.carousel.goTo"
-msgstr "Afficher {title}"
-
-msgid "landing.carousel.label"
-msgstr "Fonctionnalités expérimentales"
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "landing.banner.android.cta"
@@ -2490,6 +2492,12 @@ msgstr "Maintenant sur iOS. Téléchargez-la dans l'App Store."
 msgid "landing.banner.ios.textShort"
 msgstr "Téléchargez-la dans l'App Store."
 
+msgid "landing.carousel.goTo"
+msgstr "Afficher {title}"
+
+msgid "landing.carousel.label"
+msgstr "Fonctionnalités expérimentales"
+
 msgid "landing.explore.description"
 msgstr "Recherchez des cours et des professeurs avec les distributions de notes."
 
@@ -2501,6 +2509,10 @@ msgstr "Découvrez comment les professeurs sont liés par des cours communs."
 #: apps/web/src/lib/navigation/backState.ts:18
 msgid "landing.personalize.title"
 msgstr "Personnaliser"
+
+#: apps/web/src/components/landing/LandingPage.tsx:58
+msgid "landing.planner.description"
+msgstr "Visualisez tout votre parcours sous forme de graphe, trimestre par trimestre."
 
 msgid "landing.schedule.description"
 msgstr "Planifiez votre parcours et générez des horaires sans conflit."
@@ -2640,6 +2652,9 @@ msgstr "Glissez pour classer ces objectifs. En cas de conflit, les plus hauts l'
 msgid "optimize.disabledHeading"
 msgstr "Désactivées"
 
+msgid "optimize.dragHandle"
+msgstr "Réorganiser {label}"
+
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:41
 msgid "optimize.freeDays.description"
 msgstr "Regroupez les cours sur moins de jours pour garder plus de journées entièrement libres."
@@ -2667,9 +2682,6 @@ msgstr "Durée des pauses (min)"
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:75
 msgid "optimize.heading"
 msgstr "Priorités d'optimisation"
-
-msgid "optimize.dragHandle"
-msgstr "Réorganiser {label}"
 
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:135
 msgid "optimize.moveDown"
@@ -2762,6 +2774,162 @@ msgstr "Indique ton programme et tes cours réussis pour des résultats adaptés
 #: apps/web/src/components/shared/PersonalizeBanner.tsx:53
 msgid "personalizeBanner.messageShort"
 msgstr "Personnalise pour des résultats adaptés."
+
+#: apps/web/src/components/planner/TermBandNode.tsx:77
+msgid "planner.band.courseCount"
+msgstr "Nombre de cours"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:125
+msgid "planner.band.courses"
+msgstr "{count, plural, one {# cours} other {# cours}}"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:101
+#: apps/web/src/components/planner/TermBandNode.tsx:94
+msgid "planner.band.disable"
+msgstr "Retirer le trimestre"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:62
+msgid "planner.band.enable"
+msgstr "Activer le trimestre"
+
+#: apps/web/src/components/planner/FutureTermNode.tsx:105
+#: apps/web/src/components/planner/FutureTermNode.tsx:99
+msgid "planner.band.openInCalendar"
+msgstr "Ouvrir dans le calendrier"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:51
+msgid "planner.band.pickProgram"
+msgstr "Choisir un programme"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:82
+#: apps/web/src/components/planner/TermBandNode.tsx:88
+msgid "planner.band.regenerate"
+msgstr "Régénérer le trimestre"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:149
+msgid "planner.clearPlan"
+msgstr "Effacer le plan"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:39
+#: apps/web/src/components/planner/PlannerControls.tsx:44
+msgid "planner.controls.fit"
+msgstr "Ajuster à la vue"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:53
+#: apps/web/src/components/planner/PlannerControls.tsx:58
+#: apps/web/src/components/planner/PlannerSidebar.tsx:177
+msgid "planner.controls.resetLayout"
+msgstr "Réinitialiser la disposition"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:17
+#: apps/web/src/components/planner/PlannerControls.tsx:22
+msgid "planner.controls.zoomIn"
+msgstr "Zoom avant"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:28
+#: apps/web/src/components/planner/PlannerControls.tsx:33
+msgid "planner.controls.zoomOut"
+msgstr "Zoom arrière"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:156
+msgid "planner.defaultCount.description"
+msgstr "Cours ajoutés lorsque vous activez un nouveau trimestre."
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:155
+msgid "planner.defaultCount.label"
+msgstr "Cours par nouveau trimestre"
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:21
+msgid "planner.empty.body"
+msgstr "Ajoutez votre programme et votre relevé de notes pour visualiser votre parcours trimestre par trimestre."
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:21
+msgid "planner.empty.bodyProgram"
+msgstr "Activez un trimestre à venir pour planifier des cours menant à votre diplôme."
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:28
+msgid "planner.empty.cta"
+msgstr "Aller à Personnaliser"
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:18
+msgid "planner.empty.title"
+msgstr "Planifiez votre parcours"
+
+#: apps/web/src/components/planner/FutureTermNode.tsx:139
+msgid "planner.future.emptyHint"
+msgstr "Aucun cours pour l'instant. Ajustez le nombre ou régénérez pour remplir ce trimestre."
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:149
+msgid "planner.generate"
+msgstr "Générer les horaires"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:168
+msgid "planner.legend.completed"
+msgstr "Terminé"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:170
+msgid "planner.legend.missingPrereq"
+msgstr "Préalable manquant"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:169
+msgid "planner.legend.planned"
+msgstr "Planifié"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:166
+msgid "planner.legend.title"
+msgstr "Légende"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:114
+msgid "planner.needProgram.body"
+msgstr "Choisissez votre programme pour planifier les trimestres à venir menant à votre diplôme."
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:121
+msgid "planner.needProgram.cta"
+msgstr "Choisir un programme"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:111
+msgid "planner.needProgram.title"
+msgstr "Ajoutez votre programme"
+
+#: apps/web/src/components/planner/CourseNode.tsx:17
+msgid "planner.node.missingPrereq"
+msgstr "Préalable manquant"
+
+#: apps/web/src/components/planner/DegreePlannerPage.tsx:122
+#: apps/web/src/components/planner/PlannerSidebar.tsx:176
+msgid "planner.options.title"
+msgstr "Options de génération"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:140
+msgid "planner.regenerate"
+msgstr "Régénérer"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:31
+msgid "planner.status.empty"
+msgstr "Aucun cours"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:33
+msgid "planner.status.error"
+msgstr "Échec"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:27
+msgid "planner.status.ok"
+msgstr "Généré"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:29
+msgid "planner.status.partial"
+msgstr "Partiel"
+
+#: apps/web/src/components/landing/LandingPage.tsx:57
+#: apps/web/src/components/planner/DegreePlannerPage.tsx:117
+#: apps/web/src/components/planner/DegreePlannerPage.tsx:149
+#: apps/web/src/components/planner/PlannerSidebar.tsx:88
+msgid "planner.title"
+msgstr "Planificateur de parcours"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:129
+msgid "planner.uploadHint"
+msgstr "Téléversez votre relevé de notes dans Personnaliser pour regrouper les cours terminés par trimestre."
 
 msgid "programStep.disciplines.description"
 msgstr "Utilisé pour évaluer les préalables propres au programme. Rempli automatiquement à partir des cours de votre programme."

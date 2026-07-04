@@ -4,7 +4,7 @@ import type { ProfessorGraphNavigate } from "../components/graph/ProfessorGraphP
 import { AppDataRouteGate } from "../components/shared/AppDataRouteGate";
 import { buildPageHead } from "../lib/seo";
 
-export const Route = createFileRoute("/graph")({
+export const Route = createFileRoute("/professor-graph")({
   head: () => buildPageHead("graph"),
   validateSearch: (search: Record<string, unknown>) => ({
     prof:

@@ -1,8 +1,11 @@
 import { collectTranscriptCourseCodes } from "./courseCodeMatching";
-import type { PdfPageText } from "./types";
+import { collectTranscriptTerms } from "./termGrouping";
+import type { PdfPageText, TranscriptTerm } from "./types";
 
 export interface TranscriptParseResult {
   courses: string[];
+  /** Completed courses grouped by the term they were taken in (chronological). */
+  terms: TranscriptTerm[];
   fullText: string;
   startingYear: number | null;
   /** True when transcript text suggests the French Immersion Stream (lenient match). */
@@ -42,6 +45,7 @@ export function processExtractedPages(pages: PdfPageText[]): TranscriptParseResu
 
   return {
     courses: collectTranscriptCourseCodes(pages),
+    terms: collectTranscriptTerms(pages),
     fullText,
     startingYear: parseStartingYear(fullText),
     frenchImmersionStreamHint: detectFrenchImmersionStreamHint(fullText),

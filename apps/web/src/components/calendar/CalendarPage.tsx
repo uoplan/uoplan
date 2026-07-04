@@ -13,7 +13,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { useHotkeys, useLocalStorage, useMediaQuery } from "@mantine/hooks";
+import { useHotkeys, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import {
   IconArrowBackUp,
@@ -58,7 +58,8 @@ import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
 import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
 import { canGoToPreviousSeed } from "../../lib/seedNavigation";
-import { CALENDAR_SIDEBAR_WIDTH_PX } from "./calendarLayout";
+import { SidebarResizeHandle } from "../shared/SidebarResizeHandle";
+import { useSidebarResize } from "../shared/useSidebarResize";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
 import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { EnrolCliModal } from "./EnrolCliModal";
@@ -222,17 +223,8 @@ export function CalendarPage() {
   const [controlsOpen, setControlsOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
   const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useLocalStorage<number>({
-    key: "uoplan.calendar.sidebarWidth",
-    defaultValue: CALENDAR_SIDEBAR_WIDTH_PX,
-    getInitialValueInEffect: false,
-  });
-  const isResizing = useRef(false);
-  const resizeStartX = useRef(0);
-  const resizeStartWidth = useRef(0);
-  const pendingWidth = useRef(CALENDAR_SIDEBAR_WIDTH_PX);
-  const asideRef = useRef<HTMLDivElement>(null);
-  const previewLineRef = useRef<HTMLDivElement>(null);
+  const sidebarResize = useSidebarResize();
+  const sidebarWidth = sidebarResize.width;
 
   const cliCommand =
     currentSchedule && selectedTermId
@@ -346,60 +338,6 @@ export function CalendarPage() {
     const filename = `uoplan-schedule-${currentSeed}-${timetableStartDate}-to-${timetableEndDate}.ics`;
     downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
   };
-
-  function clampSidebarWidth(width: number) {
-    return Math.min(600, Math.max(220, width));
-  }
-
-  function positionPreviewLine(width: number) {
-    const aside = asideRef.current;
-    const line = previewLineRef.current;
-    if (!aside || !line) return;
-    const asideLeft = aside.getBoundingClientRect().left;
-    line.style.left = `${asideLeft + width}px`;
-  }
-
-  function handleResizePointerDown(e: React.PointerEvent) {
-    isResizing.current = true;
-    resizeStartX.current = e.clientX;
-    resizeStartWidth.current = sidebarWidth;
-    pendingWidth.current = sidebarWidth;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    const line = previewLineRef.current;
-    if (line) {
-      positionPreviewLine(sidebarWidth);
-      line.style.display = "block";
-    }
-  }
-
-  function handleResizePointerMove(e: React.PointerEvent) {
-    if (!isResizing.current) return;
-    const delta = e.clientX - resizeStartX.current;
-    const next = clampSidebarWidth(resizeStartWidth.current + delta);
-    pendingWidth.current = next;
-    positionPreviewLine(next);
-  }
-
-  function handleResizePointerUp() {
-    if (!isResizing.current) return;
-    isResizing.current = false;
-    const line = previewLineRef.current;
-    if (line) line.style.display = "none";
-    setSidebarWidth(pendingWidth.current);
-  }
-
-  function handleResizeKeyDown(e: React.KeyboardEvent) {
-    const STEP = 16;
-    let next: number | null = null;
-    if (e.key === "ArrowLeft") next = clampSidebarWidth(sidebarWidth - STEP);
-    else if (e.key === "ArrowRight") next = clampSidebarWidth(sidebarWidth + STEP);
-    else if (e.key === "Home") next = clampSidebarWidth(0);
-    else if (e.key === "End") next = clampSidebarWidth(Number.POSITIVE_INFINITY);
-    if (next !== null) {
-      e.preventDefault();
-      setSidebarWidth(next);
-    }
-  }
 
   const calendarTitle = tr("calendarPage.title");
   const calendarSubtitle = tr(hasProgram ? "calendarPage.subtitle" : "basicCalendar.subtitle");
@@ -598,7 +536,7 @@ export function CalendarPage() {
           <>
             <Box
               component="aside"
-              ref={asideRef}
+              ref={sidebarResize.asideRef}
               aria-label="Calendar Controls"
               style={{
                 width: sidebarWidth,
@@ -614,50 +552,7 @@ export function CalendarPage() {
             >
               {sidebarControls}
             </Box>
-            <div
-              // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- WAI-ARIA window-splitter resize handle, not an <hr>
-              role="separator"
-              aria-label="Resize sidebar"
-              aria-orientation="vertical"
-              aria-valuemin={220}
-              aria-valuemax={600}
-              aria-valuenow={Math.round(sidebarWidth)}
-              tabIndex={0}
-              onKeyDown={handleResizeKeyDown}
-              onPointerDown={handleResizePointerDown}
-              onPointerMove={handleResizePointerMove}
-              onPointerUp={handleResizePointerUp}
-              style={{
-                width: 6,
-                flexShrink: 0,
-                cursor: "col-resize",
-                backgroundColor: "var(--app-border)",
-                transition: "background-color 0.15s",
-                zIndex: 1,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.backgroundColor =
-                  "var(--app-border-strong)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.backgroundColor = "var(--app-border)";
-              }}
-            />
-            <div
-              ref={previewLineRef}
-              aria-hidden="true"
-              style={{
-                display: "none",
-                position: "fixed",
-                top: 0,
-                bottom: 0,
-                width: 2,
-                marginLeft: -1,
-                backgroundColor: "var(--app-border-strong)",
-                pointerEvents: "none",
-                zIndex: 1000,
-              }}
-            />
+            <SidebarResizeHandle controller={sidebarResize} />
           </>
         )}
 

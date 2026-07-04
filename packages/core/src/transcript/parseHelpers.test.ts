@@ -42,6 +42,7 @@ describe("processExtractedPages", () => {
 
     expect(processExtractedPages(pages)).toEqual({
       courses: ["CSI 2101", "MAT 1341"],
+      terms: [],
       fullText: pages.map((page) => page.pageText).join("\n"),
       startingYear: 2024,
       frenchImmersionStreamHint: true,
@@ -53,6 +54,7 @@ describe("processExtractedPages", () => {
       processExtractedPages([textPage("Start of Transcript 2022 Fall\nCourse ADM 1300")]),
     ).toEqual({
       courses: ["ADM 1300"],
+      terms: [],
       fullText: "Start of Transcript 2022 Fall\nCourse ADM 1300",
       startingYear: 2022,
       frenchImmersionStreamHint: false,
@@ -66,6 +68,7 @@ describe("processExtractedPages", () => {
       ]),
     ).toEqual({
       courses: ["PSY 1101"],
+      terms: [],
       fullText: "Unofficial transcript\nCourse PSY 1101\nProgramme immersion française",
       startingYear: null,
       frenchImmersionStreamHint: true,

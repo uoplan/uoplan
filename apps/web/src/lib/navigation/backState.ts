@@ -36,7 +36,7 @@ export function locationLabel(
   }
   if (pathname.startsWith("/personalize")) return tr("landing.personalize.title");
   if (pathname.startsWith("/schedule")) return tr("landing.schedule.title");
-  if (pathname.startsWith("/graph")) return tr("graph.title");
+  if (pathname.startsWith("/professor-graph")) return tr("graph.title");
   if (pathname.startsWith("/trends")) return tr("app.nav.backTrends");
   if (pathname.startsWith("/donate")) return tr("donate.title");
   if (pathname.startsWith("/changelog")) return tr("app.changelog.title");

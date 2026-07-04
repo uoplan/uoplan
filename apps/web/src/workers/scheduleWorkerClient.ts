@@ -1,4 +1,3 @@
-import * as Comlink from "comlink";
 import { notifications } from "@mantine/notifications";
 import type { AppState } from "../store/types";
 import type { CacheDataKey } from "../lib/dataCacheLoader";
@@ -8,7 +7,7 @@ import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { tr } from "../i18n";
 import { formatTermNameEn } from "@uoplan/core";
 import { getAnalytics } from "../lib/analytics";
-import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
+import { createScheduleWorkerHandle, isWorkerAvailable } from "./scheduleWorkerRemote";
 
 const SCHEDULE_WORKER_FALLBACK_TITLE_ID = "notifications.scheduleWorkerFallback.title";
 const SCHEDULE_WORKER_FALLBACK_MESSAGE_ID = "notifications.scheduleWorkerFallback.message";
@@ -71,29 +70,9 @@ function timeoutGenerationResult(): GenerateSchedulesResult {
  * Return true if we can spawn a Web Worker in this environment. False for
  * Node-side SSR/prerender and for test runs where workers aren't available.
  */
-function isWorkerAvailable(): boolean {
-  return typeof Worker !== "undefined" && typeof window !== "undefined";
-}
-
-let remote: Comlink.Remote<ScheduleWorkerApi> | null = null;
-let workerInstance: Worker | null = null;
-
-function getRemote(): Comlink.Remote<ScheduleWorkerApi> {
-  if (remote) return remote;
-  workerInstance = new Worker(new URL("./scheduleWorker.ts", import.meta.url), {
-    type: "module",
-    name: "schedule-worker",
-  });
-  remote = Comlink.wrap<ScheduleWorkerApi>(workerInstance);
-  return remote;
-}
-
-/** Terminate the current worker so a fresh one is spawned on the next call. */
-function terminateScheduleWorker(): void {
-  if (workerInstance) workerInstance.terminate();
-  workerInstance = null;
-  remote = null;
-}
+const workerHandle = createScheduleWorkerHandle("schedule-worker");
+const getRemote = () => workerHandle.getRemote();
+const terminateScheduleWorker = () => workerHandle.terminate();
 
 /**
  * Race a worker call against a timeout and an external cancel signal. On timeout
@@ -306,7 +285,5 @@ export async function prewarmScheduleWorker(state: AppState): Promise<void> {
 
 /** Test-only: tear down the worker singleton. */
 export function __resetScheduleWorkerClientForTests(): void {
-  if (workerInstance) workerInstance.terminate();
-  workerInstance = null;
-  remote = null;
+  terminateScheduleWorker();
 }

@@ -65,9 +65,8 @@ function feat(
 /**
  * The full feature matrix — the single source of truth for `/features`,
  * `/compare`, and every `/vs/<slug>` page. Support values reflect competitor
- * research as of 2026-07 and mark genuine uoPlan gaps honestly (e.g. a visual
- * prerequisite graph, hard professor require/block, and live open/closed
- * section status).
+ * research as of 2026-07 and mark genuine uoPlan gaps honestly (e.g. hard
+ * professor require/block and live open/closed section status).
  *
  * levels order: [uoplan, uenroll, uschedule, uo-grades, coursemapper]
  */
@@ -89,10 +88,11 @@ export const FEATURES: readonly Feature[] = [
   feat("transcript-import", "degree", ["yes", "no", "no", "no", "no"]),
   feat("requirement-pools", "degree", ["yes", "no", "no", "no", "no"]),
   feat("honours-detection", "degree", ["yes", "no", "no", "no", "no"]),
+  feat("degree-map", "degree", ["yes", "no", "no", "no", "no"]),
 
   // Prerequisites
   feat("prereq-checking", "prerequisites", ["yes", "no", "no", "no", "yes"], ["coursemapper"]),
-  feat("prereq-graph", "prerequisites", ["no", "no", "no", "no", "yes"]),
+  feat("prereq-graph", "prerequisites", ["yes", "no", "no", "no", "yes"]),
   feat("prereq-bilingual", "prerequisites", ["yes", "no", "no", "no", "no"]),
 
   // Grades & analytics

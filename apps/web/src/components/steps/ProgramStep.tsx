@@ -25,6 +25,7 @@ import { findBestMatchingProgram, parseTranscriptPdf } from "@uoplan/transcript"
 import { isOptCourse, normalizeCourseCode } from "@uoplan/core";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { useAnalytics } from "../../lib/analytics";
+import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 
 interface ProgramStepProps {
   programs: Program[];
@@ -47,6 +48,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
     useYearCatalogue();
   const storeApi = useStoreApi();
   const analytics = useAnalytics();
+  const setPlannerCompletedTerms = useGraphPlannerStore((s) => s.setCompletedCourseTerms);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
   const [transcriptFeedback, setTranscriptFeedback] = useState<{
@@ -135,10 +137,14 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
       const arrayBuffer = await file.arrayBuffer();
       const {
         courses: parsedCourses,
+        terms: parsedTerms,
         fullText,
         startingYear,
         frenchImmersionStreamHint,
       } = await parseTranscriptPdf(arrayBuffer);
+      // Feed the degree-planner graph its per-term breakdown (beta feature; its
+      // own isolated localStorage store, independent of the main app state).
+      setPlannerCompletedTerms(parsedTerms);
       const inCatalogue: string[] = [];
       const skippedCodes: string[] = [];
       for (const code of parsedCourses) {

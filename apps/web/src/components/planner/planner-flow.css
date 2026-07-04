@@ -1,0 +1,7 @@
+/* Global React Flow overrides for the degree-planner canvas. Kept in a plain
+   (non-module) stylesheet so the class names aren't tracked as CSS-module
+   exports. Scoped under the stable `.uoplan-planner-canvas` wrapper. */
+.uoplan-planner-canvas .react-flow__edge-path {
+  stroke: color-mix(in srgb, var(--app-text-muted) 65%, transparent);
+  stroke-width: 1.5;
+}

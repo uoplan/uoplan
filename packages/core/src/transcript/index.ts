@@ -1,5 +1,11 @@
-export type { PdfPageText, TextItemWithPosition } from "./types";
+export type {
+  PdfPageText,
+  TextItemWithPosition,
+  TranscriptTerm,
+  TranscriptTermSeason,
+} from "./types";
 export { collectTranscriptCourseCodes } from "./courseCodeMatching";
+export { collectTranscriptTerms } from "./termGrouping";
 export { findBestMatchingProgram } from "./programMatching";
 export type { ProgramMatchResult } from "./programMatching";
 export {

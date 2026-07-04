@@ -1,4 +1,5 @@
 import type { TermSeason } from "@uoplan/core";
+import type { TranscriptTermSeason } from "@uoplan/core/transcript";
 import { tr } from "../../i18n";
 import { decode, fallback, formatTermLabelPlain } from "./termLabelPlain";
 
@@ -6,6 +7,12 @@ const SEASON_LABEL_ID: Record<TermSeason, string> = {
   winter: "term.season.winter",
   springSummer: "term.season.summer",
   fall: "term.season.fall",
+};
+
+const TRANSCRIPT_SEASON_LABEL_ID: Record<TranscriptTermSeason, string> = {
+  Winter: "term.season.winter",
+  Summer: "term.season.summer",
+  Fall: "term.season.fall",
 };
 
 /**
@@ -33,6 +40,18 @@ export function formatTermLabelShort(termId: number | string): string {
   const season = tr(SEASON_LABEL_ID[decoded.season]);
   const initial = season.charAt(0).toUpperCase();
   return `${initial}${String(decoded.year).slice(-2)}`;
+}
+
+/**
+ * Localized label for a transcript-derived term (season + year already parsed),
+ * e.g. `Summer 2024` (French `Été 2024`). The parser normalizes the collapsed
+ * spring/summer term to `Summer`, so this never renders "Spring/Summer".
+ */
+export function formatTranscriptTermLabel(term: {
+  season: TranscriptTermSeason;
+  year: number;
+}): string {
+  return `${tr(TRANSCRIPT_SEASON_LABEL_ID[term.season])} ${term.year}`;
 }
 
 /**

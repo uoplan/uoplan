@@ -1,6 +1,12 @@
 import { Box, SimpleGrid, Stack, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconAffiliate, IconCalendar, IconChartHistogram, IconCompass } from "@tabler/icons-react";
+import {
+  IconAffiliate,
+  IconCalendar,
+  IconChartHistogram,
+  IconCompass,
+  IconSitemap,
+} from "@tabler/icons-react";
 import { m } from "framer-motion";
 import { useCallback, useMemo, useState } from "react";
 import { dynamicActivate, tr, useTr } from "../../i18n";
@@ -53,6 +59,15 @@ export function LandingPage() {
 
   const experimentalFeatures = [
     {
+      to: "/schedule/graph",
+      title: tr("planner.title"),
+      description: tr("landing.planner.description"),
+      badgeLabel: betaLabel,
+      badgeColor: "orange" as const,
+      icon: <IconSitemap size={32} stroke={1.5} />,
+      iconColor: experimentalIconColor,
+    },
+    {
       to: "/trends",
       title: tr("trends.title"),
       description: tr("landing.trends.description"),
@@ -62,7 +77,7 @@ export function LandingPage() {
       iconColor: experimentalIconColor,
     },
     {
-      to: "/graph",
+      to: "/professor-graph",
       title: tr("graph.title"),
       description: tr("landing.graph.description"),
       badgeLabel: betaLabel,

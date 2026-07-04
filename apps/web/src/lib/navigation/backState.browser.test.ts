@@ -10,7 +10,7 @@ test("locationLabel names each top-level section by path", () => {
   expect(locationLabel("/personalize")).toBe("Personalize");
   expect(locationLabel("/schedule")).toBe("Schedule generator");
   expect(locationLabel("/trends")).toBe("Trends");
-  expect(locationLabel("/graph")).toBe("Professor network");
+  expect(locationLabel("/professor-graph")).toBe("Professor network");
   expect(locationLabel("/donate")).toBe("Support us");
   expect(locationLabel("/changelog")).toBe("Changelog");
   // Unknown destinations fall back to the home label rather than throwing.

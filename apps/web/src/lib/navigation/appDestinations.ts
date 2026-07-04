@@ -93,7 +93,7 @@ export const APP_DESTINATIONS: readonly AppDestination[] = [
   },
   {
     id: "graph",
-    to: "/graph",
+    to: "/professor-graph",
     labelId: "app.nav.dest.graph.label",
     descriptionId: "app.nav.dest.graph.description",
     icon: IconAffiliate,

@@ -261,6 +261,7 @@ export const DYNAMIC_TR_IDS: string[] = [
       "transcript-import",
       "requirement-pools",
       "honours-detection",
+      "degree-map",
       "prereq-checking",
       "prereq-graph",
       "prereq-bilingual",

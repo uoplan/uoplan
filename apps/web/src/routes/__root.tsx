@@ -79,7 +79,9 @@ function RootLayout() {
   const showBasketFab =
     Boolean(indices) &&
     (isCalendarRoute ||
-      ["/personalize", "/trends", "/graph"].some((prefix) => pathname.startsWith(prefix)));
+      ["/personalize", "/trends", "/professor-graph"].some((prefix) =>
+        pathname.startsWith(prefix),
+      ));
   const basketDesktopPlacement = pathname.startsWith("/personalize") ? "top-right" : "bottom-right";
   const pendingAnimation = useRef(false);
   const lastNavAction = useRef<string>("PUSH");

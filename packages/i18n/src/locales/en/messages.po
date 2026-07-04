@@ -1010,6 +1010,14 @@ msgstr "Fast search across the uOttawa catalogue."
 msgid "compare.feature.course-search.name"
 msgstr "Course and professor search"
 
+#: scripts/i18n/dynamic-keys.ts
+msgid "compare.feature.degree-map.desc"
+msgstr "Map your whole degree as a term-by-term graph, with prerequisite links and future terms you can plan."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "compare.feature.degree-map.name"
+msgstr "Degree map"
+
 msgid "compare.feature.exclude-from-generation.desc"
 msgstr "Drop specific sections or professors from the results."
 
@@ -2356,14 +2364,14 @@ msgstr "View details"
 msgid "generationOptions.count.label"
 msgstr "Electives this semester (additional)"
 
-msgid "generationOptions.coursesThisSemester.label"
-msgstr "Courses this semester"
-
 msgid "generationOptions.courses.label"
 msgstr "Courses you want"
 
 msgid "generationOptions.courses.placeholder"
 msgstr "Search courses…"
+
+msgid "generationOptions.coursesThisSemester.label"
+msgstr "Courses this semester"
 
 #: apps/web/src/components/calendar/BasicCalendarSidebarControls.tsx:254
 msgid "generationOptions.moreOptions.heading"
@@ -2419,12 +2427,6 @@ msgstr "Strength"
 
 msgid "graph.title"
 msgstr "Professor network"
-
-msgid "landing.carousel.goTo"
-msgstr "Show {title}"
-
-msgid "landing.carousel.label"
-msgstr "Experimental features"
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "landing.banner.android.cta"
@@ -2490,6 +2492,12 @@ msgstr "Now on iOS. Download it on the App Store."
 msgid "landing.banner.ios.textShort"
 msgstr "Get it on the App Store."
 
+msgid "landing.carousel.goTo"
+msgstr "Show {title}"
+
+msgid "landing.carousel.label"
+msgstr "Experimental features"
+
 msgid "landing.explore.description"
 msgstr "Search courses and professors with grade distributions."
 
@@ -2501,6 +2509,10 @@ msgstr "See how professors connect through shared courses."
 #: apps/web/src/lib/navigation/backState.ts:18
 msgid "landing.personalize.title"
 msgstr "Personalize"
+
+#: apps/web/src/components/landing/LandingPage.tsx:58
+msgid "landing.planner.description"
+msgstr "Map your whole degree as a term-by-term graph."
 
 msgid "landing.schedule.description"
 msgstr "Plan your degree and generate conflict-free timetables."
@@ -2640,6 +2652,9 @@ msgstr "Drag to rank these goals. When they conflict, higher ones win. Turn off 
 msgid "optimize.disabledHeading"
 msgstr "Disabled"
 
+msgid "optimize.dragHandle"
+msgstr "Reorder {label}"
+
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:41
 msgid "optimize.freeDays.description"
 msgstr "Pack classes into fewer days so more weekdays stay completely free."
@@ -2667,9 +2682,6 @@ msgstr "Break length (min)"
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:75
 msgid "optimize.heading"
 msgstr "Optimization priorities"
-
-msgid "optimize.dragHandle"
-msgstr "Reorder {label}"
 
 #: apps/web/src/components/calendar/generationOptions/OptimizationPrioritiesCard.tsx:135
 msgid "optimize.moveDown"
@@ -2762,6 +2774,162 @@ msgstr "Set your program and completed courses for results tailored to you."
 #: apps/web/src/components/shared/PersonalizeBanner.tsx:53
 msgid "personalizeBanner.messageShort"
 msgstr "Personalize for tailored results."
+
+#: apps/web/src/components/planner/TermBandNode.tsx:77
+msgid "planner.band.courseCount"
+msgstr "Course count"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:125
+msgid "planner.band.courses"
+msgstr "{count, plural, one {# course} other {# courses}}"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:101
+#: apps/web/src/components/planner/TermBandNode.tsx:94
+msgid "planner.band.disable"
+msgstr "Remove term"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:62
+msgid "planner.band.enable"
+msgstr "Enable term"
+
+#: apps/web/src/components/planner/FutureTermNode.tsx:105
+#: apps/web/src/components/planner/FutureTermNode.tsx:99
+msgid "planner.band.openInCalendar"
+msgstr "Open in calendar"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:51
+msgid "planner.band.pickProgram"
+msgstr "Pick a program"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:82
+#: apps/web/src/components/planner/TermBandNode.tsx:88
+msgid "planner.band.regenerate"
+msgstr "Regenerate term"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:149
+msgid "planner.clearPlan"
+msgstr "Clear plan"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:39
+#: apps/web/src/components/planner/PlannerControls.tsx:44
+msgid "planner.controls.fit"
+msgstr "Fit to view"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:53
+#: apps/web/src/components/planner/PlannerControls.tsx:58
+#: apps/web/src/components/planner/PlannerSidebar.tsx:177
+msgid "planner.controls.resetLayout"
+msgstr "Reset layout"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:17
+#: apps/web/src/components/planner/PlannerControls.tsx:22
+msgid "planner.controls.zoomIn"
+msgstr "Zoom in"
+
+#: apps/web/src/components/planner/PlannerControls.tsx:28
+#: apps/web/src/components/planner/PlannerControls.tsx:33
+msgid "planner.controls.zoomOut"
+msgstr "Zoom out"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:156
+msgid "planner.defaultCount.description"
+msgstr "Courses added when you enable a new term."
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:155
+msgid "planner.defaultCount.label"
+msgstr "Courses per new term"
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:21
+msgid "planner.empty.body"
+msgstr "Add your program and transcript to map your degree term by term."
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:21
+msgid "planner.empty.bodyProgram"
+msgstr "Enable a future term to start planning courses toward your degree."
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:28
+msgid "planner.empty.cta"
+msgstr "Go to personalize"
+
+#: apps/web/src/components/planner/PlannerEmptyState.tsx:18
+msgid "planner.empty.title"
+msgstr "Plan your degree"
+
+#: apps/web/src/components/planner/FutureTermNode.tsx:139
+msgid "planner.future.emptyHint"
+msgstr "No courses yet. Adjust the count or regenerate to fill this term."
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:149
+msgid "planner.generate"
+msgstr "Generate schedules"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:168
+msgid "planner.legend.completed"
+msgstr "Completed"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:170
+msgid "planner.legend.missingPrereq"
+msgstr "Missing prerequisite"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:169
+msgid "planner.legend.planned"
+msgstr "Planned"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:166
+msgid "planner.legend.title"
+msgstr "Legend"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:114
+msgid "planner.needProgram.body"
+msgstr "Choose your program so we can plan future terms toward your degree."
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:121
+msgid "planner.needProgram.cta"
+msgstr "Choose a program"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:111
+msgid "planner.needProgram.title"
+msgstr "Add your program"
+
+#: apps/web/src/components/planner/CourseNode.tsx:17
+msgid "planner.node.missingPrereq"
+msgstr "Missing prerequisite"
+
+#: apps/web/src/components/planner/DegreePlannerPage.tsx:122
+#: apps/web/src/components/planner/PlannerSidebar.tsx:176
+msgid "planner.options.title"
+msgstr "Generation options"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:140
+msgid "planner.regenerate"
+msgstr "Regenerate"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:31
+msgid "planner.status.empty"
+msgstr "No courses"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:33
+msgid "planner.status.error"
+msgstr "Failed"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:27
+msgid "planner.status.ok"
+msgstr "Generated"
+
+#: apps/web/src/components/planner/TermBandNode.tsx:29
+msgid "planner.status.partial"
+msgstr "Partial"
+
+#: apps/web/src/components/landing/LandingPage.tsx:57
+#: apps/web/src/components/planner/DegreePlannerPage.tsx:117
+#: apps/web/src/components/planner/DegreePlannerPage.tsx:149
+#: apps/web/src/components/planner/PlannerSidebar.tsx:88
+msgid "planner.title"
+msgstr "Degree planner"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:129
+msgid "planner.uploadHint"
+msgstr "Upload your transcript in personalize to group completed courses by term."
 
 msgid "programStep.disciplines.description"
 msgstr "Used to evaluate program-specific prerequisites. Auto-filled from your program's courses."

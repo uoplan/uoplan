@@ -10,8 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ProfessorGraphRouteImport } from './routes/professor-graph'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as GraphRouteImport } from './routes/graph'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as CompareRouteImport } from './routes/compare'
@@ -30,6 +30,7 @@ import { Route as TrendsLeaderboardRouteImport } from './routes/trends/leaderboa
 import { Route as TrendsFeedbackRouteImport } from './routes/trends/feedback'
 import { Route as TrendsDisciplinesRouteImport } from './routes/trends/disciplines'
 import { Route as TrendsCoursesRouteImport } from './routes/trends/courses'
+import { Route as ScheduleGraphRouteImport } from './routes/schedule/graph'
 import { Route as ExploreProgramSplatRouteImport } from './routes/explore/program/$'
 import { Route as ExploreFacultyFacultyRouteImport } from './routes/explore/faculty/$faculty'
 import { Route as ExploreDisciplineDisciplineRouteImport } from './routes/explore/discipline/$discipline'
@@ -45,14 +46,14 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfessorGraphRoute = ProfessorGraphRouteImport.update({
+  id: '/professor-graph',
+  path: '/professor-graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GraphRoute = GraphRouteImport.update({
-  id: '/graph',
-  path: '/graph',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
@@ -145,6 +146,11 @@ const TrendsCoursesRoute = TrendsCoursesRouteImport.update({
   path: '/courses',
   getParentRoute: () => TrendsRouteRoute,
 } as any)
+const ScheduleGraphRoute = ScheduleGraphRouteImport.update({
+  id: '/graph',
+  path: '/graph',
+  getParentRoute: () => ScheduleRouteRoute,
+} as any)
 const ExploreProgramSplatRoute = ExploreProgramSplatRouteImport.update({
   id: '/program/$',
   path: '/program/$',
@@ -207,9 +213,10 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
   '/features': typeof FeaturesRoute
-  '/graph': typeof GraphRoute
   '/privacy': typeof PrivacyRoute
+  '/professor-graph': typeof ProfessorGraphRoute
   '/terms': typeof TermsRoute
+  '/schedule/graph': typeof ScheduleGraphRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
@@ -235,9 +242,10 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
   '/features': typeof FeaturesRoute
-  '/graph': typeof GraphRoute
   '/privacy': typeof PrivacyRoute
+  '/professor-graph': typeof ProfessorGraphRoute
   '/terms': typeof TermsRoute
+  '/schedule/graph': typeof ScheduleGraphRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
@@ -268,9 +276,10 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
   '/features': typeof FeaturesRoute
-  '/graph': typeof GraphRoute
   '/privacy': typeof PrivacyRoute
+  '/professor-graph': typeof ProfessorGraphRoute
   '/terms': typeof TermsRoute
+  '/schedule/graph': typeof ScheduleGraphRoute
   '/trends/courses': typeof TrendsCoursesRoute
   '/trends/disciplines': typeof TrendsDisciplinesRoute
   '/trends/feedback': typeof TrendsFeedbackRoute
@@ -302,9 +311,10 @@ export interface FileRouteTypes {
     | '/compare'
     | '/donate'
     | '/features'
-    | '/graph'
     | '/privacy'
+    | '/professor-graph'
     | '/terms'
+    | '/schedule/graph'
     | '/trends/courses'
     | '/trends/disciplines'
     | '/trends/feedback'
@@ -330,9 +340,10 @@ export interface FileRouteTypes {
     | '/compare'
     | '/donate'
     | '/features'
-    | '/graph'
     | '/privacy'
+    | '/professor-graph'
     | '/terms'
+    | '/schedule/graph'
     | '/trends/courses'
     | '/trends/disciplines'
     | '/trends/feedback'
@@ -362,9 +373,10 @@ export interface FileRouteTypes {
     | '/compare'
     | '/donate'
     | '/features'
-    | '/graph'
     | '/privacy'
+    | '/professor-graph'
     | '/terms'
+    | '/schedule/graph'
     | '/trends/courses'
     | '/trends/disciplines'
     | '/trends/feedback'
@@ -395,8 +407,8 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   DonateRoute: typeof DonateRoute
   FeaturesRoute: typeof FeaturesRoute
-  GraphRoute: typeof GraphRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProfessorGraphRoute: typeof ProfessorGraphRoute
   TermsRoute: typeof TermsRoute
   VsCompetitorRoute: typeof VsCompetitorRoute
 }
@@ -410,18 +422,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/professor-graph': {
+      id: '/professor-graph'
+      path: '/professor-graph'
+      fullPath: '/professor-graph'
+      preLoaderRoute: typeof ProfessorGraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/graph': {
-      id: '/graph'
-      path: '/graph'
-      fullPath: '/graph'
-      preLoaderRoute: typeof GraphRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -550,6 +562,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrendsCoursesRouteImport
       parentRoute: typeof TrendsRouteRoute
     }
+    '/schedule/graph': {
+      id: '/schedule/graph'
+      path: '/graph'
+      fullPath: '/schedule/graph'
+      preLoaderRoute: typeof ScheduleGraphRouteImport
+      parentRoute: typeof ScheduleRouteRoute
+    }
     '/explore/program/$': {
       id: '/explore/program/$'
       path: '/program/$'
@@ -658,10 +677,12 @@ const PersonalizeRouteRouteWithChildren =
   PersonalizeRouteRoute._addFileChildren(PersonalizeRouteRouteChildren)
 
 interface ScheduleRouteRouteChildren {
+  ScheduleGraphRoute: typeof ScheduleGraphRoute
   ScheduleIndexRoute: typeof ScheduleIndexRoute
 }
 
 const ScheduleRouteRouteChildren: ScheduleRouteRouteChildren = {
+  ScheduleGraphRoute: ScheduleGraphRoute,
   ScheduleIndexRoute: ScheduleIndexRoute,
 }
 
@@ -699,8 +720,8 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   DonateRoute: DonateRoute,
   FeaturesRoute: FeaturesRoute,
-  GraphRoute: GraphRoute,
   PrivacyRoute: PrivacyRoute,
+  ProfessorGraphRoute: ProfessorGraphRoute,
   TermsRoute: TermsRoute,
   VsCompetitorRoute: VsCompetitorRoute,
 }

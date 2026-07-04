@@ -100,7 +100,7 @@
     "noscriptBody": "Search uOttawa courses and professors with historical grade distributions from public records."
   },
   "graph": {
-    "canonicalPath": "/graph",
+    "canonicalPath": "/professor-graph",
     "tabTitle": "Professor network",
     "title": "Professor network | uoPlan",
     "description": "Explore how uOttawa professors connect through shared courses. Interactive network graph of co-teaching patterns and course overlap.",
@@ -108,6 +108,16 @@
     "structuredName": "Professor network",
     "noscriptTitle": "Professor network | uoPlan",
     "noscriptBody": "Interactive graph of uOttawa professor connections through shared course offerings."
+  },
+  "planner": {
+    "canonicalPath": "/schedule/graph",
+    "tabTitle": "Degree planner",
+    "title": "uOttawa degree planner graph | uoplan",
+    "description": "Map your whole University of Ottawa degree as a term-by-term graph: see completed courses grouped by term, prerequisite links, and plan future terms with generated course picks that advance your degree.",
+    "keywords": "uottawa degree planner, uottawa prerequisite map, university of ottawa course graph, uottawa degree map, uottawa four year plan",
+    "structuredName": "Degree planner graph",
+    "noscriptTitle": "uOttawa degree planner graph | uoplan",
+    "noscriptBody": "Map your uOttawa degree term by term with prerequisite links and planned future courses."
   },
   "trends": {
     "canonicalPath": "/trends",
