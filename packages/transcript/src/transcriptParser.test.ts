@@ -42,6 +42,7 @@ describe("parseTranscriptPdf", () => {
     expect(extractTranscriptPdfPagesMock).toHaveBeenCalledOnce();
     expect(result).toEqual({
       courses: ["CSI 2101", "MAT 1341"],
+      terms: [],
       fullText: pages.map((page) => page.pageText).join("\n"),
       startingYear: 2024,
       frenchImmersionStreamHint: true,

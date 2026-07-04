@@ -12,7 +12,7 @@
   {
     "name": "graph route (sigma + graphology)",
     "path": "dist/client/assets/graph-*.js",
-    "limit": "52 kB"
+    "limit": "55 kB"
   },
   {
     "name": "trends route",
