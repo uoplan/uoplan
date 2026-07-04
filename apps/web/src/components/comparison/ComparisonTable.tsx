@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { tr } from "../../i18n";
 import { CATEGORIES, FEATURES, PRODUCTS } from "../../lib/comparison";
 import type { Feature, Product } from "../../lib/comparison";
@@ -44,14 +44,39 @@ export function ComparisonTable({
 
   const columnCount = products.length + 1;
 
+  // The header row sticks to the viewport top on wide screens. While it's stuck
+  // and floating, its rounded top corners would reveal page content through the
+  // corner gaps, so we square them off. A 1px sentinel above the table tells us
+  // when the header has left the top of the viewport.
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const [stuck, setStuck] = useState(false);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setStuck(entry.boundingClientRect.top < 0),
+      { threshold: [0, 1] },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
+  // Running index across every feature row (category rows excluded) so zebra
+  // striping stays continuous through the category dividers.
+  let featureRowIndex = 0;
+
   return (
     <Box className={styles.tableScroll}>
+      <div ref={sentinelRef} className={styles.stickySentinel} aria-hidden="true" />
       <table className={compact ? `${styles.table} ${styles.compact}` : styles.table}>
         <thead>
-          <tr className={styles.headRow}>
-            <th className={styles.featureHead} scope="col">
-              <span className={styles.categoryLabel}>{tr("compare.table.featureColumn")}</span>
-            </th>
+          <tr className={stuck ? `${styles.headRow} ${styles.stuck}` : styles.headRow}>
+            <th
+              className={styles.featureHead}
+              scope="col"
+              aria-label={tr("compare.table.featureColumn")}
+            />
             {products.map((product) => (
               <th
                 key={product.id}
@@ -74,21 +99,25 @@ export function ComparisonTable({
                   <span className={styles.categoryLabel}>{tr(group.category.labelId)}</span>
                 </td>
               </tr>
-              {group.features.map((feature) => (
-                <tr key={feature.id} className={styles.bodyRow}>
-                  <th scope="row" className={styles.featureCol}>
-                    <span className={styles.featureName}>{tr(feature.nameId)}</span>
-                  </th>
-                  {products.map((product) => (
-                    <td
-                      key={product.id}
-                      className={product.isUoplan ? styles.uoplanCol : undefined}
-                    >
-                      <SupportCell support={feature.support[product.id]} />
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              {group.features.map((feature) => {
+                const striped = featureRowIndex % 2 === 1;
+                featureRowIndex += 1;
+                return (
+                  <tr
+                    key={feature.id}
+                    className={striped ? `${styles.bodyRow} ${styles.stripe}` : styles.bodyRow}
+                  >
+                    <th scope="row" className={styles.featureCol}>
+                      <span className={styles.featureName}>{tr(feature.nameId)}</span>
+                    </th>
+                    {products.map((product) => (
+                      <td key={product.id}>
+                        <SupportCell support={feature.support[product.id]} />
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
             </Fragment>
           ))}
         </tbody>

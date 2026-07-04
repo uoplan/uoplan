@@ -1,9 +1,20 @@
 .tableScroll {
-  overflow-x: auto;
   border: var(--app-border-width) solid var(--app-border);
   border-radius: var(--app-radius-lg);
   background: var(--app-surface);
-  -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * On narrow screens the matrix is wider than the content column, so we need
+ * horizontal scrolling. A scroll container scopes `position: sticky` to itself,
+ * so the header can only stick to the page viewport on wide screens where no
+ * horizontal scroll (and thus no scroll container) is needed.
+ */
+@media (max-width: 820px) {
+  .tableScroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .table {
@@ -12,10 +23,16 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.875rem;
+  --zebra: color-mix(in oklab, var(--app-surface-sunken) 30%, var(--app-surface));
 }
 
 .table.compact {
   min-width: 420px;
+}
+
+.stickySentinel {
+  height: 1px;
+  margin-bottom: -1px;
 }
 
 .headRow th {
@@ -24,6 +41,7 @@
   z-index: 3;
   background: var(--app-surface-sunken);
   border-bottom: var(--app-border-width) solid var(--app-border);
+  box-shadow: 0 6px 12px -10px rgba(0, 0, 0, 0.35);
   padding: 12px 10px;
   vertical-align: bottom;
   text-align: center;
@@ -34,6 +52,21 @@
   z-index: 4;
   text-align: left;
   min-width: 180px;
+  border-top-left-radius: calc(var(--app-radius-lg) - var(--app-border-width));
+}
+
+.headRow th:last-child {
+  border-top-right-radius: calc(var(--app-radius-lg) - var(--app-border-width));
+}
+
+/* While the header is stuck to the viewport top it floats free of the rounded
+   container, so square the outer corners to avoid content peeking through. */
+.headRow.stuck th.featureHead {
+  border-top-left-radius: 0;
+}
+
+.headRow.stuck th:last-child {
+  border-top-right-radius: 0;
 }
 
 .featureCol {
@@ -42,8 +75,13 @@
   z-index: 2;
   background: var(--app-surface);
   border-right: var(--app-border-width) solid var(--app-border);
+  border-bottom: 1px solid var(--app-border);
   text-align: left;
   padding: 11px 14px 11px 14px;
+}
+
+.bodyRow:last-child th.featureCol {
+  border-bottom: none;
 }
 
 .productHead {
@@ -69,16 +107,8 @@
   color: var(--app-text-dim);
 }
 
-.uoplanHead {
-  background: color-mix(in oklab, var(--app-accent) 16%, var(--app-surface-sunken)) !important;
-}
-
 .uoplanHead .productName {
   color: var(--app-accent);
-}
-
-.uoplanCol {
-  background: color-mix(in oklab, var(--app-accent) 7%, transparent);
 }
 
 .bodyRow td {
@@ -92,6 +122,14 @@
   border-bottom: none;
 }
 
+.bodyRow.stripe td {
+  background: var(--zebra);
+}
+
+.bodyRow.stripe th.featureCol {
+  background: var(--zebra);
+}
+
 .featureName {
   font-weight: 500;
   color: var(--app-text);
@@ -101,18 +139,19 @@
 .categoryRow td {
   position: sticky;
   left: 0;
-  padding: 13px 14px 7px 14px;
-  background: var(--app-surface);
+  padding: 10px 14px;
+  background: var(--app-surface-sunken);
   border-bottom: 1px solid var(--app-border);
-  text-align: left;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .categoryLabel {
-  font-family: var(--app-font-heading);
-  font-weight: 400;
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--app-font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
   color: var(--app-text-muted);
 }
 
