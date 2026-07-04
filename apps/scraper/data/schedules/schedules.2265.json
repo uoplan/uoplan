@@ -35634,7 +35634,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -43444,7 +43444,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Craig Phillips",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -43535,7 +43535,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": true,
-                "instructor": "Ligyana Korki De Candido",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -44023,7 +44023,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Krystina Brigitte Lewis",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -44034,7 +44034,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Krystina Brigitte Lewis",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
