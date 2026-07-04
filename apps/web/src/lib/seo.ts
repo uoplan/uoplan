@@ -294,7 +294,7 @@ export function buildFacultyHead(facultyParam: string) {
   });
 }
 
-export function buildTabTitle(title: string) {
+function buildTabTitle(title: string) {
   return { meta: [{ title }] };
 }
 

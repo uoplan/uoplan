@@ -211,5 +211,29 @@ writePrerenderedPage(
 writePrerenderedPage(template, "explore", path.join(distDir, "explore", "index.html"));
 writePrerenderedPage(template, "graph", path.join(distDir, "graph", "index.html"));
 writePrerenderedPage(template, "trends", path.join(distDir, "trends", "index.html"));
+writePrerenderedPage(
+  template,
+  "trendsDisciplines",
+  path.join(distDir, "trends", "disciplines", "index.html"),
+);
+writePrerenderedPage(
+  template,
+  "trendsCourses",
+  path.join(distDir, "trends", "courses", "index.html"),
+);
+writePrerenderedPage(
+  template,
+  "trendsFeedback",
+  path.join(distDir, "trends", "feedback", "index.html"),
+);
+writePrerenderedPage(
+  template,
+  "trendsLeaderboard",
+  path.join(distDir, "trends", "leaderboard", "index.html"),
+);
 writePrerenderedPage(template, "schedule", path.join(distDir, "schedule", "index.html"));
 writePrerenderedPage(template, "personalize", path.join(distDir, "personalize", "index.html"));
+writePrerenderedPage(template, "changelog", path.join(distDir, "changelog", "index.html"));
+writePrerenderedPage(template, "donate", path.join(distDir, "donate", "index.html"));
+writePrerenderedPage(template, "privacy", path.join(distDir, "privacy", "index.html"));
+writePrerenderedPage(template, "terms", path.join(distDir, "terms", "index.html"));

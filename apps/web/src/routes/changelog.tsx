@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Box, Stack, Title } from "@mantine/core";
 import changelogHtml from "virtual:changelog-html";
 import { tr, useTr } from "../i18n";
-import { buildTabTitle } from "../lib/seo";
+import { buildPageHead } from "../lib/seo";
 import { BackButton } from "../components/shared/BackButton";
 
 export const Route = createFileRoute("/changelog")({
-  head: () => buildTabTitle("Changelog"),
+  head: () => buildPageHead("changelog"),
   component: ChangelogRoute,
 });
 

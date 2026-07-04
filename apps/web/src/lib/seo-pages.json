@@ -158,5 +158,45 @@
     "structuredName": "Grade inflation leaderboard",
     "noscriptTitle": "Grade inflation leaderboard | uoPlan",
     "noscriptBody": "Ranked uOttawa grade trends: biggest risers, easiest, and hardest disciplines and courses."
+  },
+  "changelog": {
+    "canonicalPath": "/changelog",
+    "tabTitle": "Changelog",
+    "title": "What's new in uoPlan | uoPlan",
+    "description": "See what's new in uoPlan, the free course and schedule planner for University of Ottawa students: the latest features, improvements, and fixes.",
+    "keywords": "uoplan changelog, uoplan updates, uoplan what's new, uottawa course planner new features",
+    "structuredName": "uoPlan changelog",
+    "noscriptTitle": "What's new in uoPlan",
+    "noscriptBody": "The latest features, improvements, and fixes in uoPlan for University of Ottawa students."
+  },
+  "donate": {
+    "canonicalPath": "/donate",
+    "tabTitle": "Donate",
+    "title": "Support uoPlan | uoPlan",
+    "description": "uoPlan is a free, ad-free course planner for University of Ottawa students. Donate to help cover hosting and keep it free for everyone.",
+    "keywords": "support uoplan, donate uoplan, free uottawa course planner, ad-free uottawa timetable",
+    "structuredName": "Support uoPlan",
+    "noscriptTitle": "Support uoPlan",
+    "noscriptBody": "uoPlan is free and ad-free for University of Ottawa students. Donations help cover hosting costs."
+  },
+  "privacy": {
+    "canonicalPath": "/privacy",
+    "tabTitle": "Privacy Policy",
+    "title": "Privacy policy | uoPlan",
+    "description": "How uoPlan handles your data. uoPlan is a privacy-first, ad-free course planner for University of Ottawa students that keeps your planning on your device.",
+    "keywords": "uoplan privacy policy, uoplan privacy, uottawa course planner privacy",
+    "structuredName": "uoPlan privacy policy",
+    "noscriptTitle": "uoPlan privacy policy",
+    "noscriptBody": "How uoPlan handles your data as a privacy-first, ad-free planner for University of Ottawa students."
+  },
+  "terms": {
+    "canonicalPath": "/terms",
+    "tabTitle": "Terms of Service",
+    "title": "Terms of service | uoPlan",
+    "description": "The terms of service for uoPlan, the free course and schedule planner for University of Ottawa students.",
+    "keywords": "uoplan terms of service, uoplan terms, uottawa course planner terms",
+    "structuredName": "uoPlan terms of service",
+    "noscriptTitle": "uoPlan terms of service",
+    "noscriptBody": "The terms of service for using uoPlan, a free planner for University of Ottawa students."
   }
 }

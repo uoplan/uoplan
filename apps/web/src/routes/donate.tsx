@@ -6,7 +6,7 @@ import { AnimatedNumber } from "../components/shared/AnimatedNumber";
 import { BackButton } from "../components/shared/BackButton";
 import { formatLocaleNumber, tr, useTr } from "../i18n";
 import { useAnalytics } from "../lib/analytics";
-import { buildTabTitle } from "../lib/seo";
+import { buildPageHead } from "../lib/seo";
 
 const DONATION_EMAIL = "donate@uoplan.party";
 
@@ -19,7 +19,7 @@ interface DonationSummary {
 }
 
 export const Route = createFileRoute("/donate")({
-  head: () => buildTabTitle("Donate"),
+  head: () => buildPageHead("donate"),
   component: DonateRoute,
 });
 
