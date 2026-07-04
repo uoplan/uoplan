@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.0.0-beta.40](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.39...uoplan-monorepo-v1.0.0-beta.40) (2026-07-04)
+
+
+### Features
+
+* **marketing:** 3D multi-device launch video with live app-capture harness ([369baa5](https://github.com/uoplan/uoplan/commit/369baa5b7f4905907375aa314cd9972c98064d84))
+* **marketing:** continuous spin/scroll, page settle, dual explore search ([e2e3584](https://github.com/uoplan/uoplan/commit/e2e3584d9cc039f8f65f7329a93c8940f616a7e4))
+* **marketing:** rework launch ad into 45s multi-device piece with live app video ([2cb5fb0](https://github.com/uoplan/uoplan/commit/2cb5fb0328116a5c23caae245468c60a6ad46cc3))
+* **marketing:** unify store listings and add deterministic capture harness ([3703044](https://github.com/uoplan/uoplan/commit/37030442753176ebaf66f9a5b57a8506a3b2ee72))
+* **native:** allow zero electives and add swipe hint to personalize wizard ([e04b321](https://github.com/uoplan/uoplan/commit/e04b321164dbeca3a6f9c7f1f0ca1922d5acd19e))
+* **native:** polish personalize wizard, calendar cart, trends labels, iOS tab bar ([7bd032c](https://github.com/uoplan/uoplan/commit/7bd032c2e13c91c13db9060d43965196da9e7300))
+* **schedule:** unify courses-this-semester cap and additional electives ([54ab90f](https://github.com/uoplan/uoplan/commit/54ab90f5140360367778896dc57069d8ca0c55a1))
+* update iOS banner to link to the App Store release ([ef7af08](https://github.com/uoplan/uoplan/commit/ef7af08e6de1da16b4b43ff4f44527f135683b8b))
+* **web:** add degree planner graph (beta) at /schedule/graph ([5226826](https://github.com/uoplan/uoplan/commit/52268264c7ec5aba25d3e06de83980a82c4af0c7))
+* **web:** add features and comparison pages with refreshed SEO ([3922d6e](https://github.com/uoplan/uoplan/commit/3922d6e3c578aca79c6d119ab82b90285554ab2e))
+* **web:** prerender and enrich SEO meta for more static pages ([350f3cf](https://github.com/uoplan/uoplan/commit/350f3cfa5b0e123a77438661be9d17a5f5128414))
+* **web:** rotate home banner through donation, tester, star, and feedback nudges ([39f33cf](https://github.com/uoplan/uoplan/commit/39f33cfe394e9fdd0c6baaac7ecedbde336015e3))
+* **web:** sticky comparison header, zebra striping, and simpler head-to-head ([b2d9407](https://github.com/uoplan/uoplan/commit/b2d94076fc52eb46919aa34e0a50ede23ef8c524))
+
+
+### Bug Fixes
+
+* **i18n:** label the May-August season as Summer in web trends ([77c03aa](https://github.com/uoplan/uoplan/commit/77c03aa3b053ed76f9ac2dff72425d2421989f9d))
+* **marketing:** device poses, captions, materials, and CC BY 4.0 model credits ([16cb91c](https://github.com/uoplan/uoplan/commit/16cb91c545f1385cfb260a43485eb2dce9d13588))
+* **marketing:** static iOS clip, upright bigger poses, preload to kill mac flash ([787155c](https://github.com/uoplan/uoplan/commit/787155c0d3ba10325dadf5431e0f10617630aae8))
+* serve section pages without trailing slash via drop-trailing-slash html_handling ([01f45a1](https://github.com/uoplan/uoplan/commit/01f45a17bc934344893328ca016f392d1e550fcd))
+
 ## [1.0.0-beta.39](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.38...uoplan-monorepo-v1.0.0-beta.39) (2026-06-28)
 
 
