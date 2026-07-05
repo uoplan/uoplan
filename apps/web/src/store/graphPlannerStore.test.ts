@@ -118,17 +118,32 @@ describe("graphPlannerStore", () => {
     expect(useGraphPlannerStore.getState().resultByTermId["2265"]).toBeUndefined();
   });
 
-  test("beginCalendarLink snapshots the course count and endCalendarLink clears it", () => {
+  test("beginCalendarLink snapshots the real context and endCalendarLink clears it", () => {
     const store = useGraphPlannerStore.getState();
-    store.beginCalendarLink("2269", 4);
+    const snapshot = {
+      completedCourses: ["MAT 1341"],
+      selectedTermId: "2265",
+      schedulesData: null,
+      cache: null,
+      coursesThisSemester: 4,
+      remainingRequirements: [],
+      requirementTreeWithStatus: [],
+      completedRequirementsList: [],
+      selectedPerRequirement: {},
+      selectedOptionsPerRequirement: {},
+      prereqEligibleCourses: [],
+      filteredPrereqEligibleCourses: [],
+      unassignedCompletedCourses: [],
+    };
+    store.beginCalendarLink("2269", snapshot);
     let s = useGraphPlannerStore.getState();
     expect(s.linkedCalendarTermId).toBe("2269");
-    expect(s.preLinkCoursesThisSemester).toBe(4);
+    expect(s.preLinkCompletedContext).toEqual(snapshot);
 
     store.endCalendarLink();
     s = useGraphPlannerStore.getState();
     expect(s.linkedCalendarTermId).toBeNull();
-    expect(s.preLinkCoursesThisSemester).toBeNull();
+    expect(s.preLinkCompletedContext).toBeNull();
   });
 
   test("resetPlanner returns to the empty initial state", () => {

@@ -92,29 +92,61 @@ export function DegreePlannerPage() {
   }, [navigate]);
 
   // Open a future term in the single-term calendar view so the student can tweak
-  // it closely. We forward *only* this term's exact generated schedule (so the
-  // calendar matches the graph) and its course count; the real basket is left
-  // untouched. We snapshot the prior course count so returning restores it.
+  // it closely. We treat every earlier planned term as already completed (so the
+  // calendar generates exactly like the graph — and like the normal flow with
+  // those courses taken), forward this term's exact schedule so it opens showing
+  // the same timetable, and carry its course count over. The real basket is left
+  // untouched. The student's real generation context is snapshotted so returning
+  // restores it, and persistence is suppressed while linked so the hypothetical
+  // completed set never overwrites their saved state.
   const openInCalendar = useCallback(
     async (termId: string) => {
       const pstate = useGraphPlannerStore.getState();
       const bundle = pstate.resultByTermId[termId];
       const count = plannerTermCount(pstate, termId);
       const before = storeApi.getState();
-      // Remember only the real course count so returning restores it; the basket
-      // is never modified here, so nothing else needs snapshotting.
-      beginCalendarLink(termId, before.coursesThisSemester);
-      // Switch the calendar to this term. This wipes `currentSchedule` and
-      // recomputes requirement state, so the forwarded schedule must be applied
-      // afterwards.
-      await before.setSelectedTermId(termId);
+      // Snapshot the real generation context so returning restores it exactly.
+      beginCalendarLink(termId, {
+        completedCourses: before.completedCourses,
+        selectedTermId: before.selectedTermId,
+        schedulesData: before.schedulesData,
+        cache: before.cache,
+        coursesThisSemester: before.coursesThisSemester,
+        remainingRequirements: before.remainingRequirements,
+        requirementTreeWithStatus: before.requirementTreeWithStatus,
+        completedRequirementsList: before.completedRequirementsList,
+        selectedPerRequirement: before.selectedPerRequirement,
+        selectedOptionsPerRequirement: before.selectedOptionsPerRequirement,
+        prereqEligibleCourses: before.prereqEligibleCourses,
+        filteredPrereqEligibleCourses: before.filteredPrereqEligibleCourses,
+        unassignedCompletedCourses: before.unassignedCompletedCourses,
+      });
+      // Fold every earlier enabled term's picks into the completed set, mirroring
+      // useGraphPlanner.regenerateFrom, so this term generates as if the prior
+      // ones were already taken.
+      const threshold = Number(termId);
+      const effectiveCompleted = new Set(before.completedCourses);
+      for (const id of pstate.enabledTermIds) {
+        if (Number(id) < threshold) {
+          for (const code of pstate.generatedByTermId[id]?.courses ?? []) {
+            effectiveCompleted.add(code);
+          }
+        }
+      }
+      // Apply the hypothetical completed set, then switch to this term.
+      // setSelectedTermId rebuilds the cache + recomputes all requirement state
+      // from completedCourses, so setting it first makes the calendar (options
+      // panel + generation) treat prior terms as done. It also wipes
+      // `currentSchedule`, so the forwarded schedule is applied afterwards.
+      storeApi.setState({ completedCourses: [...effectiveCompleted] });
+      await storeApi.getState().setSelectedTermId(termId);
       const next = storeApi.getState();
       if (bundle) {
         // Show the term's exact schedule from the graph, without regenerating.
         next.applyPlannerTermSchedule(bundle, count);
       } else {
         // No retained schedule (e.g. after a reload cleared the in-memory map):
-        // just carry the count over and let the student generate.
+        // carry the count over and let the student generate against this context.
         next.setCoursesThisSemester(count);
       }
       void navigate({ to: "/schedule" });
@@ -125,7 +157,7 @@ export function DegreePlannerPage() {
   // When returning from the calendar, fold whatever the student ended up with for
   // the linked term back into the planner: its schedule becomes the term's
   // displayed plan (and re-openable bundle) and any course-count change carries
-  // back. Then restore the real course count snapshotted on open. The real
+  // back. Then restore the real generation context snapshotted on open. The real
   // basket was never touched, so there is nothing to restore there.
   useEffect(() => {
     const planner = useGraphPlannerStore.getState();
@@ -155,8 +187,10 @@ export function DegreePlannerPage() {
         });
       }
     }
-    const priorCount = planner.preLinkCoursesThisSemester;
-    if (priorCount !== null) store.setCoursesThisSemester(priorCount);
+    // Restore the student's real generation context (completed set, requirement
+    // state, term, count) so the planner reflects their true progress again.
+    const snapshot = planner.preLinkCompletedContext;
+    if (snapshot) storeApi.setState({ ...snapshot });
     endCalendarLink();
     // Reconcile once, on mount, after navigating back from the calendar.
     // oxlint-disable-next-line react/exhaustive-deps
