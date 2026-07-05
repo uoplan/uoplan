@@ -454,7 +454,7 @@ msgstr "Ajoutez des cours dans Explorer."
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.cta"
-msgstr "Parcourir les cours"
+msgstr "Ouvrir Explorer"
 
 #: scripts/i18n/dynamic-keys.ts
 msgid "basket.empty.title"

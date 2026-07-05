@@ -25,6 +25,7 @@ import {
   IconInfoCircle,
   IconListCheck,
   IconSearch,
+  IconTelescope,
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
@@ -469,6 +470,7 @@ export function BasketContents({
                 size="xs"
                 radius="xl"
                 variant="light"
+                leftSection={<IconTelescope size={15} />}
                 onClick={() => onNavigate?.()}
                 renderRoot={(props) => <Link to="/explore" search={exploreSearch} {...props} />}
               >
