@@ -21,6 +21,8 @@ import {
 } from "./catalogue-merged.ts";
 import type { YearCatalogue } from "./catalogue-merged.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
+import { buildCourseSearchIndex } from "./search-index.ts";
+import type { CourseDescriptionInput } from "./search-index.ts";
 import { mapSchedules } from "./schedules.ts";
 import type { SchedulesJsonInput } from "./schedules.ts";
 import { createResolverFromRegistry } from "../professors/buildRegistry.ts";
@@ -221,6 +223,28 @@ export async function main(): Promise<void> {
         DataProto.Catalogue.encode(mapCatalogue(programsOnlyInput(data))).finish(),
       );
     }
+
+    // Compact keyword index over course descriptions (latest description per
+    // course, newest year wins). Never ships the raw description text — only
+    // folded/stemmed keyword tokens + BM25 term frequencies. See
+    // docs/explore-search.md.
+    const latestDescriptions = new Map<string, CourseDescriptionInput>();
+    for (const { data } of yearInputs) {
+      for (const course of data.courses ?? []) {
+        if (!course.code) continue;
+        latestDescriptions.set(course.code, {
+          code: course.code,
+          title: course.title ?? "",
+          description: course.description ?? "",
+        });
+      }
+    }
+    await writePb(
+      path.join(WEB_ASSETS_DATA_DIR, "catalogue.search.pb"),
+      DataProto.CourseSearchIndex.encode(
+        buildCourseSearchIndex([...latestDescriptions.values()], { topK: 6 }),
+      ).finish(),
+    );
   }
 
   const gradesJson = await readJson<unknown[]>(path.join(SCRAPER_DATA_DIR, "grades.json"));
@@ -265,7 +289,7 @@ export async function main(): Promise<void> {
   await scaffoldDataManifest();
 
   console.log(
-    `Generated protobuf data: catalogue.union.pb + ${yearInputs.length} programs-only overlays, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
+    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + ${yearInputs.length} programs-only overlays, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
   );
 }
 

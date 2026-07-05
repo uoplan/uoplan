@@ -41,6 +41,9 @@ interface CatalogueCourseInput {
   aliases?: string[];
   prereqText?: string;
   prerequisites?: PrereqInput;
+  // Present in the source JSON but intentionally dropped by mapCatalogue (never
+  // shipped as text). Consumed only to build the compact description search index.
+  description?: string;
 }
 
 interface CatalogueProgramInput {

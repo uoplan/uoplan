@@ -42,7 +42,8 @@
     "./dataTypes/protoDates": "./src/dataTypes/protoDates.ts",
     "./dataTypes/codeRef": "./src/dataTypes/codeRef.ts",
     "./professorRegistry": "./src/professorRegistry.ts",
-    "./professorRatings": "./src/professorRatings.ts"
+    "./professorRatings": "./src/professorRatings.ts",
+    "./search/descriptionSearch": "./src/search/descriptionSearch.ts"
   },
   "publishConfig": {
     "access": "public",
@@ -80,7 +81,8 @@
       "./dataTypes/protoDates": "./dist/dataTypes/protoDates.js",
       "./dataTypes/codeRef": "./dist/dataTypes/codeRef.js",
       "./professorRegistry": "./dist/professorRegistry.js",
-      "./professorRatings": "./dist/professorRatings.js"
+      "./professorRatings": "./dist/professorRatings.js",
+      "./search/descriptionSearch": "./dist/search/descriptionSearch.js"
     },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts"

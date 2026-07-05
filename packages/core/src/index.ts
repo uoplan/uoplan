@@ -29,6 +29,7 @@ export * from "./ics";
 export * from "./frenchImmersionDiploma";
 export * from "./stateEncode";
 export * from "./termDefaults";
+export * from "./search/descriptionSearch";
 export * from "./prerequisites";
 export * from "./requirements";
 export * as DataProto from "@uoplan/proto/data";

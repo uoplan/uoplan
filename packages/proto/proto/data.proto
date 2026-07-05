@@ -210,6 +210,41 @@ message PrereqRevision {
   bool has_prereq_text = 3;
 }
 
+// Compact keyword index over course descriptions, enabling a secondary
+// "matched in description" search signal without ever shipping the raw
+// description text (~1 MB gzipped). Ships a front-coded keyword dictionary +
+// per-course term frequencies — enough for BM25 scoring with exact, prefix
+// (search-as-you-type), and edit-distance fuzzy matching. See
+// docs/explore-search.md.
+message CourseSearchIndex {
+  // Normalized course codes covered by the index (only courses whose description
+  // is distinct from their title), sorted ascending for gzip locality. A posting
+  // references a course by its index in this list.
+  repeated string course_codes = 1;
+  // BM25 document length per course, parallel to `course_codes`: the number of
+  // kept keyword occurrences in that course's description.
+  repeated uint32 doc_lengths = 2 [packed = true];
+  // Sorted keyword dictionary, front-coded to collapse the shared prefixes of
+  // adjacent sorted terms. Concatenated entries, one per term (a term's id is its
+  // position): varint prefix_len (bytes shared with the previous term) + varint
+  // suffix_len (bytes) + suffix (UTF-8, ASCII in practice). Terms are the folded/
+  // stemmed keyword tokens, so a query token is matched by exact binary search,
+  // prefix range scan, or bounded edit-distance scan over this list.
+  bytes term_dictionary = 3;
+  // Document frequency (posting count) per dictionary term, parallel to the
+  // dictionary order. Its sum equals the length of `posting_course_deltas` /
+  // `posting_freqs`.
+  repeated uint32 term_dfs = 4 [packed = true];
+  // Flattened postings for every dictionary term, concatenated in dictionary
+  // order (flat arrays avoid per-term message framing). For term `t`, the next
+  // `term_dfs[t]` entries are its postings: `posting_course_deltas` holds the
+  // ascending course indices delta-encoded *within* the term (the running course
+  // index resets to 0 at each term boundary); `posting_freqs` holds the parallel
+  // term frequencies (clamped small).
+  repeated uint32 posting_course_deltas = 5 [packed = true];
+  repeated uint32 posting_freqs = 6 [packed = true];
+}
+
 enum RequirementType {
   REQUIREMENT_TYPE_UNSPECIFIED = 0;
   REQUIREMENT_TYPE_COURSE = 1;
