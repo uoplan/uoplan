@@ -48,7 +48,8 @@
     "apps/web/vite/**",
     "oxfmt.config.ts",
     "packages/i18n/lingui.config.ts",
-    "packages/theme/scripts/generate-native-tokens.ts"
+    "packages/theme/scripts/generate-native-tokens.ts",
+    "scripts/route-js-sizes.test.ts"
   ],
   // Deps genuinely used but invisible to fallow's resolver:
   // - @bufbuild/protobuf is imported by git-ignored generated proto code.
@@ -111,6 +112,11 @@
   //    importing a shared module would not apply the mock — it cannot be
   //    extracted. Ignore the sidebar test (its only clone is this stub); the
   //    AdvancedGenerationOptions side stays analysed so its own dupes still gate.
+  //  - route-js-sizes.ts ↔ data-asset-sizes.ts: the small `--json`/`--save`
+  //    snapshot-CLI arg-parsing tail. The two scripts operate on different data
+  //    shapes (SizeReport vs AssetSize[]) with different print + snapshot-path
+  //    logic, so the shared surface is just this inert CLI boilerplate; a generic
+  //    helper would add more indirection than the 8 lines it removes.
   "duplicates": {
     "ignore": [
       "apps/web/src/store/tests/generationOptionsDirty.test.ts",
@@ -119,7 +125,8 @@
       "apps/web/src/test/welcomeScreenContract.browser.test.tsx",
       "apps/web/src/lib/requirements/requirementUtils.test.ts",
       "apps/web/src/test/appStoreProvider.browser.test.tsx",
-      "apps/web/src/components/calendar/BasicCalendarSidebarControls.browser.test.tsx"
+      "apps/web/src/components/calendar/BasicCalendarSidebarControls.browser.test.tsx",
+      "scripts/route-js-sizes.ts"
     ]
   }
 }
