@@ -2797,7 +2797,7 @@ msgstr "Réduire"
 
 #: apps/web/src/components/planner/PlannerTermControls.tsx:93
 msgid "planner.calendar.termHint"
-msgstr "Cette session est ouverte dans le calendrier. Utilisez le calendrier pour parcourir et échanger les horaires."
+msgstr "Cette session est ouverte dans le calendrier. Changez d'onglet pour voir une autre session, ou réduisez pour modifier les options de cette session."
 
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.clearPlan"

@@ -98,6 +98,7 @@ export function DegreePlannerPage() {
 
   // Which future term is expanded into the in-page calendar overlay (null = none).
   const [expandedTermId, setExpandedTermId] = useState<string | null>(null);
+  const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
 
   // Open a future term in the single-term calendar view so the student can tweak
   // it closely. We treat every earlier planned term as already completed (so the
@@ -209,6 +210,50 @@ export function DegreePlannerPage() {
     setExpandedTermId(null);
   }, [reconcileLinkedTerm]);
 
+  // Switch the overlay's calendar from the currently-linked term to another:
+  // fold the old term back + restore the real context, then link the new one.
+  // Doing it in this order keeps the pre-link snapshot pointing at the student's
+  // real generation state rather than the previous term's hypothetical one.
+  const switchCalendarTerm = useCallback(
+    async (termId: string) => {
+      reconcileLinkedTerm();
+      await openInCalendar(termId);
+    },
+    [reconcileLinkedTerm, openInCalendar],
+  );
+
+  // A term tab acts as the calendar's term switcher: clicking a term that has a
+  // generated schedule expands (or switches) the floating calendar to it, while
+  // Overview or a not-yet-generated term collapses back to the graph / that
+  // term's setup controls. Desktop only — the mobile flow keeps its Modal.
+  const handleSelectTermTab = useCallback(
+    (termId: string | null) => {
+      setSelectedTermId(termId);
+      if (isMobile) return;
+      const hasSchedule =
+        termId !== null &&
+        Boolean(useGraphPlannerStore.getState().resultByTermId[termId]?.currentSchedule);
+      if (!hasSchedule) {
+        if (expandedTermId !== null) closeExpandedCalendar();
+        return;
+      }
+      if (expandedTermId === termId) return;
+      if (expandedTermId !== null) {
+        void switchCalendarTerm(termId);
+      } else {
+        void openInCalendar(termId);
+      }
+    },
+    [
+      setSelectedTermId,
+      isMobile,
+      expandedTermId,
+      closeExpandedCalendar,
+      switchCalendarTerm,
+      openInCalendar,
+    ],
+  );
+
   // Safety net: if the app was reloaded while a term was linked into the calendar
   // (the in-memory snapshot is gone but the persisted link id remains), clear the
   // stale link on mount so the planner isn't stuck suppressing persistence.
@@ -253,7 +298,7 @@ export function DegreePlannerPage() {
       regenerateTerm: (id) => void planner.regenerateFrom(id),
       previousTerm: (id) => void planner.previousTermVariant(id),
       openInCalendar: (id) => void openInCalendar(id),
-      selectTerm: setSelectedTermId,
+      selectTerm: handleSelectTermTab,
       downloadTerm,
       downloadAllTerms,
       goToPersonalize,
@@ -263,7 +308,7 @@ export function DegreePlannerPage() {
       planner,
       selectedTermId,
       openInCalendar,
-      setSelectedTermId,
+      handleSelectTermTab,
       downloadTerm,
       downloadAllTerms,
       goToPersonalize,
@@ -271,7 +316,6 @@ export function DegreePlannerPage() {
   );
 
   const [drawerOpened, drawer] = useDisclosure(false);
-  const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
 
   const hasContent = graph.courseNodes.length > 0 || graph.bandNodes.length > 0;
 
@@ -288,14 +332,6 @@ export function DegreePlannerPage() {
   // Desktop only: the "open in calendar" experience is a floating two-card
   // overlay above the dimmed graph; mobile keeps the fullscreen Modal.
   const calendarMode = expandedTermId !== null && !isMobile;
-
-  // Leaving the linked term's tab (Overview or another term) exits calendar
-  // mode, mirroring the minimize control and keeping the tab + overlay in sync.
-  useEffect(() => {
-    if (expandedTermId !== null && selectedTermId !== expandedTermId) {
-      closeExpandedCalendar();
-    }
-  }, [selectedTermId, expandedTermId, closeExpandedCalendar]);
 
   // Esc closes the desktop calendar overlay (the mobile Modal handles its own).
   useEffect(() => {
