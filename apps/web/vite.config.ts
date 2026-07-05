@@ -155,7 +155,7 @@ export default defineConfig({
           name: "unit",
           globals: true,
           environment: "node",
-          include: ["src/**/*.test.ts"],
+          include: ["src/**/*.test.ts", "vite/**/*.test.ts"],
           exclude: ["**/node_modules/**", "**/.pnpm-store/**", "**/*.browser.test.*"],
           setupFiles: ["./src/test/engineSetup.ts"],
         },
