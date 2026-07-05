@@ -31,6 +31,7 @@ export function useGraphPlanner() {
     setCountForTerm,
     setDefaultCount,
     setGeneratedTerm,
+    setTermResult,
     clearGeneratedFrom,
     clearAllGenerated,
   } = useGraphPlannerStore(
@@ -40,6 +41,7 @@ export function useGraphPlanner() {
       setCountForTerm: s.setCountForTerm,
       setDefaultCount: s.setDefaultCount,
       setGeneratedTerm: s.setGeneratedTerm,
+      setTermResult: s.setTermResult,
       clearGeneratedFrom: s.clearGeneratedFrom,
       clearAllGenerated: s.clearAllGenerated,
     })),
@@ -93,6 +95,7 @@ export function useGraphPlanner() {
             status: outcome.status,
             generatedAt: Date.now(),
           });
+          if (outcome.result) setTermResult(outcome.termId, outcome.result);
         });
       } finally {
         if (runToken.current === token) {
@@ -101,7 +104,7 @@ export function useGraphPlanner() {
         }
       }
     },
-    [storeApi, clearGeneratedFrom, setGeneratedTerm],
+    [storeApi, clearGeneratedFrom, setGeneratedTerm, setTermResult],
   );
 
   const enableAndGenerate = useCallback(

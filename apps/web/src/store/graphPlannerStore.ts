@@ -1,6 +1,7 @@
 import type { TranscriptTerm } from "@uoplan/core/transcript";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { DEFAULT_COURSES_THIS_SEMESTER } from "./generationDefaults";
 
 /** localStorage key + schema version for the degree-planner graph (beta). */
@@ -25,15 +26,12 @@ export interface PlannerGeneratedTerm {
 }
 
 /**
- * Snapshot of the main store's cart-related state, captured when the student
- * opens a future term in the calendar. Returning to the planner restores it so
- * the term's tentative picks never linger in the real (persisted, shareable)
- * cart the student didn't explicitly choose.
+ * Snapshot of the main store's `coursesThisSemester`, captured when the student
+ * opens a future term in the calendar so returning to the planner restores the
+ * real (persisted, shareable) count. The real basket is never touched, so only
+ * the count needs saving. Kept in memory (navigation is client-side), never
+ * persisted.
  */
-export interface PlannerCartSnapshot {
-  basketCourses: string[];
-  coursesThisSemester: number;
-}
 
 export interface GraphPlannerState {
   /**
@@ -52,6 +50,14 @@ export interface GraphPlannerState {
   defaultCount: number;
   /** Latest generation result per enabled term. */
   generatedByTermId: Record<string, PlannerGeneratedTerm>;
+  /**
+   * Full schedule bundle (the exact `GenerateSchedulesResult`) for each enabled
+   * term, kept so "open in calendar" can forward the term's precise schedule
+   * into the calendar view without re-generating. In-memory only (never
+   * persisted): these `GeneratedSchedule` objects are large and are transient
+   * refinement state, not something to bloat localStorage or the shareable URL.
+   */
+  resultByTermId: Record<string, GenerateSchedulesResult>;
   /**
    * Courses the student pinned to a specific future term by editing it in the
    * calendar ("courses you want" for that term). They are forced into that
@@ -74,11 +80,12 @@ export interface GraphPlannerState {
    */
   linkedCalendarTermId: string | null;
   /**
-   * Cart state captured when {@link linkedCalendarTermId} was set, restored to
-   * the main store on return so opening a term in the calendar is a
-   * non-destructive detail view. `null` when no term is linked.
+   * The main store's `coursesThisSemester` captured when
+   * {@link linkedCalendarTermId} was set, restored on return so opening a term
+   * in the calendar is a non-destructive detail view. `null` when no term is
+   * linked. In-memory only (see the snapshot docblock above).
    */
-  preLinkCart: PlannerCartSnapshot | null;
+  preLinkCoursesThisSemester: number | null;
 
   /** Replace the completed-term breakdown (called after a transcript upload). */
   setCompletedCourseTerms: (terms: TranscriptTerm[]) => void;
@@ -94,6 +101,8 @@ export interface GraphPlannerState {
   setDefaultCount: (count: number) => void;
   /** Record a term's generation result. */
   setGeneratedTerm: (result: PlannerGeneratedTerm) => void;
+  /** Record a term's full schedule bundle (see {@link resultByTermId}). */
+  setTermResult: (termId: string, result: GenerateSchedulesResult) => void;
   /** Replace the pinned "courses you want" for a specific future term. */
   setTermCart: (termId: string, courses: string[]) => void;
   /**
@@ -111,10 +120,11 @@ export interface GraphPlannerState {
   resetLayout: () => void;
   /**
    * Begin editing a future term in the calendar: remember the term and snapshot
-   * the caller's current cart so {@link endCalendarLink} can restore it.
+   * the caller's current `coursesThisSemester` so {@link endCalendarLink} can
+   * restore it. The real basket is intentionally left untouched.
    */
-  beginCalendarLink: (termId: string, snapshot: PlannerCartSnapshot) => void;
-  /** Finish calendar editing: clear the linked term and its cart snapshot. */
+  beginCalendarLink: (termId: string, priorCoursesThisSemester: number) => void;
+  /** Finish calendar editing: clear the linked term and its count snapshot. */
   endCalendarLink: () => void;
   /** Reset the whole planner to its initial empty state. */
   resetPlanner: () => void;
@@ -163,10 +173,11 @@ const initialState = {
   countByTermId: {} as Record<string, number>,
   defaultCount: DEFAULT_COURSES_THIS_SEMESTER,
   generatedByTermId: {} as Record<string, PlannerGeneratedTerm>,
+  resultByTermId: {} as Record<string, GenerateSchedulesResult>,
   cartByTerm: {} as Record<string, string[]>,
   nodePositions: {} as Record<string, { x: number; y: number }>,
   linkedCalendarTermId: null as string | null,
-  preLinkCart: null as PlannerCartSnapshot | null,
+  preLinkCoursesThisSemester: null as number | null,
 };
 
 export const useGraphPlannerStore = create<GraphPlannerState>()(
@@ -191,11 +202,13 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
         set((s) => {
           const { [termId]: _removedCount, ...countByTermId } = s.countByTermId;
           const { [termId]: _removedResult, ...generatedByTermId } = s.generatedByTermId;
+          const { [termId]: _removedBundle, ...resultByTermId } = s.resultByTermId;
           const { [termId]: _removedCart, ...cartByTerm } = s.cartByTerm;
           return {
             enabledTermIds: s.enabledTermIds.filter((id) => id !== termId),
             countByTermId,
             generatedByTermId,
+            resultByTermId,
             cartByTerm,
           };
         }),
@@ -208,6 +221,9 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
       setGeneratedTerm: (result) =>
         set((s) => ({ generatedByTermId: { ...s.generatedByTermId, [result.termId]: result } })),
 
+      setTermResult: (termId, result) =>
+        set((s) => ({ resultByTermId: { ...s.resultByTermId, [termId]: result } })),
+
       setTermCart: (termId, courses) =>
         set((s) => ({ cartByTerm: { ...s.cartByTerm, [termId]: courses } })),
 
@@ -218,23 +234,33 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
           for (const [id, result] of Object.entries(s.generatedByTermId)) {
             if (Number(id) < threshold) generatedByTermId[id] = result;
           }
-          return { generatedByTermId };
+          const resultByTermId: Record<string, GenerateSchedulesResult> = {};
+          for (const [id, bundle] of Object.entries(s.resultByTermId)) {
+            if (Number(id) < threshold) resultByTermId[id] = bundle;
+          }
+          return { generatedByTermId, resultByTermId };
         }),
 
-      clearAllGenerated: () => set({ generatedByTermId: {} }),
+      clearAllGenerated: () => set({ generatedByTermId: {}, resultByTermId: {} }),
 
       clearPlannedTerms: () =>
-        set({ enabledTermIds: [], countByTermId: {}, generatedByTermId: {}, cartByTerm: {} }),
+        set({
+          enabledTermIds: [],
+          countByTermId: {},
+          generatedByTermId: {},
+          resultByTermId: {},
+          cartByTerm: {},
+        }),
 
       setNodePosition: (id, pos) =>
         set((s) => ({ nodePositions: { ...s.nodePositions, [id]: pos } })),
 
       resetLayout: () => set({ nodePositions: {} }),
 
-      beginCalendarLink: (termId, snapshot) =>
-        set({ linkedCalendarTermId: termId, preLinkCart: snapshot }),
+      beginCalendarLink: (termId, priorCoursesThisSemester) =>
+        set({ linkedCalendarTermId: termId, preLinkCoursesThisSemester: priorCoursesThisSemester }),
 
-      endCalendarLink: () => set({ linkedCalendarTermId: null, preLinkCart: null }),
+      endCalendarLink: () => set({ linkedCalendarTermId: null, preLinkCoursesThisSemester: null }),
 
       resetPlanner: () => set({ ...initialState }),
     }),
@@ -243,6 +269,8 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
       version: STORAGE_VERSION,
       storage: createJSONStorage(plannerStorage),
       // Persist data only — action closures are re-created on rehydrate.
+      // `resultByTermId` (large schedule bundles) and `preLinkCoursesThisSemester`
+      // (transient calendar-link snapshot) are intentionally in-memory only.
       partialize: (s) => ({
         completedCourseTerms: s.completedCourseTerms,
         hasTranscript: s.hasTranscript,
@@ -253,7 +281,6 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
         cartByTerm: s.cartByTerm,
         nodePositions: s.nodePositions,
         linkedCalendarTermId: s.linkedCalendarTermId,
-        preLinkCart: s.preLinkCart,
       }),
     },
   ),

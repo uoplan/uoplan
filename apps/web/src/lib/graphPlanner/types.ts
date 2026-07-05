@@ -1,4 +1,5 @@
 import type { PlannerTermStatus } from "../../store/graphPlannerStore";
+import type { GenerateSchedulesResult } from "../generateSchedulesAction";
 
 /** Result of generating one future planner term. */
 export interface PlannerTermOutcome {
@@ -8,6 +9,12 @@ export interface PlannerTermOutcome {
   /** Requested course count for the term. */
   requestedCount: number;
   status: PlannerTermStatus;
+  /**
+   * Full schedule bundle for the term, retained so "open in calendar" can
+   * forward the exact schedule into the calendar view. `null` when generation
+   * failed or timed out.
+   */
+  result: GenerateSchedulesResult | null;
 }
 
 /** Inputs describing which terms to plan and how many courses each should hold. */

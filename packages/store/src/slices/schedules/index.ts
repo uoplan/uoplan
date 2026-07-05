@@ -571,5 +571,25 @@ export const createSchedulesSlice =
         });
         void services.persistence.flushEncodedState?.();
       },
+
+      applyPlannerTermSchedule: (result, coursesThisSemester) => {
+        // Forward a degree-planner term's exact schedule into the calendar. The
+        // dirty flag is set false last so the calendar renders this schedule as
+        // "settled" (button reads "Next", no auto-generate). The real basket is
+        // intentionally not touched by the caller.
+        set({
+          currentSchedule: result.currentSchedule,
+          swapPool: result.swapPool,
+          chosenCourseToRequirementId: result.chosenCourseToRequirementId,
+          currentPoolMap: result.currentPoolMap,
+          currentColorMap: result.currentColorMap,
+          generationError: result.generationError,
+          coursesThisSemester,
+          currentSwaps: [],
+          swapsPerSeed: {},
+          calendarWeekIndex: null,
+          generationOptionsDirty: false,
+        });
+      },
     };
   };

@@ -43,7 +43,13 @@ async function generatePlannerTerm(
   const dataKey = plannerTermDataKey(base, termId);
   const result = await generatePlannerTermViaWorker(dataKey, input);
   const courses = scheduleCourses(result);
-  return { termId, courses, requestedCount, status: classify(result, courses, requestedCount) };
+  return {
+    termId,
+    courses,
+    requestedCount,
+    status: classify(result, courses, requestedCount),
+    result,
+  };
 }
 
 /**

@@ -26,5 +26,6 @@ export interface SchedulesSlice {
   blacklistCourseFromSwap: AppStore["blacklistCourseFromSwap"];
   unblacklistCourseFromSwap: AppStore["unblacklistCourseFromSwap"];
   importSchedule: AppStore["importSchedule"];
+  applyPlannerTermSchedule: AppStore["applyPlannerTermSchedule"];
   clearEnrollmentsCache: AppStore["clearEnrollmentsCache"];
 }

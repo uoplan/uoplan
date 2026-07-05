@@ -105,6 +105,22 @@ describe("runPlanner", () => {
     expect(seen).toEqual(["2265", "2269"]);
   });
 
+  test("surfaces the full result bundle on each outcome for calendar forwarding", async () => {
+    workerImpl.mockImplementation((dataKey: { termId: string }) =>
+      scheduleWith([`${dataKey.termId}-A`]),
+    );
+    const outcomes = await runPlanner(base, { ...config, enabledTermIds: ["2265"] }, []);
+    expect(outcomes[0].result?.currentSchedule?.enrollments.map((e) => e.courseCode)).toEqual([
+      "2265-A",
+    ]);
+  });
+
+  test("a failed term surfaces a null result bundle", async () => {
+    workerImpl.mockResolvedValue(null);
+    const outcomes = await runPlanner(base, { ...config, enabledTermIds: ["2265"] }, []);
+    expect(outcomes[0].result).toBeNull();
+  });
+
   test("forces each term's pinned cart courses and threads them forward", async () => {
     workerImpl.mockImplementation(
       (dataKey: { termId: string }, input: { completedCourses: string[] }) => {

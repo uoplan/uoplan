@@ -341,6 +341,25 @@ export interface AppActions {
   setCalendarMode: (mode: CalendarVariant | null) => void;
   clearEnrollmentsCache: () => void;
   importSchedule: (schedule: GeneratedSchedule) => void;
+  /**
+   * Apply a schedule generated elsewhere (the degree-planner graph) directly to
+   * the calendar view, so opening a planner term shows its exact schedule
+   * without re-generating. Sets the full result bundle + the term's course count
+   * and clears the dirty flag so nothing auto-runs. Structurally accepts an
+   * apps/web `GenerateSchedulesResult`.
+   */
+  applyPlannerTermSchedule: (
+    result: Pick<
+      AppState,
+      | "currentSchedule"
+      | "swapPool"
+      | "chosenCourseToRequirementId"
+      | "currentPoolMap"
+      | "currentColorMap"
+      | "generationError"
+    >,
+    coursesThisSemester: number,
+  ) => void;
   resetToDefault: () => void;
 }
 

@@ -48,7 +48,8 @@ export function DegreePlannerPage() {
   const setNodePosition = useGraphPlannerStore((s) => s.setNodePosition);
   const resetLayout = useGraphPlannerStore((s) => s.resetLayout);
   const setGeneratedTerm = useGraphPlannerStore((s) => s.setGeneratedTerm);
-  const setTermCart = useGraphPlannerStore((s) => s.setTermCart);
+  const setTermResult = useGraphPlannerStore((s) => s.setTermResult);
+  const setCountForTerm = useGraphPlannerStore((s) => s.setCountForTerm);
   const beginCalendarLink = useGraphPlannerStore((s) => s.beginCalendarLink);
   const endCalendarLink = useGraphPlannerStore((s) => s.endCalendarLink);
 
@@ -91,61 +92,71 @@ export function DegreePlannerPage() {
   }, [navigate]);
 
   // Open a future term in the single-term calendar view so the student can tweak
-  // it closely. We snapshot the real cart, seed the calendar with this term's
-  // planned courses, and switch it to that term; edits are reconciled back and
-  // the real cart is restored on return (effect below).
+  // it closely. We forward *only* this term's exact generated schedule (so the
+  // calendar matches the graph) and its course count; the real basket is left
+  // untouched. We snapshot the prior course count so returning restores it.
   const openInCalendar = useCallback(
     async (termId: string) => {
       const pstate = useGraphPlannerStore.getState();
-      // Seed the calendar's cart with this term's pinned courses (or, if none
-      // were pinned yet, its generated picks) so the student can refine them.
-      const pinned = pstate.cartByTerm[termId] ?? [];
-      const seed = pinned.length > 0 ? pinned : (pstate.generatedByTermId[termId]?.courses ?? []);
+      const bundle = pstate.resultByTermId[termId];
       const count = plannerTermCount(pstate, termId);
       const before = storeApi.getState();
-      // Remember the real cart so returning to the planner restores it instead
-      // of committing this term's tentative picks to the main flow.
-      beginCalendarLink(termId, {
-        basketCourses: [...before.basketCourses],
-        coursesThisSemester: before.coursesThisSemester,
-      });
+      // Remember only the real course count so returning restores it; the basket
+      // is never modified here, so nothing else needs snapshotting.
+      beginCalendarLink(termId, before.coursesThisSemester);
+      // Switch the calendar to this term. This wipes `currentSchedule` and
+      // recomputes requirement state, so the forwarded schedule must be applied
+      // afterwards.
       await before.setSelectedTermId(termId);
       const next = storeApi.getState();
-      next.setBasketCourses(seed);
-      next.setCoursesThisSemester(count);
+      if (bundle) {
+        // Show the term's exact schedule from the graph, without regenerating.
+        next.applyPlannerTermSchedule(bundle, count);
+      } else {
+        // No retained schedule (e.g. after a reload cleared the in-memory map):
+        // just carry the count over and let the student generate.
+        next.setCoursesThisSemester(count);
+      }
       void navigate({ to: "/schedule" });
     },
     [storeApi, navigate, beginCalendarLink],
   );
 
   // When returning from the calendar, fold whatever the student ended up with for
-  // the linked term back into the planner: the cart becomes the term's pinned
-  // courses (forced on regenerate) and the schedule becomes its displayed plan.
-  // Then restore the real cart snapshotted when opening, so the term's tentative
-  // picks never linger in the main flow's cart.
+  // the linked term back into the planner: its schedule becomes the term's
+  // displayed plan (and re-openable bundle) and any course-count change carries
+  // back. Then restore the real course count snapshotted on open. The real
+  // basket was never touched, so there is nothing to restore there.
   useEffect(() => {
     const planner = useGraphPlannerStore.getState();
     const linked = planner.linkedCalendarTermId;
     if (!linked) return;
     const store = storeApi.getState();
     if (store.selectedTermId === linked && planner.enabledTermIds.includes(linked)) {
-      setTermCart(linked, [...store.basketCourses]);
       const plan = planCoursesFromCalendar(store.currentSchedule, store.basketCourses);
+      const newCount = store.coursesThisSemester;
+      setCountForTerm(linked, newCount);
+      // Keep the exact calendar schedule so re-opening this term still matches.
+      setTermResult(linked, {
+        currentSchedule: store.currentSchedule,
+        swapPool: store.swapPool,
+        chosenCourseToRequirementId: store.chosenCourseToRequirementId,
+        currentPoolMap: store.currentPoolMap,
+        currentColorMap: store.currentColorMap,
+        generationError: store.generationError,
+      });
       if (plan.length > 0) {
         setGeneratedTerm({
           termId: linked,
           courses: plan,
-          requestedCount: plannerTermCount(planner, linked),
+          requestedCount: newCount,
           status: "ok",
           generatedAt: Date.now(),
         });
       }
     }
-    const snapshot = planner.preLinkCart;
-    if (snapshot) {
-      store.setBasketCourses(snapshot.basketCourses);
-      store.setCoursesThisSemester(snapshot.coursesThisSemester);
-    }
+    const priorCount = planner.preLinkCoursesThisSemester;
+    if (priorCount !== null) store.setCoursesThisSemester(priorCount);
     endCalendarLink();
     // Reconcile once, on mount, after navigating back from the calendar.
     // oxlint-disable-next-line react/exhaustive-deps

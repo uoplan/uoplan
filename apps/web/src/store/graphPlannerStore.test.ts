@@ -90,6 +90,47 @@ describe("graphPlannerStore", () => {
     expect(Object.keys(s.generatedByTermId).sort()).toEqual(["2265"]);
   });
 
+  test("setTermResult retains a bundle that disableTerm and clearGeneratedFrom drop", () => {
+    const bundle = (code: string) =>
+      ({
+        currentSchedule: { enrollments: [{ courseCode: code }] },
+        swapPool: [],
+        chosenCourseToRequirementId: {},
+        currentPoolMap: {},
+        currentColorMap: {},
+        generationError: null,
+      }) as never;
+    const store = useGraphPlannerStore.getState();
+    for (const id of ["2265", "2269", "2271"]) {
+      store.enableTerm(id);
+      store.setTermResult(id, bundle(`C ${id}`));
+    }
+    expect(Object.keys(useGraphPlannerStore.getState().resultByTermId).sort()).toEqual([
+      "2265",
+      "2269",
+      "2271",
+    ]);
+
+    store.clearGeneratedFrom("2269");
+    expect(Object.keys(useGraphPlannerStore.getState().resultByTermId).sort()).toEqual(["2265"]);
+
+    store.disableTerm("2265");
+    expect(useGraphPlannerStore.getState().resultByTermId["2265"]).toBeUndefined();
+  });
+
+  test("beginCalendarLink snapshots the course count and endCalendarLink clears it", () => {
+    const store = useGraphPlannerStore.getState();
+    store.beginCalendarLink("2269", 4);
+    let s = useGraphPlannerStore.getState();
+    expect(s.linkedCalendarTermId).toBe("2269");
+    expect(s.preLinkCoursesThisSemester).toBe(4);
+
+    store.endCalendarLink();
+    s = useGraphPlannerStore.getState();
+    expect(s.linkedCalendarTermId).toBeNull();
+    expect(s.preLinkCoursesThisSemester).toBeNull();
+  });
+
   test("resetPlanner returns to the empty initial state", () => {
     const store = useGraphPlannerStore.getState();
     store.setCompletedCourseTerms([term("2022 Fall Term", 2022, ["ADM 1100"])]);
