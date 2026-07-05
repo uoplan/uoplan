@@ -36,6 +36,7 @@
     "fallow": "fallow",
     "check:fallow": "fallow --fail-on-issues --skip health",
     "size": "pnpm --filter web size",
+    "size:data": "node scripts/data-asset-sizes.ts",
     "analyze": "pnpm --filter web analyze",
     "data:grades": "pnpm --filter scraper grades:convert && pnpm --filter scraper scrape:grades && pnpm --filter scraper enrich:schedules && pnpm build:data-proto",
     "data:build": "pnpm --filter scraper grades:convert && pnpm --filter scraper scrape:grades && pnpm --filter scraper build:professors && pnpm --filter scraper enrich:schedules && pnpm build:data-proto",

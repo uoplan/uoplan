@@ -177,6 +177,39 @@ message CoursePrereqNode {
   optional CoursePrereqKind kind = 10;
 }
 
+// Per-course prerequisite history. The union `Catalogue` carries each course's
+// LATEST prerequisites; this overlay reconstructs earlier cohorts' prerequisites
+// (and powers a per-course prereq changelog) without shipping a full catalogue
+// per year. Only prerequisites are tracked — credits/title/component drift is
+// negligible or non-cohort-critical, so consumers use the latest values for
+// those. See @uoplan/core reconstructCatalogueForYear.
+message CataloguePrereqHistory {
+  // Catalogue years this overlay is defined against, sorted ascending. Bit `i`
+  // of every `PrereqRevision.year_mask` corresponds to `years[i]`. The newest
+  // year is the baseline (its prerequisites live in the union Catalogue) and is
+  // never referenced by a revision.
+  repeated uint32 years = 1 [packed = true];
+  repeated CoursePrereqOverlay overlays = 2;
+}
+
+message CoursePrereqOverlay {
+  // 0-based index into the union `Catalogue.course_codes`.
+  uint32 code = 1;
+  // Distinct prerequisite values this course had in non-latest years, each with
+  // the set of years it applied to. A course with stable prerequisites has no
+  // overlay entry at all.
+  repeated PrereqRevision revisions = 2;
+}
+
+message PrereqRevision {
+  // Bitmask over `CataloguePrereqHistory.years`: which years used this value.
+  uint32 year_mask = 1;
+  // Prerequisites for those years; absent = the course had no prerequisites then.
+  optional CoursePrereqNode prerequisites = 2;
+  // Mirror of `Course.has_prereq_text` for those years.
+  bool has_prereq_text = 3;
+}
+
 enum RequirementType {
   REQUIREMENT_TYPE_UNSPECIFIED = 0;
   REQUIREMENT_TYPE_COURSE = 1;

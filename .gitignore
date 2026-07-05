@@ -36,3 +36,5 @@ coverage-runtime/
 # Excel exports under raw/xlsx/ plus the per-term CSVs generated from them by
 # `pnpm --filter scraper grades:convert`.
 apps/scraper/data/raw/
+# local data-asset size snapshots
+scripts/.size-snapshots/
