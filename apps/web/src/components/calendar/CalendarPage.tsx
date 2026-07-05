@@ -12,6 +12,7 @@ import {
   Text,
   Title,
   Tooltip,
+  UnstyledButton,
 } from "@mantine/core";
 import { useHotkeys, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -124,7 +125,16 @@ function ScheduleNavigationButtons({
   );
 }
 
-export function CalendarPage() {
+export interface CalendarPageProps {
+  /**
+   * When the calendar is rendered inside the degree planner's in-page overlay
+   * (instead of as the standalone `/schedule` route), this closes the overlay.
+   * The planner's back affordance then returns to the graph without navigating.
+   */
+  onExit?: () => void;
+}
+
+export function CalendarPage({ onExit }: CalendarPageProps = {}) {
   const analytics = useAnalytics();
   const viewedScheduleKey = useRef<string | null>(null);
 
@@ -353,7 +363,20 @@ export function CalendarPage() {
 
   const sidebarControls = (
     <>
-      {openedFromPlanner ? (
+      {onExit ? (
+        <UnstyledButton
+          onClick={onExit}
+          aria-label={tr("planner.title")}
+          style={{ alignSelf: "flex-start", color: "var(--mantine-color-dimmed)" }}
+        >
+          <Group gap={2} wrap="nowrap">
+            <IconChevronLeft size={15} stroke={1.8} />
+            <Text size="sm" c="dimmed">
+              {tr("planner.title")}
+            </Text>
+          </Group>
+        </UnstyledButton>
+      ) : openedFromPlanner ? (
         <BackButton fallbackTo="/schedule/graph" fallbackLabel={tr("planner.title")} />
       ) : (
         <BackButton fallbackTo="/personalize" />

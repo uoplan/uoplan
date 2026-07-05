@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ActionIcon, Drawer, Group, Text } from "@mantine/core";
+import { ActionIcon, Drawer, Group, Modal, Text } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconAdjustments } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
@@ -16,6 +16,7 @@ import { PlannerCanvas } from "./PlannerCanvas";
 import { PlannerSidebar } from "./PlannerSidebar";
 import { PlannerEmptyState } from "./PlannerEmptyState";
 import { FloatingPlannerPanel } from "./FloatingPlannerPanel";
+import { CalendarPage } from "../calendar/CalendarPage";
 import { PlannerActionsProvider } from "./plannerActionsContext";
 import type { PlannerActions } from "./plannerActionsContext";
 import { computeFutureTermColumns } from "./plannerColumns";
@@ -89,6 +90,9 @@ export function DegreePlannerPage() {
     void navigate({ to: "/personalize" });
   }, [navigate]);
 
+  // Which future term is expanded into the in-page calendar overlay (null = none).
+  const [expandedTermId, setExpandedTermId] = useState<string | null>(null);
+
   // Open a future term in the single-term calendar view so the student can tweak
   // it closely. We treat every earlier planned term as already completed (so the
   // calendar generates exactly like the graph — and like the normal flow with
@@ -147,17 +151,19 @@ export function DegreePlannerPage() {
         // carry the count over and let the student generate against this context.
         next.setCoursesThisSemester(count);
       }
-      void navigate({ to: "/schedule" });
+      // Expand the calendar in place over the graph instead of navigating away.
+      setExpandedTermId(termId);
     },
-    [storeApi, navigate, beginCalendarLink],
+    [storeApi, beginCalendarLink],
   );
 
-  // When returning from the calendar, fold whatever the student ended up with for
-  // the linked term back into the planner: its schedule becomes the term's
-  // displayed plan (and re-openable bundle) and any course-count change carries
-  // back. Then restore the real generation context snapshotted on open. The real
-  // basket was never touched, so there is nothing to restore there.
-  useEffect(() => {
+  // Fold whatever the student ended up with for the linked term back into the
+  // planner: its schedule becomes the term's displayed plan (and re-openable
+  // bundle) and any course-count change carries back. Then restore the real
+  // generation context snapshotted on open. The real basket was never touched, so
+  // there is nothing to restore there. Shared by the overlay-close handler and a
+  // mount-time safety net (for a reload that happened mid-link).
+  const reconcileLinkedTerm = useCallback(() => {
     const planner = useGraphPlannerStore.getState();
     const linked = planner.linkedCalendarTermId;
     if (!linked) return;
@@ -190,7 +196,19 @@ export function DegreePlannerPage() {
     const snapshot = planner.preLinkCompletedContext;
     if (snapshot) storeApi.setState({ ...snapshot });
     endCalendarLink();
-    // Reconcile once, on mount, after navigating back from the calendar.
+  }, [storeApi, setCountForTerm, setTermResult, setGeneratedTerm, endCalendarLink]);
+
+  const closeExpandedCalendar = useCallback(() => {
+    reconcileLinkedTerm();
+    setExpandedTermId(null);
+  }, [reconcileLinkedTerm]);
+
+  // Safety net: if the app was reloaded while a term was linked into the calendar
+  // (the in-memory snapshot is gone but the persisted link id remains), clear the
+  // stale link on mount so the planner isn't stuck suppressing persistence.
+  useEffect(() => {
+    reconcileLinkedTerm();
+    // Reconcile once on mount only.
     // oxlint-disable-next-line react/exhaustive-deps
   }, []);
 
@@ -288,6 +306,20 @@ export function DegreePlannerPage() {
       >
         {renderSidebar(true)}
       </Drawer>
+
+      <Modal
+        opened={expandedTermId !== null}
+        onClose={closeExpandedCalendar}
+        fullScreen
+        withCloseButton={false}
+        padding={0}
+        zIndex={150}
+        transitionProps={{ transition: "scale", duration: 160 }}
+        styles={{ body: { height: "100dvh", padding: 0 } }}
+        aria-label={expandedTermId ? formatTermLabel(expandedTermId) : tr("calendarPage.title")}
+      >
+        {expandedTermId ? <CalendarPage onExit={closeExpandedCalendar} /> : null}
+      </Modal>
     </PlannerActionsProvider>
   );
 }
