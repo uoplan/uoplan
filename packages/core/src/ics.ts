@@ -95,26 +95,39 @@ function pickLocation(sectionText: string): string | null {
   return `${building} ${room}`;
 }
 
-export function buildScheduleIcs(args: {
-  schedule: GeneratedSchedule;
-  cache: DataCache | null;
-  startDate: string; // YYYY-MM-DD
-  endDate: string; // YYYY-MM-DD
-}): string {
-  const { schedule, cache, startDate, endDate } = args;
+type ICalendar = ReturnType<typeof ical>;
+
+/**
+ * Resolve a start/end ISO date pair to the UTC-midnight start date and the
+ * `UNTIL` bound `ical-generator` expects. Throws when either date is malformed.
+ */
+function resolveDateRange(startDate: string, endDate: string): { start: Date; until: Date } {
   const start = utcDateFromIso(startDate);
   const end = utcDateFromIso(endDate);
   if (!start || !end) {
     throw new Error("Invalid date range for iCalendar export");
   }
-
   // UTC midnight on the end date, matching the original export's UNTIL format.
   const until = new Date(
     Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate(), 0, 0, 0, 0),
   );
+  return { start, until };
+}
 
-  const calendar = ical({ prodId: "//uoplan//EN" });
-
+/**
+ * Append every meeting of a schedule to an existing calendar as weekly-repeating
+ * VEVENTs anchored to `start` and repeating until `until`. `uidPrefix`
+ * disambiguates UIDs when several schedules (e.g. multiple planned terms) are
+ * merged into one calendar so the same course in two terms never collides.
+ */
+function addScheduleEvents(
+  calendar: ICalendar,
+  schedule: GeneratedSchedule,
+  cache: DataCache | null,
+  start: Date,
+  until: Date,
+  uidPrefix = "",
+): void {
   for (const enrollment of schedule.enrollments) {
     const courseCode = enrollment.courseCode;
     const courseTitle =
@@ -150,7 +163,7 @@ export function buildScheduleIcs(args: {
         const delta = (startIsoDow - startDow + 7) % 7;
         const firstDay = addUtcDays(start, delta);
 
-        const uid = `${courseCode}-${component}-${t.day}-${t.startMinutes}-${t.endMinutes}@uoplan`;
+        const uid = `${uidPrefix}${courseCode}-${component}-${t.day}-${t.startMinutes}-${t.endMinutes}@uoplan`;
 
         calendar.createEvent({
           id: uid,
@@ -168,6 +181,48 @@ export function buildScheduleIcs(args: {
       }
     }
   }
+}
 
+export function buildScheduleIcs(args: {
+  schedule: GeneratedSchedule;
+  cache: DataCache | null;
+  startDate: string; // YYYY-MM-DD
+  endDate: string; // YYYY-MM-DD
+}): string {
+  const { schedule, cache, startDate, endDate } = args;
+  const { start, until } = resolveDateRange(startDate, endDate);
+
+  const calendar = ical({ prodId: "//uoplan//EN" });
+  addScheduleEvents(calendar, schedule, cache, start, until);
+  return calendar.toString();
+}
+
+/** One planned term's schedule plus its own date range for a combined export. */
+export interface CombinedScheduleSegment {
+  schedule: GeneratedSchedule;
+  startDate: string; // YYYY-MM-DD
+  endDate: string; // YYYY-MM-DD
+  /**
+   * Stable per-segment discriminator (e.g. the term id) folded into every UID so
+   * the same course appearing in two terms yields distinct events.
+   */
+  key: string;
+}
+
+/**
+ * Build a single iCalendar covering several planned terms. Each segment keeps
+ * its own recurrence window (`UNTIL`) so a fall course doesn't bleed into the
+ * winter term, and its `key` disambiguates UIDs across terms.
+ */
+export function buildCombinedScheduleIcs(args: {
+  segments: CombinedScheduleSegment[];
+  cache: DataCache | null;
+}): string {
+  const { segments, cache } = args;
+  const calendar = ical({ prodId: "//uoplan//EN" });
+  for (const segment of segments) {
+    const { start, until } = resolveDateRange(segment.startDate, segment.endDate);
+    addScheduleEvents(calendar, segment.schedule, cache, start, until, `${segment.key}-`);
+  }
   return calendar.toString();
 }
