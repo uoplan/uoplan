@@ -8,7 +8,6 @@ import { shouldEnablePreload } from "./lib/preloadStrategy";
 import { routeTree } from "./routeTree.gen";
 import { setRouterInstance } from "./routerRef";
 import { AppThemeProvider } from "./theme/AppThemeProvider";
-import "@fontsource/dm-mono/300.css";
 import "@fontsource/dm-mono/400.css";
 import "@fontsource/dm-mono/500.css";
 import "@fontsource/dm-serif-display/400.css";
