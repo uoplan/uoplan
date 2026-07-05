@@ -133,6 +133,21 @@ describe("graphPlannerStore", () => {
     expect(useGraphPlannerStore.getState().seedByTermId).toEqual({});
   });
 
+  test("panel position and collapsed state persist; resetLayout re-anchors the panel", () => {
+    const store = useGraphPlannerStore.getState();
+    store.setPanelPosition({ x: 200, y: 120 });
+    store.setPanelCollapsed(true);
+    let s = useGraphPlannerStore.getState();
+    expect(s.panelPosition).toEqual({ x: 200, y: 120 });
+    expect(s.panelCollapsed).toBe(true);
+
+    store.resetLayout();
+    s = useGraphPlannerStore.getState();
+    expect(s.panelPosition).toBeNull();
+    // Collapsing is a separate preference; resetLayout only re-anchors position.
+    expect(s.panelCollapsed).toBe(true);
+  });
+
   test("beginCalendarLink snapshots the real context and endCalendarLink clears it", () => {
     const store = useGraphPlannerStore.getState();
     const snapshot = {

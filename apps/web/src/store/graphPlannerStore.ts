@@ -107,6 +107,18 @@ export interface GraphPlannerState {
    */
   nodeSizes: Record<string, { width: number; height: number }>;
   /**
+   * Position of the floating planner panel on the graph canvas, as a top-left
+   * offset (px) from the canvas's top-left corner. `null` uses the default
+   * detached anchor (top-left with a gap). Persisted so the panel stays where
+   * the student dragged it.
+   */
+  panelPosition: { x: number; y: number } | null;
+  /**
+   * Whether the floating planner panel is collapsed to just its header. Lets the
+   * student tuck the controls away to see the full graph. Persisted.
+   */
+  panelCollapsed: boolean;
+  /**
    * When the student opens a future term in the calendar view ("modify this one
    * closely"), we remember which term so the planner can reconcile the calendar's
    * edits back into {@link generatedByTermId} when they return. `null` when no
@@ -157,6 +169,10 @@ export interface GraphPlannerState {
   setNodeSize: (id: string, size: { width: number; height: number }) => void;
   /** Clear all manual node positions, restoring the automatic layout. */
   resetLayout: () => void;
+  /** Persist the floating panel's dragged position (see {@link panelPosition}). */
+  setPanelPosition: (pos: { x: number; y: number } | null) => void;
+  /** Collapse or expand the floating planner panel (see {@link panelCollapsed}). */
+  setPanelCollapsed: (collapsed: boolean) => void;
   /**
    * Begin editing a future term in the calendar: remember the term and snapshot
    * the caller's real generation context so {@link endCalendarLink} can restore
@@ -219,6 +235,8 @@ const initialState = {
   seedByTermId: {} as Record<string, number>,
   nodePositions: {} as Record<string, { x: number; y: number }>,
   nodeSizes: {} as Record<string, { width: number; height: number }>,
+  panelPosition: null as { x: number; y: number } | null,
+  panelCollapsed: false,
   linkedCalendarTermId: null as string | null,
   preLinkCompletedContext: null as PlannerCalendarSnapshot | null,
 };
@@ -306,7 +324,11 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
 
       setNodeSize: (id, size) => set((s) => ({ nodeSizes: { ...s.nodeSizes, [id]: size } })),
 
-      resetLayout: () => set({ nodePositions: {}, nodeSizes: {} }),
+      resetLayout: () => set({ nodePositions: {}, nodeSizes: {}, panelPosition: null }),
+
+      setPanelPosition: (pos) => set({ panelPosition: pos }),
+
+      setPanelCollapsed: (collapsed) => set({ panelCollapsed: collapsed }),
 
       beginCalendarLink: (termId, snapshot) =>
         set({ linkedCalendarTermId: termId, preLinkCompletedContext: snapshot }),
@@ -335,6 +357,8 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
         seedByTermId: s.seedByTermId,
         nodePositions: s.nodePositions,
         nodeSizes: s.nodeSizes,
+        panelPosition: s.panelPosition,
+        panelCollapsed: s.panelCollapsed,
         linkedCalendarTermId: s.linkedCalendarTermId,
       }),
     },

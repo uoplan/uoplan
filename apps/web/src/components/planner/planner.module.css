@@ -310,12 +310,72 @@
   min-height: 0;
   min-width: 0;
   height: 100%;
+  position: relative;
 }
 
-.sidebar {
+/* ---- Floating, movable planner panel (detached over the full-screen graph) ---- */
+.floatingPanel {
+  position: absolute;
+  z-index: 5;
+  width: min(340px, calc(100% - 24px));
+  max-height: calc(100% - 96px);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--app-radius-lg);
+  border: var(--app-border-width) solid var(--app-border);
+  background: color-mix(in srgb, var(--app-surface) 92%, transparent);
+  box-shadow: var(--app-shadow-lg, 0 12px 32px rgb(0 0 0 / 28%));
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.floatingPanel[data-collapsed] {
+  width: min(280px, calc(100% - 24px));
+}
+
+.floatingPanelHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 10px;
+  cursor: grab;
+  border-bottom: var(--app-border-width) solid var(--app-border);
+  touch-action: none;
+  user-select: none;
+}
+
+.floatingPanel[data-collapsed] .floatingPanelHeader {
+  border-bottom: none;
+}
+
+.floatingPanelHeader:active {
+  cursor: grabbing;
+}
+
+.floatingPanelGrip {
+  color: var(--app-text-muted);
   flex-shrink: 0;
+}
+
+.floatingPanelTitle {
+  font-family: var(--app-font-heading);
+  font-weight: 700;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--app-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.floatingPanelHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.floatingPanelBody {
   min-height: 0;
   overflow-y: auto;
-  padding: 16px;
-  background: var(--app-surface);
+  padding: 14px;
 }

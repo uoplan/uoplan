@@ -2904,6 +2904,16 @@ msgstr "Missing prerequisite"
 msgid "planner.options.title"
 msgstr "Generation options"
 
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:150
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:157
+msgid "planner.panel.collapse"
+msgstr "Collapse panel"
+
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:150
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:157
+msgid "planner.panel.expand"
+msgstr "Expand panel"
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:140
 msgid "planner.regenerate"
 msgstr "Regenerate"

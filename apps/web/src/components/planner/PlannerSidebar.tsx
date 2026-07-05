@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import {
+  ActionIcon,
   Alert,
-  Badge,
   Button,
   Divider,
   Group,
@@ -9,6 +9,7 @@ import {
   Skeleton,
   Stack,
   Text,
+  Tooltip,
 } from "@mantine/core";
 import {
   IconInfoCircle,
@@ -39,6 +40,12 @@ export interface PlannerSidebarProps {
   onClearPlan: () => void;
   onResetLayout: () => void;
   onPersonalize: () => void;
+  /**
+   * Render the reset-layout / clear-plan icon buttons in the body. The desktop
+   * floating panel puts them in its draggable header instead, so it passes
+   * `false`; the mobile drawer keeps them here.
+   */
+  showLayoutActions?: boolean;
 }
 
 function LegendItem({ token, label }: { token: string; label: string }) {
@@ -65,21 +72,12 @@ export function PlannerSidebar(props: PlannerSidebarProps) {
     onClearPlan,
     onResetLayout,
     onPersonalize,
+    showLayoutActions = true,
   } = props;
 
   return (
     <Stack gap="md">
       <BackButton fallbackTo="/personalize" />
-      <div>
-        <Group gap="xs" align="center">
-          <Text fz="xl" fw={700}>
-            {tr("planner.title")}
-          </Text>
-          <Badge size="sm" variant="light" color="grape">
-            {tr("app.beta")}
-          </Badge>
-        </Group>
-      </div>
 
       {!hasProgram ? (
         <Alert
@@ -133,27 +131,33 @@ export function PlannerSidebar(props: PlannerSidebarProps) {
         />
       </Group>
 
-      <Group gap="xs">
-        <Button
-          size="xs"
-          variant="subtle"
-          color="gray"
-          leftSection={<IconLayoutGrid size={16} />}
-          onClick={onResetLayout}
-        >
-          {tr("planner.controls.resetLayout")}
-        </Button>
-        <Button
-          size="xs"
-          variant="subtle"
-          color="red"
-          leftSection={<IconTrash size={16} />}
-          disabled={isGenerating || !hasEnabledTerms}
-          onClick={onClearPlan}
-        >
-          {tr("planner.clearPlan")}
-        </Button>
-      </Group>
+      {showLayoutActions ? (
+        <Group gap="xs">
+          <Tooltip label={tr("planner.controls.resetLayout")} withArrow>
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="lg"
+              aria-label={tr("planner.controls.resetLayout")}
+              onClick={onResetLayout}
+            >
+              <IconLayoutGrid size={18} />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label={tr("planner.clearPlan")} withArrow>
+            <ActionIcon
+              variant="subtle"
+              color="red"
+              size="lg"
+              aria-label={tr("planner.clearPlan")}
+              disabled={isGenerating || !hasEnabledTerms}
+              onClick={onClearPlan}
+            >
+              <IconTrash size={18} />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
+      ) : null}
 
       {hasProgram ? (
         <>

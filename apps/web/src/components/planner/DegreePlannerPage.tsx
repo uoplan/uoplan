@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ActionIcon, Box, Drawer, Group, Text } from "@mantine/core";
+import { ActionIcon, Drawer, Group, Text } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconAdjustments } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
@@ -15,8 +15,7 @@ import { formatTermLabel, formatTranscriptTermLabel } from "../../lib/term/termL
 import { PlannerCanvas } from "./PlannerCanvas";
 import { PlannerSidebar } from "./PlannerSidebar";
 import { PlannerEmptyState } from "./PlannerEmptyState";
-import { SidebarResizeHandle } from "../shared/SidebarResizeHandle";
-import { useSidebarResize } from "../shared/useSidebarResize";
+import { FloatingPlannerPanel } from "./FloatingPlannerPanel";
 import { PlannerActionsProvider } from "./plannerActionsContext";
 import type { PlannerActions } from "./plannerActionsContext";
 import { computeFutureTermColumns } from "./plannerColumns";
@@ -217,11 +216,10 @@ export function DegreePlannerPage() {
 
   const [drawerOpened, drawer] = useDisclosure(false);
   const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
-  const sidebarResize = useSidebarResize();
 
   const hasContent = graph.courseNodes.length > 0 || graph.bandNodes.length > 0;
 
-  const sidebar = (
+  const renderSidebar = (showLayoutActions: boolean) => (
     <PlannerSidebar
       hasProgram={program !== null}
       hasTranscript={hasTranscript}
@@ -233,6 +231,7 @@ export function DegreePlannerPage() {
       onClearPlan={clearPlannedTerms}
       onResetLayout={resetLayout}
       onPersonalize={goToPersonalize}
+      showLayoutActions={showLayoutActions}
     />
   );
 
@@ -257,24 +256,22 @@ export function DegreePlannerPage() {
 
         {hasContent ? (
           <div className={styles.body}>
-            {isMobile ? null : (
-              <>
-                <Box
-                  className={styles.sidebar}
-                  ref={sidebarResize.asideRef}
-                  style={{ width: sidebarResize.width }}
-                >
-                  {sidebar}
-                </Box>
-                <SidebarResizeHandle controller={sidebarResize} />
-              </>
-            )}
             <div className={styles.canvasWrap}>
               <PlannerCanvas
                 graph={graph}
                 onNodePositionCommit={handleNodePositionCommit}
                 onResetLayout={resetLayout}
               />
+              {isMobile ? null : (
+                <FloatingPlannerPanel
+                  title={tr("planner.title")}
+                  onResetLayout={resetLayout}
+                  onClearPlan={clearPlannedTerms}
+                  clearDisabled={planner.isGenerating || enabledTermIds.length === 0}
+                >
+                  {renderSidebar(false)}
+                </FloatingPlannerPanel>
+              )}
             </div>
           </div>
         ) : (
@@ -289,7 +286,7 @@ export function DegreePlannerPage() {
         size="min(88vw, 360px)"
         title={tr("planner.title")}
       >
-        {sidebar}
+        {renderSidebar(true)}
       </Drawer>
     </PlannerActionsProvider>
   );

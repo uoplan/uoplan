@@ -2904,6 +2904,16 @@ msgstr "Préalable manquant"
 msgid "planner.options.title"
 msgstr "Options de génération"
 
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:150
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:157
+msgid "planner.panel.collapse"
+msgstr "Réduire le panneau"
+
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:150
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:157
+msgid "planner.panel.expand"
+msgstr "Agrandir le panneau"
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:140
 msgid "planner.regenerate"
 msgstr "Régénérer"
