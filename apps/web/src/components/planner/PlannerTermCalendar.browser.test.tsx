@@ -1,5 +1,6 @@
 import { page } from "vitest/browser";
-import { type ReactElement, useState } from "react";
+import { useState } from "react";
+import type { ReactElement } from "react";
 import { expect, test } from "vitest";
 import {
   createMemoryHistory,
