@@ -29,6 +29,7 @@ import {
 } from "../../lib/explore/programSearch";
 import { filterFaculties } from "../../lib/explore/faculty";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
+import { useDescriptionSearchIndex } from "../../hooks/useDescriptionSearchIndex";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 
 const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
@@ -69,8 +70,14 @@ export function useExploreResults({
   remainingRequirements,
   completedCourses,
 }: UseExploreResultsArgs) {
-  const { loading, getCourseEntries, getProfessorEntries, getTermPresence, getCourseFuse } =
-    useExploreOfferings();
+  const {
+    loading,
+    getCourseEntries,
+    getCourseEntryByNorm,
+    getProfessorEntries,
+    getTermPresence,
+    getCourseFuse,
+  } = useExploreOfferings();
 
   const needsSearchIndex = debouncedQuery.trim().length > 0 || activeFilters;
   const [indexNeeded, setIndexNeeded] = useState(() => query.trim().length > 0 || activeFilters);
@@ -82,11 +89,30 @@ export function useExploreResults({
   const professorEntries = indexNeeded ? getProfessorEntries() : EMPTY_PROFESSOR_ENTRIES;
   const courseFuse = indexNeeded ? getCourseFuse() : null;
 
+  // Description keyword search is a text-query-only augmentation (not used in the
+  // filter-only browse mode), lazily fetched on first query.
+  const descriptionSearchEnabled = debouncedQuery.trim().length > 0;
+  const { index: descriptionIndex } = useDescriptionSearchIndex(descriptionSearchEnabled);
+
   const rawSearchResults = useMemo(() => {
     const q = debouncedQuery.trim();
     if (!q || !courseFuse) return null;
-    return searchExplore(q, { courseFuse, courseEntries, professorEntries });
-  }, [debouncedQuery, courseFuse, courseEntries, professorEntries]);
+    return searchExplore(q, {
+      courseFuse,
+      courseEntries,
+      professorEntries,
+      descriptionIndex,
+      courseEntryByNorm: indexNeeded ? getCourseEntryByNorm() : null,
+    });
+  }, [
+    debouncedQuery,
+    courseFuse,
+    courseEntries,
+    professorEntries,
+    descriptionIndex,
+    indexNeeded,
+    getCourseEntryByNorm,
+  ]);
 
   const termSets = useMemo<ExploreTermSets | undefined>(() => {
     if (filters.termId === null) return;

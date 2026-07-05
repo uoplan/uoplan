@@ -1,6 +1,7 @@
 import {
   buildProfessorRatingsMap,
   DataProto,
+  DescriptionSearchIndex,
   FeedbackProto,
   fromProtoCatalogue,
   fromProtoCatalogueManifest,
@@ -29,6 +30,7 @@ import type { FetchBytes } from "./transport";
 export const dataAssetIds = {
   manifest: "catalogue.pb",
   catalogueUnion: "catalogue.union.pb",
+  catalogueSearch: "catalogue.search.pb",
   cataloguePrereqHistory: "catalogue.history.pb",
   catalogueProgramsForYear: (year: number): string => `catalogue.programs.${year}.pb`,
   schedules: (termId: string): string => `schedules.${termId}.pb`,
@@ -81,6 +83,15 @@ export async function loadCatalogueProgramsForYear(
 ): Promise<Catalogue> {
   return fromProtoCatalogue(
     DataProto.Catalogue.decode(await fetchBytes(dataAssetIds.catalogueProgramsForYear(year))),
+  );
+}
+
+/** Decode the compact course-description keyword index for explore search. */
+export async function loadCourseSearchIndex(
+  fetchBytes: FetchBytes,
+): Promise<DescriptionSearchIndex> {
+  return DescriptionSearchIndex.fromProto(
+    DataProto.CourseSearchIndex.decode(await fetchBytes(dataAssetIds.catalogueSearch)),
   );
 }
 

@@ -18,6 +18,7 @@ import {
 } from "@uoplan/core";
 import { buildAliasGroups, resolveComponentId } from "@uoplan/core/courseAlias";
 import type { AliasGroups } from "@uoplan/core/courseAlias";
+import type { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
 import { searchProfessorsScored } from "../graph/professorGraphSearch";
 import type { ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";
@@ -635,19 +636,58 @@ export function exploreProfessorsSectionFirst(
   );
 }
 
+/**
+ * Append description-only keyword hits below the code/title Fuse results. Each
+ * BM25 match is resolved to its explore course entry (dropping courses with no
+ * offering row to render), deduped by alias-component id against the Fuse hits,
+ * and capped at {@link EXPLORE_MAX_COURSE_RESULTS}. Keeps description hits a
+ * strictly secondary signal — they never reorder the code/title matches above.
+ */
+function appendDescriptionMatches(
+  fuseItems: ExploreCourseSearchEntry[],
+  rawQuery: string,
+  descriptionIndex: DescriptionSearchIndex | null | undefined,
+  entryByNorm: Map<string, ExploreCourseSearchEntry> | null | undefined,
+): ExploreCourseSearchEntry[] {
+  if (!descriptionIndex || !entryByNorm || fuseItems.length >= EXPLORE_MAX_COURSE_RESULTS) {
+    return fuseItems;
+  }
+  const matches = descriptionIndex.search(rawQuery);
+  if (matches.length === 0) return fuseItems;
+
+  const seen = new Set<string>(fuseItems.map((e) => e.componentId));
+  const merged = fuseItems.slice();
+  for (const match of matches) {
+    if (merged.length >= EXPLORE_MAX_COURSE_RESULTS) break;
+    const entry = entryByNorm.get(match.code);
+    if (!entry || seen.has(entry.componentId)) continue;
+    seen.add(entry.componentId);
+    merged.push(entry);
+  }
+  return merged;
+}
+
 export function searchExplore(
   rawQuery: string,
   opts: {
     courseFuse: Fuse<ExploreCourseSearchEntry> | null;
     courseEntries: ExploreCourseSearchEntry[];
     professorEntries: ExploreProfessorSearchEntry[];
+    descriptionIndex?: DescriptionSearchIndex | null;
+    courseEntryByNorm?: Map<string, ExploreCourseSearchEntry> | null;
   },
 ): ExploreSearchResult {
   const courseScored =
     opts.courseFuse && opts.courseEntries.length > 0
       ? searchExploreCoursesScored(opts.courseFuse, opts.courseEntries, rawQuery)
       : { items: [] as ExploreCourseSearchEntry[], topScore: null as number | null };
-  const { items: courses, topScore: courseTopScore } = courseScored;
+  const { items: fuseCourses, topScore: courseTopScore } = courseScored;
+  const courses = appendDescriptionMatches(
+    fuseCourses,
+    rawQuery,
+    opts.descriptionIndex,
+    opts.courseEntryByNorm,
+  );
   const { items: professors, topRank: profTopRank } = searchExploreProfessorsScored(
     opts.professorEntries,
     rawQuery,

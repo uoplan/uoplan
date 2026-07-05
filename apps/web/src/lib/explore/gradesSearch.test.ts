@@ -21,7 +21,49 @@ import {
 } from "./gradesSearch";
 import type { ExploreOfferingFlat } from "./gradesSearch";
 import type { Catalogue, CourseGradesData, CourseSchedule, SchedulesData } from "@uoplan/core";
+import { DataProto, DescriptionSearchIndex } from "@uoplan/core";
 import { testCourseCode, testProfessorName } from "../../test/brands";
+
+/** Build a {@link DescriptionSearchIndex} over explicit term → postings for tests. */
+function buildDescriptionIndex(
+  courseCodes: string[],
+  postingsByTerm: Record<string, [courseIndex: number, freq: number][]>,
+): DescriptionSearchIndex {
+  const sortedTerms = Object.keys(postingsByTerm).sort();
+  const dict: number[] = [];
+  const encoder = new TextEncoder();
+  let previous = "";
+  for (const term of sortedTerms) {
+    let prefixLength = 0;
+    const max = Math.min(previous.length, term.length);
+    while (prefixLength < max && previous[prefixLength] === term[prefixLength]) prefixLength += 1;
+    const suffix = encoder.encode(term.slice(prefixLength));
+    dict.push(prefixLength, suffix.length, ...suffix);
+    previous = term;
+  }
+  const termDfs: number[] = [];
+  const postingCourseDeltas: number[] = [];
+  const postingFreqs: number[] = [];
+  for (const term of sortedTerms) {
+    const postings = [...postingsByTerm[term]].sort((a, b) => a[0] - b[0]);
+    termDfs.push(postings.length);
+    let prev = 0;
+    for (const [courseIndex, freq] of postings) {
+      postingCourseDeltas.push(courseIndex - prev);
+      prev = courseIndex;
+      postingFreqs.push(freq);
+    }
+  }
+  const proto: DataProto.CourseSearchIndex = {
+    courseCodes,
+    docLengths: courseCodes.map(() => 1),
+    termDictionary: Uint8Array.from(dict),
+    termDfs,
+    postingCourseDeltas,
+    postingFreqs,
+  };
+  return DescriptionSearchIndex.fromProto(proto);
+}
 
 type OfferingPartial = Partial<Omit<ExploreOfferingFlat, "courseCode" | "professorName">> & {
   courseCode?: string;
@@ -288,6 +330,54 @@ describe("searchExplore", () => {
       professorEntries: profEntries,
     });
     expect(courseOnly.courses.length).toBeGreaterThan(0);
+  });
+
+  it("appends description-only keyword hits below code/title matches", () => {
+    const courseEntries = buildCourseSearchEntries(offerings);
+    const profEntries = buildExploreProfessorSearchEntries(offerings);
+    const fuse = createExploreCourseFuse(courseEntries);
+    const courseEntryByNorm = new Map(courseEntries.map((e) => [e.normCode as string, e]));
+    // "algorithm" matches neither title/code, but the description index maps it
+    // to CSI 2110.
+    const descriptionIndex = buildDescriptionIndex([testCourseCode("CSI 2110")], {
+      algorithm: [[0, 1]],
+    });
+
+    const withoutIndex = searchExplore("algorithm", {
+      courseFuse: fuse,
+      courseEntries,
+      professorEntries: profEntries,
+    });
+    expect(withoutIndex.courses).toHaveLength(0);
+
+    const withIndex = searchExplore("algorithm", {
+      courseFuse: fuse,
+      courseEntries,
+      professorEntries: profEntries,
+      descriptionIndex,
+      courseEntryByNorm,
+    });
+    expect(withIndex.courses.map((c) => c.courseCode)).toContain("CSI 2110");
+  });
+
+  it("does not duplicate a course already matched by code/title", () => {
+    const courseEntries = buildCourseSearchEntries(offerings);
+    const profEntries = buildExploreProfessorSearchEntries(offerings);
+    const fuse = createExploreCourseFuse(courseEntries);
+    const courseEntryByNorm = new Map(courseEntries.map((e) => [e.normCode as string, e]));
+    const descriptionIndex = buildDescriptionIndex([testCourseCode("CSI 2110")], {
+      structure: [[0, 1]],
+    });
+
+    const result = searchExplore("structures", {
+      courseFuse: fuse,
+      courseEntries,
+      professorEntries: profEntries,
+      descriptionIndex,
+      courseEntryByNorm,
+    });
+    const csiHits = result.courses.filter((c) => c.componentId === "CSI 2110");
+    expect(csiHits).toHaveLength(1);
   });
 });
 
