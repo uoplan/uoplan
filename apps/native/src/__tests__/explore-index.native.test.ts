@@ -1,4 +1,7 @@
 import type { SchedulesData } from "@uoplan/core/dataTypes";
+import { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
+import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
+import type { CourseSearchIndex } from "@uoplan/proto/data";
 
 import {
   type AppDataBundle,
@@ -9,6 +12,51 @@ import {
   type ExploreProfessorEntry,
   searchExplore,
 } from "@/data/explore-index";
+
+/**
+ * Build a {@link DescriptionSearchIndex} over explicit `term → [courseIndex, freq]`
+ * postings for tests (front-codes the sorted vocab + delta-encodes postings, the
+ * same wire layout the scraper emits).
+ */
+function buildDescriptionIndex(
+  courseCodes: string[],
+  postingsByTerm: Record<string, [courseIndex: number, freq: number][]>,
+): DescriptionSearchIndex {
+  const sortedTerms = Object.keys(postingsByTerm).sort();
+  const dict: number[] = [];
+  const encoder = new TextEncoder();
+  let previous = "";
+  for (const term of sortedTerms) {
+    let prefixLength = 0;
+    const max = Math.min(previous.length, term.length);
+    while (prefixLength < max && previous[prefixLength] === term[prefixLength]) prefixLength += 1;
+    const suffix = encoder.encode(term.slice(prefixLength));
+    dict.push(prefixLength, suffix.length, ...suffix);
+    previous = term;
+  }
+  const termDfs: number[] = [];
+  const postingCourseDeltas: number[] = [];
+  const postingFreqs: number[] = [];
+  for (const term of sortedTerms) {
+    const postings = [...postingsByTerm[term]].sort((a, b) => a[0] - b[0]);
+    termDfs.push(postings.length);
+    let prev = 0;
+    for (const [courseIndex, freq] of postings) {
+      postingCourseDeltas.push(courseIndex - prev);
+      prev = courseIndex;
+      postingFreqs.push(freq);
+    }
+  }
+  const proto: CourseSearchIndex = {
+    courseCodes,
+    docLengths: courseCodes.map(() => 1),
+    termDictionary: Uint8Array.from(dict),
+    termDfs,
+    postingCourseDeltas,
+    postingFreqs,
+  };
+  return DescriptionSearchIndex.fromProto(proto);
+}
 
 /** Build a small but realistic bundle covering every result type. */
 function makeBundle(): AppDataBundle {
@@ -215,6 +263,30 @@ describe("searchExplore", () => {
     expect(results.professors).toEqual([]);
   });
 
+  it("surfaces description-only keyword matches below code/title hits", () => {
+    // "MAT 1320" (Calculus I) matches neither the code nor title of the query
+    // "integral", but its description index posting does.
+    const descriptionIndex = buildDescriptionIndex([normalizeCourseCode("MAT 1320")], {
+      integral: [[0, 3]],
+    });
+    const withDescription = buildExploreIndex(makeBundle(), undefined, descriptionIndex);
+
+    expect(searchExplore(index, "integral").courses).toEqual([]);
+    expect(searchExplore(withDescription, "integral").courses.map((c) => c.code)).toContain(
+      "MAT 1320",
+    );
+  });
+
+  it("keeps code/title matches ranked above description-only matches", () => {
+    // "iti" matches ITI 1120 by code; the description index also maps it to MAT 1320.
+    const descriptionIndex = buildDescriptionIndex([normalizeCourseCode("MAT 1320")], {
+      iti: [[0, 3]],
+    });
+    const withDescription = buildExploreIndex(makeBundle(), undefined, descriptionIndex);
+    const codes = searchExplore(withDescription, "iti").courses.map((c) => c.code);
+    expect(codes.indexOf("ITI 1120")).toBeLessThan(codes.indexOf("MAT 1320"));
+  });
+
   it("keeps the existing numeric limit argument working", () => {
     const filterIndex = makeFilterIndex();
     const results = searchExplore(filterIndex, "course", 2);
@@ -381,6 +453,7 @@ function makeFilterIndex(): ExploreIndex {
     disciplines: [],
     faculties: [],
     programs: [],
+    descriptionIndex: null,
   };
 }
 

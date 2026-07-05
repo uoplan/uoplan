@@ -21,6 +21,7 @@ const REQUIRED_ASSETS = [
   "feedback.pb",
   "catalogue.pb",
   "catalogue.union.pb",
+  "catalogue.search.pb",
 ];
 
 /**

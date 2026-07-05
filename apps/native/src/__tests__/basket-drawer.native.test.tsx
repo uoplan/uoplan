@@ -100,6 +100,7 @@ const index: ExploreIndex = {
   faculties: [],
   professors: [],
   programs: [],
+  descriptionIndex: null,
 };
 
 function setData() {

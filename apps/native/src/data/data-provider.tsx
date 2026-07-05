@@ -25,6 +25,7 @@ import { loadAppDataWithFallback } from "./load-with-fallback";
 import {
   decodeCatalogue,
   decodeCatalogueManifest,
+  decodeCourseSearchIndex,
   decodeDisciplines,
   decodeFeedbackData,
   decodeGrades,
@@ -112,6 +113,13 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
   ]);
   const feedback = buildFeedbackIndex(feedbackData, indicesCourses);
 
+  // Best-effort: the compact BM25 description index is a secondary search signal,
+  // so a missing/incompatible `catalogue.search.pb` disables description search
+  // rather than failing the whole load.
+  const descriptionIndexPromise = load("catalogue.search.pb", decodeCourseSearchIndex).catch(
+    () => null,
+  );
+
   const schedulesByTerm = new Map<string, SchedulesData>();
   await Promise.all(
     plan.scheduleTermIds.map(async (termId) => {
@@ -128,7 +136,7 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
     professors,
     ratings,
   };
-  const index = buildExploreIndex(bundle, schedulesByTerm);
+  const index = buildExploreIndex(bundle, schedulesByTerm, await descriptionIndexPromise);
   const aliasGroups = buildAliasGroups(catalogue);
 
   // Background: cache remaining catalogue-year + feedback bytes for offline.
@@ -142,6 +150,7 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
     "feedback.pb",
     "indices.pb",
     "catalogue.union.pb",
+    "catalogue.search.pb",
     ...plan.scheduleTermIds.map((t) => `schedules.${t}.pb`),
   ]);
   void Promise.allSettled(deferredAssetIds(manifest, eager).map((id) => fetchBytes(id)));

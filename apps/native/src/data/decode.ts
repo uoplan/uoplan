@@ -21,6 +21,7 @@ import { buildProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import type { ProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import { fromProtoProfessorsData } from "@uoplan/core/professorRegistry";
 import type { ProfessorRegistryEntry } from "@uoplan/core/professorRegistry";
+import { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
 import {
   Catalogue as ProtoCatalogue,
   CatalogueManifest as ProtoCatalogueManifest,
@@ -66,6 +67,11 @@ export function decodeCatalogue(bytes: Uint8Array): Catalogue {
 
 export function decodeSchedules(bytes: Uint8Array): SchedulesData {
   return fromProtoSchedulesData(ProtoSchedulesData.decode(bytes));
+}
+
+/** Decode `catalogue.search.pb` into the query-time BM25 description index. */
+export function decodeCourseSearchIndex(bytes: Uint8Array): DescriptionSearchIndex {
+  return DescriptionSearchIndex.fromBytes(bytes);
 }
 
 export function decodeProfessors(bytes: Uint8Array): ProfessorRegistryEntry[] {

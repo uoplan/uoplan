@@ -15,6 +15,7 @@ import {
 } from "@uoplan/core/gradeDistribution";
 import { normalizeProfessorName, type ProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import type { ProfessorRegistryEntry } from "@uoplan/core/professorRegistry";
+import type { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 
 /** Grades excluded from the GPA denominator (mirrors web `gradedHeadcount`). */
@@ -89,6 +90,9 @@ export interface ExploreIndex {
   faculties: ExploreFacultyEntry[];
   programs: ExploreProgramEntry[];
   professors: ExploreProfessorEntry[];
+  /** Compact BM25 keyword index over course descriptions (secondary search
+   *  signal), or `null` when the `catalogue.search.pb` asset is unavailable. */
+  descriptionIndex: DescriptionSearchIndex | null;
 }
 
 export interface ExploreSearchResults {
@@ -171,6 +175,7 @@ function disciplinePrefix(code: string): string {
 export function buildExploreIndex(
   bundle: AppDataBundle,
   schedulesByTerm?: ReadonlyMap<string, SchedulesData>,
+  descriptionIndex?: DescriptionSearchIndex | null,
 ): ExploreIndex {
   const distByCourse = new Map<string, Distribution>();
   const distByProfRef = new Map<number, Distribution>();
@@ -295,7 +300,14 @@ export function buildExploreIndex(
   });
   professors.sort((a, b) => a.name.localeCompare(b.name));
 
-  return { courses, disciplines, faculties, programs, professors };
+  return {
+    courses,
+    disciplines,
+    faculties,
+    programs,
+    professors,
+    descriptionIndex: descriptionIndex ?? null,
+  };
 }
 
 /**
@@ -354,6 +366,39 @@ function score(haystack: string, needle: string): number {
 }
 
 const DEFAULT_LIMIT = 12;
+
+/**
+ * Append description-only keyword hits below the ranked code/title matches. Each
+ * BM25 match is resolved (by normalized code) to a course entry from the already
+ * filtered set, deduped against the ranked hits, and capped at `limit`. Keeps
+ * description hits a strictly secondary signal — they never displace or reorder
+ * the code/title matches above them (mirrors the web explore merge).
+ */
+function appendCourseDescriptionMatches(
+  ranked: ExploreCourseEntry[],
+  filteredCourses: ExploreCourseEntry[],
+  query: string,
+  descriptionIndex: DescriptionSearchIndex | null,
+  limit: number,
+): ExploreCourseEntry[] {
+  if (!descriptionIndex || ranked.length >= limit) return ranked;
+  const matches = descriptionIndex.search(query);
+  if (matches.length === 0) return ranked;
+
+  const entryByNorm = new Map<string, ExploreCourseEntry>();
+  for (const course of filteredCourses) entryByNorm.set(normalizeCourseCode(course.code), course);
+
+  const seen = new Set<string>(ranked.map((c) => c.code));
+  const merged = ranked.slice();
+  for (const match of matches) {
+    if (merged.length >= limit) break;
+    const entry = entryByNorm.get(match.code);
+    if (!entry || seen.has(entry.code)) continue;
+    seen.add(entry.code);
+    merged.push(entry);
+  }
+  return merged;
+}
 
 export function exploreCourseLevel(code: string): ExploreCourseLevel | null {
   const match = code.match(/(\d{4,5})/);
@@ -587,7 +632,13 @@ export function searchExplore(
 
   return {
     courses: sortCourses(
-      rank(courses, (c) => [c.code, c.title]),
+      appendCourseDescriptionMatches(
+        rank(courses, (c) => [c.code, c.title]),
+        courses,
+        q,
+        index.descriptionIndex,
+        limit,
+      ),
       filters,
     ),
     professors: sortProfessors(

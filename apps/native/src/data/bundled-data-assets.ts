@@ -7,6 +7,7 @@ declare const require: (id: string) => BundledDataAssetModule;
 
 export const BUNDLED_DATA_MODULES = {
   "catalogue.pb": require("../../assets/data/catalogue.pb"),
+  "catalogue.search.pb": require("../../assets/data/catalogue.search.pb"),
   "catalogue.union.pb": require("../../assets/data/catalogue.union.pb"),
   "disciplines.pb": require("../../assets/data/disciplines.pb"),
   "feedback.pb": require("../../assets/data/feedback.pb"),
