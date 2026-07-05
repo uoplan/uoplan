@@ -2795,10 +2795,6 @@ msgstr "Regenerate term"
 msgid "planner.calendar.minimize"
 msgstr "Minimize"
 
-#: apps/web/src/components/planner/PlannerTermControls.tsx:93
-msgid "planner.calendar.termHint"
-msgstr "This term is open in the calendar. Switch tabs to view another term, or minimize to edit this term's options."
-
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.clearPlan"
 msgstr "Clear plan"

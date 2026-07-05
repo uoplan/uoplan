@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   ActionIcon,
   Alert,
-  Badge,
   Box,
   Button,
   Divider,
@@ -21,7 +20,6 @@ import {
   IconArrowsDiagonalMinimize2,
   IconChevronLeft,
   IconChevronRight,
-  IconInfoCircle,
   IconSettings,
 } from "@tabler/icons-react";
 import {
@@ -42,6 +40,7 @@ import {
 import { useBasketCourses } from "../../hooks/useBasket";
 import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import { CalendarView } from "./CalendarView";
+import { NoTimeslotBanner } from "./NoTimeslotBanner";
 import { BackButton } from "../shared/BackButton";
 import { PersonalizeBanner } from "../shared/PersonalizeBanner";
 import { buildScheduleIcs, normalizeCourseCode } from "@uoplan/core";
@@ -267,49 +266,6 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
     setTimetableEndDate,
   );
 
-  const noTimeslotCourses =
-    currentSchedule?.enrollments
-      .filter((enrollment) => enrollment.times.length === 0)
-      .map((enrollment) => {
-        const title = cache?.getCourse(enrollment.courseCode)?.title.trim();
-        return {
-          code: enrollment.courseCode,
-          title: title || null,
-        };
-      }) ?? [];
-
-  const noTimeslotBanner =
-    noTimeslotCourses.length > 0 ? (
-      <Alert
-        icon={<IconInfoCircle size={16} />}
-        radius="md"
-        py="xs"
-        data-testid="no-timeslot-banner"
-        style={{
-          flexShrink: 0,
-          backgroundColor: "var(--app-info-soft)",
-          border: "1px solid var(--app-info)",
-        }}
-      >
-        <Group gap={6} align="center" wrap="wrap">
-          <Text size="xs" fw={600} style={{ color: "var(--app-text)" }}>
-            {tr("calendarPage.noTimeslotCourses.title")}
-          </Text>
-          {noTimeslotCourses.map((course) => (
-            <Badge
-              key={course.code}
-              size="sm"
-              variant="light"
-              color="gray"
-              title={course.title ? `${course.code}: ${course.title}` : course.code}
-            >
-              {course.code}
-            </Badge>
-          ))}
-        </Group>
-      </Alert>
-    ) : null;
-
   const startOk =
     Boolean(timetableStartDate) && !Number.isNaN(Date.parse(`${timetableStartDate}T00:00:00Z`));
   const endOk =
@@ -421,7 +377,7 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
               onPrevious={handlePrevious}
             />
           )}
-          {noTimeslotBanner}
+          <NoTimeslotBanner />
           <BasicGenerationOptions />
         </>
       ) : (
@@ -458,7 +414,7 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
 
           <Divider color="var(--app-border)" />
 
-          {noTimeslotBanner}
+          <NoTimeslotBanner />
 
           <AdvancedGenerationOptions />
 
@@ -595,16 +551,11 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
             </Box>
           </Group>
 
-          {(noTimeslotBanner || (scheduleNoVariety && !generationError)) && (
+          {scheduleNoVariety && !generationError && (
             <Stack gap={8} style={{ flexShrink: 0, padding: "10px 12px 0" }}>
-              {noTimeslotBanner}
-              {scheduleNoVariety && !generationError && (
-                <Alert color="yellow" variant="light" radius="md" py="xs">
-                  {tr(
-                    hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules",
-                  )}
-                </Alert>
-              )}
+              <Alert color="yellow" variant="light" radius="md" py="xs">
+                {tr(hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules")}
+              </Alert>
             </Stack>
           )}
 

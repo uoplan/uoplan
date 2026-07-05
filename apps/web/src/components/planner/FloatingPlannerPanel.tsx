@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import {
-  IconArrowsDiagonalMinimize2,
   IconChevronDown,
   IconChevronUp,
   IconGripVertical,
@@ -29,11 +28,10 @@ interface FloatingPlannerPanelProps {
    * When true, the panel abandons its floating/draggable behaviour and docks to
    * the left of the canvas (enlarged, full-height minus margins) as the sidebar
    * of the "open in calendar" overlay. Dragging, resizing and collapsing are
-   * disabled; a minimize control replaces the collapse toggle.
+   * disabled; the header carries only the term title (the minimize control lives
+   * on the calendar card).
    */
   calendarMode?: boolean;
-  /** Exit calendar mode (used by the minimize control). */
-  onExitCalendar?: () => void;
 }
 
 /**
@@ -51,7 +49,6 @@ export function FloatingPlannerPanel({
   clearDisabled,
   children,
   calendarMode = false,
-  onExitCalendar,
 }: FloatingPlannerPanelProps) {
   useTr();
   const storedPosition = useGraphPlannerStore((s) => s.panelPosition);
@@ -243,19 +240,7 @@ export function FloatingPlannerPanel({
         )}
         <span className={styles.floatingPanelTitle}>{title}</span>
         <div className={styles.floatingPanelHeaderActions}>
-          {calendarMode ? (
-            <Tooltip label={tr("planner.calendar.minimize")} withArrow>
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                size="sm"
-                aria-label={tr("planner.calendar.minimize")}
-                onClick={onExitCalendar}
-              >
-                <IconArrowsDiagonalMinimize2 size={15} />
-              </ActionIcon>
-            </Tooltip>
-          ) : (
+          {calendarMode ? null : (
             <>
               <Tooltip label={tr("planner.controls.resetLayout")} withArrow>
                 <ActionIcon

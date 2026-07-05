@@ -210,6 +210,14 @@ export function DegreePlannerPage() {
     setExpandedTermId(null);
   }, [reconcileLinkedTerm]);
 
+  // Minimizing the calendar (its minimize control, the scrim, or Esc) exits the
+  // overlay and returns to the Overview tab, so the panel lands back on the
+  // whole-plan view rather than the just-closed term's (now hint-only) tab.
+  const minimizeCalendar = useCallback(() => {
+    closeExpandedCalendar();
+    setSelectedTermId(null);
+  }, [closeExpandedCalendar, setSelectedTermId]);
+
   // Switch the overlay's calendar from the currently-linked term to another:
   // fold the old term back + restore the real context, then link the new one.
   // Doing it in this order keeps the pre-link snapshot pointing at the student's
@@ -337,11 +345,11 @@ export function DegreePlannerPage() {
   useEffect(() => {
     if (!calendarMode) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeExpandedCalendar();
+      if (event.key === "Escape") minimizeCalendar();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [calendarMode, closeExpandedCalendar]);
+  }, [calendarMode, minimizeCalendar]);
 
   const renderSidebar = (showLayoutActions: boolean, sidebarCalendarMode = false) => (
     <PlannerSidebar
@@ -392,7 +400,6 @@ export function DegreePlannerPage() {
                   onClearPlan={clearPlannedTerms}
                   clearDisabled={planner.isGenerating || enabledTermIds.length === 0}
                   calendarMode={calendarMode}
-                  onExitCalendar={closeExpandedCalendar}
                 >
                   {renderSidebar(false, calendarMode)}
                 </FloatingPlannerPanel>
@@ -408,7 +415,7 @@ export function DegreePlannerPage() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        onClick={closeExpandedCalendar}
+                        onClick={minimizeCalendar}
                         aria-hidden
                       />,
                       <m.div
@@ -426,7 +433,7 @@ export function DegreePlannerPage() {
                         exit={{ opacity: 0, scale: 0.97 }}
                         transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
                       >
-                        <CalendarPage variant="embedded" onExit={closeExpandedCalendar} />
+                        <CalendarPage variant="embedded" onExit={minimizeCalendar} />
                       </m.div>,
                     ]
                   : null}
@@ -448,7 +455,7 @@ export function DegreePlannerPage() {
 
       <Modal
         opened={expandedTermId !== null && isMobile}
-        onClose={closeExpandedCalendar}
+        onClose={minimizeCalendar}
         fullScreen
         withCloseButton={false}
         padding={0}
@@ -457,7 +464,7 @@ export function DegreePlannerPage() {
         styles={{ body: { height: "100dvh", padding: 0 } }}
         aria-label={expandedTermId ? formatTermLabel(expandedTermId) : tr("calendarPage.title")}
       >
-        {expandedTermId ? <CalendarPage onExit={closeExpandedCalendar} /> : null}
+        {expandedTermId ? <CalendarPage onExit={minimizeCalendar} /> : null}
       </Modal>
     </PlannerActionsProvider>
   );

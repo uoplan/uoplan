@@ -12,6 +12,7 @@ import { tr, useTr } from "../../i18n";
 import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlannerStore";
 import { useSeedNavigation } from "../../store/hooks";
 import { canDownloadTerm } from "../../lib/graphPlanner/downloadPlannerIcs";
+import { NoTimeslotBanner } from "../calendar/NoTimeslotBanner";
 import { usePlannerActions } from "./plannerActionsContext";
 
 /**
@@ -83,16 +84,11 @@ export function PlannerTermControls({
     );
   }
 
-  // While this term is expanded into the calendar overlay, schedule navigation
-  // and options live in the calendar card + the shared generation options below
-  // — the planner-flow controls here would drive a different (isolated) store and
-  // desync from the live timetable, so we replace them with a hint.
+  // While this term is expanded into the calendar overlay, the calendar card +
+  // shared generation options own all the controls; here we only surface the
+  // "some courses don't appear on the schedule" notice for the live timetable.
   if (calendarMode) {
-    return (
-      <Text fz="sm" c="dimmed">
-        {tr("planner.calendar.termHint")}
-      </Text>
-    );
+    return <NoTimeslotBanner />;
   }
 
   return (
