@@ -23,7 +23,13 @@ import { usePlannerActions } from "./plannerActionsContext";
  * and remove. The shared cart + advanced options live below the panel tabs (they
  * are global), so this component only carries the term-scoped actions.
  */
-export function PlannerTermControls({ termId }: { termId: string }) {
+export function PlannerTermControls({
+  termId,
+  calendarMode = false,
+}: {
+  termId: string;
+  calendarMode?: boolean;
+}) {
   useTr();
   const actions = usePlannerActions();
   const enabled = useGraphPlannerStore((s) => s.enabledTermIds.includes(termId));
@@ -74,6 +80,18 @@ export function PlannerTermControls({ termId }: { termId: string }) {
           {tr("planner.term.enable")}
         </Button>
       </Stack>
+    );
+  }
+
+  // While this term is expanded into the calendar overlay, schedule navigation
+  // and options live in the calendar card + the shared generation options below
+  // — the planner-flow controls here would drive a different (isolated) store and
+  // desync from the live timetable, so we replace them with a hint.
+  if (calendarMode) {
+    return (
+      <Text fz="sm" c="dimmed">
+        {tr("planner.calendar.termHint")}
+      </Text>
     );
   }
 

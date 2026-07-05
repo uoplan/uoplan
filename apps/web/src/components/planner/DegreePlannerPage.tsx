@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { AnimatePresence, m } from "framer-motion";
 import { Modal, UnstyledButton } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconAdjustments } from "@tabler/icons-react";
@@ -22,6 +23,7 @@ import { BottomDrawer } from "../shared/BottomDrawer";
 import { PlannerActionsProvider } from "./plannerActionsContext";
 import type { PlannerActions } from "./plannerActionsContext";
 import { computeFutureTermColumns } from "./plannerColumns";
+import { CALENDAR_OVERLAY_CARD_LEFT, CALENDAR_OVERLAY_MARGIN } from "./plannerCalendarOverlay";
 import styles from "./planner.module.css";
 
 export function DegreePlannerPage() {
@@ -283,7 +285,29 @@ export function DegreePlannerPage() {
     [setSelectedTermId, isMobile, drawer],
   );
 
-  const renderSidebar = (showLayoutActions: boolean) => (
+  // Desktop only: the "open in calendar" experience is a floating two-card
+  // overlay above the dimmed graph; mobile keeps the fullscreen Modal.
+  const calendarMode = expandedTermId !== null && !isMobile;
+
+  // Leaving the linked term's tab (Overview or another term) exits calendar
+  // mode, mirroring the minimize control and keeping the tab + overlay in sync.
+  useEffect(() => {
+    if (expandedTermId !== null && selectedTermId !== expandedTermId) {
+      closeExpandedCalendar();
+    }
+  }, [selectedTermId, expandedTermId, closeExpandedCalendar]);
+
+  // Esc closes the desktop calendar overlay (the mobile Modal handles its own).
+  useEffect(() => {
+    if (!calendarMode) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeExpandedCalendar();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [calendarMode, closeExpandedCalendar]);
+
+  const renderSidebar = (showLayoutActions: boolean, sidebarCalendarMode = false) => (
     <PlannerSidebar
       hasProgram={program !== null}
       hasTranscript={hasTranscript}
@@ -296,6 +320,7 @@ export function DegreePlannerPage() {
       onResetLayout={resetLayout}
       onPersonalize={goToPersonalize}
       showLayoutActions={showLayoutActions}
+      calendarMode={sidebarCalendarMode}
     />
   );
 
@@ -322,14 +347,54 @@ export function DegreePlannerPage() {
                 </UnstyledButton>
               ) : (
                 <FloatingPlannerPanel
-                  title={tr("planner.title")}
+                  title={
+                    calendarMode && expandedTermId
+                      ? formatTermLabel(expandedTermId)
+                      : tr("planner.title")
+                  }
                   onResetLayout={resetLayout}
                   onClearPlan={clearPlannedTerms}
                   clearDisabled={planner.isGenerating || enabledTermIds.length === 0}
+                  calendarMode={calendarMode}
+                  onExitCalendar={closeExpandedCalendar}
                 >
-                  {renderSidebar(false)}
+                  {renderSidebar(false, calendarMode)}
                 </FloatingPlannerPanel>
               )}
+
+              <AnimatePresence>
+                {calendarMode && expandedTermId
+                  ? [
+                      <m.div
+                        key="calendar-scrim"
+                        className={styles.calendarScrim}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        onClick={closeExpandedCalendar}
+                        aria-hidden
+                      />,
+                      <m.div
+                        key="calendar-card"
+                        className={styles.calendarCard}
+                        style={{
+                          top: CALENDAR_OVERLAY_MARGIN,
+                          right: CALENDAR_OVERLAY_MARGIN,
+                          bottom: CALENDAR_OVERLAY_MARGIN,
+                          left: CALENDAR_OVERLAY_CARD_LEFT,
+                          transformOrigin: "left center",
+                        }}
+                        initial={{ opacity: 0, scale: 0.96 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.97 }}
+                        transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <CalendarPage variant="embedded" onExit={closeExpandedCalendar} />
+                      </m.div>,
+                    ]
+                  : null}
+              </AnimatePresence>
             </div>
           </div>
         ) : (
@@ -346,7 +411,7 @@ export function DegreePlannerPage() {
       </BottomDrawer>
 
       <Modal
-        opened={expandedTermId !== null}
+        opened={expandedTermId !== null && isMobile}
         onClose={closeExpandedCalendar}
         fullScreen
         withCloseButton={false}

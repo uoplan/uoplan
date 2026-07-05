@@ -52,6 +52,12 @@ export interface PlannerSidebarProps {
    * `false`; the mobile drawer keeps them here.
    */
   showLayoutActions?: boolean;
+  /**
+   * When the panel is docked as the "open in calendar" overlay sidebar: the
+   * per-term tab hides its (now redundant) navigation, keeping only the tab
+   * switcher + shared generation options.
+   */
+  calendarMode?: boolean;
 }
 
 function LegendItem({ token, label }: { token: string; label: string }) {
@@ -79,6 +85,7 @@ export function PlannerSidebar(props: PlannerSidebarProps) {
     onResetLayout,
     onPersonalize,
     showLayoutActions = true,
+    calendarMode = false,
   } = props;
 
   const actions = usePlannerActions();
@@ -220,7 +227,7 @@ export function PlannerSidebar(props: PlannerSidebarProps) {
 
         {tabTermIds.map((id) => (
           <Tabs.Panel key={id} value={id} pt="sm">
-            <PlannerTermControls termId={id} />
+            <PlannerTermControls termId={id} calendarMode={calendarMode} />
           </Tabs.Panel>
         ))}
       </Tabs>

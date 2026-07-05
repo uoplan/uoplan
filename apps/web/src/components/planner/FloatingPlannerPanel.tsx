@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import {
+  IconArrowsDiagonalMinimize2,
   IconChevronDown,
   IconChevronUp,
   IconGripVertical,
@@ -10,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { tr, useTr } from "../../i18n";
 import { useGraphPlannerStore } from "../../store/graphPlannerStore";
+import { CALENDAR_OVERLAY_LEFT_WIDTH, CALENDAR_OVERLAY_MARGIN } from "./plannerCalendarOverlay";
 import styles from "./planner.module.css";
 
 const DEFAULT_OFFSET = 16;
@@ -23,6 +25,15 @@ interface FloatingPlannerPanelProps {
   onClearPlan: () => void;
   clearDisabled: boolean;
   children: ReactNode;
+  /**
+   * When true, the panel abandons its floating/draggable behaviour and docks to
+   * the left of the canvas (enlarged, full-height minus margins) as the sidebar
+   * of the "open in calendar" overlay. Dragging, resizing and collapsing are
+   * disabled; a minimize control replaces the collapse toggle.
+   */
+  calendarMode?: boolean;
+  /** Exit calendar mode (used by the minimize control). */
+  onExitCalendar?: () => void;
 }
 
 /**
@@ -39,6 +50,8 @@ export function FloatingPlannerPanel({
   onClearPlan,
   clearDisabled,
   children,
+  calendarMode = false,
+  onExitCalendar,
 }: FloatingPlannerPanelProps) {
   useTr();
   const storedPosition = useGraphPlannerStore((s) => s.panelPosition);
@@ -53,6 +66,10 @@ export function FloatingPlannerPanel({
     storedPosition ?? { x: DEFAULT_OFFSET, y: DEFAULT_OFFSET },
   );
   const [size, setSize] = useState<{ width: number; height: number } | null>(storedSize);
+  // Suppresses the position/size CSS transition during an active drag/resize so
+  // the panel tracks the pointer instantly; the transition only plays when
+  // docking into / out of calendar mode.
+  const [interacting, setInteracting] = useState(false);
   const dragRef = useRef<{ pointerId: number; offsetX: number; offsetY: number } | null>(null);
   const resizeRef = useRef<{
     pointerId: number;
@@ -89,11 +106,14 @@ export function FloatingPlannerPanel({
 
   const handlePointerDown = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
+      // Dragging is disabled while docked as the calendar overlay sidebar.
+      if (calendarMode) return;
       // Ignore drags that start on a button (collapse / reset / clear).
       if ((event.target as HTMLElement).closest("button")) return;
       const panel = panelRef.current;
       if (!panel) return;
       event.preventDefault();
+      setInteracting(true);
       dragRef.current = {
         pointerId: event.pointerId,
         offsetX: event.clientX - position.x,
@@ -101,7 +121,7 @@ export function FloatingPlannerPanel({
       };
       event.currentTarget.setPointerCapture(event.pointerId);
     },
-    [position.x, position.y],
+    [calendarMode, position.x, position.y],
   );
 
   const handlePointerMove = useCallback(
@@ -118,6 +138,7 @@ export function FloatingPlannerPanel({
       const drag = dragRef.current;
       if (!drag || drag.pointerId !== event.pointerId) return;
       dragRef.current = null;
+      setInteracting(false);
       const next = clampToParent(event.clientX - drag.offsetX, event.clientY - drag.offsetY);
       setPosition(next);
       setPanelPosition(next);
@@ -147,6 +168,7 @@ export function FloatingPlannerPanel({
     if (!panel) return;
     event.preventDefault();
     event.stopPropagation();
+    setInteracting(true);
     resizeRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -173,6 +195,7 @@ export function FloatingPlannerPanel({
       const r = resizeRef.current;
       if (!r || r.pointerId !== event.pointerId) return;
       resizeRef.current = null;
+      setInteracting(false);
       const next = clampSize(
         r.startW + (event.clientX - r.startX),
         r.startH + (event.clientY - r.startY),
@@ -183,17 +206,30 @@ export function FloatingPlannerPanel({
     [clampSize, setPanelSize],
   );
 
+  const effectiveCollapsed = calendarMode ? false : collapsed;
+
+  const dockedStyle = {
+    left: CALENDAR_OVERLAY_MARGIN,
+    top: CALENDAR_OVERLAY_MARGIN,
+    width: CALENDAR_OVERLAY_LEFT_WIDTH,
+    height: `calc(100% - ${CALENDAR_OVERLAY_MARGIN * 2}px)`,
+    maxHeight: "none" as const,
+  };
+  const floatStyle = {
+    left: position.x,
+    top: position.y,
+    ...(size ? { width: size.width } : {}),
+    ...(size && !collapsed ? { height: size.height, maxHeight: "none" as const } : {}),
+  };
+
   return (
     <div
       ref={panelRef}
       className={styles.floatingPanel}
-      data-collapsed={collapsed || undefined}
-      style={{
-        left: position.x,
-        top: position.y,
-        ...(size ? { width: size.width } : {}),
-        ...(size && !collapsed ? { height: size.height, maxHeight: "none" } : {}),
-      }}
+      data-collapsed={effectiveCollapsed || undefined}
+      data-calendar-mode={calendarMode || undefined}
+      data-interacting={interacting || undefined}
+      style={calendarMode ? dockedStyle : floatStyle}
     >
       <div
         className={styles.floatingPanelHeader}
@@ -202,50 +238,68 @@ export function FloatingPlannerPanel({
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
       >
-        <IconGripVertical size={16} className={styles.floatingPanelGrip} aria-hidden />
+        {calendarMode ? null : (
+          <IconGripVertical size={16} className={styles.floatingPanelGrip} aria-hidden />
+        )}
         <span className={styles.floatingPanelTitle}>{title}</span>
         <div className={styles.floatingPanelHeaderActions}>
-          <Tooltip label={tr("planner.controls.resetLayout")} withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="gray"
-              size="sm"
-              aria-label={tr("planner.controls.resetLayout")}
-              onClick={onResetLayout}
-            >
-              <IconLayoutGrid size={15} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip label={tr("planner.clearPlan")} withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              size="sm"
-              disabled={clearDisabled}
-              aria-label={tr("planner.clearPlan")}
-              onClick={onClearPlan}
-            >
-              <IconTrash size={15} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip
-            label={collapsed ? tr("planner.panel.expand") : tr("planner.panel.collapse")}
-            withArrow
-          >
-            <ActionIcon
-              variant="subtle"
-              color="gray"
-              size="sm"
-              aria-label={collapsed ? tr("planner.panel.expand") : tr("planner.panel.collapse")}
-              onClick={() => setPanelCollapsed(!collapsed)}
-            >
-              {collapsed ? <IconChevronDown size={15} /> : <IconChevronUp size={15} />}
-            </ActionIcon>
-          </Tooltip>
+          {calendarMode ? (
+            <Tooltip label={tr("planner.calendar.minimize")} withArrow>
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                size="sm"
+                aria-label={tr("planner.calendar.minimize")}
+                onClick={onExitCalendar}
+              >
+                <IconArrowsDiagonalMinimize2 size={15} />
+              </ActionIcon>
+            </Tooltip>
+          ) : (
+            <>
+              <Tooltip label={tr("planner.controls.resetLayout")} withArrow>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label={tr("planner.controls.resetLayout")}
+                  onClick={onResetLayout}
+                >
+                  <IconLayoutGrid size={15} />
+                </ActionIcon>
+              </Tooltip>
+              <Tooltip label={tr("planner.clearPlan")} withArrow>
+                <ActionIcon
+                  variant="subtle"
+                  color="red"
+                  size="sm"
+                  disabled={clearDisabled}
+                  aria-label={tr("planner.clearPlan")}
+                  onClick={onClearPlan}
+                >
+                  <IconTrash size={15} />
+                </ActionIcon>
+              </Tooltip>
+              <Tooltip
+                label={collapsed ? tr("planner.panel.expand") : tr("planner.panel.collapse")}
+                withArrow
+              >
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="sm"
+                  aria-label={collapsed ? tr("planner.panel.expand") : tr("planner.panel.collapse")}
+                  onClick={() => setPanelCollapsed(!collapsed)}
+                >
+                  {collapsed ? <IconChevronDown size={15} /> : <IconChevronUp size={15} />}
+                </ActionIcon>
+              </Tooltip>
+            </>
+          )}
         </div>
       </div>
-      {collapsed ? null : <div className={styles.floatingPanelBody}>{children}</div>}
-      {collapsed ? null : (
+      {effectiveCollapsed ? null : <div className={styles.floatingPanelBody}>{children}</div>}
+      {effectiveCollapsed || calendarMode ? null : (
         <div
           className={styles.floatingPanelResize}
           role="presentation"

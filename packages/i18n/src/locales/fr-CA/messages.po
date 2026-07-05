@@ -2788,6 +2788,17 @@ msgstr "Choisir un programme"
 msgid "planner.band.regenerate"
 msgstr "Régénérer le trimestre"
 
+#: apps/web/src/components/calendar/CalendarPage.tsx:541
+#: apps/web/src/components/calendar/CalendarPage.tsx:548
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:250
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:255
+msgid "planner.calendar.minimize"
+msgstr "Réduire"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:93
+msgid "planner.calendar.termHint"
+msgstr "Cette session est ouverte dans le calendrier. Utilisez le calendrier pour parcourir et échanger les horaires."
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.clearPlan"
 msgstr "Effacer le plan"

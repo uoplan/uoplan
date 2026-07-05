@@ -2788,6 +2788,17 @@ msgstr "Pick a program"
 msgid "planner.band.regenerate"
 msgstr "Regenerate term"
 
+#: apps/web/src/components/calendar/CalendarPage.tsx:541
+#: apps/web/src/components/calendar/CalendarPage.tsx:548
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:250
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:255
+msgid "planner.calendar.minimize"
+msgstr "Minimize"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:93
+msgid "planner.calendar.termHint"
+msgstr "This term is open in the calendar. Use the calendar to browse and swap schedules."
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.clearPlan"
 msgstr "Clear plan"
