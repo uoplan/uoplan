@@ -33563,7 +33563,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 76,
               "A": 186,
@@ -52881,7 +52881,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 259,
               "A": 248,
@@ -91146,7 +91146,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 79,
               "A": 112,
@@ -160528,7 +160528,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1135,
               "A": 543,
@@ -176063,7 +176063,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176074,7 +176074,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176085,7 +176085,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176096,7 +176096,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "DINGKE TANG",
+                "instructor": "Dingke Tang",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -242141,7 +242141,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 69,
               "A": 130,
@@ -251068,7 +251068,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 88,
               "A": 105,
