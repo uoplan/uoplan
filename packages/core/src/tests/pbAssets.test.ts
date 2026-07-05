@@ -94,12 +94,24 @@ describe("committed .pb assets decode with current proto contract", () => {
     expect(hasNamedOffering).toBe(true);
   });
 
-  it("decodes every catalogue.YYYY.pb", () => {
+  it("decodes the union catalogue", () => {
+    const union = fromProtoCatalogue(DataProto.Catalogue.decode(read("catalogue.union.pb")));
+    expect(union.courses.length).toBeGreaterThan(0);
+    expect(union.programs.length).toBeGreaterThan(0);
+  });
+
+  it("decodes every catalogue.programs.YYYY.pb", () => {
     expectAllDecode(
-      /^catalogue\.\d{4}\.pb$/,
+      /^catalogue\.programs\.\d{4}\.pb$/,
       (buf) => fromProtoCatalogue(DataProto.Catalogue.decode(buf)),
-      (c) => c.courses.length,
+      (c) => c.programs.length,
     );
+  });
+
+  it("decodes the prerequisite-history overlay when present", () => {
+    if (!existsSync(join(dataDir, "catalogue.history.pb"))) return;
+    const history = DataProto.CataloguePrereqHistory.decode(read("catalogue.history.pb"));
+    expect(history.years.length).toBeGreaterThan(0);
   });
 
   it("decodes every schedules.NNNN.pb", () => {

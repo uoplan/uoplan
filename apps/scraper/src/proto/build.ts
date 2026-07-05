@@ -93,6 +93,16 @@ function isScheduleJson(name: string): boolean {
 export async function main(): Promise<void> {
   await fs.mkdir(WEB_ASSETS_DATA_DIR, { recursive: true });
 
+  // Remove stale per-year full catalogues from earlier builds; the app now ships
+  // the single union catalogue (`catalogue.union.pb`) plus tiny programs-only /
+  // prerequisite-history overlays instead of one full catalogue per year.
+  const staleFullCatalogues = (
+    await fs.readdir(WEB_ASSETS_DATA_DIR).catch(() => [] as string[])
+  ).filter((name) => /^catalogue\.\d{4}\.pb$/.test(name));
+  await Promise.all(
+    staleFullCatalogues.map((name) => fs.rm(path.join(WEB_ASSETS_DATA_DIR, name), { force: true })),
+  );
+
   const catalogueEntries = await fs.readdir(CATALOGUE_DATA_DIR).catch(() => [] as string[]);
   const scheduleEntries = await fs.readdir(SCHEDULES_DATA_DIR).catch(() => [] as string[]);
   const yearCatalogues = catalogueEntries.filter(isCatalogueYearJson).sort();
@@ -177,13 +187,6 @@ export async function main(): Promise<void> {
     }).finish(),
   );
 
-  for (const fileName of yearCatalogues) {
-    const fullPath = path.join(CATALOGUE_DATA_DIR, fileName);
-    const data = await readJson<CatalogueJsonInput>(fullPath);
-    const encoded = DataProto.Catalogue.encode(mapCatalogue(data)).finish();
-    await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
-  }
-
   // Merged catalogue: a single union of all courses (latest metadata) shipped
   // once, plus a compact per-course prerequisite-history overlay for cohort
   // reconstruction, plus small programs-only assets per cohort year. Replaces
@@ -262,7 +265,7 @@ export async function main(): Promise<void> {
   await scaffoldDataManifest();
 
   console.log(
-    `Generated protobuf data: ${yearCatalogues.length} catalogue files, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
+    `Generated protobuf data: catalogue.union.pb + ${yearInputs.length} programs-only overlays, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
   );
 }
 

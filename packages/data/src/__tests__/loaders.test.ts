@@ -10,8 +10,8 @@ import {
 import type { Catalogue } from "@uoplan/core";
 import {
   dataAssetIds,
-  loadCatalogue,
   loadCatalogueManifest,
+  loadCatalogueUnion,
   loadDisciplines,
   loadFeedback,
   loadGrades,
@@ -58,7 +58,7 @@ describe("catalogue and schedule loaders", () => {
   it("loads canonical asset ids and decodes protobuf bytes into domain data", async () => {
     const fetchBytes = fetchFrom({
       [dataAssetIds.manifest]: encode(DataProto.CatalogueManifest.encode({ years: [2026, 2025] })),
-      [dataAssetIds.catalogue(2026)]: encode(
+      [dataAssetIds.catalogueUnion]: encode(
         DataProto.Catalogue.encode(toProtoCatalogue(catalogue)),
       ),
       [dataAssetIds.schedules("2261")]: encode(
@@ -67,7 +67,7 @@ describe("catalogue and schedule loaders", () => {
     });
 
     await expect(loadCatalogueManifest(fetchBytes)).resolves.toEqual({ years: [2026, 2025] });
-    await expect(loadCatalogue(fetchBytes, 2026)).resolves.toMatchObject({
+    await expect(loadCatalogueUnion(fetchBytes)).resolves.toMatchObject({
       courses: [
         { code: normalizeCourseCode("CSI 2110"), aliases: [normalizeCourseCode("ITI 2110")] },
       ],
@@ -79,7 +79,7 @@ describe("catalogue and schedule loaders", () => {
     });
 
     expect(fetchBytes).toHaveBeenCalledWith("catalogue.pb");
-    expect(fetchBytes).toHaveBeenCalledWith("catalogue.2026.pb");
+    expect(fetchBytes).toHaveBeenCalledWith("catalogue.union.pb");
     expect(fetchBytes).toHaveBeenCalledWith("schedules.2261.pb");
   });
 });

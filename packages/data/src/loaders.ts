@@ -28,7 +28,6 @@ import type { FetchBytes } from "./transport";
 /** Canonical asset ids (bare `.pb` filenames) for every data asset. */
 export const dataAssetIds = {
   manifest: "catalogue.pb",
-  catalogue: (year: number): string => `catalogue.${year}.pb`,
   catalogueUnion: "catalogue.union.pb",
   cataloguePrereqHistory: "catalogue.history.pb",
   catalogueProgramsForYear: (year: number): string => `catalogue.programs.${year}.pb`,
@@ -49,12 +48,6 @@ export interface CatalogueManifest {
 export async function loadCatalogueManifest(fetchBytes: FetchBytes): Promise<CatalogueManifest> {
   return fromProtoCatalogueManifest(
     DataProto.CatalogueManifest.decode(await fetchBytes(dataAssetIds.manifest)),
-  );
-}
-
-export async function loadCatalogue(fetchBytes: FetchBytes, year: number): Promise<Catalogue> {
-  return fromProtoCatalogue(
-    DataProto.Catalogue.decode(await fetchBytes(dataAssetIds.catalogue(year))),
   );
 }
 
