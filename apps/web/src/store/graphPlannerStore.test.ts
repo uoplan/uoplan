@@ -118,6 +118,21 @@ describe("graphPlannerStore", () => {
     expect(useGraphPlannerStore.getState().resultByTermId["2265"]).toBeUndefined();
   });
 
+  test("setTermSeed persists per-term seeds that disableTerm and clearPlannedTerms drop", () => {
+    const store = useGraphPlannerStore.getState();
+    store.enableTerm("2265");
+    store.enableTerm("2269");
+    store.setTermSeed("2265", 101);
+    store.setTermSeed("2269", 102);
+    expect(useGraphPlannerStore.getState().seedByTermId).toEqual({ "2265": 101, "2269": 102 });
+
+    store.disableTerm("2265");
+    expect(useGraphPlannerStore.getState().seedByTermId).toEqual({ "2269": 102 });
+
+    store.clearPlannedTerms();
+    expect(useGraphPlannerStore.getState().seedByTermId).toEqual({});
+  });
+
   test("beginCalendarLink snapshots the real context and endCalendarLink clears it", () => {
     const store = useGraphPlannerStore.getState();
     const snapshot = {

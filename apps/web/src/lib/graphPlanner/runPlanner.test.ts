@@ -5,6 +5,7 @@ import { runPlanner } from "./runPlanner";
 
 const capturedCompleted: Record<string, string[]> = {};
 const capturedForced: Record<string, string[]> = {};
+const capturedSeed: Record<string, number | undefined> = {};
 
 // Avoid pulling in the real requirement recompute / AppState projection: capture
 // the effective completed set the runner threads into each term.
@@ -14,10 +15,12 @@ vi.mock("./buildTermInput", () => ({
     effectiveCompleted: string[],
     count: number,
     forcedCourses: string[] = [],
+    seed?: number,
   ) => ({
     completedCourses: effectiveCompleted,
     coursesThisSemester: count,
     basketCourses: forcedCourses,
+    currentSeed: seed,
   }),
   plannerTermDataKey: (_base: AppState, termId: string) => ({
     termId,
@@ -32,9 +35,10 @@ const workerImpl = vi.fn();
 vi.mock("../../workers/plannerWorkerClient", () => ({
   generatePlannerTermViaWorker: (
     dataKey: { termId: string },
-    input: { completedCourses: string[]; basketCourses?: string[] },
+    input: { completedCourses: string[]; basketCourses?: string[]; currentSeed?: number },
   ) => {
     capturedForced[dataKey.termId] = input.basketCourses ?? [];
+    capturedSeed[dataKey.termId] = input.currentSeed;
     return workerImpl(dataKey, input);
   },
 }));
@@ -58,6 +62,7 @@ describe("runPlanner", () => {
     workerImpl.mockReset();
     for (const k of Object.keys(capturedCompleted)) delete capturedCompleted[k];
     for (const k of Object.keys(capturedForced)) delete capturedForced[k];
+    for (const k of Object.keys(capturedSeed)) delete capturedSeed[k];
   });
 
   test("threads each term's picks forward as completed for later terms", async () => {
@@ -121,24 +126,24 @@ describe("runPlanner", () => {
     expect(outcomes[0].result).toBeNull();
   });
 
-  test("forces each term's pinned cart courses and threads them forward", async () => {
-    workerImpl.mockImplementation(
-      (dataKey: { termId: string }, input: { completedCourses: string[] }) => {
-        capturedCompleted[dataKey.termId] = input.completedCourses;
-        // Echo the forced courses back as the schedule (as the engine would).
-        return scheduleWith(capturedForced[dataKey.termId]);
-      },
+  test("forwards each term's engine seed so regeneration varies the schedule", async () => {
+    workerImpl.mockImplementation((dataKey: { termId: string }) =>
+      scheduleWith([`${dataKey.termId}-A`]),
     );
 
-    const outcomes = await runPlanner(base, { ...config, cartByTermId: { "2265": ["CSI 3105"] } }, [
-      "CSI 2110",
-    ]);
+    await runPlanner(base, { ...config, seedByTermId: { "2265": 42, "2269": 43 } }, []);
 
-    // The first term forces its pinned course; the second term has none pinned.
-    expect(capturedForced["2265"]).toEqual(["CSI 3105"]);
-    expect(capturedForced["2269"]).toEqual([]);
-    // The pinned course flows forward as completed for the later term.
-    expect(capturedCompleted["2269"].sort()).toEqual(["CSI 2110", "CSI 3105"]);
-    expect(outcomes[0].courses).toEqual(["CSI 3105"]);
+    expect(capturedSeed["2265"]).toBe(42);
+    expect(capturedSeed["2269"]).toBe(43);
+  });
+
+  test("leaves the seed undefined when none is supplied (engine anchor default)", async () => {
+    workerImpl.mockImplementation((dataKey: { termId: string }) =>
+      scheduleWith([`${dataKey.termId}-A`]),
+    );
+
+    await runPlanner(base, { ...config, enabledTermIds: ["2265"] }, []);
+
+    expect(capturedSeed["2265"]).toBeUndefined();
   });
 });

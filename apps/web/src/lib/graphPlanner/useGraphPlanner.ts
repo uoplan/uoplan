@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { nextSeed } from "../seedNavigation";
 import { useStoreApi } from "../../store/hooks";
 import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import type { PlannerRunConfig } from "./types";
@@ -32,6 +33,7 @@ export function useGraphPlanner() {
     setDefaultCount,
     setGeneratedTerm,
     setTermResult,
+    setTermSeed,
     clearGeneratedFrom,
     clearAllGenerated,
   } = useGraphPlannerStore(
@@ -42,6 +44,7 @@ export function useGraphPlanner() {
       setDefaultCount: s.setDefaultCount,
       setGeneratedTerm: s.setGeneratedTerm,
       setTermResult: s.setTermResult,
+      setTermSeed: s.setTermSeed,
       clearGeneratedFrom: s.clearGeneratedFrom,
       clearAllGenerated: s.clearAllGenerated,
     })),
@@ -73,11 +76,22 @@ export function useGraphPlanner() {
         }
       }
 
+      // Advance each target term's engine seed so a repeat "Regenerate" yields a
+      // different variant. `nextSeed(firstSeed, 0)` returns `firstSeed` (first
+      // gen matches the calendar's anchor); each later run increments from there.
+      const seedByTermId: Record<string, number> = { ...planner.seedByTermId };
+      for (const id of termsToRun) {
+        const advanced = nextSeed(base.firstSeed, planner.seedByTermId[id] ?? 0);
+        seedByTermId[id] = advanced;
+        setTermSeed(id, advanced);
+      }
+
       const config: PlannerRunConfig = {
         enabledTermIds: termsToRun,
         countByTermId: planner.countByTermId,
         defaultCount: planner.defaultCount,
         cartByTermId: planner.cartByTerm,
+        seedByTermId,
       };
 
       const token = ++runToken.current;
@@ -104,7 +118,7 @@ export function useGraphPlanner() {
         }
       }
     },
-    [storeApi, clearGeneratedFrom, setGeneratedTerm, setTermResult],
+    [storeApi, clearGeneratedFrom, setGeneratedTerm, setTermResult, setTermSeed],
   );
 
   const enableAndGenerate = useCallback(

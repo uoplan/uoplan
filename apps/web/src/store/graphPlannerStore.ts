@@ -86,6 +86,14 @@ export interface GraphPlannerState {
    */
   cartByTerm: Record<string, string[]>;
   /**
+   * Per-term generation seed (the engine's `currentSeed`). Advanced by one step
+   * each time a term is regenerated so successive "Regenerate" clicks yield
+   * different schedule variants instead of the same deterministic result.
+   * Absent / `0` means "not yet generated" — the first run anchors on the main
+   * store's `firstSeed`.
+   */
+  seedByTermId: Record<string, number>;
+  /**
    * User-adjusted node positions, keyed by React Flow node id. Absolute for
    * top-level nodes (completed courses, future-term containers); relative to the
    * parent container for a future term's child course nodes. Lets a student drag
@@ -132,6 +140,8 @@ export interface GraphPlannerState {
   setTermResult: (termId: string, result: GenerateSchedulesResult) => void;
   /** Replace the pinned "courses you want" for a specific future term. */
   setTermCart: (termId: string, courses: string[]) => void;
+  /** Persist the seed used to generate a term (see {@link seedByTermId}). */
+  setTermSeed: (termId: string, seed: number) => void;
   /**
    * Drop cached generation results for `termId` and every later enabled term,
    * so re-running an earlier term invalidates the ones that depended on it.
@@ -206,6 +216,7 @@ const initialState = {
   generatedByTermId: {} as Record<string, PlannerGeneratedTerm>,
   resultByTermId: {} as Record<string, GenerateSchedulesResult>,
   cartByTerm: {} as Record<string, string[]>,
+  seedByTermId: {} as Record<string, number>,
   nodePositions: {} as Record<string, { x: number; y: number }>,
   nodeSizes: {} as Record<string, { width: number; height: number }>,
   linkedCalendarTermId: null as string | null,
@@ -236,12 +247,14 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
           const { [termId]: _removedResult, ...generatedByTermId } = s.generatedByTermId;
           const { [termId]: _removedBundle, ...resultByTermId } = s.resultByTermId;
           const { [termId]: _removedCart, ...cartByTerm } = s.cartByTerm;
+          const { [termId]: _removedSeed, ...seedByTermId } = s.seedByTermId;
           return {
             enabledTermIds: s.enabledTermIds.filter((id) => id !== termId),
             countByTermId,
             generatedByTermId,
             resultByTermId,
             cartByTerm,
+            seedByTermId,
           };
         }),
 
@@ -259,6 +272,9 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
       setTermCart: (termId, courses) =>
         set((s) => ({ cartByTerm: { ...s.cartByTerm, [termId]: courses } })),
 
+      setTermSeed: (termId, seed) =>
+        set((s) => ({ seedByTermId: { ...s.seedByTermId, [termId]: seed } })),
+
       clearGeneratedFrom: (termId) =>
         set((s) => {
           const threshold = Number(termId);
@@ -273,7 +289,7 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
           return { generatedByTermId, resultByTermId };
         }),
 
-      clearAllGenerated: () => set({ generatedByTermId: {}, resultByTermId: {} }),
+      clearAllGenerated: () => set({ generatedByTermId: {}, resultByTermId: {}, seedByTermId: {} }),
 
       clearPlannedTerms: () =>
         set({
@@ -282,6 +298,7 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
           generatedByTermId: {},
           resultByTermId: {},
           cartByTerm: {},
+          seedByTermId: {},
         }),
 
       setNodePosition: (id, pos) =>
@@ -315,6 +332,7 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
         generatedByTermId: s.generatedByTermId,
         resultByTermId: s.resultByTermId,
         cartByTerm: s.cartByTerm,
+        seedByTermId: s.seedByTermId,
         nodePositions: s.nodePositions,
         nodeSizes: s.nodeSizes,
         linkedCalendarTermId: s.linkedCalendarTermId,

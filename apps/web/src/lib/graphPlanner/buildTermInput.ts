@@ -19,6 +19,7 @@ export function buildPlannerTermInput(
   effectiveCompleted: string[],
   count: number,
   forcedCourses: string[] = [],
+  seed?: number,
 ): GenerateSchedulesInput {
   const recomputed = recomputeStateForProgram(
     base.program,
@@ -43,6 +44,10 @@ export function buildPlannerTermInput(
     // No extra electives carry over from the calendar view.
     additionalElectivesCount: 0,
     basketCourses: forcedCourses,
+    // Each regenerate advances the term's seed so the engine returns a
+    // different schedule variant (the calendar's "Next" uses the same anchor
+    // ladder). `0`/undefined keeps the engine's default anchor (firstSeed).
+    ...(seed !== undefined ? { currentSeed: seed } : {}),
     remainingRequirements: recomputed.remainingRequirements,
     requirementTreeWithStatus: recomputed.requirementTreeWithStatus,
     selectedPerRequirement: recomputed.selectedPerRequirement,

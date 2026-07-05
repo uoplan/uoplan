@@ -38,8 +38,15 @@ async function generatePlannerTerm(
   requestedCount: number,
   effectiveCompleted: string[],
   forcedCourses: string[],
+  seed: number | undefined,
 ): Promise<PlannerTermOutcome> {
-  const input = buildPlannerTermInput(base, effectiveCompleted, requestedCount, forcedCourses);
+  const input = buildPlannerTermInput(
+    base,
+    effectiveCompleted,
+    requestedCount,
+    forcedCourses,
+    seed,
+  );
   const dataKey = plannerTermDataKey(base, termId);
   const result = await generatePlannerTermViaWorker(dataKey, input);
   const courses = scheduleCourses(result);
@@ -73,12 +80,14 @@ export async function runPlanner(
   for (const termId of config.enabledTermIds) {
     const requestedCount = countFor(config, termId);
     const forcedCourses = config.cartByTermId?.[termId] ?? [];
+    const seed = config.seedByTermId?.[termId];
     const outcome = await generatePlannerTerm(
       base,
       termId,
       requestedCount,
       [...accumulated],
       forcedCourses,
+      seed,
     );
     for (const code of outcome.courses) accumulated.add(code);
     outcomes.push(outcome);

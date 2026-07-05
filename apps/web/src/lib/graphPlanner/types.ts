@@ -31,4 +31,10 @@ export interface PlannerRunConfig {
    * the remaining slots toward the degree. Absent terms have no pins.
    */
   cartByTermId?: Record<string, string[]>;
+  /**
+   * Per-term engine seed (`currentSeed`). Advanced by the caller before each
+   * run so successive regenerations of a term produce different schedule
+   * variants. Absent terms fall back to the anchor (`firstSeed`).
+   */
+  seedByTermId?: Record<string, number>;
 }
