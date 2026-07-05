@@ -178,7 +178,7 @@ export function ScheduleDashboardPage() {
         }}
       >
         <Stack gap="xs" maw={760} mx="auto" w="100%">
-          <BackButton fallbackTo="/" />
+          <BackButton fallbackTo="/" emphasis="prominent" />
           <Title
             order={1}
             c="var(--app-text)"

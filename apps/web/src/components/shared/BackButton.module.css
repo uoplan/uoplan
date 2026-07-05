@@ -1,0 +1,10 @@
+.prominent {
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.prominent:hover {
+  background-color: var(--app-surface-hover);
+  border-color: var(--app-border-strong);
+}

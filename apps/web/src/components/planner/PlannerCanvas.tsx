@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
   Background,
   BackgroundVariant,
@@ -6,7 +6,7 @@ import {
   useEdgesState,
   useNodesState,
 } from "@xyflow/react";
-import type { Edge, Node, NodeTypes, OnNodeDrag } from "@xyflow/react";
+import type { Edge, FitViewOptions, Node, NodeTypes, OnNodeDrag } from "@xyflow/react";
 import type { PlannerGraph } from "../../lib/graphPlanner/buildPlannerGraph";
 import { CourseNode } from "./CourseNode";
 import { FutureTermNode } from "./FutureTermNode";
@@ -58,6 +58,25 @@ function toFlowEdges(graph: PlannerGraph): Edge[] {
   }));
 }
 
+/**
+ * Nodes to frame on the initial fit: the most recent completed term block (the
+ * last "completed" band) plus every future/planning container. Framing just
+ * these keeps the default view zoomed into the area the student actually plans
+ * in, instead of shrinking to fit years of past terms. Their child course nodes
+ * sit inside these bounds, so listing the bands/containers is enough. Returns an
+ * empty array when there is nothing notable to focus, so the caller can fall
+ * back to fitting the whole graph.
+ */
+function focusNodeIds(graph: PlannerGraph): { id: string }[] {
+  const completed = graph.bandNodes.filter((n) => n.data.kind === "completed");
+  const future = graph.bandNodes.filter((n) => n.data.kind === "future");
+  const ids: { id: string }[] = [];
+  const mostRecentCompleted = completed.at(-1);
+  if (mostRecentCompleted) ids.push({ id: mostRecentCompleted.id });
+  for (const container of future) ids.push({ id: container.id });
+  return ids;
+}
+
 interface PlannerCanvasProps {
   graph: PlannerGraph;
   /** Persist a node's position after the user drags it. */
@@ -87,6 +106,19 @@ export function PlannerCanvas({ graph, onNodePositionCommit, onResetLayout }: Pl
     [onNodePositionCommit],
   );
 
+  // On the initial fit, frame the most recent term + future/planning terms rather
+  // than the whole (potentially multi-year) graph. Falls back to fitting
+  // everything when there is nothing notable to focus.
+  const fitViewOptions = useMemo<FitViewOptions>(() => {
+    const nodes = focusNodeIds(graph);
+    return {
+      padding: 0.3,
+      minZoom: 0.3,
+      maxZoom: 1.1,
+      ...(nodes.length > 0 ? { nodes } : {}),
+    };
+  }, [graph]);
+
   return (
     <div className={`${styles.canvas} uoplan-planner-canvas`}>
       <ReactFlow
@@ -97,7 +129,7 @@ export function PlannerCanvas({ graph, onNodePositionCommit, onResetLayout }: Pl
         onNodeDragStop={handleDragStop}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.3, minZoom: 0.3, maxZoom: 1.1 }}
+        fitViewOptions={fitViewOptions}
         minZoom={0.2}
         maxZoom={1.6}
         nodesConnectable={false}

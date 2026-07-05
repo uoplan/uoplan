@@ -9,6 +9,9 @@ test("locationLabel names each top-level section by path", () => {
   expect(locationLabel("/explore")).toBe("Course explorer");
   expect(locationLabel("/personalize")).toBe("Personalize");
   expect(locationLabel("/schedule")).toBe("Schedule generator");
+  // The degree-planner graph is named distinctly from the generic schedule section,
+  // so back buttons that return to it don't mislabel it as "Schedule generator".
+  expect(locationLabel("/schedule/graph")).toBe("Degree planner");
   expect(locationLabel("/trends")).toBe("Trends");
   expect(locationLabel("/professor-graph")).toBe("Professor network");
   expect(locationLabel("/donate")).toBe("Support us");

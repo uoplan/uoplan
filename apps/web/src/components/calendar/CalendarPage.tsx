@@ -43,6 +43,7 @@ import {
   useTermSelection,
 } from "../../store/hooks";
 import { useBasketCourses } from "../../hooks/useBasket";
+import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import { CalendarView } from "./CalendarView";
 import { BackButton } from "../shared/BackButton";
 import { PersonalizeBanner } from "../shared/PersonalizeBanner";
@@ -178,6 +179,14 @@ export function CalendarPage() {
   const { additionalElectivesCount } = useAdditionalElectives();
   const { selectedTermId } = useTermSelection();
   const program = useActiveProgram();
+
+  // When a term is opened from the degree planner it links that term into this
+  // calendar (see `openInCalendar`). While that link is live for the term on
+  // screen, the back affordance returns to the planner (not the generic
+  // personalize dashboard) and names it accordingly.
+  const linkedCalendarTermId = useGraphPlannerStore((s) => s.linkedCalendarTermId);
+  const openedFromPlanner =
+    linkedCalendarTermId !== null && linkedCalendarTermId === selectedTermId;
 
   const hasProgram = program !== null;
 
@@ -344,7 +353,11 @@ export function CalendarPage() {
 
   const sidebarControls = (
     <>
-      <BackButton fallbackTo="/personalize" />
+      {openedFromPlanner ? (
+        <BackButton fallbackTo="/schedule/graph" fallbackLabel={tr("planner.title")} />
+      ) : (
+        <BackButton fallbackTo="/personalize" />
+      )}
       <Title
         order={1}
         style={{

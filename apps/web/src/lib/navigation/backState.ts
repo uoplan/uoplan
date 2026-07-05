@@ -35,6 +35,7 @@ export function locationLabel(
     return q ? tr("explore.backToSearch", { q }) : tr("explore.title");
   }
   if (pathname.startsWith("/personalize")) return tr("landing.personalize.title");
+  if (pathname.startsWith("/schedule/graph")) return tr("planner.title");
   if (pathname.startsWith("/schedule")) return tr("landing.schedule.title");
   if (pathname.startsWith("/professor-graph")) return tr("graph.title");
   if (pathname.startsWith("/trends")) return tr("app.nav.backTrends");

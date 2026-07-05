@@ -4,6 +4,7 @@ import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { locationLabel } from "../../lib/navigation/backState";
 import { usePreviousLocation } from "../../lib/navigation/navigationHistory";
 import { useProfessorRegistry } from "../../store/hooks";
+import styles from "./BackButton.module.css";
 
 type BackButtonProps = {
   /** Logical parent to navigate to when there is no in-app history to pop. */
@@ -15,6 +16,12 @@ type BackButtonProps = {
   fallbackLabel?: string;
   fallbackParams?: Record<string, string>;
   fallbackSearch?: Record<string, unknown>;
+  /**
+   * Visual weight. `"subtle"` (default) is the quiet dimmed chevron+label used on
+   * most detail pages. `"prominent"` renders a clearly-tappable bordered pill with
+   * non-dimmed text, for pages where the back affordance is otherwise easy to miss.
+   */
+  emphasis?: "subtle" | "prominent";
 };
 
 /**
@@ -32,6 +39,7 @@ export function BackButton({
   fallbackLabel,
   fallbackParams,
   fallbackSearch,
+  emphasis = "subtle",
 }: BackButtonProps) {
   const router = useRouter();
   const navigate = useNavigate();
@@ -55,6 +63,30 @@ export function BackButton({
       replace: true,
     } as never);
   };
+
+  if (emphasis === "prominent") {
+    return (
+      <UnstyledButton
+        onClick={onBack}
+        className={styles.prominent}
+        style={{
+          alignSelf: "flex-start",
+          color: "var(--app-text)",
+          border: "1px solid var(--app-border)",
+          borderRadius: "var(--mantine-radius-xl)",
+          padding: "6px 14px 6px 10px",
+          backgroundColor: "var(--app-surface)",
+        }}
+      >
+        <Group gap={6} wrap="nowrap">
+          <IconChevronLeft size={16} stroke={2} />
+          <Text size="sm" fw={500} c="var(--app-text)">
+            {label}
+          </Text>
+        </Group>
+      </UnstyledButton>
+    );
+  }
 
   return (
     <UnstyledButton
