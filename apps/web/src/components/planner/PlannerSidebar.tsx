@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import {
   ActionIcon,
   Alert,
@@ -8,10 +8,12 @@ import {
   NumberInput,
   Skeleton,
   Stack,
+  Tabs,
   Text,
   Tooltip,
 } from "@mantine/core";
 import {
+  IconCalendarDown,
   IconInfoCircle,
   IconLayoutGrid,
   IconSchool,
@@ -19,7 +21,11 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { tr, useTr } from "../../i18n";
+import { formatTermLabel } from "../../lib/term/termLabel";
+import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import { BackButton } from "../shared/BackButton";
+import { usePlannerActions } from "./plannerActionsContext";
+import { PlannerTermControls } from "./PlannerTermControls";
 import styles from "./planner.module.css";
 
 // The advanced generation options pull in the full requirement-assignment UI;
@@ -75,90 +81,153 @@ export function PlannerSidebar(props: PlannerSidebarProps) {
     showLayoutActions = true,
   } = props;
 
+  const actions = usePlannerActions();
+  const enabledTermIds = useGraphPlannerStore((s) => s.enabledTermIds);
+  const selectedTermId = useGraphPlannerStore((s) => s.selectedTermId);
+  const anyDownloadable = useGraphPlannerStore((s) =>
+    s.enabledTermIds.some((id) => Boolean(s.resultByTermId[id]?.currentSchedule)),
+  );
+
+  // Tabs: an always-present Overview plus one tab per enabled term. A term that
+  // is selected (e.g. by clicking its node) but not yet enabled still gets a tab
+  // so it can be configured / enabled from the panel.
+  const tabTermIds = useMemo(() => {
+    const ids = new Set(enabledTermIds);
+    if (selectedTermId) ids.add(selectedTermId);
+    return [...ids].sort((a, b) => Number(a) - Number(b));
+  }, [enabledTermIds, selectedTermId]);
+
+  const activeTab = selectedTermId ?? "overview";
+
   return (
-    <Stack gap="md">
+    <Stack gap="sm">
       <BackButton fallbackTo="/personalize" />
 
-      {!hasProgram ? (
-        <Alert
-          variant="light"
-          color="blue"
-          icon={<IconInfoCircle size={16} />}
-          title={tr("planner.needProgram.title")}
-        >
-          <Stack gap="xs">
-            <Text fz="sm">{tr("planner.needProgram.body")}</Text>
-            <Button
-              size="xs"
-              variant="light"
-              leftSection={<IconSchool size={14} />}
-              onClick={onPersonalize}
-            >
-              {tr("planner.needProgram.cta")}
-            </Button>
-          </Stack>
-        </Alert>
-      ) : null}
-
-      {hasProgram && !hasTranscript ? (
-        <Alert variant="light" color="gray" icon={<IconInfoCircle size={16} />}>
-          {tr("planner.uploadHint")}
-        </Alert>
-      ) : null}
-
-      <Button
-        size="md"
-        leftSection={<IconSparkles size={16} />}
-        loading={isGenerating}
-        disabled={!hasProgram || !hasEnabledTerms}
-        onClick={onRegenerateAll}
+      <Tabs
+        value={activeTab}
+        onChange={(value) => actions.selectTerm(value && value !== "overview" ? value : null)}
+        keepMounted={false}
       >
-        {tr("planner.generate")}
-      </Button>
+        <Tabs.List className={styles.panelTabsList}>
+          <Tabs.Tab value="overview">{tr("planner.tabs.overview")}</Tabs.Tab>
+          {tabTermIds.map((id) => (
+            <Tabs.Tab key={id} value={id}>
+              {formatTermLabel(id)}
+            </Tabs.Tab>
+          ))}
+        </Tabs.List>
 
-      <Group gap="xs" align="flex-end" grow>
-        <NumberInput
-          size="xs"
-          label={tr("planner.defaultCount.label")}
-          description={tr("planner.defaultCount.description")}
-          min={1}
-          max={12}
-          value={defaultCount}
-          disabled={isGenerating}
-          onChange={(v) =>
-            onDefaultCountChange(typeof v === "number" ? v : Number(v) || defaultCount)
-          }
-        />
-      </Group>
+        <Tabs.Panel value="overview" pt="sm">
+          <Stack gap="md">
+            {!hasProgram ? (
+              <Alert
+                variant="light"
+                color="blue"
+                icon={<IconInfoCircle size={16} />}
+                title={tr("planner.needProgram.title")}
+              >
+                <Stack gap="xs">
+                  <Text fz="sm">{tr("planner.needProgram.body")}</Text>
+                  <Button
+                    size="xs"
+                    variant="light"
+                    leftSection={<IconSchool size={14} />}
+                    onClick={onPersonalize}
+                  >
+                    {tr("planner.needProgram.cta")}
+                  </Button>
+                </Stack>
+              </Alert>
+            ) : null}
 
-      {showLayoutActions ? (
-        <Group gap="xs">
-          <Tooltip label={tr("planner.controls.resetLayout")} withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="gray"
-              size="lg"
-              aria-label={tr("planner.controls.resetLayout")}
-              onClick={onResetLayout}
+            {hasProgram && !hasTranscript ? (
+              <Alert variant="light" color="gray" icon={<IconInfoCircle size={16} />}>
+                {tr("planner.uploadHint")}
+              </Alert>
+            ) : null}
+
+            <Button
+              size="md"
+              leftSection={<IconSparkles size={16} />}
+              loading={isGenerating}
+              disabled={!hasProgram || !hasEnabledTerms}
+              onClick={onRegenerateAll}
             >
-              <IconLayoutGrid size={18} />
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip label={tr("planner.clearPlan")} withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              size="lg"
-              aria-label={tr("planner.clearPlan")}
-              disabled={isGenerating || !hasEnabledTerms}
-              onClick={onClearPlan}
-            >
-              <IconTrash size={18} />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
-      ) : null}
+              {tr("planner.generate")}
+            </Button>
 
+            <Group gap="xs" align="flex-end" grow>
+              <NumberInput
+                size="xs"
+                label={tr("planner.defaultCount.label")}
+                description={tr("planner.defaultCount.description")}
+                min={1}
+                max={12}
+                value={defaultCount}
+                disabled={isGenerating}
+                onChange={(v) =>
+                  onDefaultCountChange(typeof v === "number" ? v : Number(v) || defaultCount)
+                }
+              />
+            </Group>
+
+            <Button
+              size="sm"
+              variant="light"
+              leftSection={<IconCalendarDown size={16} />}
+              disabled={!anyDownloadable}
+              onClick={() => actions.downloadAllTerms()}
+            >
+              {tr("planner.download.all")}
+            </Button>
+
+            {showLayoutActions ? (
+              <Group gap="xs">
+                <Tooltip label={tr("planner.controls.resetLayout")} withArrow>
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    size="lg"
+                    aria-label={tr("planner.controls.resetLayout")}
+                    onClick={onResetLayout}
+                  >
+                    <IconLayoutGrid size={18} />
+                  </ActionIcon>
+                </Tooltip>
+                <Tooltip label={tr("planner.clearPlan")} withArrow>
+                  <ActionIcon
+                    variant="subtle"
+                    color="red"
+                    size="lg"
+                    aria-label={tr("planner.clearPlan")}
+                    disabled={isGenerating || !hasEnabledTerms}
+                    onClick={onClearPlan}
+                  >
+                    <IconTrash size={18} />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+            ) : null}
+
+            <Divider label={tr("planner.legend.title")} labelPosition="left" />
+            <Stack gap={6}>
+              <LegendItem token="--app-success" label={tr("planner.legend.completed")} />
+              <LegendItem token="--app-accent" label={tr("planner.legend.planned")} />
+              <LegendItem token="--app-warning" label={tr("planner.legend.missingPrereq")} />
+            </Stack>
+          </Stack>
+        </Tabs.Panel>
+
+        {tabTermIds.map((id) => (
+          <Tabs.Panel key={id} value={id} pt="sm">
+            <PlannerTermControls termId={id} />
+          </Tabs.Panel>
+        ))}
+      </Tabs>
+
+      {/* Cart + advanced options are shared across every term (they drive the
+          main-store generation config that each term regenerates against), so
+          they live once here, below the tabs, rather than per tab. */}
       {hasProgram ? (
         <>
           <Divider label={tr("planner.options.title")} labelPosition="left" />
@@ -167,13 +236,6 @@ export function PlannerSidebar(props: PlannerSidebarProps) {
           </Suspense>
         </>
       ) : null}
-
-      <Divider label={tr("planner.legend.title")} labelPosition="left" />
-      <Stack gap={6}>
-        <LegendItem token="--app-success" label={tr("planner.legend.completed")} />
-        <LegendItem token="--app-accent" label={tr("planner.legend.planned")} />
-        <LegendItem token="--app-warning" label={tr("planner.legend.missingPrereq")} />
-      </Stack>
     </Stack>
   );
 }

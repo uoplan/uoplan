@@ -2821,6 +2821,14 @@ msgstr "Cours ajoutés lorsque vous activez un nouveau trimestre."
 msgid "planner.defaultCount.label"
 msgstr "Cours par nouveau trimestre"
 
+#: apps/web/src/components/planner/PlannerSidebar.tsx:181
+msgid "planner.download.all"
+msgstr "Télécharger tous les trimestres"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:134
+msgid "planner.download.term"
+msgstr "Télécharger ce trimestre"
+
 #: apps/web/src/components/planner/PlannerEmptyState.tsx:21
 msgid "planner.empty.body"
 msgstr "Ajoutez votre programme et votre relevé de notes pour visualiser votre parcours trimestre par trimestre."
@@ -2844,6 +2852,10 @@ msgstr "Aucun cours pour l'instant. Ajustez le nombre ou régénérez pour rempl
 #: apps/web/src/components/planner/FutureTermNode.tsx:161
 msgid "planner.future.noPreview"
 msgstr "Régénérez pour afficher le calendrier de ce trimestre."
+
+#: apps/web/src/components/planner/FutureTermNode.tsx:147
+msgid "planner.future.selectToPlan"
+msgstr "Sélectionnez pour planifier ce trimestre."
 
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.generate"
@@ -2919,6 +2931,18 @@ msgstr "Généré"
 #: apps/web/src/components/planner/TermBandNode.tsx:29
 msgid "planner.status.partial"
 msgstr "Partiel"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:112
+msgid "planner.tabs.overview"
+msgstr "Aperçu"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:79
+msgid "planner.term.enable"
+msgstr "Activer le trimestre"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:72
+msgid "planner.term.enableHint"
+msgstr "Ce trimestre n'est pas encore planifié. Activez-le pour générer un horaire."
 
 #: apps/web/src/components/landing/LandingPage.tsx:57
 #: apps/web/src/components/planner/DegreePlannerPage.tsx:117

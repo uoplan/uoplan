@@ -179,6 +179,34 @@ describe("graphPlannerStore", () => {
     expect(s.preLinkCompletedContext).toBeNull();
   });
 
+  test("enabling a term focuses it; disabling or clearing resets the focus", () => {
+    const store = useGraphPlannerStore.getState();
+    store.enableTerm("2265");
+    expect(useGraphPlannerStore.getState().selectedTermId).toBe("2265");
+
+    // Enabling a later term moves focus to it.
+    store.enableTerm("2269");
+    expect(useGraphPlannerStore.getState().selectedTermId).toBe("2269");
+
+    // Explicit selection wins, including back to the Overview tab (null).
+    store.setSelectedTermId("2265");
+    expect(useGraphPlannerStore.getState().selectedTermId).toBe("2265");
+    store.setSelectedTermId(null);
+    expect(useGraphPlannerStore.getState().selectedTermId).toBeNull();
+
+    // Disabling the focused term clears the focus; disabling another keeps it.
+    store.setSelectedTermId("2269");
+    store.disableTerm("2265");
+    expect(useGraphPlannerStore.getState().selectedTermId).toBe("2269");
+    store.disableTerm("2269");
+    expect(useGraphPlannerStore.getState().selectedTermId).toBeNull();
+
+    // Clearing the whole plan resets focus to Overview.
+    store.enableTerm("2271");
+    store.clearPlannedTerms();
+    expect(useGraphPlannerStore.getState().selectedTermId).toBeNull();
+  });
+
   test("resetPlanner returns to the empty initial state", () => {
     const store = useGraphPlannerStore.getState();
     store.setCompletedCourseTerms([term("2022 Fall Term", 2022, ["ADM 1100"])]);

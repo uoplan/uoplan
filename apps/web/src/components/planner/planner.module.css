@@ -43,6 +43,14 @@
   background: color-mix(in srgb, var(--app-accent-soft) 34%, var(--app-surface-sunken));
 }
 
+/* The term focused in the tabbed panel: a solid accent (blue) ring so it's clear
+   which node the panel's per-term controls are driving. */
+.container[data-selected] {
+  border-style: solid;
+  border-color: var(--app-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--app-accent) 55%, transparent);
+}
+
 .containerHeader {
   display: flex;
   flex-direction: column;
@@ -145,11 +153,14 @@
   font-variant-numeric: tabular-nums;
 }
 
-.bandControls {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+/* Tab strip in the floating/mobile planner panel. Allows the term tabs to scroll
+   horizontally when there are more than fit the panel width, instead of wrapping
+   into a tall, ragged block. */
+.panelTabsList {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
 }
 
 /* ---- Custom canvas controls (bottom-left) ---- */

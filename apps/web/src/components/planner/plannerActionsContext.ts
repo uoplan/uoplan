@@ -12,12 +12,22 @@ export interface PlannerActions {
   isGenerating: boolean;
   /** The term currently being generated, if any. */
   runningTermId: string | null;
+  /** The term currently focused in the panel (its node is highlighted). */
+  selectedTermId: string | null;
   enableTerm: (termId: string) => void;
   disableTerm: (termId: string) => void;
   changeCount: (termId: string, count: number) => void;
   regenerateTerm: (termId: string) => void;
+  /** Step the term back to its previous schedule variant. */
+  previousTerm: (termId: string) => void;
   /** Open a future term in the calendar view to edit it closely. */
   openInCalendar: (termId: string) => void;
+  /** Focus a term in the panel (or `null` for the Overview tab). */
+  selectTerm: (termId: string | null) => void;
+  /** Download a single planned term's timetable as an `.ics` file. */
+  downloadTerm: (termId: string) => void;
+  /** Download every planned term as one combined `.ics` file. */
+  downloadAllTerms: () => void;
   /** Route the user to Personalize to pick a program. */
   goToPersonalize: () => void;
 }

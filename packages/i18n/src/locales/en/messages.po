@@ -2821,6 +2821,14 @@ msgstr "Courses added when you enable a new term."
 msgid "planner.defaultCount.label"
 msgstr "Courses per new term"
 
+#: apps/web/src/components/planner/PlannerSidebar.tsx:181
+msgid "planner.download.all"
+msgstr "Download all terms"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:134
+msgid "planner.download.term"
+msgstr "Download this term"
+
 #: apps/web/src/components/planner/PlannerEmptyState.tsx:21
 msgid "planner.empty.body"
 msgstr "Add your program and transcript to map your degree term by term."
@@ -2844,6 +2852,10 @@ msgstr "No courses yet. Adjust the count or regenerate to fill this term."
 #: apps/web/src/components/planner/FutureTermNode.tsx:161
 msgid "planner.future.noPreview"
 msgstr "Regenerate to preview this term's calendar."
+
+#: apps/web/src/components/planner/FutureTermNode.tsx:147
+msgid "planner.future.selectToPlan"
+msgstr "Select to plan this term."
 
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.generate"
@@ -2919,6 +2931,18 @@ msgstr "Generated"
 #: apps/web/src/components/planner/TermBandNode.tsx:29
 msgid "planner.status.partial"
 msgstr "Partial"
+
+#: apps/web/src/components/planner/PlannerSidebar.tsx:112
+msgid "planner.tabs.overview"
+msgstr "Overview"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:79
+msgid "planner.term.enable"
+msgstr "Enable term"
+
+#: apps/web/src/components/planner/PlannerTermControls.tsx:72
+msgid "planner.term.enableHint"
+msgstr "This term isn't planned yet. Enable it to generate a schedule."
 
 #: apps/web/src/components/landing/LandingPage.tsx:57
 #: apps/web/src/components/planner/DegreePlannerPage.tsx:117

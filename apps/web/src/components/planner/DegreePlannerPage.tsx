@@ -11,6 +11,7 @@ import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlanner
 import { useGraphPlanner } from "../../lib/graphPlanner/useGraphPlanner";
 import { buildPlannerGraph } from "../../lib/graphPlanner/buildPlannerGraph";
 import { planCoursesFromCalendar } from "../../lib/graphPlanner/calendarBridge";
+import { downloadAllTermsIcs, downloadTermIcs } from "../../lib/graphPlanner/downloadPlannerIcs";
 import { formatTermLabel, formatTranscriptTermLabel } from "../../lib/term/termLabel";
 import { PlannerCanvas } from "./PlannerCanvas";
 import { PlannerSidebar } from "./PlannerSidebar";
@@ -52,6 +53,8 @@ export function DegreePlannerPage() {
   const setCountForTerm = useGraphPlannerStore((s) => s.setCountForTerm);
   const beginCalendarLink = useGraphPlannerStore((s) => s.beginCalendarLink);
   const endCalendarLink = useGraphPlannerStore((s) => s.endCalendarLink);
+  const setSelectedTermId = useGraphPlannerStore((s) => s.setSelectedTermId);
+  const selectedTermId = useGraphPlannerStore((s) => s.selectedTermId);
 
   const planner = useGraphPlanner();
 
@@ -218,25 +221,67 @@ export function DegreePlannerPage() {
     [setNodePosition],
   );
 
+  const downloadTerm = useCallback(
+    (termId: string) => {
+      const bundle = useGraphPlannerStore.getState().resultByTermId[termId];
+      downloadTermIcs({ termId, label: formatTermLabel(termId), bundle }, cache);
+    },
+    [cache],
+  );
+
+  const downloadAllTerms = useCallback(() => {
+    const pstate = useGraphPlannerStore.getState();
+    const terms = pstate.enabledTermIds.map((termId) => ({
+      termId,
+      label: formatTermLabel(termId),
+      bundle: pstate.resultByTermId[termId],
+    }));
+    downloadAllTermsIcs(terms, cache);
+  }, [cache]);
+
   const actions = useMemo<PlannerActions>(
     () => ({
       hasProgram: program !== null,
       isGenerating: planner.isGenerating,
       runningTermId: planner.runningTermId,
+      selectedTermId,
       enableTerm: (id) => void planner.enableTerm(id),
       disableTerm: (id) => void planner.disableTerm(id),
       changeCount: (id, count) => void planner.changeCount(id, count),
       regenerateTerm: (id) => void planner.regenerateFrom(id),
+      previousTerm: (id) => void planner.previousTermVariant(id),
       openInCalendar: (id) => void openInCalendar(id),
+      selectTerm: setSelectedTermId,
+      downloadTerm,
+      downloadAllTerms,
       goToPersonalize,
     }),
-    [program, planner, openInCalendar, goToPersonalize],
+    [
+      program,
+      planner,
+      selectedTermId,
+      openInCalendar,
+      setSelectedTermId,
+      downloadTerm,
+      downloadAllTerms,
+      goToPersonalize,
+    ],
   );
 
   const [drawerOpened, drawer] = useDisclosure(false);
   const isMobile = useMediaQuery("(max-width: 768px)", false, { getInitialValueInEffect: false });
 
   const hasContent = graph.courseNodes.length > 0 || graph.bandNodes.length > 0;
+
+  // Clicking a term node focuses it in the panel; on mobile also surface the
+  // drawer so the newly-focused term's controls are immediately reachable.
+  const handleSelectTerm = useCallback(
+    (termId: string) => {
+      setSelectedTermId(termId);
+      if (isMobile) drawer.open();
+    },
+    [setSelectedTermId, isMobile, drawer],
+  );
 
   const renderSidebar = (showLayoutActions: boolean) => (
     <PlannerSidebar
@@ -264,6 +309,7 @@ export function DegreePlannerPage() {
                 graph={graph}
                 onNodePositionCommit={handleNodePositionCommit}
                 onResetLayout={resetLayout}
+                onSelectTerm={handleSelectTerm}
               />
               {isMobile ? (
                 <UnstyledButton

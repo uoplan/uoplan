@@ -138,6 +138,14 @@ export interface GraphPlannerState {
    * the snapshot docblock above).
    */
   preLinkCompletedContext: PlannerCalendarSnapshot | null;
+  /**
+   * The future term currently focused in the tabbed planner panel (its calendar
+   * node is highlighted). `null` shows the panel's "Overview" (global controls)
+   * tab and highlights no node. Selecting a term tab or clicking its node sets
+   * this; enabling a term focuses it; disabling/clearing the focused term resets
+   * it. Persisted so focus survives a reload (clamped to a still-planned term).
+   */
+  selectedTermId: string | null;
 
   /** Replace the completed-term breakdown (called after a transcript upload). */
   setCompletedCourseTerms: (terms: TranscriptTerm[]) => void;
@@ -147,6 +155,8 @@ export interface GraphPlannerState {
   enableTerm: (termId: string) => void;
   /** Disable a future term and drop its count/result. */
   disableTerm: (termId: string) => void;
+  /** Focus a future term in the panel (or `null` for the Overview tab). */
+  setSelectedTermId: (termId: string | null) => void;
   /** Set the requested course count for a specific enabled term. */
   setCountForTerm: (termId: string, count: number) => void;
   /** Set the default count used for newly enabled terms. */
@@ -247,6 +257,7 @@ const initialState = {
   panelCollapsed: false,
   linkedCalendarTermId: null as string | null,
   preLinkCompletedContext: null as PlannerCalendarSnapshot | null,
+  selectedTermId: null as string | null,
 };
 
 export const useGraphPlannerStore = create<GraphPlannerState>()(
@@ -260,12 +271,15 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
 
       enableTerm: (termId) =>
         set((s) => {
-          if (s.enabledTermIds.includes(termId)) return s;
+          if (s.enabledTermIds.includes(termId)) return { selectedTermId: termId };
           return {
             enabledTermIds: sortTermIds([...s.enabledTermIds, termId]),
             countByTermId: { ...s.countByTermId, [termId]: s.defaultCount },
+            selectedTermId: termId,
           };
         }),
+
+      setSelectedTermId: (termId) => set({ selectedTermId: termId }),
 
       disableTerm: (termId) =>
         set((s) => {
@@ -281,6 +295,7 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
             resultByTermId,
             cartByTerm,
             seedByTermId,
+            selectedTermId: s.selectedTermId === termId ? null : s.selectedTermId,
           };
         }),
 
@@ -325,6 +340,7 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
           resultByTermId: {},
           cartByTerm: {},
           seedByTermId: {},
+          selectedTermId: null,
         }),
 
       setNodePosition: (id, pos) =>
@@ -372,7 +388,15 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
         panelSize: s.panelSize,
         panelCollapsed: s.panelCollapsed,
         linkedCalendarTermId: s.linkedCalendarTermId,
+        selectedTermId: s.selectedTermId,
       }),
+      // On reload, drop a persisted focus that no longer maps to an enabled term
+      // (e.g. the plan was cleared in another tab) so the panel opens on Overview.
+      onRehydrateStorage: () => (state) => {
+        if (state && state.selectedTermId && !state.enabledTermIds.includes(state.selectedTermId)) {
+          state.selectedTermId = null;
+        }
+      },
     },
   ),
 );

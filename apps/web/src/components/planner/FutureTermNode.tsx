@@ -1,17 +1,11 @@
 import { memo, useRef } from "react";
-import { ActionIcon, Badge, Button, Loader, NumberInput, Tooltip } from "@mantine/core";
-import {
-  IconArrowsDiagonal,
-  IconCalendarEvent,
-  IconRefresh,
-  IconSchool,
-  IconX,
-} from "@tabler/icons-react";
+import { Badge, Loader } from "@mantine/core";
+import { IconArrowsDiagonal } from "@tabler/icons-react";
 import { Handle, NodeResizeControl, Position } from "@xyflow/react";
 import type { Node, NodeProps, ResizeParams } from "@xyflow/react";
 import { tr } from "../../i18n";
 import { useDataCache, useProfessorRatings } from "../../store/hooks";
-import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlannerStore";
+import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import type { PlannerTermStatus } from "../../store/graphPlannerStore";
 import type { PlannerBandData } from "../../lib/graphPlanner/buildPlannerGraph";
 import { PLANNER_FUTURE_MIN_SIZE } from "../../lib/graphPlanner/buildPlannerGraph";
@@ -40,98 +34,6 @@ function statusLabel(status: PlannerTermStatus): string {
     case "error":
       return tr("planner.status.error");
   }
-}
-
-/**
- * Enable / count / regenerate / disable controls for a future term. Marked
- * `nodrag nopan` so interacting with them never drags the container node.
- */
-function FutureControls({ termId, enabled }: { termId: string; enabled: boolean }) {
-  const actions = usePlannerActions();
-  const count = useGraphPlannerStore((s) => plannerTermCount(s, termId));
-  const running = actions.runningTermId === termId;
-
-  if (!enabled) {
-    if (!actions.hasProgram) {
-      return (
-        <Button
-          className="nodrag nopan"
-          size="compact-xs"
-          variant="light"
-          leftSection={<IconSchool size={14} />}
-          onClick={actions.goToPersonalize}
-        >
-          {tr("planner.band.pickProgram")}
-        </Button>
-      );
-    }
-    return (
-      <Button
-        className="nodrag nopan"
-        size="compact-xs"
-        variant="light"
-        disabled={actions.isGenerating}
-        onClick={() => actions.enableTerm(termId)}
-      >
-        {tr("planner.band.enable")}
-      </Button>
-    );
-  }
-
-  return (
-    <div className={`${styles.bandControls} nodrag nopan`}>
-      <NumberInput
-        size="xs"
-        w={72}
-        min={1}
-        max={12}
-        value={count}
-        disabled={actions.isGenerating}
-        onChange={(v) =>
-          actions.changeCount(termId, typeof v === "number" ? v : Number(v) || count)
-        }
-        aria-label={tr("planner.band.courseCount")}
-      />
-      {running ? (
-        <Loader size="xs" />
-      ) : (
-        <Tooltip label={tr("planner.band.regenerate")} withArrow>
-          <ActionIcon
-            size="sm"
-            variant="subtle"
-            disabled={actions.isGenerating}
-            onClick={() => actions.regenerateTerm(termId)}
-            aria-label={tr("planner.band.regenerate")}
-          >
-            <IconRefresh size={15} />
-          </ActionIcon>
-        </Tooltip>
-      )}
-      <Tooltip label={tr("planner.band.openInCalendar")} withArrow>
-        <ActionIcon
-          size="sm"
-          variant="subtle"
-          disabled={actions.isGenerating}
-          onClick={() => actions.openInCalendar(termId)}
-          aria-label={tr("planner.band.openInCalendar")}
-        >
-          <IconCalendarEvent size={15} />
-        </ActionIcon>
-      </Tooltip>
-      <Tooltip label={tr("planner.band.disable")} withArrow>
-        <ActionIcon
-          size="sm"
-          variant="subtle"
-          color="red"
-          disabled={actions.isGenerating}
-          onClick={() => actions.disableTerm(termId)}
-          aria-label={tr("planner.band.disable")}
-        >
-          <IconX size={15} />
-        </ActionIcon>
-      </Tooltip>
-    </div>
-  );
 }
 
 /**
@@ -205,17 +107,19 @@ function FutureTermBody({
  * A future term rendered as a React Flow container node whose body is a
  * read-only week calendar of the term's generated schedule. Prerequisite edges
  * from earlier terms (completed course chips or earlier term calendars) land on
- * the left target handle; the right source handle feeds later terms. The header
- * stays a drag handle while the enable/count/regenerate controls opt out of
- * dragging via `nodrag`.
+ * the left target handle; the right source handle feeds later terms. The node is
+ * a click target that focuses the term in the tabbed panel (highlighted blue
+ * while selected); all per-term controls now live in that panel. Disabled terms
+ * show a "select to plan" hint instead of a calendar.
  */
 function FutureTermNodeImpl({ id, data }: NodeProps<FutureFlowNode>) {
   const running = usePlannerActions().runningTermId === data.termId;
+  const selected = useGraphPlannerStore((s) => s.selectedTermId === data.termId);
   const active = data.enabled || running;
   const setNodeSize = useGraphPlannerStore((s) => s.setNodeSize);
 
   return (
-    <div className={styles.container} data-active={active}>
+    <div className={styles.container} data-active={active} data-selected={selected || undefined}>
       <Handle
         type="target"
         position={Position.Left}
@@ -231,7 +135,6 @@ function FutureTermNodeImpl({ id, data }: NodeProps<FutureFlowNode>) {
             </Badge>
           ) : null}
         </div>
-        {data.termId ? <FutureControls termId={data.termId} enabled={data.enabled} /> : null}
       </div>
       {data.enabled && data.termId ? (
         <FutureTermBody
@@ -240,7 +143,9 @@ function FutureTermNodeImpl({ id, data }: NodeProps<FutureFlowNode>) {
           status={data.status}
           running={running}
         />
-      ) : null}
+      ) : (
+        <div className={styles.calendarHintBody}>{tr("planner.future.selectToPlan")}</div>
+      )}
       {data.enabled ? (
         <NodeResizeControl
           className={styles.resizeControl}

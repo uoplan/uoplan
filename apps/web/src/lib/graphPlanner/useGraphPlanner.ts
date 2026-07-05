@@ -55,7 +55,7 @@ export function useGraphPlanner() {
    * enabled term. Earlier terms' picks are reused as the completed base.
    */
   const regenerateFrom = useCallback(
-    async (startTermId?: string): Promise<void> => {
+    async (startTermId?: string, opts?: { startSeed?: number }): Promise<void> => {
       const base = storeApi.getState();
       if (!base.program || !base.cache) return;
 
@@ -79,11 +79,17 @@ export function useGraphPlanner() {
       // Advance each target term's engine seed so a repeat "Regenerate" yields a
       // different variant. `nextSeed(firstSeed, 0)` returns `firstSeed` (first
       // gen matches the calendar's anchor); each later run increments from there.
+      // `opts.startSeed` pins the *start* term to an explicit seed instead of
+      // advancing — used by "Previous" to step back down the variant ladder.
+      const startSeed = opts?.startSeed;
       const seedByTermId: Record<string, number> = { ...planner.seedByTermId };
       for (const id of termsToRun) {
-        const advanced = nextSeed(base.firstSeed, planner.seedByTermId[id] ?? 0);
-        seedByTermId[id] = advanced;
-        setTermSeed(id, advanced);
+        const seed =
+          startSeed !== undefined && id === termsToRun[0]
+            ? startSeed
+            : nextSeed(base.firstSeed, planner.seedByTermId[id] ?? 0);
+        seedByTermId[id] = seed;
+        setTermSeed(id, seed);
       }
 
       const config: PlannerRunConfig = {
@@ -129,6 +135,22 @@ export function useGraphPlanner() {
     [enableTerm, regenerateFrom],
   );
 
+  /**
+   * Step the term back to its previous schedule variant (seed − 1), down to the
+   * anchor (`firstSeed`). Later terms depend on this term's picks, so they
+   * regenerate too. No-op once the term is already on its first variant.
+   */
+  const previousTermVariant = useCallback(
+    async (termId: string): Promise<void> => {
+      const base = storeApi.getState();
+      const planner = useGraphPlannerStore.getState();
+      const current = planner.seedByTermId[termId] ?? 0;
+      if (current === 0 || current <= base.firstSeed) return;
+      await regenerateFrom(termId, { startSeed: current - 1 });
+    },
+    [storeApi, regenerateFrom],
+  );
+
   const disableAndReflow = useCallback(
     async (termId: string): Promise<void> => {
       const before = useGraphPlannerStore.getState().enabledTermIds;
@@ -161,6 +183,7 @@ export function useGraphPlanner() {
     setDefaultCount,
     regenerateAll,
     regenerateFrom,
+    previousTermVariant,
     clearAllGenerated,
   };
 }

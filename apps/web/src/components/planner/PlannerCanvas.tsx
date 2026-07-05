@@ -6,7 +6,14 @@ import {
   useEdgesState,
   useNodesState,
 } from "@xyflow/react";
-import type { Edge, FitViewOptions, Node, NodeTypes, OnNodeDrag } from "@xyflow/react";
+import type {
+  Edge,
+  FitViewOptions,
+  Node,
+  NodeMouseHandler,
+  NodeTypes,
+  OnNodeDrag,
+} from "@xyflow/react";
 import type { PlannerGraph } from "../../lib/graphPlanner/buildPlannerGraph";
 import { CourseNode } from "./CourseNode";
 import { FutureTermNode } from "./FutureTermNode";
@@ -83,9 +90,16 @@ interface PlannerCanvasProps {
   onNodePositionCommit: (id: string, pos: { x: number; y: number }) => void;
   /** Clear manual positions, restoring the automatic layout. */
   onResetLayout: () => void;
+  /** Focus a future term when its node is clicked. */
+  onSelectTerm: (termId: string) => void;
 }
 
-export function PlannerCanvas({ graph, onNodePositionCommit, onResetLayout }: PlannerCanvasProps) {
+export function PlannerCanvas({
+  graph,
+  onNodePositionCommit,
+  onResetLayout,
+  onSelectTerm,
+}: PlannerCanvasProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
@@ -104,6 +118,18 @@ export function PlannerCanvas({ graph, onNodePositionCommit, onResetLayout }: Pl
       onNodePositionCommit(node.id, { x: node.position.x, y: node.position.y });
     },
     [onNodePositionCommit],
+  );
+
+  // Clicking a future-term node focuses that term in the panel. Other node kinds
+  // (completed bands, course chips) have no term to focus, so they're ignored.
+  const handleNodeClick = useCallback<NodeMouseHandler>(
+    (_event, node) => {
+      if (node.type === "futureTerm") {
+        const termId = (node.data as { termId?: string }).termId;
+        if (termId) onSelectTerm(termId);
+      }
+    },
+    [onSelectTerm],
   );
 
   // On the initial fit, frame the most recent term + future/planning terms rather
@@ -127,6 +153,7 @@ export function PlannerCanvas({ graph, onNodePositionCommit, onResetLayout }: Pl
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeDragStop={handleDragStop}
+        onNodeClick={handleNodeClick}
         nodeTypes={nodeTypes}
         fitView
         fitViewOptions={fitViewOptions}
