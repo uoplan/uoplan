@@ -7,7 +7,6 @@ import { useShallow } from "zustand/react/shallow";
 import "@xyflow/react/dist/style.css";
 import { i18n, tr, useTr } from "../../i18n";
 import { useActiveProgram, useDataCache, useStoreApi, useTerms } from "../../store/hooks";
-import { useProgramSelection } from "../../store/hooks/useProgramSelection";
 import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlannerStore";
 import { useGraphPlanner } from "../../lib/graphPlanner/useGraphPlanner";
 import { buildPlannerGraph } from "../../lib/graphPlanner/buildPlannerGraph";
@@ -29,7 +28,6 @@ export function DegreePlannerPage() {
   const navigate = useNavigate();
   const cache = useDataCache();
   const program = useActiveProgram();
-  const { studentPrograms } = useProgramSelection();
   const terms = useTerms();
   const storeApi = useStoreApi();
 
@@ -45,6 +43,7 @@ export function DegreePlannerPage() {
     );
   const clearPlannedTerms = useGraphPlannerStore((s) => s.clearPlannedTerms);
   const nodePositions = useGraphPlannerStore((s) => s.nodePositions);
+  const nodeSizes = useGraphPlannerStore((s) => s.nodeSizes);
   const setNodePosition = useGraphPlannerStore((s) => s.setNodePosition);
   const resetLayout = useGraphPlannerStore((s) => s.resetLayout);
   const setGeneratedTerm = useGraphPlannerStore((s) => s.setGeneratedTerm);
@@ -80,12 +79,12 @@ export function DegreePlannerPage() {
       completedTerms,
       futureTerms,
       cache,
-      studentPrograms,
       positions: nodePositions,
+      sizes: nodeSizes,
     });
     // `locale` is a dep because `formatTermLabel` reads the active i18n locale.
     // oxlint-disable-next-line react/exhaustive-deps
-  }, [futureColumns, completedCourseTerms, cache, studentPrograms, nodePositions, locale]);
+  }, [futureColumns, completedCourseTerms, cache, nodePositions, nodeSizes, locale]);
 
   const goToPersonalize = useCallback(() => {
     void navigate({ to: "/personalize" });

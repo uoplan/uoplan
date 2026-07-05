@@ -2859,6 +2859,10 @@ msgstr "Planifiez votre parcours"
 msgid "planner.future.emptyHint"
 msgstr "Aucun cours pour l'instant. Ajustez le nombre ou régénérez pour remplir ce trimestre."
 
+#: apps/web/src/components/planner/FutureTermNode.tsx:161
+msgid "planner.future.noPreview"
+msgstr "Régénérez pour afficher le calendrier de ce trimestre."
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.generate"
 msgstr "Générer les horaires"

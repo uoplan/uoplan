@@ -72,10 +72,10 @@ export interface GraphPlannerState {
   generatedByTermId: Record<string, PlannerGeneratedTerm>;
   /**
    * Full schedule bundle (the exact `GenerateSchedulesResult`) for each enabled
-   * term, kept so "open in calendar" can forward the term's precise schedule
-   * into the calendar view without re-generating. In-memory only (never
-   * persisted): these `GeneratedSchedule` objects are large and are transient
-   * refinement state, not something to bloat localStorage or the shareable URL.
+   * term, kept so the graph can render each term's precise timetable in a
+   * calendar and "open in calendar" can forward it without re-generating.
+   * Persisted so the term calendars survive a reload; it only ever lands in
+   * localStorage (never the shareable URL, which is encoded by the main store).
    */
   resultByTermId: Record<string, GenerateSchedulesResult>;
   /**
@@ -92,6 +92,12 @@ export interface GraphPlannerState {
    * courses anywhere and have it persist across reloads.
    */
   nodePositions: Record<string, { x: number; y: number }>;
+  /**
+   * User-adjusted node sizes, keyed by React Flow node id. Currently only
+   * future-term calendar containers are resizable; the stored size overrides the
+   * automatic layout so a student can grow a term's calendar and have it persist.
+   */
+  nodeSizes: Record<string, { width: number; height: number }>;
   /**
    * When the student opens a future term in the calendar view ("modify this one
    * closely"), we remember which term so the planner can reconcile the calendar's
@@ -137,6 +143,8 @@ export interface GraphPlannerState {
   clearPlannedTerms: () => void;
   /** Persist a dragged node's position (see {@link nodePositions}). */
   setNodePosition: (id: string, pos: { x: number; y: number }) => void;
+  /** Persist a resized node's size (see {@link nodeSizes}). */
+  setNodeSize: (id: string, size: { width: number; height: number }) => void;
   /** Clear all manual node positions, restoring the automatic layout. */
   resetLayout: () => void;
   /**
@@ -199,6 +207,7 @@ const initialState = {
   resultByTermId: {} as Record<string, GenerateSchedulesResult>,
   cartByTerm: {} as Record<string, string[]>,
   nodePositions: {} as Record<string, { x: number; y: number }>,
+  nodeSizes: {} as Record<string, { width: number; height: number }>,
   linkedCalendarTermId: null as string | null,
   preLinkCompletedContext: null as PlannerCalendarSnapshot | null,
 };
@@ -278,7 +287,9 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
       setNodePosition: (id, pos) =>
         set((s) => ({ nodePositions: { ...s.nodePositions, [id]: pos } })),
 
-      resetLayout: () => set({ nodePositions: {} }),
+      setNodeSize: (id, size) => set((s) => ({ nodeSizes: { ...s.nodeSizes, [id]: size } })),
+
+      resetLayout: () => set({ nodePositions: {}, nodeSizes: {} }),
 
       beginCalendarLink: (termId, snapshot) =>
         set({ linkedCalendarTermId: termId, preLinkCompletedContext: snapshot }),
@@ -292,8 +303,9 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
       version: STORAGE_VERSION,
       storage: createJSONStorage(plannerStorage),
       // Persist data only — action closures are re-created on rehydrate.
-      // `resultByTermId` (large schedule bundles) and `preLinkCompletedContext`
-      // (transient calendar-link context snapshot) are intentionally in-memory only.
+      // `preLinkCompletedContext` (transient calendar-link context snapshot) is
+      // intentionally in-memory only. `resultByTermId` IS persisted so the graph
+      // can redraw each term's calendar after a reload.
       partialize: (s) => ({
         completedCourseTerms: s.completedCourseTerms,
         hasTranscript: s.hasTranscript,
@@ -301,8 +313,10 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
         countByTermId: s.countByTermId,
         defaultCount: s.defaultCount,
         generatedByTermId: s.generatedByTermId,
+        resultByTermId: s.resultByTermId,
         cartByTerm: s.cartByTerm,
         nodePositions: s.nodePositions,
+        nodeSizes: s.nodeSizes,
         linkedCalendarTermId: s.linkedCalendarTermId,
       }),
     },

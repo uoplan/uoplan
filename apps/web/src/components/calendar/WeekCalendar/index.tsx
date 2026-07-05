@@ -3,15 +3,8 @@ import type { DataCache, DayOfWeekCode } from "@uoplan/core";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
 import type { BlockedTime } from "../../../store/types";
 import { useBlockedTimes, useGenerationTimeWindow } from "../../../store/hooks";
-import {
-  assignLanes,
-  DAY_LABELS,
-  FULL_WEEK_CODES,
-  HALF_HOUR_PERCENTS,
-  HOUR_LABELS,
-  WEEKDAY_CODES,
-} from "./weekCalendarLayout";
-import { WeekCalendarEvent } from "./WeekCalendarEvent";
+import { FULL_WEEK_CODES, WEEKDAY_CODES } from "./weekCalendarLayout";
+import { WeekCalendarGrid } from "./WeekCalendarGrid";
 import { BlockedTimeLayer } from "./BlockedTimeLayer";
 import { GenerationWindowLayer } from "./GenerationWindowLayer";
 import { BlockedTimeRemoveModal } from "../BlockedTimeRemoveModal";
@@ -35,12 +28,10 @@ interface WeekCalendarProps {
   onEventClose: () => void;
 }
 
-const EMPTY_COLOR_MAP: Record<string, number> = {};
-
 export function WeekCalendar({
   events,
   cache,
-  colorMap = EMPTY_COLOR_MAP,
+  colorMap,
   onEventClick,
   showWeekends,
   animationPhase,
@@ -66,89 +57,40 @@ export function WeekCalendar({
     return map;
   }, [blockedTimes, dayCodes]);
 
-  const eventsByDay = useMemo(() => {
-    const map = new Map<DayOfWeekCode, CalendarEvent[]>();
-    for (const day of dayCodes) map.set(day, []);
-    for (const ev of events) {
-      map.get(ev.day)?.push(ev);
-    }
-    return map;
-  }, [events, dayCodes]);
-
   return (
-    <div className="cal-root" data-phase={animationPhase}>
-      {/* Time axis */}
-      <div className="cal-time-axis">
-        <div className="cal-time-axis-inner">
-          {HOUR_LABELS.map(({ label, percent }) => (
-            <div key={label} className="cal-time-label" style={{ top: `${percent}%` }}>
-              {label}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Day columns */}
-      <div className="cal-columns">
-        {/* Hour lines (behind all columns) */}
-        <div className="cal-hour-lines" aria-hidden>
-          {HOUR_LABELS.map(({ label, percent }) => (
-            <div key={label} className="cal-hour-line" style={{ top: `${percent}%` }} />
-          ))}
-        </div>
-
-        {dayCodes.map((day) => {
-          const dayEvents = eventsByDay.get(day) ?? [];
-          const laid = assignLanes(dayEvents);
-          return (
-            <div key={day} className="cal-column">
-              <div className="cal-col-header">{DAY_LABELS[day]}</div>
-              <div className="cal-col-body">
-                {/* Half-hour dividers */}
-                {HALF_HOUR_PERCENTS.map((percent) => (
-                  <div
-                    key={percent}
-                    className="cal-half-line"
-                    style={{ top: `${percent}%` }}
-                    aria-hidden
-                  />
-                ))}
-                <GenerationWindowLayer
-                  minStartMinutes={minStartMinutes}
-                  maxEndMinutes={maxEndMinutes}
-                />
-                <BlockedTimeLayer
-                  day={day}
-                  blocks={blocksByDay.get(day) ?? []}
-                  onCommitCreate={(d, start, end) =>
-                    addBlockedTime({ day: d, startMinutes: start, endMinutes: end })
-                  }
-                  onCommitUpdate={(id, start, end) =>
-                    updateBlockedTime(id, { day, startMinutes: start, endMinutes: end })
-                  }
-                  onRequestRemove={setBlockToRemove}
-                />
-                {laid.map(({ event, laneIndex, laneCount }) => (
-                  <WeekCalendarEvent
-                    key={event.id}
-                    event={event}
-                    laneIndex={laneIndex}
-                    laneCount={laneCount}
-                    cache={cache}
-                    colorMap={colorMap}
-                    onClick={onEventClick}
-                    isActive={event.id === activeEventId}
-                    isMobile={isMobile}
-                    isFullscreen={isFullscreen}
-                    instantPopover={instantPopover && event.id === activeEventId}
-                    onRequestClose={onEventClose}
-                  />
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+    <>
+      <WeekCalendarGrid
+        events={events}
+        cache={cache}
+        colorMap={colorMap}
+        dayCodes={dayCodes}
+        animationPhase={animationPhase}
+        activeEventId={activeEventId}
+        onEventClick={onEventClick}
+        onEventClose={onEventClose}
+        isMobile={isMobile}
+        isFullscreen={isFullscreen}
+        instantPopover={instantPopover}
+        renderDayUnderlay={(day) => (
+          <>
+            <GenerationWindowLayer
+              minStartMinutes={minStartMinutes}
+              maxEndMinutes={maxEndMinutes}
+            />
+            <BlockedTimeLayer
+              day={day}
+              blocks={blocksByDay.get(day) ?? []}
+              onCommitCreate={(d, start, end) =>
+                addBlockedTime({ day: d, startMinutes: start, endMinutes: end })
+              }
+              onCommitUpdate={(id, start, end) =>
+                updateBlockedTime(id, { day, startMinutes: start, endMinutes: end })
+              }
+              onRequestRemove={setBlockToRemove}
+            />
+          </>
+        )}
+      />
       <BlockedTimeRemoveModal
         block={blockToRemove}
         onClose={() => setBlockToRemove(null)}
@@ -157,6 +99,6 @@ export function WeekCalendar({
           setBlockToRemove(null);
         }}
       />
-    </div>
+    </>
   );
 }

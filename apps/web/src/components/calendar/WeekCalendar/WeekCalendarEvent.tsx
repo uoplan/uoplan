@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import type { ReactNode } from "react";
 import { Popover } from "@mantine/core";
 import type { DataCache } from "@uoplan/core";
 import { COURSE_COLOR_OKLCH, COURSE_COLORS, ratingToColor } from "@uoplan/core";
@@ -29,6 +30,12 @@ interface WeekCalendarEventProps {
   instantPopover: boolean;
   /** Dismiss the active swap overlay (used when the popover closes itself). */
   onRequestClose: () => void;
+  /**
+   * Custom popover content. Defaults to the interactive swap overlay
+   * ({@link CalendarEventDetails}); the planner term calendar passes a read-only
+   * details renderer instead. Receives the event and its resolved course title.
+   */
+  renderDetails?: (event: CalendarEvent, courseTitle: string) => ReactNode;
 }
 
 const LANE_GAP_PX = 1;
@@ -46,6 +53,7 @@ function WeekCalendarEventImpl({
   isFullscreen,
   instantPopover,
   onRequestClose,
+  renderDetails,
 }: WeekCalendarEventProps) {
   const tr = useTr();
 
@@ -165,7 +173,11 @@ function WeekCalendarEventImpl({
             scrollbarGutter: "stable",
           }}
         >
-          <CalendarEventDetails event={event} courseTitle={courseTitle} />
+          {renderDetails ? (
+            renderDetails(event, courseTitle)
+          ) : (
+            <CalendarEventDetails event={event} courseTitle={courseTitle} />
+          )}
         </div>
       </Popover.Dropdown>
     </Popover>

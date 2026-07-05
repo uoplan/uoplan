@@ -57,11 +57,63 @@
   flex-wrap: wrap;
 }
 
-.containerHint {
-  padding: 0 12px 10px;
+/* Read-only week calendar embedded in a future-term node. Rounded (and clipped)
+   to sit concentrically inside the container card. */
+.calendarBody {
+  flex: 1;
+  min-height: 0;
+  margin: 0 12px 12px;
+  border-radius: var(--app-radius);
+  border: var(--app-border-width) solid var(--app-border);
+  background: var(--app-bg);
+  overflow: hidden;
+}
+
+.calendarHintBody {
+  flex: 1;
+  min-height: 0;
+  margin: 0 12px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--app-radius);
+  border: var(--app-border-width) dashed var(--app-border);
+  padding: 12px;
+  text-align: center;
   font-family: var(--app-font-body);
   font-size: var(--mantine-font-size-xs);
   color: var(--app-text-muted);
+}
+
+/* Corner grip for resizing a future-term calendar node. Overrides React Flow's
+   default 5px handle to a subtle icon tucked inside the bottom-right corner. */
+.resizeControl.resizeControl {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  translate: -100% -100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 3px;
+  color: var(--app-text-dim);
+  opacity: 0.5;
+  cursor: nwse-resize;
+  transition:
+    opacity var(--app-transition),
+    color var(--app-transition);
+}
+
+.container:hover .resizeControl.resizeControl {
+  opacity: 0.9;
+  color: var(--app-accent);
+}
+
+.resizeGrip {
+  pointer-events: none;
 }
 
 .bandLabel {

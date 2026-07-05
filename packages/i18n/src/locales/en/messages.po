@@ -2859,6 +2859,10 @@ msgstr "Plan your degree"
 msgid "planner.future.emptyHint"
 msgstr "No courses yet. Adjust the count or regenerate to fill this term."
 
+#: apps/web/src/components/planner/FutureTermNode.tsx:161
+msgid "planner.future.noPreview"
+msgstr "Regenerate to preview this term's calendar."
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:149
 msgid "planner.generate"
 msgstr "Generate schedules"
