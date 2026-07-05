@@ -62,11 +62,25 @@
 .calendarBody {
   flex: 1;
   min-height: 0;
+  position: relative;
   margin: 0 12px 12px;
   border-radius: var(--app-radius);
   border: var(--app-border-width) solid var(--app-border);
   background: var(--app-bg);
   overflow: hidden;
+}
+
+/* Dim overlay + spinner shown over the retained calendar while a term
+   regenerates, so the schedule-change animation reads as a refresh. */
+.calendarBusy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--app-radius);
+  background: color-mix(in srgb, var(--app-bg) 55%, transparent);
+  z-index: 2;
 }
 
 .calendarHintBody {

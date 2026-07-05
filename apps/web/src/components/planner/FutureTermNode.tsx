@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useRef } from "react";
 import { ActionIcon, Badge, Button, Loader, NumberInput, Tooltip } from "@mantine/core";
 import {
   IconArrowsDiagonal,
@@ -15,6 +15,7 @@ import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlanner
 import type { PlannerTermStatus } from "../../store/graphPlannerStore";
 import type { PlannerBandData } from "../../lib/graphPlanner/buildPlannerGraph";
 import { PLANNER_FUTURE_MIN_SIZE } from "../../lib/graphPlanner/buildPlannerGraph";
+import type { GenerateSchedulesResult } from "../../lib/generateSchedulesAction";
 import { usePlannerActions } from "./plannerActionsContext";
 import { PlannerTermCalendar } from "./PlannerTermCalendar";
 import styles from "./planner.module.css";
@@ -137,22 +138,56 @@ function FutureControls({ termId, enabled }: { termId: string; enabled: boolean 
  * The calendar body of an enabled future term. Reads the term's retained
  * schedule bundle from the planner store and renders it in the same read-only
  * week calendar the rest of the app uses, so the graph shows the real timetable.
- * Falls back to a hint while generating, when the term came back empty, or when
- * an older persisted plan has no retained schedule to draw.
+ * While regenerating it keeps the previous schedule mounted (dimmed, with a
+ * spinner) so the schedule-change animation can play instead of the calendar
+ * collapsing to a loader. Falls back to a hint when the term came back empty or
+ * when an older persisted plan has no retained schedule to draw.
  */
 function FutureTermBody({
   termId,
   courseCount,
+  status,
   running,
 }: {
   termId: string;
   courseCount: number;
+  status: PlannerTermStatus | undefined;
   running: boolean;
 }) {
   const cache = useDataCache();
   const professorRatings = useProfessorRatings();
   const bundle = useGraphPlannerStore((s) => s.resultByTermId[termId]);
 
+  // Keep the last drawn schedule so a mid-regeneration clear (bundle briefly
+  // undefined while the term recomputes) doesn't unmount the calendar. Staying
+  // mounted lets PlannerTermCalendar animate the exit -> enter on the new
+  // schedule. A term that *settles* with no schedule (empty / error) drops the
+  // retained calendar so we show the hint instead of a stale timetable.
+  const lastBundleRef = useRef<GenerateSchedulesResult | undefined>(bundle);
+  if (bundle?.currentSchedule) lastBundleRef.current = bundle;
+  else if (!running && status !== undefined) lastBundleRef.current = undefined;
+
+  const shown = bundle?.currentSchedule ? bundle : lastBundleRef.current;
+  const schedule = shown?.currentSchedule ?? null;
+  const busy = running || (schedule != null && !bundle?.currentSchedule);
+
+  if (schedule) {
+    return (
+      <div className={`${styles.calendarBody} nodrag nowheel`}>
+        <PlannerTermCalendar
+          schedule={schedule}
+          cache={cache}
+          colorMap={shown?.currentColorMap}
+          professorRatings={professorRatings}
+        />
+        {busy ? (
+          <div className={styles.calendarBusy}>
+            <Loader size="sm" />
+          </div>
+        ) : null}
+      </div>
+    );
+  }
   if (running) {
     return (
       <div className={styles.calendarHintBody}>
@@ -163,20 +198,7 @@ function FutureTermBody({
   if (courseCount === 0) {
     return <div className={styles.calendarHintBody}>{tr("planner.future.emptyHint")}</div>;
   }
-  const schedule = bundle?.currentSchedule ?? null;
-  if (!schedule) {
-    return <div className={styles.calendarHintBody}>{tr("planner.future.noPreview")}</div>;
-  }
-  return (
-    <div className={`${styles.calendarBody} nodrag nowheel`}>
-      <PlannerTermCalendar
-        schedule={schedule}
-        cache={cache}
-        colorMap={bundle?.currentColorMap}
-        professorRatings={professorRatings}
-      />
-    </div>
-  );
+  return <div className={styles.calendarHintBody}>{tr("planner.future.noPreview")}</div>;
 }
 
 /**
@@ -212,7 +234,12 @@ function FutureTermNodeImpl({ id, data }: NodeProps<FutureFlowNode>) {
         {data.termId ? <FutureControls termId={data.termId} enabled={data.enabled} /> : null}
       </div>
       {data.enabled && data.termId ? (
-        <FutureTermBody termId={data.termId} courseCount={data.courseCount} running={running} />
+        <FutureTermBody
+          termId={data.termId}
+          courseCount={data.courseCount}
+          status={data.status}
+          running={running}
+        />
       ) : null}
       {data.enabled ? (
         <NodeResizeControl
