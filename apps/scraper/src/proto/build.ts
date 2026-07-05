@@ -14,6 +14,12 @@ import { readJson } from "../shared/json.ts";
 import { buildFeedbackData } from "./feedback.ts";
 import { mapCatalogue } from "./catalogue.ts";
 import type { CatalogueJsonInput } from "./catalogue.ts";
+import {
+  buildPrereqHistory,
+  buildUnionCatalogueInput,
+  programsOnlyInput,
+} from "./catalogue-merged.ts";
+import type { YearCatalogue } from "./catalogue-merged.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
 import { mapSchedules } from "./schedules.ts";
 import type { SchedulesJsonInput } from "./schedules.ts";
@@ -176,6 +182,42 @@ export async function main(): Promise<void> {
     const data = await readJson<CatalogueJsonInput>(fullPath);
     const encoded = DataProto.Catalogue.encode(mapCatalogue(data)).finish();
     await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
+  }
+
+  // Merged catalogue: a single union of all courses (latest metadata) shipped
+  // once, plus a compact per-course prerequisite-history overlay for cohort
+  // reconstruction, plus small programs-only assets per cohort year. Replaces
+  // the app's need to fetch two full year catalogues. See docs + @uoplan/core
+  // reconstructCatalogueForYear.
+  const yearInputs: YearCatalogue[] = [];
+  for (const fileName of yearCatalogues) {
+    const match = /catalogue\.(\d{4})\.json$/.exec(fileName);
+    if (!match) continue;
+    yearInputs.push({
+      year: Number(match[1]),
+      data: await readJson<CatalogueJsonInput>(path.join(CATALOGUE_DATA_DIR, fileName)),
+    });
+  }
+  yearInputs.sort((a, b) => a.year - b.year);
+  if (yearInputs.length > 0) {
+    const unionInput = buildUnionCatalogueInput(yearInputs);
+    const unionProto = mapCatalogue(unionInput);
+    await writePb(
+      path.join(WEB_ASSETS_DATA_DIR, "catalogue.union.pb"),
+      DataProto.Catalogue.encode(unionProto).finish(),
+    );
+    await writePb(
+      path.join(WEB_ASSETS_DATA_DIR, "catalogue.history.pb"),
+      DataProto.CataloguePrereqHistory.encode(
+        buildPrereqHistory(yearInputs, unionInput, unionProto.courseCodes),
+      ).finish(),
+    );
+    for (const { year, data } of yearInputs) {
+      await writePb(
+        path.join(WEB_ASSETS_DATA_DIR, `catalogue.programs.${year}.pb`),
+        DataProto.Catalogue.encode(mapCatalogue(programsOnlyInput(data))).finish(),
+      );
+    }
   }
 
   const gradesJson = await readJson<unknown[]>(path.join(SCRAPER_DATA_DIR, "grades.json"));

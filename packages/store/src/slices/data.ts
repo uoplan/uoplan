@@ -22,6 +22,7 @@ import {
   parseStateFromUrl,
   peekTermAndYear,
   peekTermAndYearFromBase64,
+  reconstructCatalogueForYear,
   urlToSlug,
 } from "@uoplan/core";
 import type { DataCache, DisciplinesData, Indices } from "@uoplan/core";
@@ -60,6 +61,31 @@ export const createDataSlice =
     let disciplinesPromise: Promise<void> | null = null;
     let professorsPromise: Promise<void> | null = null;
     let yearCataloguePromise: Promise<void> | null = null;
+
+    // The union catalogue proto (all courses, latest metadata) and the compact
+    // prerequisite-history overlay are retained so a cohort's year-specific
+    // prerequisites can be reconstructed without fetching a second full year
+    // catalogue. `prereqHistory` is fetched lazily on the first cohort load.
+    let unionProtoCatalogue: DataProto.Catalogue | null = null;
+    let prereqHistory: DataProto.CataloguePrereqHistory | null = null;
+
+    /** Reconstruct a cohort year's courses (from the union + prereq overlay) and
+     * fetch that year's programs-only catalogue. */
+    const loadYearCatalogueData = async (year: number) => {
+      if (!unionProtoCatalogue) throw new Error("Catalogue not loaded");
+      if (!prereqHistory) {
+        prereqHistory = DataProto.CataloguePrereqHistory.decode(
+          await services.data.fetchBytes(dataAssetIds.cataloguePrereqHistory),
+        );
+      }
+      const { courses } = reconstructCatalogueForYear(unionProtoCatalogue, prereqHistory, year);
+      const { programs } = fromProtoCatalogue(
+        DataProto.Catalogue.decode(
+          await services.data.fetchBytes(dataAssetIds.catalogueProgramsForYear(year)),
+        ),
+      );
+      return { courses, programs };
+    };
 
     /** Rebuild the effective merged catalogue for the current store state. */
     const effectiveCatalogueFromState = () => {
@@ -169,8 +195,7 @@ export const createDataSlice =
               set({ cache });
             }
           } else {
-            const bytes = await services.data.fetchBytes(dataAssetIds.catalogue(year));
-            const parsed = fromProtoCatalogue(DataProto.Catalogue.decode(bytes));
+            const parsed = await loadYearCatalogueData(year);
             set({
               yearCataloguePrograms: parsed.programs,
               yearCatalogueCourses: parsed.courses,
@@ -233,12 +258,11 @@ export const createDataSlice =
             const latestYear = availableYears[0];
             if (!latestYear) throw new Error("Catalogue manifest has no years");
 
-            const catalogueBytes = await services.data.fetchBytes(
-              dataAssetIds.catalogue(latestYear),
-            );
+            const catalogueBytes = await services.data.fetchBytes(dataAssetIds.catalogueUnion);
             bumpLoadProgress();
 
-            const parsedCatalogue = fromProtoCatalogue(DataProto.Catalogue.decode(catalogueBytes));
+            unionProtoCatalogue = DataProto.Catalogue.decode(catalogueBytes);
+            const parsedCatalogue = fromProtoCatalogue(unionProtoCatalogue);
             const parsedTerms = fromProtoTermsData(DataProto.TermsData.decode(termsBytes));
 
             let indices: Indices | null = null;
@@ -570,8 +594,7 @@ export const createDataSlice =
         yearCataloguePromise = (async () => {
           try {
             set({ yearCatalogueLoading: true });
-            const bytes = await services.data.fetchBytes(dataAssetIds.catalogue(firstYear));
-            const parsed = fromProtoCatalogue(DataProto.Catalogue.decode(bytes));
+            const parsed = await loadYearCatalogueData(firstYear);
             set({
               yearCataloguePrograms: parsed.programs,
               yearCatalogueCourses: parsed.courses,

@@ -25,6 +25,24 @@ export function catalogueBytes(catalogue: Catalogue): Uint8Array {
   return encode(DataProto.Catalogue.encode(toProtoCatalogue(catalogue)));
 }
 
+/** Encode a prerequisite-history overlay for tests. */
+export function prereqHistoryBytes(history: DataProto.CataloguePrereqHistory): Uint8Array {
+  return encode(DataProto.CataloguePrereqHistory.encode(history));
+}
+
+/** A minimal single-course prerequisite node for building overlay revisions. */
+export function coursePrereqNode(code: string): DataProto.CoursePrereqNode {
+  return {
+    type: DataProto.CoursePrereqNodeType.COURSE_PREREQ_NODE_TYPE_COURSE,
+    code: normalizeCourseCode(code),
+    disciplines: [],
+    levels: [],
+    disciplineLevels: [],
+    programs: [],
+    children: [],
+  };
+}
+
 export function schedulesBytes(schedules: SchedulesData): Uint8Array {
   return encode(DataProto.SchedulesData.encode(toProtoSchedulesData(schedules)));
 }

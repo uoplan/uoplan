@@ -55,6 +55,8 @@ export interface CatalogueJsonInput {
   programs?: CatalogueProgramInput[];
 }
 
+export type { CatalogueCourseInput, CatalogueProgramInput, PrereqInput };
+
 function prereqTypeToProto(type: string): number {
   switch (type) {
     case "course":
@@ -139,7 +141,7 @@ function mapDisciplineLevels(items: DisciplineLevelInput[] = []) {
   }));
 }
 
-function mapPrereq(node: PrereqInput): DataProto.CoursePrereqNode {
+export function mapPrereq(node: PrereqInput): DataProto.CoursePrereqNode {
   return {
     type: prereqTypeToProto(String(node.type ?? "")),
     code: node.code,

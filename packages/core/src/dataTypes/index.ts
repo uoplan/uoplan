@@ -18,3 +18,4 @@ export {
   toProtoTermsData,
 } from "./schedules";
 export { fromProtoIndices, toProtoIndices } from "./indices";
+export { reconstructCatalogueForYear } from "./catalogueHistory";

@@ -6,8 +6,10 @@ import { dataAssetIds } from "../loaders";
 import {
   catalogueBytes,
   course,
+  coursePrereqNode,
   encode,
   fetchFrom,
+  prereqHistoryBytes,
   schedulesBytes,
   schedulesFor,
 } from "./testFixtures";
@@ -32,14 +34,30 @@ function gradesBytes(): Uint8Array {
   );
 }
 
-const latestCatalogue: Catalogue = {
-  courses: [course("CSI 2110", "Data Structures"), course("MAT 1320", "Calculus I")],
+// The union catalogue carries every course ever seen with its latest metadata.
+// MAT 1300 is a discontinued course that only the 2025 cohort references — it now
+// lives in the union rather than in a separate year catalogue.
+const unionCatalogue: Catalogue = {
+  courses: [
+    course("CSI 2110", "Data Structures"),
+    course("MAT 1320", "Calculus I"),
+    course("MAT 1300", "Calculus I (old)"),
+  ],
   programs: [],
 };
 
-const firstYearCatalogue: Catalogue = {
-  courses: [course("CSI 2110", "Old Data Structures"), course("MAT 1300", "Calculus I (old)")],
-  programs: [],
+// In 2025, CSI 2110 required MAT 1300; the union baseline (latest) has no
+// prerequisite. `code: 0` = CSI 2110 (index 0 into the union course_codes).
+const prereqHistory: DataProto.CataloguePrereqHistory = {
+  years: [2025, 2026],
+  overlays: [
+    {
+      code: 0,
+      revisions: [
+        { yearMask: 0b01, prerequisites: coursePrereqNode("MAT 1300"), hasPrereqText: false },
+      ],
+    },
+  ],
 };
 
 function mergeCatalogue(
@@ -49,29 +67,30 @@ function mergeCatalogue(
 ): Catalogue {
   const byCode = new Map(latest.courses.map((c) => [c.code, c]));
   for (const yearCourse of yearCourses ?? []) {
-    if (!byCode.has(yearCourse.code)) byCode.set(yearCourse.code, yearCourse);
+    byCode.set(yearCourse.code, yearCourse);
   }
   return { ...latest, courses: [...byCode.values()] };
 }
 
 function makeEffectiveTransport({
   years = [2026],
-  catalogues = [[2026, latestCatalogue]],
+  union = unionCatalogue,
+  history = prereqHistory,
   schedules = ["2261"],
   grades = new Error("grades unavailable"),
 }: {
   years?: number[];
-  catalogues?: Array<readonly [year: number, catalogue: Catalogue]>;
+  union?: Catalogue;
+  history?: DataProto.CataloguePrereqHistory;
   schedules?: string[];
   grades?: Uint8Array | Error;
 } = {}): ReturnType<typeof fetchFrom> {
   const assets: Record<string, Uint8Array | Error> = {
     [dataAssetIds.manifest]: encode(DataProto.CatalogueManifest.encode({ years })),
+    [dataAssetIds.catalogueUnion]: catalogueBytes(union),
+    [dataAssetIds.cataloguePrereqHistory]: prereqHistoryBytes(history),
     [dataAssetIds.grades]: grades,
   };
-  for (const [year, catalogue] of catalogues) {
-    assets[dataAssetIds.catalogue(year)] = catalogueBytes(catalogue);
-  }
   for (const termId of schedules) {
     assets[dataAssetIds.schedules(termId)] = schedulesBytes(schedulesFor(termId));
   }
@@ -79,14 +98,8 @@ function makeEffectiveTransport({
 }
 
 describe("createDataClient.loadEffectiveDataset", () => {
-  it("decodes manifest/catalogue/schedules/grades, merges the effective catalogue, and builds lookup caches", async () => {
-    const transport = fetchFrom({
-      [dataAssetIds.manifest]: encode(DataProto.CatalogueManifest.encode({ years: [2026, 2025] })),
-      [dataAssetIds.catalogue(2026)]: catalogueBytes(latestCatalogue),
-      [dataAssetIds.catalogue(2025)]: catalogueBytes(firstYearCatalogue),
-      [dataAssetIds.schedules("2261")]: schedulesBytes(schedulesFor("2261")),
-      [dataAssetIds.grades]: gradesBytes(),
-    });
+  it("decodes manifest/union/schedules/grades, reconstructs cohort prereqs, and builds lookup caches", async () => {
+    const transport = makeEffectiveTransport({ years: [2026, 2025], grades: gradesBytes() });
     const merge = vi.fn(mergeCatalogue);
     const client = createDataClient({ transport, mergeCatalogue: merge });
 
@@ -103,14 +116,25 @@ describe("createDataClient.loadEffectiveDataset", () => {
 
     expect(cache).toBe(dataset.cache);
     expect(merge).toHaveBeenCalledOnce();
+    // Base = the full union of courses (latest metadata).
     expect(merge.mock.calls[0][0].courses.map((c) => c.code)).toEqual([
       normalizeCourseCode("CSI 2110"),
       normalizeCourseCode("MAT 1320"),
-    ]);
-    expect(merge.mock.calls[0][1]?.map((c) => c.code)).toEqual([
-      normalizeCourseCode("CSI 2110"),
       normalizeCourseCode("MAT 1300"),
     ]);
+    // Cohort courses = the union reconstructed for 2025 (same codes, 2025 prereqs).
+    const yearCourses = merge.mock.calls[0][1];
+    expect(yearCourses?.map((c) => c.code)).toEqual([
+      normalizeCourseCode("CSI 2110"),
+      normalizeCourseCode("MAT 1320"),
+      normalizeCourseCode("MAT 1300"),
+    ]);
+    expect(
+      yearCourses?.find((c) => c.code === normalizeCourseCode("CSI 2110"))?.prerequisites,
+    ).toMatchObject({
+      type: "course",
+      code: normalizeCourseCode("MAT 1300"),
+    });
     expect(merge.mock.calls[0][2]).toEqual(["opt1000", "CSI2110"]);
     expect(dataset.catalogue.courses.map((c) => c.code)).toContain(normalizeCourseCode("MAT 1300"));
     expect(dataset.cache.getCourse("OPT1000")).toMatchObject({
@@ -124,13 +148,14 @@ describe("createDataClient.loadEffectiveDataset", () => {
       expect.objectContaining({ "A+": 10, B: 2 }),
     );
     expect(transport).toHaveBeenCalledWith("catalogue.pb");
-    expect(transport).toHaveBeenCalledWith("catalogue.2026.pb");
-    expect(transport).toHaveBeenCalledWith("catalogue.2025.pb");
+    expect(transport).toHaveBeenCalledWith("catalogue.union.pb");
+    expect(transport).toHaveBeenCalledWith("catalogue.history.pb");
     expect(transport).toHaveBeenCalledWith("schedules.2261.pb");
     expect(transport).toHaveBeenCalledWith("grades.pb");
+    expect(transport).not.toHaveBeenCalledWith("catalogue.2026.pb");
   });
 
-  it("reuses the decoded latest catalogue when first year equals the manifest latest year", async () => {
+  it("skips the prereq history when the first year equals the manifest latest year", async () => {
     const transport = makeEffectiveTransport();
     const merge = vi.fn(mergeCatalogue);
     const client = createDataClient({ transport, mergeCatalogue: merge });
@@ -141,12 +166,9 @@ describe("createDataClient.loadEffectiveDataset", () => {
       completedCourses: [],
     });
 
-    expect(transport.mock.calls.filter(([id]) => id === "catalogue.2026.pb")).toHaveLength(1);
-    expect(transport).not.toHaveBeenCalledWith("catalogue.2025.pb");
-    expect(merge.mock.calls[0][1]?.map((c) => c.code)).toEqual([
-      normalizeCourseCode("CSI 2110"),
-      normalizeCourseCode("MAT 1320"),
-    ]);
+    expect(transport.mock.calls.filter(([id]) => id === "catalogue.union.pb")).toHaveLength(1);
+    expect(transport).not.toHaveBeenCalledWith("catalogue.history.pb");
+    expect(merge.mock.calls[0][1]).toBeNull();
   });
 
   it("treats grades as optional and leaves schedules unmodified when grades fail to load", async () => {

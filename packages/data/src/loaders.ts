@@ -29,6 +29,9 @@ import type { FetchBytes } from "./transport";
 export const dataAssetIds = {
   manifest: "catalogue.pb",
   catalogue: (year: number): string => `catalogue.${year}.pb`,
+  catalogueUnion: "catalogue.union.pb",
+  cataloguePrereqHistory: "catalogue.history.pb",
+  catalogueProgramsForYear: (year: number): string => `catalogue.programs.${year}.pb`,
   schedules: (termId: string): string => `schedules.${termId}.pb`,
   terms: "terms.pb",
   indices: "indices.pb",
@@ -52,6 +55,39 @@ export async function loadCatalogueManifest(fetchBytes: FetchBytes): Promise<Cat
 export async function loadCatalogue(fetchBytes: FetchBytes, year: number): Promise<Catalogue> {
   return fromProtoCatalogue(
     DataProto.Catalogue.decode(await fetchBytes(dataAssetIds.catalogue(year))),
+  );
+}
+
+/** Decode the raw union catalogue proto (all courses, latest metadata). Kept as
+ * a proto so {@link reconstructCatalogueForYear} can index into `course_codes`. */
+export async function loadCatalogueUnionProto(
+  fetchBytes: FetchBytes,
+): Promise<DataProto.Catalogue> {
+  return DataProto.Catalogue.decode(await fetchBytes(dataAssetIds.catalogueUnion));
+}
+
+/** Decode the union catalogue into runtime types. */
+export async function loadCatalogueUnion(fetchBytes: FetchBytes): Promise<Catalogue> {
+  return fromProtoCatalogue(await loadCatalogueUnionProto(fetchBytes));
+}
+
+/** Decode the per-course prerequisite-history overlay (kept as a proto; paired
+ * with the union proto by {@link reconstructCatalogueForYear}). */
+export async function loadCataloguePrereqHistory(
+  fetchBytes: FetchBytes,
+): Promise<DataProto.CataloguePrereqHistory> {
+  return DataProto.CataloguePrereqHistory.decode(
+    await fetchBytes(dataAssetIds.cataloguePrereqHistory),
+  );
+}
+
+/** Decode a cohort year's programs-only catalogue (courses come from the union). */
+export async function loadCatalogueProgramsForYear(
+  fetchBytes: FetchBytes,
+  year: number,
+): Promise<Catalogue> {
+  return fromProtoCatalogue(
+    DataProto.Catalogue.decode(await fetchBytes(dataAssetIds.catalogueProgramsForYear(year))),
   );
 }
 
