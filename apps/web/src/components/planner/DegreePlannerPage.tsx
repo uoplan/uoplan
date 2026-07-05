@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ActionIcon, Drawer, Group, Modal, Text } from "@mantine/core";
+import { Modal, UnstyledButton } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconAdjustments } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
@@ -17,6 +17,7 @@ import { PlannerSidebar } from "./PlannerSidebar";
 import { PlannerEmptyState } from "./PlannerEmptyState";
 import { FloatingPlannerPanel } from "./FloatingPlannerPanel";
 import { CalendarPage } from "../calendar/CalendarPage";
+import { BottomDrawer } from "../shared/BottomDrawer";
 import { PlannerActionsProvider } from "./plannerActionsContext";
 import type { PlannerActions } from "./plannerActionsContext";
 import { computeFutureTermColumns } from "./plannerColumns";
@@ -256,22 +257,6 @@ export function DegreePlannerPage() {
   return (
     <PlannerActionsProvider value={actions}>
       <div className={styles.page}>
-        {isMobile ? (
-          <Group justify="space-between" align="center" px={4}>
-            <Text fz="lg" fw={700}>
-              {tr("planner.title")}
-            </Text>
-            <ActionIcon
-              variant="light"
-              size="lg"
-              aria-label={tr("planner.options.title")}
-              onClick={drawer.open}
-            >
-              <IconAdjustments size={18} />
-            </ActionIcon>
-          </Group>
-        ) : null}
-
         {hasContent ? (
           <div className={styles.body}>
             <div className={styles.canvasWrap}>
@@ -280,7 +265,16 @@ export function DegreePlannerPage() {
                 onNodePositionCommit={handleNodePositionCommit}
                 onResetLayout={resetLayout}
               />
-              {isMobile ? null : (
+              {isMobile ? (
+                <UnstyledButton
+                  className={styles.mobilePanelTrigger}
+                  onClick={drawer.open}
+                  aria-label={tr("planner.options.title")}
+                >
+                  <IconAdjustments size={17} />
+                  {tr("planner.title")}
+                </UnstyledButton>
+              ) : (
                 <FloatingPlannerPanel
                   title={tr("planner.title")}
                   onResetLayout={resetLayout}
@@ -297,15 +291,13 @@ export function DegreePlannerPage() {
         )}
       </div>
 
-      <Drawer
+      <BottomDrawer
         opened={drawerOpened && isMobile}
         onClose={drawer.close}
-        position="right"
-        size="min(88vw, 360px)"
         title={tr("planner.title")}
       >
-        {renderSidebar(true)}
-      </Drawer>
+        <div className={styles.mobileDrawerBody}>{renderSidebar(true)}</div>
+      </BottomDrawer>
 
       <Modal
         opened={expandedTermId !== null}

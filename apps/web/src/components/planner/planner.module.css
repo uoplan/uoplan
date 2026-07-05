@@ -404,3 +404,29 @@
   );
   border-bottom-right-radius: var(--app-radius-lg);
 }
+
+/* ---- Mobile: bottom pill trigger opening the planner options as a bottom sheet ---- */
+.mobilePanelTrigger {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: var(--app-border-width) solid var(--app-border);
+  background: color-mix(in srgb, var(--app-surface) 94%, transparent);
+  box-shadow: var(--app-shadow-lg, 0 12px 32px rgb(0 0 0 / 28%));
+  backdrop-filter: blur(8px);
+  color: var(--app-text);
+  font-family: var(--app-font-heading);
+  font-weight: 700;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.mobileDrawerBody {
+  padding: 14px 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
