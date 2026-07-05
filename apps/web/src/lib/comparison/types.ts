@@ -7,11 +7,11 @@
  *   - `/vs/<slug>` — a 1-on-1 comparison (uoPlan vs one competitor)
  *
  * User-visible strings are referenced by translation id (`tr(id)`); brand names
- * (uEnroll, CourseMapper, …) are proper nouns and stay untranslated literals.
+ * (uEnroll, uSchedule, …) are proper nouns and stay untranslated literals.
  */
 
 /** Stable ids for every product in the comparison. `uoplan` is always us. */
-export type ProductId = "uoplan" | "uenroll" | "uschedule" | "uo-grades" | "coursemapper";
+export type ProductId = "uoplan" | "uenroll" | "uschedule" | "uo-grades";
 
 /** How well a product supports a given feature. */
 export type SupportLevel = "yes" | "partial" | "no";

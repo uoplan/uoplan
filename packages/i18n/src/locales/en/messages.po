@@ -1108,15 +1108,6 @@ msgstr "Shows whether a section is open, full, or waitlisted."
 msgid "compare.feature.live-section-status.name"
 msgstr "Live seat availability"
 
-msgid "compare.feature.multi-university.desc"
-msgstr "Covers schools beyond uOttawa."
-
-msgid "compare.feature.multi-university.name"
-msgstr "Multiple universities"
-
-msgid "compare.feature.multi-university.note.coursemapper"
-msgstr "CourseMapper supports several universities; uoPlan is uOttawa-only by design."
-
 msgid "compare.feature.multi-year-catalogue.desc"
 msgstr "Browse course and program data across several years."
 
@@ -1144,9 +1135,6 @@ msgstr "Start planning without signing up."
 msgid "compare.feature.no-account.name"
 msgstr "No account required"
 
-msgid "compare.feature.no-account.note.coursemapper"
-msgstr "CourseMapper asks you to create an account for full features."
-
 msgid "compare.feature.open-source.desc"
 msgstr "The full source is public on GitHub."
 
@@ -1164,9 +1152,6 @@ msgstr "Flags courses you cannot take yet based on your history."
 
 msgid "compare.feature.prereq-checking.name"
 msgstr "Prerequisite checking"
-
-msgid "compare.feature.prereq-checking.note.coursemapper"
-msgstr "CourseMapper maps prerequisites but does not check them against your record."
 
 msgid "compare.feature.prereq-graph.desc"
 msgstr "An interactive tree showing how courses unlock each other."
@@ -1289,7 +1274,7 @@ msgid "compare.hero.eyebrow"
 msgstr "Comparison"
 
 msgid "compare.hero.subtitle"
-msgstr "How uoPlan compares to uEnroll, uSchedule, UO Grades, and CourseMapper, feature by feature."
+msgstr "How uoPlan compares to uEnroll, uSchedule, and UO Grades, feature by feature."
 
 msgid "compare.hero.title"
 msgstr "uoPlan vs other uOttawa tools"
@@ -1305,9 +1290,6 @@ msgstr "compare"
 
 msgid "compare.page.title"
 msgstr "Compare courses"
-
-msgid "compare.product.coursemapper.tagline"
-msgstr "Visual prerequisite maps across universities."
 
 msgid "compare.product.uenroll.tagline"
 msgstr "A fast, conflict-free schedule generator for uOttawa."
@@ -4009,9 +3991,6 @@ msgstr "uoPlan vs {name}"
 
 msgid "vs.hero.visit"
 msgstr "Visit {name}"
-
-msgid "vs.intro.coursemapper"
-msgstr "CourseMapper visualizes course prerequisites as an interactive graph across many universities. uoPlan is built specifically for uOttawa: it checks prerequisites against your own record and pairs that with degree planning, scheduling, grades, and professor insights."
 
 msgid "vs.intro.uenroll"
 msgstr "uEnroll is a fast, open-source schedule generator for uOttawa, and a great one. uoPlan does the same conflict-free generation, then goes further: it maps your degree requirements, imports your transcript, and layers in grades and professor ratings so you plan your whole program, not just next term."

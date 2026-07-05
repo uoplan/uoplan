@@ -1108,15 +1108,6 @@ msgstr "Indique si une section est ouverte, complète ou sur liste d'attente."
 msgid "compare.feature.live-section-status.name"
 msgstr "Places disponibles en direct"
 
-msgid "compare.feature.multi-university.desc"
-msgstr "Couvre des établissements au-delà de l'Université d'Ottawa."
-
-msgid "compare.feature.multi-university.name"
-msgstr "Plusieurs universités"
-
-msgid "compare.feature.multi-university.note.coursemapper"
-msgstr "CourseMapper prend en charge plusieurs universités; uoPlan est conçu uniquement pour l'Université d'Ottawa."
-
 msgid "compare.feature.multi-year-catalogue.desc"
 msgstr "Parcourez les données de cours et de programmes sur plusieurs années."
 
@@ -1144,9 +1135,6 @@ msgstr "Commencez à planifier sans inscription."
 msgid "compare.feature.no-account.name"
 msgstr "Aucun compte requis"
 
-msgid "compare.feature.no-account.note.coursemapper"
-msgstr "CourseMapper demande de créer un compte pour toutes les fonctionnalités."
-
 msgid "compare.feature.open-source.desc"
 msgstr "Le code source complet est public sur GitHub."
 
@@ -1164,9 +1152,6 @@ msgstr "Signale les cours que vous ne pouvez pas encore suivre selon votre parco
 
 msgid "compare.feature.prereq-checking.name"
 msgstr "Vérification des préalables"
-
-msgid "compare.feature.prereq-checking.note.coursemapper"
-msgstr "CourseMapper cartographie les préalables mais ne les vérifie pas selon votre dossier."
 
 msgid "compare.feature.prereq-graph.desc"
 msgstr "Un arbre interactif montrant comment les cours se débloquent entre eux."
@@ -1289,7 +1274,7 @@ msgid "compare.hero.eyebrow"
 msgstr "comparatif"
 
 msgid "compare.hero.subtitle"
-msgstr "Comment uoPlan se compare à uEnroll, uSchedule, UO Grades et CourseMapper, fonctionnalité par fonctionnalité."
+msgstr "Comment uoPlan se compare à uEnroll, uSchedule et UO Grades, fonctionnalité par fonctionnalité."
 
 msgid "compare.hero.title"
 msgstr "uoPlan vs les autres outils de l'Université d'Ottawa"
@@ -1305,9 +1290,6 @@ msgstr "Comparer"
 
 msgid "compare.page.title"
 msgstr "Comparer les cours"
-
-msgid "compare.product.coursemapper.tagline"
-msgstr "Cartes visuelles des préalables pour plusieurs universités."
 
 msgid "compare.product.uenroll.tagline"
 msgstr "Un générateur d'horaires sans conflit rapide pour l'Université d'Ottawa."
@@ -4009,9 +3991,6 @@ msgstr "uoPlan vs {name}"
 
 msgid "vs.hero.visit"
 msgstr "Visiter {name}"
-
-msgid "vs.intro.coursemapper"
-msgstr "CourseMapper illustre les préalables des cours sous forme de graphe interactif pour de nombreuses universités. uoPlan est conçu spécialement pour l'Université d'Ottawa : il vérifie les préalables selon votre propre dossier et y ajoute la planification du diplôme, la création d'horaires, les notes et les renseignements sur les professeurs."
 
 msgid "vs.intro.uenroll"
 msgstr "uEnroll est un générateur d'horaires rapide et à code ouvert pour l'Université d'Ottawa, et il est excellent. uoPlan offre la même génération sans conflit, puis va plus loin : il cartographie vos exigences de programme, importe votre relevé de notes et ajoute les notes et les évaluations des professeurs pour planifier tout votre programme, pas seulement la prochaine session."

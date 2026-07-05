@@ -303,7 +303,6 @@ const VS_PAGE_BY_SLUG: Record<string, SeoPageId> = {
   uenroll: "vsUenroll",
   uschedule: "vsUschedule",
   "uo-grades": "vsUoGrades",
-  coursemapper: "vsCoursemapper",
 };
 
 function breadcrumbLd(trail: { name: string; path: string }[]): Record<string, unknown> {

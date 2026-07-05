@@ -239,11 +239,7 @@ export const DYNAMIC_TR_IDS: string[] = [
     "privacy",
     "data",
   ]),
-  ...cross(
-    "compare.product.",
-    ["uoplan", "uenroll", "uschedule", "uo-grades", "coursemapper"],
-    ["tagline"],
-  ),
+  ...cross("compare.product.", ["uoplan", "uenroll", "uschedule", "uo-grades"], ["tagline"]),
   ...cross(
     "compare.feature.",
     [
@@ -277,7 +273,6 @@ export const DYNAMIC_TR_IDS: string[] = [
       "course-search",
       "section-browsing",
       "language-filter",
-      "multi-university",
       "auto-enrol",
       "uenroll-import",
       "share-link",
@@ -304,18 +299,15 @@ export const DYNAMIC_TR_IDS: string[] = [
   ),
   ...family("compare.support.", ["yes", "partial", "no"]),
   // Sparse per-cell clarifying notes (compare.feature.<id>.note.<productId>).
-  "compare.feature.prereq-checking.note.coursemapper",
   "compare.feature.grade-distributions.note.uenroll",
   "compare.feature.grade-trends.note.uo-grades",
   "compare.feature.prof-ratings.note.uschedule",
   "compare.feature.prof-ratings.note.uo-grades",
   "compare.feature.section-browsing.note.uo-grades",
-  "compare.feature.multi-university.note.coursemapper",
   "compare.feature.auto-enrol.note.uoplan",
-  "compare.feature.no-account.note.coursemapper",
   "compare.feature.multi-year-catalogue.note.uo-grades",
   // Passed as props to <VsLinkGrid ctaId=...>, so resolved via tr(ctaId, {name}).
   "compare.vsLinks.cta",
   "features.vs.cardCta",
-  ...family("vs.intro.", ["uenroll", "uschedule", "uo-grades", "coursemapper"]),
+  ...family("vs.intro.", ["uenroll", "uschedule", "uo-grades"]),
 ];

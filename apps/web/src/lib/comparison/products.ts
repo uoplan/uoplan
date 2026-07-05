@@ -40,14 +40,6 @@ export const PRODUCTS: readonly Product[] = [
     taglineId: "compare.product.uo-grades.tagline",
     vsSlug: "uo-grades",
   },
-  {
-    id: "coursemapper",
-    name: "CourseMapper",
-    url: "https://www.coursemapper.co/uottawa",
-    host: "coursemapper.co",
-    taglineId: "compare.product.coursemapper.tagline",
-    vsSlug: "coursemapper",
-  },
 ] as const;
 
 const PRODUCT_BY_ID: Record<ProductId, Product> = Object.fromEntries(

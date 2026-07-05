@@ -23,11 +23,11 @@
     "canonicalPath": "/compare",
     "tabTitle": "Compare",
     "title": "uoPlan vs uEnroll, uSchedule & other uOttawa tools | uoPlan",
-    "description": "Compare uoPlan with uEnroll, uSchedule, UO Grades, and CourseMapper feature by feature: schedule generation, degree planning, prerequisites, grades, professor ratings, enrolment, sharing, and platform support for University of Ottawa students.",
+    "description": "Compare uoPlan with uEnroll, uSchedule, and UO Grades feature by feature: schedule generation, degree planning, prerequisites, grades, professor ratings, enrolment, sharing, and platform support for University of Ottawa students.",
     "keywords": "uoplan vs uenroll, uoplan vs uschedule, uottawa schedule generator comparison, best uottawa course planner, university of ottawa timetable tools",
     "structuredName": "uOttawa course tool comparison",
     "noscriptTitle": "Compare uOttawa course planning tools | uoPlan",
-    "noscriptBody": "A feature-by-feature comparison of uoPlan, uEnroll, uSchedule, UO Grades, and CourseMapper for University of Ottawa students."
+    "noscriptBody": "A feature-by-feature comparison of uoPlan, uEnroll, uSchedule, and UO Grades for University of Ottawa students."
   },
   "vsUenroll": {
     "canonicalPath": "/vs/uenroll",
@@ -58,16 +58,6 @@
     "structuredName": "uoPlan vs UO Grades",
     "noscriptTitle": "uoPlan vs UO Grades | uoPlan",
     "noscriptBody": "How uoPlan compares to UO Grades for University of Ottawa grade data and planning."
-  },
-  "vsCoursemapper": {
-    "canonicalPath": "/vs/coursemapper",
-    "tabTitle": "uoPlan vs CourseMapper",
-    "title": "uoPlan vs CourseMapper: uOttawa course planning compared | uoPlan",
-    "description": "uoPlan vs CourseMapper for University of Ottawa students. CourseMapper visualizes prerequisite graphs across schools; uoPlan focuses on uOttawa with degree planning, schedule generation, grades, and professor insights.",
-    "keywords": "uoplan vs coursemapper, coursemapper alternative, uottawa prerequisites, uottawa course planner, university of ottawa degree planner",
-    "structuredName": "uoPlan vs CourseMapper",
-    "noscriptTitle": "uoPlan vs CourseMapper | uoPlan",
-    "noscriptBody": "How uoPlan compares to CourseMapper for University of Ottawa course planning."
   },
   "schedule": {
     "canonicalPath": "/schedule/",

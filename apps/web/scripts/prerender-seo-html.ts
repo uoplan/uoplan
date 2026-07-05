@@ -203,11 +203,6 @@ writePrerenderedPage(template, "compare", path.join(distDir, "compare", "index.h
 writePrerenderedPage(template, "vsUenroll", path.join(distDir, "vs", "uenroll", "index.html"));
 writePrerenderedPage(template, "vsUschedule", path.join(distDir, "vs", "uschedule", "index.html"));
 writePrerenderedPage(template, "vsUoGrades", path.join(distDir, "vs", "uo-grades", "index.html"));
-writePrerenderedPage(
-  template,
-  "vsCoursemapper",
-  path.join(distDir, "vs", "coursemapper", "index.html"),
-);
 writePrerenderedPage(template, "explore", path.join(distDir, "explore", "index.html"));
 writePrerenderedPage(template, "graph", path.join(distDir, "professor-graph", "index.html"));
 writePrerenderedPage(template, "trends", path.join(distDir, "trends", "index.html"));
