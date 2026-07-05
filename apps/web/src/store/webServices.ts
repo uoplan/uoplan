@@ -4,14 +4,8 @@ import type { AppServices, RetimetableFixedSetInput, WizardStepLike } from "@uop
 import { tr } from "../i18n";
 import { navigateToCalendar, navigateToWizardStep } from "../lib/appNavigation";
 import { buildShareUrl } from "../lib/buildShareUrl";
-import { getEngineSync } from "../lib/engine/engineHost";
 import { flushPersistedAppState } from "../lib/persistAppState";
 import { fetchProtoBytes, optionalProtoBytes } from "../lib/protoFetch";
-import {
-  cancelScheduleGeneration,
-  prewarmScheduleWorker,
-  runScheduleGeneration,
-} from "../workers/scheduleWorkerClient";
 import { LOCAL_STORAGE_KEY } from "./constants";
 import { getEffectiveCatalogue } from "./slices/catalogueUtils";
 import type { WizardStep } from "../lib/wizardSteps";
@@ -40,32 +34,53 @@ function clearSearch(): void {
   w.history.replaceState({}, "", url);
 }
 
-function retimetableFixedSet(input: RetimetableFixedSetInput) {
+async function retimetableFixedSet(input: RetimetableFixedSetInput) {
   // Preserve the exact references the store holds so getEffectiveCatalogue's
   // identity memo (and thus the WASM engine memo) stays warm across swap calls.
   const completedCourses = (input.completedCourses ?? []) as string[];
   const effectiveCatalogue =
     getEffectiveCatalogue(input.catalogue, input.yearCatalogueCourses ?? null, completedCourses) ??
     input.catalogue;
+  // Lazily pull just the WASM engine glue (@uoplan/engine + engineBridge) so it
+  // stays out of the initial route bundle; it's only needed once the user swaps
+  // sections. runTimetableFixedSet is a static import — it already ships in the
+  // entry via the store, so importing @uoplan/core dynamically would only bloat
+  // the shared initial chunk without deferring anything.
+  const { getEngineSync } = await import("../lib/engine/engineHost");
   const engine = getEngineSync(effectiveCatalogue, input.schedulesData);
-  if (!engine) return Promise.resolve(null);
-  return Promise.resolve(
-    runTimetableFixedSet(
-      engine,
-      {
-        courseCodes: [...input.courseCodes],
-        constraints: input.constraints,
-        seed: input.seed,
-        includeClosedComponents: input.includeClosedComponents,
-        virtualSectionsOnly: input.virtualSectionsOnly,
-        virtualExemptCourses: [...(input.virtualExemptCourses ?? [])],
-        applyBlacklist: input.applyBlacklist,
-        blacklistedCourses: [...(input.blacklistedCourses ?? [])],
-        optimizationPriorities: input.optimizationPriorities,
-      },
-      input.cache,
-    ),
+  if (!engine) return null;
+  return runTimetableFixedSet(
+    engine,
+    {
+      courseCodes: [...input.courseCodes],
+      constraints: input.constraints,
+      seed: input.seed,
+      includeClosedComponents: input.includeClosedComponents,
+      virtualSectionsOnly: input.virtualSectionsOnly,
+      virtualExemptCourses: [...(input.virtualExemptCourses ?? [])],
+      applyBlacklist: input.applyBlacklist,
+      blacklistedCourses: [...(input.blacklistedCourses ?? [])],
+      optimizationPriorities: input.optimizationPriorities,
+    },
+    input.cache,
   );
+}
+
+/**
+ * Lazily load the Comlink schedule-worker client. Keeping it behind a dynamic
+ * import keeps the worker glue (comlink + generateSchedulesAction) out of the
+ * initial route bundle; it's only needed once a generation actually runs.
+ */
+let scheduleWorkerClientPromise: ReturnType<typeof importScheduleWorkerClient> | null = null;
+let cancelInFlightGeneration: (() => void) | null = null;
+function importScheduleWorkerClient() {
+  return import("../workers/scheduleWorkerClient");
+}
+async function loadScheduleWorkerClient() {
+  scheduleWorkerClientPromise ??= importScheduleWorkerClient();
+  const client = await scheduleWorkerClientPromise;
+  cancelInFlightGeneration = client.cancelScheduleGeneration;
+  return client;
 }
 
 /** Default web services backed by browser APIs and the app's router/worker/engine adapters. */
@@ -98,9 +113,17 @@ export function createWebAppServices(): AppServices {
       optionalBytes: optionalProtoBytes,
     },
     scheduleRunner: {
-      run: runScheduleGeneration,
-      cancel: cancelScheduleGeneration,
-      prewarm: prewarmScheduleWorker,
+      run: async (state, mode) => {
+        const client = await loadScheduleWorkerClient();
+        return client.runScheduleGeneration(state, mode);
+      },
+      // cancel is sync; if no run/prewarm has loaded the client yet there is
+      // nothing in flight to cancel, so a no-op is correct.
+      cancel: () => cancelInFlightGeneration?.(),
+      prewarm: async (state) => {
+        const client = await loadScheduleWorkerClient();
+        return client.prewarmScheduleWorker(state);
+      },
     },
     engine: {
       retimetableFixedSet,
