@@ -11,6 +11,8 @@ Student program requirements are based on the academic year they first enrolled,
 
 `pnpm build:data-proto` converts those committed source JSON files into git-ignored runtime protobuf assets in `apps/web/public/data/` (`catalogue.{year}.pb` and `catalogue.pb`).
 
+Course **descriptions** are dropped from the shipped catalogue protos (too large — ~4 MB raw), but the build extracts the newest description per course to feed a compact keyword search index, `catalogue.search.pb`, so explore search can match description text without shipping it. See [`explore-search.md`](./explore-search.md#description-keyword-matching-compact-bm25-index).
+
 The current academic year is detected dynamically via `getCurrentAcademicYear()` (September = new academic year). Archive years are only scraped if their file does not yet exist; pass `--force` to re-scrape them. The current year is always re-scraped.
 
 **Archive URLs** follow the pattern `https://catalogue.uottawa.ca/archive/{year}-{year+1}/en/...`. The current year uses the root `https://catalogue.uottawa.ca/en/...`. The HTML structure is identical across years.
