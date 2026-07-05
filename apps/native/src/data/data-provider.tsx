@@ -101,7 +101,10 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
   const catalogueYears =
     catalogueManifest.years.length > 0 ? catalogueManifest.years : plan.catalogueYears;
 
-  const catalogue = await load(`catalogue.${latestYear}.pb`, decodeCatalogue);
+  // The single union catalogue carries every course ever published with its
+  // latest metadata (replacing the per-year `catalogue.<year>.pb` files). Native
+  // always uses the latest prerequisites, so it never needs the history overlay.
+  const catalogue = await load("catalogue.union.pb", decodeCatalogue);
 
   const [feedbackData, indicesCourses] = await Promise.all([
     load("feedback.pb", decodeFeedbackData),
@@ -138,7 +141,7 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
     "catalogue.pb",
     "feedback.pb",
     "indices.pb",
-    `catalogue.${latestYear}.pb`,
+    "catalogue.union.pb",
     ...plan.scheduleTermIds.map((t) => `schedules.${t}.pb`),
   ]);
   void Promise.allSettled(deferredAssetIds(manifest, eager).map((id) => fetchBytes(id)));
