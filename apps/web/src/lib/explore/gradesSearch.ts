@@ -57,6 +57,15 @@ const EXPLORE_MAX_RESULTS = 120;
 const EXPLORE_MAX_COURSE_RESULTS = 24;
 
 /**
+ * Weight of a normalized description (BM25) relevance relative to a code/title
+ * (Fuse) relevance when the two are blended into one ranked course list. Kept
+ * below 1 so a strong code/title match always outranks a description-only hit of
+ * equal normalized strength, while a strong description hit can still interleave
+ * above weaker/fuzzier code-title matches (and a course matching in both is lifted).
+ */
+const DESCRIPTION_MERGE_WEIGHT = 0.5;
+
+/**
  * Maps professor substring rank (0–2) to a scale comparable to Fuse scores (lower = better).
  * rank 0 ≈ 0, rank 1 ≈ 0.14, rank 2 ≈ 0.28 vs typical course scores 0–0.34.
  */
@@ -118,6 +127,7 @@ const EXPLORE_COURSE_FUSE_OPTIONS: IFuseOptions<ExploreCourseSearchEntry> = {
   ignoreLocation: true,
   minMatchCharLength: 1,
   distance: 56,
+  includeScore: true,
 };
 
 function offeringId(parts: {
@@ -562,8 +572,14 @@ function narrowCoursesBySubstring(
   return pool;
 }
 
+type ExploreCourseScoredItem = {
+  entry: ExploreCourseSearchEntry;
+  /** Fuse score: 0 (perfect) … 1 (weak). */
+  score: number;
+};
+
 type ExploreCourseSearchScored = {
-  items: ExploreCourseSearchEntry[];
+  scored: ExploreCourseScoredItem[];
   topScore: number | null;
 };
 
@@ -573,7 +589,7 @@ function searchExploreCoursesScored(
   rawQuery: string,
 ): ExploreCourseSearchScored {
   const q = rawQuery.trim().toLowerCase();
-  if (!fuse || q.length === 0) return { items: [], topScore: null };
+  if (!fuse || q.length === 0) return { scored: [], topScore: null };
 
   const pool = narrowCoursesBySubstring(entries, q);
   const engine = pool.length > 0 ? new Fuse(pool, EXPLORE_COURSE_FUSE_OPTIONS) : fuse;
@@ -582,17 +598,14 @@ function searchExploreCoursesScored(
   // (i.e. the user-requested) member code, then cap the result count.
   const rawResults = engine.search(q);
   const seen = new Set<string>();
-  const deduped: typeof rawResults = [];
+  const scored: ExploreCourseScoredItem[] = [];
   for (const r of rawResults) {
     if (seen.has(r.item.componentId)) continue;
     seen.add(r.item.componentId);
-    deduped.push(r);
-    if (deduped.length >= EXPLORE_MAX_COURSE_RESULTS) break;
+    scored.push({ entry: r.item, score: r.score ?? 0 });
+    if (scored.length >= EXPLORE_MAX_COURSE_RESULTS) break;
   }
-  return {
-    items: deduped.map((r) => r.item),
-    topScore: deduped[0]?.score ?? null,
-  };
+  return { scored, topScore: scored[0]?.score ?? null };
 }
 
 export function searchExploreCourses(
@@ -600,7 +613,7 @@ export function searchExploreCourses(
   entries: ExploreCourseSearchEntry[],
   rawQuery: string,
 ): ExploreCourseSearchEntry[] {
-  return searchExploreCoursesScored(fuse, entries, rawQuery).items;
+  return searchExploreCoursesScored(fuse, entries, rawQuery).scored.map((s) => s.entry);
 }
 
 export function searchExploreProfessors(
@@ -637,34 +650,51 @@ export function exploreProfessorsSectionFirst(
 }
 
 /**
- * Append description-only keyword hits below the code/title Fuse results. Each
- * BM25 match is resolved to its explore course entry (dropping courses with no
- * offering row to render), deduped by alias-component id against the Fuse hits,
- * and capped at {@link EXPLORE_MAX_COURSE_RESULTS}. Keeps description hits a
- * strictly secondary signal — they never reorder the code/title matches above.
+ * Blend description-keyword (BM25) hits with the code/title (Fuse) results into a
+ * single ranked course list. Each course's combined score sums its code/title
+ * relevance (`1 - fuseScore`) and its description relevance (BM25 normalized to the
+ * top hit, then scaled by {@link DESCRIPTION_MERGE_WEIGHT}). A course matching in
+ * both is lifted; a strong description-only hit can interleave above weaker
+ * code/title matches, while strong code/title matches still dominate. Results are
+ * deduped by alias-component id and capped at {@link EXPLORE_MAX_COURSE_RESULTS}.
  */
-function appendDescriptionMatches(
-  fuseItems: ExploreCourseSearchEntry[],
+function mergeDescriptionMatches(
+  fuseScored: ExploreCourseScoredItem[],
   rawQuery: string,
   descriptionIndex: DescriptionSearchIndex | null | undefined,
   entryByNorm: Map<string, ExploreCourseSearchEntry> | null | undefined,
 ): ExploreCourseSearchEntry[] {
-  if (!descriptionIndex || !entryByNorm || fuseItems.length >= EXPLORE_MAX_COURSE_RESULTS) {
-    return fuseItems;
-  }
-  const matches = descriptionIndex.search(rawQuery);
-  if (matches.length === 0) return fuseItems;
+  const descMatches = descriptionIndex && entryByNorm ? descriptionIndex.search(rawQuery) : [];
+  // Nothing to blend → keep the Fuse ordering untouched.
+  if (descMatches.length === 0) return fuseScored.map((s) => s.entry);
 
-  const seen = new Set<string>(fuseItems.map((e) => e.componentId));
-  const merged = fuseItems.slice();
-  for (const match of matches) {
-    if (merged.length >= EXPLORE_MAX_COURSE_RESULTS) break;
-    const entry = entryByNorm.get(match.code);
-    if (!entry || seen.has(entry.componentId)) continue;
-    seen.add(entry.componentId);
-    merged.push(entry);
+  const combined = new Map<string, { entry: ExploreCourseSearchEntry; score: number }>();
+  const add = (entry: ExploreCourseSearchEntry, delta: number): void => {
+    const existing = combined.get(entry.componentId);
+    if (existing) existing.score += delta;
+    else combined.set(entry.componentId, { entry, score: delta });
+  };
+
+  for (const { entry, score } of fuseScored) {
+    add(entry, 1 - Math.min(Math.max(score, 0), 1));
   }
-  return merged;
+
+  const topScore = descMatches[0].score;
+  if (topScore > 0) {
+    const seenComponent = new Set<string>();
+    for (const match of descMatches) {
+      const entry = entryByNorm?.get(match.code);
+      // Take only the best-scoring alias per component (matches are score-sorted).
+      if (!entry || seenComponent.has(entry.componentId)) continue;
+      seenComponent.add(entry.componentId);
+      add(entry, (match.score / topScore) * DESCRIPTION_MERGE_WEIGHT);
+    }
+  }
+
+  return [...combined.values()]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, EXPLORE_MAX_COURSE_RESULTS)
+    .map((x) => x.entry);
 }
 
 export function searchExplore(
@@ -680,10 +710,9 @@ export function searchExplore(
   const courseScored =
     opts.courseFuse && opts.courseEntries.length > 0
       ? searchExploreCoursesScored(opts.courseFuse, opts.courseEntries, rawQuery)
-      : { items: [] as ExploreCourseSearchEntry[], topScore: null as number | null };
-  const { items: fuseCourses, topScore: courseTopScore } = courseScored;
-  const courses = appendDescriptionMatches(
-    fuseCourses,
+      : { scored: [] as ExploreCourseScoredItem[], topScore: null as number | null };
+  const courses = mergeDescriptionMatches(
+    courseScored.scored,
     rawQuery,
     opts.descriptionIndex,
     opts.courseEntryByNorm,
@@ -693,7 +722,7 @@ export function searchExplore(
     rawQuery,
   );
 
-  const professorsFirst = exploreProfessorsSectionFirst(profTopRank, courseTopScore);
+  const professorsFirst = exploreProfessorsSectionFirst(profTopRank, courseScored.topScore);
 
   return { professors, courses, professorsFirst };
 }

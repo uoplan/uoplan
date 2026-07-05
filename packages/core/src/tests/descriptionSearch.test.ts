@@ -138,3 +138,26 @@ describe("DescriptionSearchIndex", () => {
     expect(codes("")).toEqual([]);
   });
 });
+
+describe("DescriptionSearchIndex coordination factor", () => {
+  it("penalizes a course that covers only part of a multi-term query", () => {
+    // ZZZ carries only "aaa"; WWW carries only "bbb". Both are single-posting terms
+    // with identical document lengths, so ZZZ's "aaa" contribution is fixed.
+    const index = buildFixture(
+      [
+        { code: "ZZZ 1000", docLength: 1 },
+        { code: "WWW 2000", docLength: 1 },
+      ],
+      {
+        aaa: [[0, 1]],
+        bbb: [[1, 1]],
+      },
+    );
+    const single = index.search("aaa").find((m) => m.code === "ZZZ 1000")?.score ?? 0;
+    const partial = index.search("aaa bbb").find((m) => m.code === "ZZZ 1000")?.score ?? 0;
+    // Adding a second matchable query term ZZZ doesn't cover scales its score by
+    // the coordination factor 0.3 + 0.7 * (1/2) = 0.65 versus the single-term query.
+    expect(single).toBeGreaterThan(0);
+    expect(partial).toBeCloseTo(single * 0.65, 5);
+  });
+});

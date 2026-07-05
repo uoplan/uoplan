@@ -4,11 +4,19 @@ import type * as DataProto from "@uoplan/proto/data";
 
 /**
  * Build a compact {@link DataProto.CourseSearchIndex} from course descriptions.
- * Tokenizes each description, keeps the top-`topK` keywords by TF-IDF, then emits
- * a sorted front-coded keyword dictionary + delta-encoded postings. Raw
- * description text is never included — only the (folded/stemmed) keyword tokens
- * and per-course term frequencies, enough for BM25 scoring with exact/prefix/
- * fuzzy matching. See docs/explore-search.md.
+ * Tokenizes each description, keeps every term whose **document frequency** falls
+ * in the `[minDf, maxDf]` band, then emits a sorted front-coded keyword dictionary
+ * + delta-encoded postings. Raw description text is never included — only the
+ * (folded/stemmed) keyword tokens and per-course term frequencies, enough for BM25
+ * scoring with exact/prefix/fuzzy matching. See docs/explore-search.md.
+ *
+ * The df band replaces an earlier per-course top-K TF-IDF cap, which kept only the
+ * few *rarest* terms per course and so dropped meaningful mid-frequency words
+ * (e.g. "logic", df=29) — the cause of missing results like MAT 2362 for
+ * "propositional logic". Dropping hapax terms (df=1, ~35% of the vocabulary) and
+ * capping near-stopwords (df > maxDf, already served by the primary code/title
+ * search) keeps the discriminative middle band, fixing recall while shrinking the
+ * shipped asset.
  */
 
 export interface CourseDescriptionInput {
@@ -18,11 +26,21 @@ export interface CourseDescriptionInput {
 }
 
 export interface SearchIndexOptions {
-  /** Max keywords retained per course (highest TF-IDF wins). */
-  topK?: number;
+  /**
+   * Drop rare/hapax terms with document frequency below this. Removing single-
+   * occurrence terms (df=1) shrinks the dictionary for a negligible recall cost.
+   */
+  minDf?: number;
+  /**
+   * Drop near-stopword terms with document frequency above this. A term appearing
+   * in more course descriptions than this is too common to discriminate — such
+   * words are already handled by the primary code/title search.
+   */
+  maxDf?: number;
 }
 
-const DEFAULT_TOP_K = 6;
+const DEFAULT_MIN_DF = 2;
+const DEFAULT_MAX_DF = 200;
 const MAX_FREQ = 255;
 
 interface CourseTokens {
@@ -68,7 +86,8 @@ export function buildCourseSearchIndex(
   input: readonly CourseDescriptionInput[],
   options: SearchIndexOptions = {},
 ): DataProto.CourseSearchIndex {
-  const topK = options.topK ?? DEFAULT_TOP_K;
+  const minDf = options.minDf ?? DEFAULT_MIN_DF;
+  const maxDf = options.maxDf ?? DEFAULT_MAX_DF;
 
   // Pass 1: tokenize descriptions and accumulate document frequency per term.
   const perCourse: CourseTokens[] = [];
@@ -87,32 +106,24 @@ export function buildCourseSearchIndex(
     }
   }
 
-  const docCount = perCourse.length;
-
   // Sort covered courses by normalized code so the emitted `course_codes` array
   // is prefix-sorted (far better gzip) and the index is deterministic.
   perCourse.sort((a, b) => (normalizeCourseCode(a.code) < normalizeCourseCode(b.code) ? -1 : 1));
 
-  // Pass 2: keep top-K TF-IDF terms per course; record per-course kept terms.
+  // Pass 2: keep every term whose document frequency is in the [minDf, maxDf]
+  // band; record per-course kept terms + document lengths.
   const courseCodes: string[] = [];
   const docLengths: number[] = [];
   const keptPerCourse: { term: string; freq: number }[][] = [];
   const vocabulary = new Set<string>();
 
   for (const course of perCourse) {
-    const ranked = [...course.freqs]
-      .map(([term, tf]) => {
-        const df = documentFrequency.get(term) ?? 1;
-        const idf = Math.log(1 + (docCount - df + 0.5) / (df + 0.5));
-        return { term, tf, weight: tf * idf };
-      })
-      .sort((a, b) => b.weight - a.weight)
-      .slice(0, topK);
-
     courseCodes.push(normalizeCourseCode(course.code));
     let docLength = 0;
     const kept: { term: string; freq: number }[] = [];
-    for (const { term, tf } of ranked) {
+    for (const [term, tf] of course.freqs) {
+      const df = documentFrequency.get(term) ?? 1;
+      if (df < minDf || df > maxDf) continue;
       const clamped = Math.min(tf, MAX_FREQ);
       kept.push({ term, freq: clamped });
       docLength += clamped;

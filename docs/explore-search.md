@@ -23,10 +23,18 @@ Course search also matches **course descriptions**, without ever shipping the ra
 description text (which is ~4 MB / ~1.09 MB gzipped). Instead the scraper builds a
 compact keyword index and ships only that:
 
-- **Asset:** `catalogue.search.pb` (~423 KB raw / ~198 KB gzip), a
+- **Asset:** `catalogue.search.pb` (~635 KB raw / ~303 KB gzip), a
   `DataProto.CourseSearchIndex` message. Built by
   `apps/scraper/src/proto/search-index.ts#buildCourseSearchIndex` from the newest
-  description per course, pruned to the top-K TF-IDF terms per course (K = 6).
+  description per course, keeping every term whose **document frequency** is in the
+  `[minDf, maxDf]` band (currently `2 ≤ df ≤ 200`). Dropping hapax terms (df=1, ~35% of
+  the vocabulary) trims the dictionary for a negligible recall cost, and dropping only the
+  truly ubiquitous words (df > 200, e.g. "data" 439, "learning" 350, "structure" 595,
+  all stopword-adjacent and already caught by the primary code/title search) keeps the
+  index bounded while retaining genuine content words like "logic" (df=47),
+  "chemistry" (84), "machine" (94). This band replaced an earlier per-course top-K TF-IDF
+  cap, which kept only the _rarest_ terms per course and dropped meaningful mid-frequency
+  words like "logic", the cause of misses such as MAT 2362 for "propositional logic".
 - **Format:** a front-coded term dictionary (so queries can match a term exactly, by
   **prefix** for search-as-you-type, and by **bounded edit distance** for typo
   tolerance) plus per-course term frequencies and document lengths. Postings are
@@ -36,18 +44,26 @@ compact keyword index and ships only that:
   (`K1 = 1.2`, `B = 0.75`). Its `tokenizeDescription` is the single source of truth so
   build-time postings and query-time lookups always agree (bilingual EN + FR stopwords,
   diacritic folding, light stemming). Match weights: exact `1.0`, prefix `0.6`,
-  fuzzy `0.45`.
+  fuzzy `0.45`. A **coordination factor** then scales each course's summed score by
+  `0.3 + 0.7 · (matchedTerms / matchableTerms)`, so a course covering more of the query's
+  distinct terms (e.g. MAT 2362, matching both "propositional" and "logic") outranks one
+  matching only a single, more frequent word whose length-normalized BM25 is higher.
+  Single-term queries are unaffected.
 - **Web wiring:** loaded lazily on the first non-empty query via
   `apps/web/src/hooks/useDescriptionSearchIndex.ts`. `searchExplore` in `gradesSearch.ts`
-  merges description-only hits **below** the Fuse code/title results
-  (`appendDescriptionMatches`), deduped by alias-component id and capped at
-  `EXPLORE_MAX_COURSE_RESULTS`. Description hits are strictly secondary — they never
-  reorder the code/title matches.
+  **blends** description (BM25) hits with the Fuse code/title results into one ranked list
+  (`mergeDescriptionMatches`): each course's combined score sums its code/title relevance
+  (`1 − fuseScore`) and its description relevance (BM25 normalized to the top hit, scaled
+  by `DESCRIPTION_MERGE_WEIGHT = 0.5`). A course matching in both is lifted; a strong
+  description-only hit can interleave above weaker/fuzzier code/title matches, while strong
+  code/title matches still dominate. Deduped by alias-component id, capped at
+  `EXPLORE_MAX_COURSE_RESULTS`. (Fuse runs with `includeScore` so per-item scores drive the
+  blend and the professors-vs-courses ordering.)
 - **Native wiring:** bundled with the app (`catalogue.search.pb` in the native asset
   bundle) and decoded in `data-provider.tsx#buildAppData` (best-effort — a missing or
   incompatible asset just disables description search). `explore-index.ts#searchExplore`
-  appends description-only matches below the code/title hits via
-  `appendCourseDescriptionMatches`, mirroring the web ranking.
+  blends description matches with the code/title hits via `mergeCourseDescriptionMatches`
+  (native match score → relevance `1 / (1 + score)`), mirroring the web ranking.
 
 ### Course/professor detail pages
 

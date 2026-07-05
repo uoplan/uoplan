@@ -368,36 +368,66 @@ function score(haystack: string, needle: string): number {
 const DEFAULT_LIMIT = 12;
 
 /**
- * Append description-only keyword hits below the ranked code/title matches. Each
- * BM25 match is resolved (by normalized code) to a course entry from the already
- * filtered set, deduped against the ranked hits, and capped at `limit`. Keeps
- * description hits a strictly secondary signal — they never displace or reorder
- * the code/title matches above them (mirrors the web explore merge).
+ * Weight of a normalized description (BM25) relevance relative to a code/title
+ * match relevance when blending the two into one ranked course list. Kept below 1
+ * so a strong code/title match outranks a description-only hit of equal normalized
+ * strength, while a strong description hit can interleave above weaker code/title
+ * matches (and a course matching in both is lifted). Mirrors the web explore merge.
  */
-function appendCourseDescriptionMatches(
-  ranked: ExploreCourseEntry[],
+const DESCRIPTION_MERGE_WEIGHT = 0.5;
+
+/** Map a code/title match score (0 exact, 1 prefix, ≥3 substring; lower better) to a [0,1] relevance. */
+function courseMatchRelevance(matchScore: number): number {
+  return 1 / (1 + Math.max(matchScore, 0));
+}
+
+/**
+ * Blend description-keyword (BM25) hits with the ranked code/title matches into a
+ * single ordered course list. Each course's combined score sums its code/title
+ * relevance and its description relevance (BM25 normalized to the top hit, scaled by
+ * {@link DESCRIPTION_MERGE_WEIGHT}). A course matching in both is lifted; a strong
+ * description-only hit can interleave above weaker code/title matches. Deduped by
+ * normalized code and capped at `limit`. Mirrors the web explore merge.
+ */
+function mergeCourseDescriptionMatches(
+  scoredCourses: { entry: ExploreCourseEntry; score: number }[],
   filteredCourses: ExploreCourseEntry[],
   query: string,
   descriptionIndex: DescriptionSearchIndex | null,
   limit: number,
 ): ExploreCourseEntry[] {
-  if (!descriptionIndex || ranked.length >= limit) return ranked;
-  const matches = descriptionIndex.search(query);
-  if (matches.length === 0) return ranked;
+  const descMatches = descriptionIndex ? descriptionIndex.search(query) : [];
+  // Nothing to blend → keep the code/title ordering untouched.
+  if (descMatches.length === 0) return scoredCourses.slice(0, limit).map((s) => s.entry);
 
-  const entryByNorm = new Map<string, ExploreCourseEntry>();
-  for (const course of filteredCourses) entryByNorm.set(normalizeCourseCode(course.code), course);
+  const combined = new Map<string, { entry: ExploreCourseEntry; score: number }>();
+  const add = (entry: ExploreCourseEntry, delta: number): void => {
+    const key = normalizeCourseCode(entry.code);
+    const existing = combined.get(key);
+    if (existing) existing.score += delta;
+    else combined.set(key, { entry, score: delta });
+  };
 
-  const seen = new Set<string>(ranked.map((c) => c.code));
-  const merged = ranked.slice();
-  for (const match of matches) {
-    if (merged.length >= limit) break;
-    const entry = entryByNorm.get(match.code);
-    if (!entry || seen.has(entry.code)) continue;
-    seen.add(entry.code);
-    merged.push(entry);
+  for (const { entry, score: matchScore } of scoredCourses) {
+    add(entry, courseMatchRelevance(matchScore));
   }
-  return merged;
+
+  const topScore = descMatches[0].score;
+  if (topScore > 0) {
+    const entryByNorm = new Map<string, ExploreCourseEntry>();
+    for (const course of filteredCourses) entryByNorm.set(normalizeCourseCode(course.code), course);
+    // Description matches are unique per course, so each contributes at most once.
+    for (const match of descMatches) {
+      const entry = entryByNorm.get(match.code);
+      if (!entry) continue;
+      add(entry, (match.score / topScore) * DESCRIPTION_MERGE_WEIGHT);
+    }
+  }
+
+  return [...combined.values()]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((x) => x.entry);
 }
 
 export function exploreCourseLevel(code: string): ExploreCourseLevel | null {
@@ -630,15 +660,23 @@ export function searchExplore(
       .slice(0, limit)
       .map((r) => r.item);
 
+  // Courses keep their match score so description hits can be blended in (not just
+  // appended) — see mergeCourseDescriptionMatches.
+  const scoredCourses = courses
+    .map((item) => {
+      const best = [item.code, item.title].reduce((acc, field) => {
+        const s = score(field, q);
+        return s >= 0 && (acc < 0 || s < acc) ? s : acc;
+      }, -1);
+      return { entry: item, score: best };
+    })
+    .filter((r) => r.score >= 0)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, limit);
+
   return {
     courses: sortCourses(
-      appendCourseDescriptionMatches(
-        rank(courses, (c) => [c.code, c.title]),
-        courses,
-        q,
-        index.descriptionIndex,
-        limit,
-      ),
+      mergeCourseDescriptionMatches(scoredCourses, courses, q, index.descriptionIndex, limit),
       filters,
     ),
     professors: sortProfessors(

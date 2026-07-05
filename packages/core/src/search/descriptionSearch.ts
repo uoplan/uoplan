@@ -164,6 +164,14 @@ const EXACT_WEIGHT = 1;
 const PREFIX_WEIGHT = 0.6;
 const FUZZY_WEIGHT = 0.45;
 
+// Coordination floor: a course's raw BM25 sum is scaled by
+// `COORD_BASE + (1 - COORD_BASE) * (matchedQueryTerms / matchableQueryTerms)`, so a
+// course covering more of the query's distinct terms is rewarded. This lifts a course
+// matching every query word (e.g. MAT 2362 for "propositional logic") above one matching
+// only a single, more common word whose BM25 happens to be higher after length
+// normalization. Single-term queries are unaffected (coverage is always 1).
+const COORD_BASE = 0.3;
+
 // Bounds so a short/common query token can't explode into thousands of postings.
 const MIN_FUZZY_LENGTH = 4;
 const MAX_PREFIX_EXPANSIONS = 32;
@@ -370,9 +378,12 @@ export class DescriptionSearchIndex {
     if (tokens.size === 0) return [];
 
     const scores = new Map<number, number>();
+    const matchedTermCounts = new Map<number, number>();
+    let matchableTermCount = 0;
     for (const token of tokens) {
       const candidates = this.collectCandidates(token);
       if (candidates.size === 0) continue;
+      matchableTermCount += 1;
 
       // Best contribution this query token makes to each course, so a single word
       // expanding into many dictionary terms can't multiply one course's score.
@@ -396,12 +407,16 @@ export class DescriptionSearchIndex {
 
       for (const [courseIndex, contribution] of tokenScores) {
         scores.set(courseIndex, (scores.get(courseIndex) ?? 0) + contribution);
+        matchedTermCounts.set(courseIndex, (matchedTermCounts.get(courseIndex) ?? 0) + 1);
       }
     }
 
     const matches: DescriptionMatch[] = [];
-    for (const [courseIndex, score] of scores) {
-      matches.push({ code: this.codes[courseIndex], score });
+    for (const [courseIndex, rawScore] of scores) {
+      const coverage =
+        matchableTermCount > 0 ? (matchedTermCounts.get(courseIndex) ?? 0) / matchableTermCount : 1;
+      const coord = COORD_BASE + (1 - COORD_BASE) * coverage;
+      matches.push({ code: this.codes[courseIndex], score: rawScore * coord });
     }
     matches.sort((a, b) => b.score - a.score);
     return matches;

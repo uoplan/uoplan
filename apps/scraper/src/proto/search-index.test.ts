@@ -31,7 +31,9 @@ const COURSES: CourseDescriptionInput[] = [
 ];
 
 function buildReader(input: CourseDescriptionInput[] = COURSES): DescriptionSearchIndex {
-  const index = buildCourseSearchIndex(input, { topK: 6 });
+  // The fixture corpus is tiny (every term has df=1), so keep the full vocabulary
+  // to exercise reader behavior; the df band is asserted separately below.
+  const index = buildCourseSearchIndex(input, { minDf: 1, maxDf: Number.POSITIVE_INFINITY });
   const bytes = DataProto.CourseSearchIndex.encode(index).finish();
   return DescriptionSearchIndex.fromBytes(bytes);
 }
@@ -44,7 +46,7 @@ describe("buildCourseSearchIndex", () => {
   });
 
   it("normalizes course codes in the emitted index", () => {
-    const index = buildCourseSearchIndex(COURSES, { topK: 6 });
+    const index = buildCourseSearchIndex(COURSES, { minDf: 1, maxDf: Number.POSITIVE_INFINITY });
     expect(index.courseCodes).toContain("PHY 1000");
     expect(index.courseCodes).not.toContain("phy1000");
   });
@@ -66,11 +68,44 @@ describe("buildCourseSearchIndex", () => {
     expect(buildReader().search("quantm")[0]?.code).toBe("PHY 1000");
   });
 
-  it("keeps at most topK terms per course", () => {
-    const index = buildCourseSearchIndex(COURSES, { topK: 2 });
-    // Each course contributes one posting per kept distinct term, so the total
-    // posting count cannot exceed topK * covered course count.
-    const totalPostings = index.termDfs.reduce((sum, n) => sum + n, 0);
-    expect(totalPostings).toBeLessThanOrEqual(2 * index.courseCodes.length);
+  it("keeps discriminative mid-frequency terms and drops over-common ones", () => {
+    // df: common=3, mid=2, and the per-course singletons (rare/alpha/beta) = 1.
+    // A [2, 2] band keeps only "mid" — the discriminative middle term that an
+    // older top-K-rarest cap would have dropped in favour of the singletons.
+    const corpus: CourseDescriptionInput[] = [
+      { code: "aaa1000", title: "One", description: "common rare alpha" },
+      { code: "bbb2000", title: "Two", description: "common mid beta" },
+      { code: "ccc3000", title: "Three", description: "common mid gamma" },
+    ];
+    const index = buildCourseSearchIndex(corpus, { minDf: 2, maxDf: 2 });
+    const reader = DescriptionSearchIndex.fromBytes(
+      DataProto.CourseSearchIndex.encode(index).finish(),
+    );
+    // Only "mid" survives the band → exactly one dictionary term.
+    expect(index.termDfs).toHaveLength(1);
+    const midHits = reader.search("mid").map((m) => m.code);
+    expect(midHits).toContain("BBB 2000");
+    expect(midHits).toContain("CCC 3000");
+    // Over-common ("common", df=3 > maxDf) and hapax ("rare", df=1 < minDf) drop out.
+    expect(reader.search("common")).toEqual([]);
+    expect(reader.search("rare")).toEqual([]);
+  });
+
+  it("drops hapax terms with the default df band", () => {
+    // "shared" appears twice (df=2, kept); every other term is a per-course hapax
+    // (df=1) dropped by the default minDf=2.
+    const corpus: CourseDescriptionInput[] = [
+      { code: "aaa1000", title: "One", description: "shared alpha" },
+      { code: "bbb2000", title: "Two", description: "shared beta" },
+    ];
+    const index = buildCourseSearchIndex(corpus);
+    expect(index.termDfs).toHaveLength(1);
+    const reader = DescriptionSearchIndex.fromBytes(
+      DataProto.CourseSearchIndex.encode(index).finish(),
+    );
+    expect(reader.search("shared").map((m) => m.code)).toEqual(
+      expect.arrayContaining(["AAA 1000", "BBB 2000"]),
+    );
+    expect(reader.search("alpha")).toEqual([]);
   });
 });

@@ -242,7 +242,7 @@ export async function main(): Promise<void> {
     await writePb(
       path.join(WEB_ASSETS_DATA_DIR, "catalogue.search.pb"),
       DataProto.CourseSearchIndex.encode(
-        buildCourseSearchIndex([...latestDescriptions.values()], { topK: 6 }),
+        buildCourseSearchIndex([...latestDescriptions.values()], { minDf: 2, maxDf: 200 }),
       ).finish(),
     );
   }
