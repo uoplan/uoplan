@@ -375,7 +375,32 @@
 }
 
 .floatingPanelBody {
+  flex: 1;
   min-height: 0;
   overflow-y: auto;
   padding: 14px;
+}
+
+.floatingPanelResize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  cursor: se-resize;
+  touch-action: none;
+  z-index: 1;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 45%,
+    var(--app-border) 45%,
+    var(--app-border) 55%,
+    transparent 55%,
+    transparent 70%,
+    var(--app-border) 70%,
+    var(--app-border) 80%,
+    transparent 80%
+  );
+  border-bottom-right-radius: var(--app-radius-lg);
 }

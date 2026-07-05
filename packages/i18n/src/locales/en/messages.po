@@ -2914,6 +2914,10 @@ msgstr "Collapse panel"
 msgid "planner.panel.expand"
 msgstr "Expand panel"
 
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:262
+msgid "planner.panel.resize"
+msgstr "Resize panel"
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:140
 msgid "planner.regenerate"
 msgstr "Regenerate"

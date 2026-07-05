@@ -14,6 +14,8 @@ import styles from "./planner.module.css";
 
 const DEFAULT_OFFSET = 16;
 const EDGE_GAP = 12;
+const RESIZE_MIN_W = 260;
+const RESIZE_MIN_H = 220;
 
 interface FloatingPlannerPanelProps {
   title: string;
@@ -40,15 +42,25 @@ export function FloatingPlannerPanel({
 }: FloatingPlannerPanelProps) {
   useTr();
   const storedPosition = useGraphPlannerStore((s) => s.panelPosition);
+  const storedSize = useGraphPlannerStore((s) => s.panelSize);
   const collapsed = useGraphPlannerStore((s) => s.panelCollapsed);
   const setPanelPosition = useGraphPlannerStore((s) => s.setPanelPosition);
+  const setPanelSize = useGraphPlannerStore((s) => s.setPanelSize);
   const setPanelCollapsed = useGraphPlannerStore((s) => s.setPanelCollapsed);
 
   const panelRef = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState<{ x: number; y: number }>(
     storedPosition ?? { x: DEFAULT_OFFSET, y: DEFAULT_OFFSET },
   );
+  const [size, setSize] = useState<{ width: number; height: number } | null>(storedSize);
   const dragRef = useRef<{ pointerId: number; offsetX: number; offsetY: number } | null>(null);
+  const resizeRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    startW: number;
+    startH: number;
+  } | null>(null);
 
   // Keep local position in sync when the store changes externally (e.g. reset
   // layout re-anchors the panel), but not mid-drag.
@@ -56,6 +68,12 @@ export function FloatingPlannerPanel({
     if (dragRef.current) return;
     setPosition(storedPosition ?? { x: DEFAULT_OFFSET, y: DEFAULT_OFFSET });
   }, [storedPosition]);
+
+  // Same for the resized size (reset layout clears it back to the default).
+  useEffect(() => {
+    if (resizeRef.current) return;
+    setSize(storedSize);
+  }, [storedSize]);
 
   const clampToParent = useCallback((x: number, y: number) => {
     const panel = panelRef.current;
@@ -107,12 +125,75 @@ export function FloatingPlannerPanel({
     [clampToParent, setPanelPosition],
   );
 
+  const clampSize = useCallback(
+    (width: number, height: number) => {
+      const parent = panelRef.current?.offsetParent as HTMLElement | null;
+      let maxW = Number.POSITIVE_INFINITY;
+      let maxH = Number.POSITIVE_INFINITY;
+      if (parent) {
+        maxW = Math.max(RESIZE_MIN_W, parent.clientWidth - position.x - EDGE_GAP);
+        maxH = Math.max(RESIZE_MIN_H, parent.clientHeight - position.y - EDGE_GAP);
+      }
+      return {
+        width: Math.min(Math.max(RESIZE_MIN_W, width), maxW),
+        height: Math.min(Math.max(RESIZE_MIN_H, height), maxH),
+      };
+    },
+    [position.x, position.y],
+  );
+
+  const handleResizeDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    const panel = panelRef.current;
+    if (!panel) return;
+    event.preventDefault();
+    event.stopPropagation();
+    resizeRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startW: panel.offsetWidth,
+      startH: panel.offsetHeight,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }, []);
+
+  const handleResizeMove = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const r = resizeRef.current;
+      if (!r || r.pointerId !== event.pointerId) return;
+      setSize(
+        clampSize(r.startW + (event.clientX - r.startX), r.startH + (event.clientY - r.startY)),
+      );
+    },
+    [clampSize],
+  );
+
+  const endResize = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const r = resizeRef.current;
+      if (!r || r.pointerId !== event.pointerId) return;
+      resizeRef.current = null;
+      const next = clampSize(
+        r.startW + (event.clientX - r.startX),
+        r.startH + (event.clientY - r.startY),
+      );
+      setSize(next);
+      setPanelSize(next);
+    },
+    [clampSize, setPanelSize],
+  );
+
   return (
     <div
       ref={panelRef}
       className={styles.floatingPanel}
       data-collapsed={collapsed || undefined}
-      style={{ left: position.x, top: position.y }}
+      style={{
+        left: position.x,
+        top: position.y,
+        ...(size ? { width: size.width } : {}),
+        ...(size && !collapsed ? { height: size.height, maxHeight: "none" } : {}),
+      }}
     >
       <div
         className={styles.floatingPanelHeader}
@@ -164,6 +245,17 @@ export function FloatingPlannerPanel({
         </div>
       </div>
       {collapsed ? null : <div className={styles.floatingPanelBody}>{children}</div>}
+      {collapsed ? null : (
+        <div
+          className={styles.floatingPanelResize}
+          role="presentation"
+          title={tr("planner.panel.resize")}
+          onPointerDown={handleResizeDown}
+          onPointerMove={handleResizeMove}
+          onPointerUp={endResize}
+          onPointerCancel={endResize}
+        />
+      )}
     </div>
   );
 }

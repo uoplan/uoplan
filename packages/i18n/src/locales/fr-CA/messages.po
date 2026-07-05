@@ -2914,6 +2914,10 @@ msgstr "Réduire le panneau"
 msgid "planner.panel.expand"
 msgstr "Agrandir le panneau"
 
+#: apps/web/src/components/planner/FloatingPlannerPanel.tsx:262
+msgid "planner.panel.resize"
+msgstr "Redimensionner le panneau"
+
 #: apps/web/src/components/planner/PlannerSidebar.tsx:140
 msgid "planner.regenerate"
 msgstr "Régénérer"

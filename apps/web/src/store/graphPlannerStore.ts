@@ -114,6 +114,11 @@ export interface GraphPlannerState {
    */
   panelPosition: { x: number; y: number } | null;
   /**
+   * Explicit size (px) of the floating planner panel when the student has resized
+   * it via the corner handle. `null` uses the default responsive size. Persisted.
+   */
+  panelSize: { width: number; height: number } | null;
+  /**
    * Whether the floating planner panel is collapsed to just its header. Lets the
    * student tuck the controls away to see the full graph. Persisted.
    */
@@ -171,6 +176,8 @@ export interface GraphPlannerState {
   resetLayout: () => void;
   /** Persist the floating panel's dragged position (see {@link panelPosition}). */
   setPanelPosition: (pos: { x: number; y: number } | null) => void;
+  /** Persist the floating panel's resized dimensions (see {@link panelSize}). */
+  setPanelSize: (size: { width: number; height: number } | null) => void;
   /** Collapse or expand the floating planner panel (see {@link panelCollapsed}). */
   setPanelCollapsed: (collapsed: boolean) => void;
   /**
@@ -236,6 +243,7 @@ const initialState = {
   nodePositions: {} as Record<string, { x: number; y: number }>,
   nodeSizes: {} as Record<string, { width: number; height: number }>,
   panelPosition: null as { x: number; y: number } | null,
+  panelSize: null as { width: number; height: number } | null,
   panelCollapsed: false,
   linkedCalendarTermId: null as string | null,
   preLinkCompletedContext: null as PlannerCalendarSnapshot | null,
@@ -324,9 +332,12 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
 
       setNodeSize: (id, size) => set((s) => ({ nodeSizes: { ...s.nodeSizes, [id]: size } })),
 
-      resetLayout: () => set({ nodePositions: {}, nodeSizes: {}, panelPosition: null }),
+      resetLayout: () =>
+        set({ nodePositions: {}, nodeSizes: {}, panelPosition: null, panelSize: null }),
 
       setPanelPosition: (pos) => set({ panelPosition: pos }),
+
+      setPanelSize: (size) => set({ panelSize: size }),
 
       setPanelCollapsed: (collapsed) => set({ panelCollapsed: collapsed }),
 
@@ -358,6 +369,7 @@ export const useGraphPlannerStore = create<GraphPlannerState>()(
         nodePositions: s.nodePositions,
         nodeSizes: s.nodeSizes,
         panelPosition: s.panelPosition,
+        panelSize: s.panelSize,
         panelCollapsed: s.panelCollapsed,
         linkedCalendarTermId: s.linkedCalendarTermId,
       }),
