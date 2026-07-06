@@ -12464,6 +12464,34 @@
             }
           },
           {
+            "section": "S200-REC Term",
+            "sectionCode": "S200",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Closed",
+            "distribution": {
+              "A+": 204,
+              "A": 427,
+              "A-": 235,
+              "B+": 98,
+              "B": 43,
+              "C+": 2,
+              "C": 5,
+              "D+": 1,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "DR": 0,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 5,
+              "ABS": 0,
+              "P": 0,
+              "S": 50
+            }
+          },
+          {
             "section": "SR00-REC Term",
             "sectionCode": "SR00",
             "component": "REC",
@@ -35634,7 +35662,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -43588,8 +43616,8 @@
                 "virtual": false,
                 "instructor": "Brenda Halabisky",
                 "meetingDates": [
-                  "2026-05-01",
-                  "2026-08-31"
+                  "2026-05-04",
+                  "2026-07-24"
                 ]
               }
             ],
@@ -43628,8 +43656,8 @@
                 "virtual": false,
                 "instructor": "Tawnya Ann Shimizu",
                 "meetingDates": [
-                  "2026-05-01",
-                  "2026-08-31"
+                  "2026-05-04",
+                  "2026-07-24"
                 ]
               }
             ],
@@ -43728,7 +43756,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Marie-Claude Thifault",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -43739,7 +43767,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Marie-Claude Thifault",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -43830,7 +43858,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Bernard Martin Pinet",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -43883,8 +43911,8 @@
                 "virtual": false,
                 "instructor": "France Farley",
                 "meetingDates": [
-                  "2026-05-01",
-                  "2026-08-31"
+                  "2026-05-04",
+                  "2026-07-24"
                 ]
               }
             ],
@@ -43923,8 +43951,8 @@
                 "virtual": false,
                 "instructor": "France Farley",
                 "meetingDates": [
-                  "2026-05-01",
-                  "2026-08-31"
+                  "2026-05-04",
+                  "2026-07-24"
                 ]
               }
             ],
@@ -44093,7 +44121,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "David Wright",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -44104,7 +44132,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "David Wright",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -44175,7 +44203,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": true,
-                "instructor": "Marie-Claude Thifault",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"
@@ -45688,7 +45716,7 @@
                 "startMinutes": 1110,
                 "endMinutes": 1220,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Cécile L R Catalfo",
                 "meetingDates": [
                   "2026-07-08",
                   "2026-08-12"
@@ -46738,7 +46766,7 @@
                 "startMinutes": 1110,
                 "endMinutes": 1220,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Maryam Jabbari",
                 "meetingDates": [
                   "2026-07-07",
                   "2026-08-11"
