@@ -163037,7 +163037,59 @@
       "title": "Doctorate in Philosophy Law",
       "url": "https://catalogue.uottawa.ca/en/graduate/doctorate-philosophy-law/",
       "slug": "graduate/doctorate-philosophy-law",
-      "requirements": []
+      "requirements": [
+        {
+          "type": "and",
+          "title": "Compulsory Courses",
+          "options": [
+            {
+              "type": "course",
+              "code": "DCL 8330",
+              "credits": 3
+            },
+            {
+              "type": "discipline_elective",
+              "title": "3 optional course units in law (DCL) at the graduate level",
+              "credits": 3,
+              "disciplineLevels": [
+                {
+                  "discipline": "DCL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Comprehensive Examination",
+          "options": [
+            {
+              "type": "course",
+              "code": "DCL 9998"
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Thesis Proposal",
+          "options": [
+            {
+              "type": "course",
+              "code": "DCL 9997"
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Thesis",
+          "options": [
+            {
+              "type": "course",
+              "code": "THD 9999"
+            }
+          ]
+        }
+      ]
     },
     {
       "title": "Doctorate in Philosophy Linguistics",
@@ -167664,7 +167716,7 @@
       ]
     },
     {
-      "title": "Master of Applied Science in Accessibility in Biomedicine",
+      "title": "Master of Applied Science in Accessibility in Biomedicine (Online)",
       "url": "https://catalogue.uottawa.ca/en/graduate/master-applied-science-accessibility-biomedicine/",
       "slug": "graduate/master-applied-science-accessibility-biomedicine",
       "requirements": [
@@ -201438,7 +201490,7 @@
       "requirements": [
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Compulsory Courses:",
           "options": [
             {
               "type": "course",
@@ -201474,11 +201526,11 @@
         },
         {
           "type": "and",
-          "title": "Cours optionnels :",
+          "title": "Optional Courses:",
           "options": [
             {
               "type": "group",
-              "title": "9 crédits de cours optionnels parmi :",
+              "title": "9 optional course units from:",
               "credits": 9,
               "options": [
                 {
@@ -201527,7 +201579,7 @@
         },
         {
           "type": "and",
-          "title": "Cours obligatoires :",
+          "title": "Compulsory courses",
           "options": [
             {
               "type": "course",
@@ -201543,7 +201595,7 @@
         },
         {
           "type": "and",
-          "title": "Mémoire :",
+          "title": "Research Paper",
           "options": [
             {
               "type": "course",
@@ -201553,18 +201605,18 @@
         },
         {
           "type": "and",
-          "title": "Champ d'étude :",
+          "title": "Field of Study",
           "options": [
             {
               "type": "elective",
-              "title": "18 crédits parmi l'un des champs d'étude suivants :",
+              "title": "18 course units from one of the following fields of study:",
               "credits": 18
             }
           ]
         },
         {
           "type": "and",
-          "title": "Champ d'étude santé (avec stage)",
+          "title": "Health Science, with Field Placement",
           "options": [
             {
               "type": "course",
@@ -201583,14 +201635,14 @@
             },
             {
               "type": "elective",
-              "title": "6 crédits de cours optionnels parmi la liste de cours optionnels",
+              "title": "6 optional course unit from list of optional courses",
               "credits": 6
             }
           ]
         },
         {
           "type": "and",
-          "title": "Champ d'étude famille-enfance (avec stage)",
+          "title": "Youth and Family, with Field Placement",
           "options": [
             {
               "type": "course",
@@ -201609,14 +201661,14 @@
             },
             {
               "type": "elective",
-              "title": "6 crédits de cours optionnels parmi la liste de cours optionnels",
+              "title": "6 optional course unit from list of optional courses",
               "credits": 6
             }
           ]
         },
         {
           "type": "and",
-          "title": "Champ d'étude santé (cheminement cours) 1",
+          "title": "Health Science, with Coursework 1",
           "options": [
             {
               "type": "course",
@@ -201643,14 +201695,14 @@
             },
             {
               "type": "elective",
-              "title": "6 crédits de cours optionnels parmi la liste de cours optionnels",
+              "title": "6 optional course unit from list of optional courses",
               "credits": 6
             }
           ]
         },
         {
           "type": "and",
-          "title": "Champ d'étude famille-enfance (cheminement cours) 1",
+          "title": "Youth and Family, with Coursework 1",
           "options": [
             {
               "type": "course",
@@ -201664,7 +201716,7 @@
             },
             {
               "type": "discipline_elective",
-              "title": "6 crédits de cours optionnels en travail social (TSO) de niveau 6000",
+              "title": "6 optional course in Scocial Work (TSO) at the 6000 level",
               "credits": 6,
               "disciplineLevels": [
                 {
@@ -201677,7 +201729,7 @@
             },
             {
               "type": "elective",
-              "title": "6 crédits de cours optionnels parmi la liste de cours optionnels",
+              "title": "6 optional course unit from list of optional courses",
               "credits": 6
             },
             {
@@ -206127,6 +206179,149 @@
       "url": "https://catalogue.uottawa.ca/en/undergrad/bachelor-arts-interdisciplinary-studies-online/",
       "slug": "undergrad/bachelor-arts-interdisciplinary-studies-online",
       "requirements": [
+        {
+          "type": "and",
+          "title": "Basis of admission",
+          "options": [
+            {
+              "type": "elective",
+              "title": "45 course units in equivalences for a two-year diploma program at a Canadian college",
+              "credits": 45
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Optional Courses",
+          "options": [
+            {
+              "type": "group",
+              "title": "9 course units from:",
+              "credits": 9,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "DCN 1101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "EAS 1101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ENV 1101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "HIS 1101",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "HIS 1110",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "LIN 1300",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "elective",
+              "title": "12 optional courses units at the 3000 or 4000 level from the list of optional courses",
+              "credits": 12,
+              "levels": [
+                3000,
+                4000
+              ]
+            },
+            {
+              "type": "elective",
+              "title": "24 optional course units at the 2000, 3000 or 4000 level from the list of optional courses",
+              "credits": 24,
+              "levels": [
+                2000,
+                3000,
+                4000
+              ]
+            },
+            {
+              "type": "course",
+              "code": "AHL 2170",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "AHL 2171",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CLA 2122",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "CMN 2130",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "EAS 2172",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ENG 2107",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "GEG 2110",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "PHI 2100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "SRS 2173",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "AHL 3170",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "LCM 3101",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "LCM 3105",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "SRS 3173",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "AHL 4170",
+              "credits": 3
+            }
+          ]
+        },
         {
           "type": "and",
           "title": "Basis of admission",
@@ -254171,6 +254366,21 @@
               "type": "course",
               "code": "TMM 4924",
               "credits": 1.5
+            },
+            {
+              "type": "course",
+              "code": "TMM 4925",
+              "credits": 1.5
+            },
+            {
+              "type": "course",
+              "code": "TMM 4951",
+              "credits": 1.5
+            },
+            {
+              "type": "course",
+              "code": "TMM 4952",
+              "credits": 1.5
             }
           ]
         }
@@ -300123,11 +300333,6 @@
           "options": [
             {
               "type": "course",
-              "code": "BIO 1131",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "BIO 1141",
               "credits": 3
             },
@@ -300201,7 +300406,24 @@
           "options": [
             {
               "type": "group",
-              "title": "3 optional course units from:",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "BIO 1131",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BIO 1150",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
               "credits": 3,
               "options": [
                 {
@@ -300223,7 +300445,7 @@
             },
             {
               "type": "group",
-              "title": "3 optional course units from:",
+              "title": "3 course units from:",
               "credits": 3,
               "options": [
                 {
@@ -300240,7 +300462,7 @@
             },
             {
               "type": "group",
-              "title": "3 optional course units from:",
+              "title": "3 course units from:",
               "credits": 3,
               "options": [
                 {
@@ -315089,11 +315311,6 @@
           "options": [
             {
               "type": "course",
-              "code": "BIO 1131",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "BIO 1141",
               "credits": 3
             },
@@ -315129,6 +315346,23 @@
           "type": "and",
           "title": "Optional courses",
           "options": [
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "BIO 1131",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "BIO 1150",
+                  "indented": true
+                }
+              ]
+            },
             {
               "type": "pick",
               "title": "6 optional course units in biochemistry (BCH), biology (BIO), biopharmaceutical sciences (BPS), chemistry (CHM), environmental science (EVS), microbiology and immunology (MIC) or PHA 4107",
