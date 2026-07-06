@@ -210,6 +210,53 @@ message PrereqRevision {
   bool has_prereq_text = 3;
 }
 
+// Per-cohort program history. The union `Catalogue` carries the LATEST year's
+// programs; this overlay reconstructs earlier cohorts' program lists without
+// shipping a full programs-only catalogue per year (each of which duplicated a
+// ~thousand-entry course-code dictionary). Program-requirement `code_ref`
+// values in this overlay index the UNION `Catalogue.course_codes` (plus this
+// overlay's `extra_codes` for the few program-only codes absent from the
+// union), exactly like `Catalogue.code_ref`. See @uoplan/core
+// reconstructProgramsForYear.
+message CatalogueProgramHistory {
+  // Catalogue years this overlay is defined against, sorted ascending. Bit `i`
+  // of every mask corresponds to `years[i]`. The newest year is the baseline
+  // (its programs live in the union Catalogue).
+  repeated uint32 years = 1 [packed = true];
+  repeated ProgramOverlay overlays = 2;
+  // Program-requirement code strings not present in the union
+  // `Catalogue.course_codes`. A `ProgramRequirement.code_ref` value past
+  // `union.course_codes.length` indexes this list (`ref - union_len - 1`),
+  // mirroring `Catalogue.extra_codes`.
+  repeated string extra_codes = 3;
+}
+
+// One program key's cross-cohort presence + value history. A program that was
+// present in EVERY tracked year with the union (latest) value has no overlay at
+// all (it is reconstructed from the union baseline for every year).
+message ProgramOverlay {
+  // Program identity, matching `Program.program_key`. May be absent from the
+  // union's latest programs (a history-only program dropped before latest), in
+  // which case `baseline_present_mask` is 0 and all presence lives in
+  // `revisions`.
+  string program_key = 1;
+  // Bitmask over `years`: years the program was present with a value EQUAL to
+  // the union baseline (so its value is not restated here). 0 for history-only
+  // programs (no union baseline exists to equal).
+  uint32 baseline_present_mask = 2;
+  // Distinct non-baseline program values, each with the set of years that used
+  // it. A program present in a year is covered by exactly one of these
+  // revisions or by `baseline_present_mask`; absence in a year means neither.
+  repeated ProgramRevision revisions = 3;
+}
+
+message ProgramRevision {
+  // Bitmask over `CatalogueProgramHistory.years`: which years used this value.
+  uint32 year_mask = 1;
+  // The full program (title + requirements) for those years.
+  Program program = 2;
+}
+
 // Compact keyword index over course descriptions, enabling a secondary
 // "matched in description" search signal without ever shipping the raw
 // description text (~1 MB gzipped). Ships a front-coded keyword dictionary +

@@ -16,6 +16,7 @@ import { mapCatalogue } from "./catalogue.ts";
 import type { CatalogueJsonInput } from "./catalogue.ts";
 import {
   buildPrereqHistory,
+  buildProgramHistory,
   buildUnionCatalogueInput,
   programsOnlyInput,
 } from "./catalogue-merged.ts";
@@ -215,6 +216,12 @@ export async function main(): Promise<void> {
       path.join(WEB_ASSETS_DATA_DIR, "catalogue.history.pb"),
       DataProto.CataloguePrereqHistory.encode(
         buildPrereqHistory(yearInputs, unionInput, unionProto.courseCodes),
+      ).finish(),
+    );
+    await writePb(
+      path.join(WEB_ASSETS_DATA_DIR, "catalogue.programs.history.pb"),
+      DataProto.CatalogueProgramHistory.encode(
+        buildProgramHistory(yearInputs, unionInput, unionProto.courseCodes),
       ).finish(),
     );
     for (const { year, data } of yearInputs) {

@@ -19,3 +19,4 @@ export {
 } from "./schedules";
 export { fromProtoIndices, toProtoIndices } from "./indices";
 export { reconstructCatalogueForYear } from "./catalogueHistory";
+export { reconstructProgramsForYear } from "./programHistory";

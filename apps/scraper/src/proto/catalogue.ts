@@ -159,9 +159,9 @@ export function mapPrereq(node: PrereqInput): DataProto.CoursePrereqNode {
   };
 }
 
-type CodeRefEncoder = (code: string | undefined) => number | undefined;
+export type CodeRefEncoder = (code: string | undefined) => number | undefined;
 
-function mapRequirement(
+export function mapRequirement(
   req: RequirementInput,
   encodeCodeRef: CodeRefEncoder,
 ): DataProto.ProgramRequirement {
