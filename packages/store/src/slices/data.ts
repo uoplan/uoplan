@@ -23,6 +23,7 @@ import {
   peekTermAndYear,
   peekTermAndYearFromBase64,
   reconstructCatalogueForYear,
+  reconstructProgramsForYear,
   urlToSlug,
 } from "@uoplan/core";
 import type { DataCache, DisciplinesData, Indices } from "@uoplan/core";
@@ -62,15 +63,18 @@ export const createDataSlice =
     let professorsPromise: Promise<void> | null = null;
     let yearCataloguePromise: Promise<void> | null = null;
 
-    // The union catalogue proto (all courses, latest metadata) and the compact
-    // prerequisite-history overlay are retained so a cohort's year-specific
-    // prerequisites can be reconstructed without fetching a second full year
-    // catalogue. `prereqHistory` is fetched lazily on the first cohort load.
+    // The union catalogue proto (all courses + the latest cohort's programs) and
+    // the compact prerequisite/program history overlays are retained so a
+    // cohort's year-specific courses AND programs can be reconstructed without
+    // fetching a full year catalogue. Both overlays are fetched lazily on the
+    // first non-latest cohort load.
     let unionProtoCatalogue: DataProto.Catalogue | null = null;
     let prereqHistory: DataProto.CataloguePrereqHistory | null = null;
+    let programHistory: DataProto.CatalogueProgramHistory | null = null;
 
-    /** Reconstruct a cohort year's courses (from the union + prereq overlay) and
-     * fetch that year's programs-only catalogue. */
+    /** Reconstruct a cohort year's courses (union + prereq overlay) and programs
+     * (union + program overlay). The latest cohort's programs are the union's, so
+     * only earlier cohorts fetch the program-history overlay. */
     const loadYearCatalogueData = async (year: number) => {
       if (!unionProtoCatalogue) throw new Error("Catalogue not loaded");
       if (!prereqHistory) {
@@ -79,10 +83,16 @@ export const createDataSlice =
         );
       }
       const { courses } = reconstructCatalogueForYear(unionProtoCatalogue, prereqHistory, year);
-      const { programs } = fromProtoCatalogue(
-        DataProto.Catalogue.decode(
-          await services.data.fetchBytes(dataAssetIds.catalogueProgramsForYear(year)),
-        ),
+      const isLatestYear = year === get().availableYears?.[0];
+      if (!isLatestYear && !programHistory) {
+        programHistory = DataProto.CatalogueProgramHistory.decode(
+          await services.data.fetchBytes(dataAssetIds.catalogueProgramHistory),
+        );
+      }
+      const programs = reconstructProgramsForYear(
+        unionProtoCatalogue,
+        isLatestYear ? null : programHistory,
+        year,
       );
       return { courses, programs };
     };

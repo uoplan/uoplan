@@ -18,7 +18,6 @@ import {
   buildPrereqHistory,
   buildProgramHistory,
   buildUnionCatalogueInput,
-  programsOnlyInput,
 } from "./catalogue-merged.ts";
 import type { YearCatalogue } from "./catalogue-merged.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
@@ -224,12 +223,6 @@ export async function main(): Promise<void> {
         buildProgramHistory(yearInputs, unionInput, unionProto.courseCodes),
       ).finish(),
     );
-    for (const { year, data } of yearInputs) {
-      await writePb(
-        path.join(WEB_ASSETS_DATA_DIR, `catalogue.programs.${year}.pb`),
-        DataProto.Catalogue.encode(mapCatalogue(programsOnlyInput(data))).finish(),
-      );
-    }
 
     // Compact keyword index over course descriptions (latest description per
     // course, newest year wins). Never ships the raw description text — only
@@ -296,7 +289,7 @@ export async function main(): Promise<void> {
   await scaffoldDataManifest();
 
   console.log(
-    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + ${yearInputs.length} programs-only overlays, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
+    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + catalogue.history.pb + catalogue.programs.history.pb, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
   );
 }
 

@@ -32,7 +32,7 @@ export const dataAssetIds = {
   catalogueUnion: "catalogue.union.pb",
   catalogueSearch: "catalogue.search.pb",
   cataloguePrereqHistory: "catalogue.history.pb",
-  catalogueProgramsForYear: (year: number): string => `catalogue.programs.${year}.pb`,
+  catalogueProgramHistory: "catalogue.programs.history.pb",
   schedules: (termId: string): string => `schedules.${termId}.pb`,
   terms: "terms.pb",
   indices: "indices.pb",
@@ -73,16 +73,6 @@ export async function loadCataloguePrereqHistory(
 ): Promise<DataProto.CataloguePrereqHistory> {
   return DataProto.CataloguePrereqHistory.decode(
     await fetchBytes(dataAssetIds.cataloguePrereqHistory),
-  );
-}
-
-/** Decode a cohort year's programs-only catalogue (courses come from the union). */
-export async function loadCatalogueProgramsForYear(
-  fetchBytes: FetchBytes,
-  year: number,
-): Promise<Catalogue> {
-  return fromProtoCatalogue(
-    DataProto.Catalogue.decode(await fetchBytes(dataAssetIds.catalogueProgramsForYear(year))),
   );
 }
 
