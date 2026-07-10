@@ -23168,7 +23168,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 15,
               "A": 9,
@@ -25214,7 +25214,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 43,
               "A": 32,
@@ -35662,7 +35662,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -46504,7 +46504,7 @@
                 "startMinutes": 1110,
                 "endMinutes": 1220,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Chaymaa Marouf",
                 "meetingDates": [
                   "2026-07-09",
                   "2026-08-13"
