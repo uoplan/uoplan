@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { diagnoseTimetableFailure } from "../generationDiagnostics";
 import { buildDataCache } from "../dataCache";
 import type { Catalogue, DayOfWeek, SchedulesData } from "../dataTypes";
-import { lectureScheduleWithTimes as makeSchedule } from "./engineTestHelpers";
+import { lectureScheduleWithTimes as makeSchedule } from "@uoplan/generation/tests/engineTestHelpers";
 
 const emptyCatalogue: Catalogue = { courses: [], programs: [] };
 

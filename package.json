@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm generate && pnpm build:engine-wasm && pnpm --filter web dev",
+    "dev": "pnpm generate:if-needed && pnpm build:engine-wasm:dev:if-needed && pnpm --filter web dev",
     "build": "pnpm generate && pnpm build:engine-wasm && pnpm --filter web build",
     "deploy": "pnpm build && wrangler deploy -c apps/web/dist/uoplan/wrangler.json",
     "deploy:cf": "wrangler deploy -c apps/web/dist/uoplan/wrangler.json",
@@ -42,7 +42,12 @@
     "data:grades": "pnpm --filter scraper grades:convert && pnpm --filter scraper scrape:grades && pnpm --filter scraper enrich:schedules && pnpm build:data-proto",
     "data:build": "pnpm --filter scraper grades:convert && pnpm --filter scraper scrape:grades && pnpm --filter scraper build:professors && pnpm --filter scraper enrich:schedules && pnpm build:data-proto",
     "build:data-proto": "pnpm --filter scraper build:proto",
-    "cli": "cargo run --quiet --manifest-path apps/cli/Cargo.toml --"
+    "cli": "cargo run --quiet --manifest-path apps/cli/Cargo.toml --",
+    "generate:if-needed": "node scripts/generate-if-needed.ts",
+    "build:engine-wasm:if-needed": "node scripts/engine-wasm-if-needed.ts",
+    "build:engine-wasm:dev:if-needed": "node scripts/engine-wasm-if-needed.ts --dev",
+    "dev:web": "pnpm generate:if-needed && pnpm build:engine-wasm:dev:if-needed && pnpm --filter web dev",
+    "dev:force": "FORCE_GENERATE=1 FORCE_ENGINE_WASM=1 pnpm dev"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",

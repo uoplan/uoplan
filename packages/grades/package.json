@@ -11,7 +11,8 @@
     "./gradeDistribution": "./src/gradeDistribution.ts",
     "./gradeTrends": "./src/gradeTrends.ts",
     "./gradeAnalytics": "./src/gradeAnalytics.ts",
-    "./programTrends": "./src/programTrends.ts"
+    "./programTrends": "./src/programTrends.ts",
+    "./feedback": "./src/feedback.ts"
   },
   "scripts": {
     "typecheck": "tsgo --noEmit -p tsconfig.json",
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "@uoplan/domain": "workspace:*",
+    "@uoplan/professors": "workspace:*",
     "@uoplan/proto": "workspace:*"
   },
   "devDependencies": {

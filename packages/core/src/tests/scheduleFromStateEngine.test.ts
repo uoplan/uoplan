@@ -10,7 +10,7 @@ import {
   engineReturning,
   fakeDataCache as fakeCache,
   testLectureSchedule as lec,
-} from "./engineTestHelpers";
+} from "@uoplan/generation/tests/engineTestHelpers";
 
 function generatedCourse(courseCode: string): {
   courseCode: string;

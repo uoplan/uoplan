@@ -21,7 +21,7 @@ import {
   generationResponse as resp,
   testCourseSchedule as schedule,
   testSection as section,
-} from "./engineTestHelpers";
+} from "@uoplan/generation/tests/engineTestHelpers";
 
 /** Default priority list with a single objective's enabled flag overridden. */
 function prioritiesWith(kind: OptimizationKind, enabled: boolean) {

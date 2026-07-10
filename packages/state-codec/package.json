@@ -1,0 +1,26 @@
+{
+  "name": "@uoplan/state-codec",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/stateEncode.ts",
+  "types": "src/stateEncode.ts",
+  "exports": {
+    ".": "./src/stateEncode.ts",
+    "./stateEncode": "./src/stateEncode.ts"
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@uoplan/domain": "workspace:*",
+    "@uoplan/generation": "workspace:*",
+    "@uoplan/proto": "workspace:*",
+    "@uoplan/requirements": "workspace:*",
+    "fflate": "^0.8.3"
+  },
+  "devDependencies": {
+    "vitest": "4.1.7"
+  }
+}

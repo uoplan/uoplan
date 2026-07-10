@@ -1,0 +1,23 @@
+{
+  "name": "@uoplan/ics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/ics.ts",
+  "types": "src/ics.ts",
+  "exports": {
+    ".": "./src/ics.ts"
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@uoplan/domain": "workspace:*",
+    "@uoplan/generation": "workspace:*",
+    "ical-generator": "^10.2.0"
+  },
+  "devDependencies": {
+    "vitest": "4.1.7"
+  }
+}

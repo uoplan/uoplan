@@ -1,0 +1,54 @@
+{
+  "name": "@uoplan/generation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./engineBridge": "./src/engineBridge.ts",
+    "./scheduleFromStateEngine": "./src/scheduleFromStateEngine.ts",
+    "./generationDiagnostics": "./src/generationDiagnostics.ts",
+    "./optimizationPriorities": "./src/optimizationPriorities.ts",
+    "./poolHelpers": "./src/poolHelpers.ts",
+    "./schedulePreview": "./src/schedulePreview.ts",
+    "./scheduleFilters": "./src/scheduleFilters.ts",
+    "./compareSelection": "./src/compareSelection.ts",
+    "./implicitHonours": "./src/implicitHonours.ts",
+    "./uiUtils": "./src/uiUtils.ts",
+    "./instructorPrediction": "./src/instructorPrediction.ts",
+    "./instructorPredictionExplain": "./src/instructorPredictionExplain.ts",
+    "./generation/types": "./src/generation/types.ts",
+    "./generation/sectionCombos": "./src/generation/sectionCombos.ts",
+    "./generation/overlaps": "./src/generation/overlaps.ts",
+    "./generation/requirementAutoAssign": "./src/generation/requirementAutoAssign.ts",
+    "./generation/resolveDesiredCourses": "./src/generation/resolveDesiredCourses.ts",
+    "./generation/computeStillNeeded": "./src/generation/computeStillNeeded.ts",
+    "./generation/swapCandidates": "./src/generation/swapCandidates.ts",
+    "./generation/*": "./src/generation/*",
+    "./generation/blockedTimes": "./src/generation/blockedTimes.ts",
+    "./generation/constraints": "./src/generation/constraints.ts",
+    "./generation/fingerprint": "./src/generation/fingerprint.ts",
+    "./generation/swap": "./src/generation/swap.ts",
+    "./generation/index": "./src/generation/index.ts",
+    "./tests/engineTestHelpers": "./src/tests/engineTestHelpers.ts",
+    "./decodedState": "./src/decodedState.ts"
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@uoplan/domain": "workspace:*",
+    "@uoplan/grades": "workspace:*",
+    "@uoplan/professors": "workspace:*",
+    "@uoplan/proto": "workspace:*",
+    "@uoplan/requirements": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "4.1.7",
+    "vitest": "4.1.7"
+  }
+}

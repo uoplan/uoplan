@@ -36,6 +36,7 @@
     "@uoplan/navigation": "workspace:*",
     "@uoplan/proto": "workspace:*",
     "@uoplan/search": "workspace:*",
+    "@uoplan/store": "workspace:*",
     "@uoplan/theme": "workspace:*",
     "@uoplan/ui": "workspace:*",
     "expo": "~56.0.11",

@@ -7,7 +7,10 @@ Always use `pnpm`, never `npm`.
 ## Commands
 
 ```bash
-pnpm dev              # Vite dev server (runs generate + engine-wasm:dev + data-proto build first)
+pnpm dev              # Vite dev server (stamp-skipped generate + engine-wasm:dev when up to date)
+pnpm dev:force         # Same as dev but FORCE_GENERATE=1 FORCE_ENGINE_WASM=1
+pnpm generate:if-needed # Run generate only when inputs/outputs stamp changes
+pnpm build:engine-wasm:if-needed  # Skip wasm-pack when engine sources unchanged
 pnpm build            # Production build (generate + engine-wasm + data-proto + vite + prerender)
 pnpm test             # Run all workspace tests once (vitest)
 pnpm test:watch       # Watch mode (apps/web)

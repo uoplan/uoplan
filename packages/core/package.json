@@ -98,11 +98,14 @@
   },
   "dependencies": {
     "@uoplan/domain": "workspace:*",
+    "@uoplan/generation": "workspace:*",
     "@uoplan/grades": "workspace:*",
+    "@uoplan/ics": "workspace:*",
+    "@uoplan/professors": "workspace:*",
     "@uoplan/proto": "workspace:*",
+    "@uoplan/requirements": "workspace:*",
     "@uoplan/search": "workspace:*",
-    "fflate": "^0.8.3",
-    "ical-generator": "^10.2.0"
+    "@uoplan/state-codec": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",

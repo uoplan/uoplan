@@ -22,7 +22,12 @@ Dependencies only point **down**. Enforced by `pnpm check:arch`
 @uoplan/domain                 (done — brand, dataTypes, dataCache, utils)
 
 @uoplan/grades                 (done — grade analytics/trends/lookup; feedback still in core)
-@uoplan/core                   (remaining: requirements, generation, professors, stateEncode, feedback, …)
+@uoplan/professors             (done — identity, ratings, registry, co-teaching graph)
+@uoplan/generation             (done — engine bridge, generation helpers, diagnostics)
+@uoplan/requirements           (done)
+@uoplan/ics                   (done)
+@uoplan/state-codec            (done)
+@uoplan/core                   (compat facade + transcript helpers + thin leftovers)
 @uoplan/data
 @uoplan/calendar
 @uoplan/transcript             (pdfjs; browser-only — never in worker)
@@ -57,9 +62,9 @@ here incrementally.
 | `@uoplan/domain`       | `brand`, `dataTypes`, `dataCache`, `courseAlias`, `facultyIdentity`, pure utils | **done**                          |
 | `@uoplan/search`       | `DescriptionSearchIndex`, tokenize/encode helpers                               | **done**                          |
 | `@uoplan/grades`       | grade lookup/distribution/trends/analytics, programTrends                       | **done** (feedback still in core) |
+| `@uoplan/professors`   | identity, ratings, registry, co-teaching graph, discipline colours              | **done**                          |
 | `@uoplan/requirements` | requirements, prerequisites, honours, immersion                                 | planned                           |
 | `@uoplan/generation`   | engine bridge, generation helpers, schedule preview                             | planned                           |
-| `@uoplan/professors`   | identity, ratings, co-teaching graphs                                           | planned                           |
 | `@uoplan/state-codec`  | URL/localStorage state encoding                                                 | planned                           |
 | `@uoplan/ics`          | ICS export                                                                      | planned                           |
 

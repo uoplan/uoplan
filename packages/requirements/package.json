@@ -1,0 +1,35 @@
+{
+  "name": "@uoplan/requirements",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./requirements": "./src/requirements/index.ts",
+    "./requirements/types": "./src/requirements/types.ts",
+    "./requirements/priority": "./src/requirements/priority.ts",
+    "./requirements/utils": "./src/requirements/utils.ts",
+    "./requirements/context": "./src/requirements/context.ts",
+    "./requirements/evaluator": "./src/requirements/evaluator.ts",
+    "./prerequisites": "./src/prerequisites/index.ts",
+    "./prerequisites/context": "./src/prerequisites/context.ts",
+    "./prerequisites/evaluator": "./src/prerequisites/evaluator.ts",
+    "./prerequisites/types": "./src/prerequisites/types.ts",
+    "./requirementExpansion": "./src/requirementExpansion/index.ts",
+    "./frenchImmersionDiploma": "./src/frenchImmersionDiploma.ts"
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@uoplan/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "4.1.7",
+    "vitest": "4.1.7"
+  }
+}

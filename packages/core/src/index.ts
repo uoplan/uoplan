@@ -44,7 +44,7 @@ export * from "./poolHelpers";
 export * from "./implicitHonours";
 export * from "./requirementExpansion";
 export * from "./engineBridge";
-export { arrangementFingerprint } from "./generation/fingerprint";
+export { arrangementFingerprint } from "@uoplan/generation/generation/fingerprint";
 export * from "./scheduleFromStateEngine";
 export * from "./schedulePreview";
 export * from "./feedback";
