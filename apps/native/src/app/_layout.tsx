@@ -1,8 +1,9 @@
 import { useFonts } from "expo-font";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useColorScheme, View } from "react-native";
+import { AppStoreProvider } from "@uoplan/store/AppStoreProvider";
 
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
 import { LoadingErrorScreen, LoadingScreen } from "@/components/loading-screen";
@@ -16,6 +17,8 @@ import { OnboardingProvider, useOnboarding } from "@/data/onboarding-provider";
 import { ScheduleOptionsProvider } from "@/data/schedule-options-provider";
 import { LocaleProvider } from "@/i18n/locale-provider";
 import { AnalyticsProvider } from "@/lib/analytics";
+import { NativeNavigationProvider } from "@/navigation/NativeNavigationProvider";
+import { createAppStore } from "@/store/appStore";
 
 // Keep the native splash up (no auto-hide) until our fonts are ready, so the very
 // first JS frame is already the themed background + animated logo rather than a
@@ -94,24 +97,31 @@ export default function TabLayout() {
     return <View style={{ flex: 1, backgroundColor: Surface.page }} />;
   }
 
+  // Stable store instance for the app session (services inject native adapters).
+  const appStore = useMemo(() => createAppStore(), []);
+
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <AnalyticsProvider>
         <LocaleProvider>
-          <AnimatedSplashOverlay />
-          <AppDataProvider>
-            <CompareProvider>
-              <BasketProvider>
-                <CompletedCoursesProvider>
-                  <ScheduleOptionsProvider>
-                    <OnboardingProvider>
-                      <DataGate />
-                    </OnboardingProvider>
-                  </ScheduleOptionsProvider>
-                </CompletedCoursesProvider>
-              </BasketProvider>
-            </CompareProvider>
-          </AppDataProvider>
+          <NativeNavigationProvider>
+            <AppStoreProvider store={appStore}>
+              <AnimatedSplashOverlay />
+              <AppDataProvider>
+                <CompareProvider>
+                  <BasketProvider>
+                    <CompletedCoursesProvider>
+                      <ScheduleOptionsProvider>
+                        <OnboardingProvider>
+                          <DataGate />
+                        </OnboardingProvider>
+                      </ScheduleOptionsProvider>
+                    </CompletedCoursesProvider>
+                  </BasketProvider>
+                </CompareProvider>
+              </AppDataProvider>
+            </AppStoreProvider>
+          </NativeNavigationProvider>
         </LocaleProvider>
       </AnalyticsProvider>
     </ThemeProvider>

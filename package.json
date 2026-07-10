@@ -47,7 +47,8 @@
     "build:engine-wasm:if-needed": "node scripts/engine-wasm-if-needed.ts",
     "build:engine-wasm:dev:if-needed": "node scripts/engine-wasm-if-needed.ts --dev",
     "dev:web": "pnpm generate:if-needed && pnpm build:engine-wasm:dev:if-needed && pnpm --filter web dev",
-    "dev:force": "FORCE_GENERATE=1 FORCE_ENGINE_WASM=1 pnpm dev"
+    "dev:force": "FORCE_GENERATE=1 FORCE_ENGINE_WASM=1 pnpm dev",
+    "check:bulk-files": "node scripts/check-bulk-files.ts"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",

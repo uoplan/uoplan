@@ -16,6 +16,9 @@ pre-commit:
       glob: "**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}"
       # health (complexity/CRAP) analysis is temporarily disabled — see CLAUDE.md.
       run: pnpm check:fallow
+    check-bulk-files:
+      glob: "**/*"
+      run: pnpm check:bulk-files
     cargo-clippy:
       glob: "apps/cli/**"
       run: cargo clippy --manifest-path apps/cli/Cargo.toml -- -D warnings

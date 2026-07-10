@@ -855,6 +855,15 @@ importers:
       '@uoplan/data':
         specifier: workspace:*
         version: link:../data
+      '@uoplan/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@uoplan/generation':
+        specifier: workspace:*
+        version: link:../generation
+      '@uoplan/requirements':
+        specifier: workspace:*
+        version: link:../requirements
       react:
         specifier: ^19.2.4
         version: 19.2.4

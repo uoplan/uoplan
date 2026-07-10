@@ -111,3 +111,13 @@ Known hotspots to split: native `schedule-settings-sheet.tsx`, web `CalendarPage
 3. Delete re-export shims only after zero consumers.
 4. Prefer many vertical PRs; keep main shippable.
 5. Do not mix bulk data-compaction commits with TypeScript refactors.
+
+## Engine hosts
+
+| Platform | Host                                                             |
+| -------- | ---------------------------------------------------------------- |
+| Web      | `apps/web/src/lib/engine/engineHost.ts` (WASM)                   |
+| Worker   | `apps/worker` OG path via `@uoplan/generation` + in-process WASM |
+| Native   | `apps/native/src/lib/engine/native-engine.ts` (FFI)              |
+
+Request build + response mapping live in `@uoplan/generation` (`engineBridge`). Platforms only load the runtime and call `generate`.

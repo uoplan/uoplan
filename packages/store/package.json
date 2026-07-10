@@ -39,7 +39,8 @@
     "./slices/schedules/generationState": "./src/slices/schedules/generationState.ts",
     "./generationInput": "./src/generationInput.ts",
     "./hydrateNavigation": "./src/hydrateNavigation.ts",
-    "./tests/scheduleBuilders": "./src/tests/scheduleBuilders.ts"
+    "./tests/scheduleBuilders": "./src/tests/scheduleBuilders.ts",
+    "./personalizeRequirements": "./src/personalizeRequirements.ts"
   },
   "scripts": {
     "typecheck": "tsgo -b tsconfig.json",
@@ -49,6 +50,9 @@
   "dependencies": {
     "@uoplan/core": "workspace:*",
     "@uoplan/data": "workspace:*",
+    "@uoplan/domain": "workspace:*",
+    "@uoplan/generation": "workspace:*",
+    "@uoplan/requirements": "workspace:*",
     "react": "^19.2.4",
     "zustand": "^5.0.11"
   },

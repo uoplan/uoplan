@@ -1,6 +1,5 @@
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -8,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useAppStoreApi } from "@uoplan/store/appStore";
 
 import { readCompletedCourses, writeCompletedCourses } from "./completed-courses-storage";
 
@@ -38,6 +38,8 @@ export function CompletedCoursesProvider({ children }: { children: ReactNode }) 
   const [codes, setCodes] = useState<string[]>([]);
   // Skip persisting the very first state set (the initial load from disk).
   const hydrated = useRef(false);
+  // Mirror into the shared planner store so store-driven screens see the same list.
+  const storeApi = useAppStoreApi();
 
   useEffect(() => {
     let active = true;
@@ -53,7 +55,9 @@ export function CompletedCoursesProvider({ children }: { children: ReactNode }) 
   useEffect(() => {
     if (!hydrated.current) return;
     void writeCompletedCourses(codes);
-  }, [codes]);
+    // Dual-write: keep @uoplan/store in sync during the Context → store migration.
+    storeApi.getState().setCompletedCourses(codes);
+  }, [codes, storeApi]);
 
   const value = useMemo<CompletedCoursesContextValue>(
     () => ({

@@ -44,7 +44,7 @@ export function WelcomeScreen() {
     <Container maxWidth={720} px="md" testID="welcome-screen">
       <Stack gap="lg">
         <Stack gap="xs">
-          <Badge tone="accent">uoplan</Badge>
+          <Badge tone="accent">uoPlan</Badge>
           <Title order={1}>Plan your degree, one term at a time</Title>
           <Text dimmed>
             Requirement-first course planning for uOttawa students. This screen is written once and

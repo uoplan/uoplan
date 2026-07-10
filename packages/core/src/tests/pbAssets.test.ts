@@ -100,12 +100,11 @@ describe("committed .pb assets decode with current proto contract", () => {
     expect(union.programs.length).toBeGreaterThan(0);
   });
 
-  it("decodes every catalogue.programs.YYYY.pb", () => {
-    expectAllDecode(
-      /^catalogue\.programs\.\d{4}\.pb$/,
-      (buf) => fromProtoCatalogue(DataProto.Catalogue.decode(buf)),
-      (c) => c.programs.length,
-    );
+  it("decodes the program-history overlay (replaces per-year programs assets)", () => {
+    // Per-year catalogue.programs.YYYY.pb were replaced by the union +
+    // CatalogueProgramHistory overlay (see multi-year catalogue docs).
+    const history = DataProto.CatalogueProgramHistory.decode(read("catalogue.programs.history.pb"));
+    expect(history.years.length).toBeGreaterThan(0);
   });
 
   it("decodes the prerequisite-history overlay when present", () => {
