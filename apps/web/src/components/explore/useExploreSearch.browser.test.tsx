@@ -26,6 +26,22 @@ function Harness() {
 }
 
 describe("useExploreSearch rapid filter changes", () => {
+  it("navigates with the typed delivery search param", async () => {
+    routerMock.search = {};
+    routerMock.pathname = "/explore";
+    routerMock.navigate.mockClear();
+    await render(<Harness />);
+
+    api.handleFilterChange({ delivery: "virtual" });
+
+    expect(routerMock.navigate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: "/explore",
+        search: expect.objectContaining({ delivery: "virtual" }),
+      }),
+    );
+  });
+
   it("does not let a lagging URL param echo clobber newer local edits", async () => {
     routerMock.search = {};
     routerMock.navigate.mockClear();

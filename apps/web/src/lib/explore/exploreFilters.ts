@@ -1,5 +1,6 @@
 import { gradeVizGpa, normalizeCourseCode } from "@uoplan/core";
 import type { RemainingRequirement } from "@uoplan/core";
+import type { ExploreDeliveryMode, ExploreDeliverySets } from "./deliveryMode";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 
 export type ExploreFilterLevel = 1000 | 2000 | 3000 | 4000 | 5000;
@@ -14,6 +15,7 @@ export type ExploreSearchParams = {
   difficulty: string | undefined;
   rating: number | undefined;
   feedback: number | undefined;
+  delivery: string | undefined;
   term: number | undefined;
   reqs: string | undefined;
   sort: string | undefined;
@@ -29,6 +31,10 @@ function toFiniteNumber(value: unknown): number | undefined {
   return undefined;
 }
 
+function parseDeliverySearchParam(value: unknown): ExploreDeliveryMode | undefined {
+  return value === "virtual" || value === "in-person" ? value : undefined;
+}
+
 export function validateExploreSearch(search: Record<string, unknown>): ExploreSearchParams {
   return {
     q: typeof search.q === "string" && search.q.length > 0 ? search.q : undefined,
@@ -42,6 +48,7 @@ export function validateExploreSearch(search: Record<string, unknown>): ExploreS
         : undefined,
     rating: toFiniteNumber(search.rating),
     feedback: toFiniteNumber(search.feedback),
+    delivery: parseDeliverySearchParam(search.delivery),
     term: toFiniteNumber(search.term),
     reqs: search.reqs === "1" ? "1" : undefined,
     sort: typeof search.sort === "string" && search.sort.length > 0 ? search.sort : undefined,
@@ -57,6 +64,7 @@ export const EMPTY_EXPLORE_SEARCH: ExploreSearchParams = {
   difficulty: undefined,
   rating: undefined,
   feedback: undefined,
+  delivery: undefined,
   term: undefined,
   reqs: undefined,
   sort: undefined,
@@ -70,6 +78,7 @@ export type ExploreFilterState = {
   difficulty: ExploreFilterDifficulty | null;
   minRating: number | null;
   minFeedback: number | null;
+  delivery: ExploreDeliveryMode | null;
   termId: number | null;
   contributesToRequirements: boolean;
   sortKey: ExploreSortKey;
@@ -83,6 +92,7 @@ export const EMPTY_FILTERS: ExploreFilterState = {
   difficulty: null,
   minRating: null,
   minFeedback: null,
+  delivery: null,
   termId: null,
   contributesToRequirements: false,
   sortKey: "relevance",
@@ -97,6 +107,7 @@ export function hasActiveFilters(f: ExploreFilterState): boolean {
     f.difficulty !== null ||
     f.minRating !== null ||
     f.minFeedback !== null ||
+    f.delivery !== null ||
     f.termId !== null ||
     f.contributesToRequirements
   );
@@ -175,6 +186,8 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
   const minFeedback =
     minFeedbackRaw != null && MIN_FEEDBACK_VALUES.includes(minFeedbackRaw) ? minFeedbackRaw : null;
 
+  const delivery = parseDeliverySearchParam(search.delivery) ?? null;
+
   const termRaw = search.term != null ? Number(search.term) : null;
   const termId = termRaw != null && Number.isInteger(termRaw) && termRaw > 0 ? termRaw : null;
 
@@ -190,6 +203,7 @@ export function parseExploreFiltersSearch(search: Record<string, unknown>): Expl
     difficulty,
     minRating,
     minFeedback,
+    delivery,
     termId,
     contributesToRequirements,
     sortKey,
@@ -208,6 +222,7 @@ export function serializeExploreFiltersSearch(
   if (filters.difficulty !== null) params.difficulty = filters.difficulty;
   if (filters.minRating !== null) params.rating = filters.minRating;
   if (filters.minFeedback !== null) params.feedback = filters.minFeedback;
+  if (filters.delivery !== null) params.delivery = filters.delivery;
   if (filters.termId !== null) params.term = filters.termId;
   if (filters.contributesToRequirements) params.reqs = "1";
 
@@ -335,10 +350,17 @@ export function filterCourseEntries(
   termSets?: ExploreTermSets,
   sentiment?: ExploreSentimentSets,
   requirementCandidateSet?: Set<string> | null,
+  deliverySets?: ExploreDeliverySets,
 ): ExploreCourseSearchEntry[] {
   const byTerm = filters.termId !== null;
   const byFeedback = filters.minFeedback !== null && sentiment?.courseByNorm != null;
   const byRequirements = filters.contributesToRequirements && requirementCandidateSet != null;
+  const deliverySet =
+    filters.delivery === null
+      ? null
+      : filters.delivery === "virtual"
+        ? deliverySets?.virtual
+        : deliverySets?.inPerson;
   return entries.filter((e) => {
     if (filters.levels.length > 0 && (e.level === null || !filters.levels.includes(e.level))) {
       return false;
@@ -368,6 +390,9 @@ export function filterCourseEntries(
       const s = sentiment!.courseByNorm!.get(e.normCode);
       if (s == null || s < filters.minFeedback!) return false;
     }
+    if (filters.delivery !== null && !deliverySet?.has(e.componentId)) {
+      return false;
+    }
     if (byTerm && !termSets?.courseComponents?.has(e.componentId)) {
       return false;
     }
@@ -384,6 +409,7 @@ export function filterProfessorEntries(
   termSets?: ExploreTermSets,
   sentiment?: ExploreSentimentSets,
 ): ExploreProfessorSearchEntry[] {
+  if (filters.delivery !== null) return [];
   const byDiscipline = filters.disciplines.length > 0;
   const byRating = filters.minRating !== null;
   const byFeedback = filters.minFeedback !== null && sentiment?.professorByGroupId != null;

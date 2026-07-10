@@ -14,6 +14,7 @@ import {
   hasActiveFilters,
   parseExploreFiltersSearch,
   serializeExploreFiltersSearch,
+  validateExploreSearch,
 } from "./exploreFilters";
 import type { ExploreFilterState } from "./exploreFilters";
 import { testCourseCode, testProfessorName } from "../../test/brands";
@@ -112,6 +113,17 @@ describe("parseExploreFiltersSearch", () => {
     expect(parsed.sortKey).toBe("grade");
     expect(parsed.sortDir).toBe("desc");
   });
+
+  it("ignores invalid delivery values", () => {
+    expect(validateExploreSearch({ delivery: "hybrid" }).delivery).toBeUndefined();
+    expect(parseExploreFiltersSearch({ delivery: "hybrid" }).delivery).toBeNull();
+  });
+
+  it("defaults delivery to null and treats it as active when set", () => {
+    expect(EMPTY_FILTERS.delivery).toBeNull();
+    expect(parseExploreFiltersSearch({}).delivery).toBeNull();
+    expect(hasActiveFilters({ ...EMPTY_FILTERS, delivery: "virtual" })).toBe(true);
+  });
 });
 
 describe("serializeExploreFiltersSearch", () => {
@@ -128,6 +140,7 @@ describe("serializeExploreFiltersSearch", () => {
       difficulty: "easy",
       minRating: 4,
       minFeedback: null,
+      delivery: null,
       termId: null,
       contributesToRequirements: false,
       sortKey: "grade",
@@ -143,6 +156,13 @@ describe("serializeExploreFiltersSearch", () => {
       sort: "grade",
       dir: "desc",
     });
+  });
+
+  it.each(["virtual", "in-person"] as const)("round-trips the %s delivery filter", (delivery) => {
+    const params = serializeExploreFiltersSearch({ ...EMPTY_FILTERS, delivery });
+    expect(params).toEqual({ delivery });
+    expect(validateExploreSearch(params).delivery).toBe(delivery);
+    expect(parseExploreFiltersSearch(params).delivery).toBe(delivery);
   });
 
   it("round-trips the term filter through search params", () => {
@@ -385,6 +405,10 @@ describe("filterProfessorEntries", () => {
   it("returns all entries when no relevant filter is active", () => {
     expect(filterProfessorEntries(all, EMPTY_FILTERS)).toHaveLength(3);
   });
+
+  it("suppresses professor entries while a delivery filter is active", () => {
+    expect(filterProfessorEntries(all, { ...EMPTY_FILTERS, delivery: "virtual" })).toEqual([]);
+  });
 });
 
 describe("feedback (overall sentiment) filter", () => {
@@ -461,6 +485,80 @@ describe("term presence filter", () => {
 
     const result = filterProfessorEntries([inTerm, outOfTerm], filters, termSets);
     expect(result.map((e) => e.groupId)).toEqual(["id:1"]);
+  });
+});
+
+describe("delivery filter", () => {
+  const virtualAlias = makeCourseEntry({
+    normCode: "csi1100",
+    courseCode: "CSI 1100",
+    componentId: "csi11-lab",
+  });
+  const inPerson = makeCourseEntry({
+    normCode: "mat1320",
+    courseCode: "MAT 1320",
+    componentId: "mat13-lecture",
+  });
+  const mixed = makeCourseEntry({
+    normCode: "seg2105",
+    courseCode: "SEG 2105",
+    componentId: "seg21-seminar",
+  });
+  const deliverySets = {
+    virtual: new Set([testCourseCode("csi11-lab"), testCourseCode("seg21-seminar")]),
+    inPerson: new Set([testCourseCode("mat13-lecture"), testCourseCode("seg21-seminar")]),
+  };
+
+  it("filters virtual courses by alias component id", () => {
+    const result = filterCourseEntries(
+      [virtualAlias, inPerson],
+      { ...EMPTY_FILTERS, delivery: "virtual" },
+      undefined,
+      undefined,
+      undefined,
+      deliverySets,
+    );
+    expect(result.map((entry) => entry.componentId)).toEqual(["csi11-lab"]);
+  });
+
+  it("filters in-person courses", () => {
+    const result = filterCourseEntries(
+      [virtualAlias, inPerson],
+      { ...EMPTY_FILTERS, delivery: "in-person" },
+      undefined,
+      undefined,
+      undefined,
+      deliverySets,
+    );
+    expect(result.map((entry) => entry.componentId)).toEqual(["mat13-lecture"]);
+  });
+
+  it("allows mixed components to match both delivery modes", () => {
+    const virtualResult = filterCourseEntries(
+      [mixed],
+      { ...EMPTY_FILTERS, delivery: "virtual" },
+      undefined,
+      undefined,
+      undefined,
+      deliverySets,
+    );
+    const inPersonResult = filterCourseEntries(
+      [mixed],
+      { ...EMPTY_FILTERS, delivery: "in-person" },
+      undefined,
+      undefined,
+      undefined,
+      deliverySets,
+    );
+
+    expect(virtualResult.map((entry) => entry.componentId)).toEqual(["seg21-seminar"]);
+    expect(inPersonResult.map((entry) => entry.componentId)).toEqual(["seg21-seminar"]);
+  });
+
+  it("yields zero course matches when delivery is active but no sets are available", () => {
+    expect(filterCourseEntries([virtualAlias], { ...EMPTY_FILTERS, delivery: "virtual" })).toEqual(
+      [],
+    );
   });
 });
 

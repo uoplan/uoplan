@@ -136,6 +136,10 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
 
   const {
     loading,
+    deliveryLoading,
+    deliveryError,
+    schedulesError,
+    retrySchedules,
     displayedCourses,
     displayedProfessors,
     disciplineResults,
@@ -144,6 +148,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     disciplineCourseCount,
     hasResults,
     professorsFirst,
+    virtualCourseComponents,
   } = useExploreResults({
     query,
     debouncedQuery,
@@ -166,7 +171,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     programResults.length;
 
   useEffect(() => {
-    if (!renderResults || loading) return;
+    if (!renderResults || loading || deliveryLoading || deliveryError) return;
     const hasQuery = debouncedQuery.trim().length > 0;
     const signature = JSON.stringify({
       hasQuery,
@@ -179,7 +184,16 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
       hasQuery,
       resultCount: exploreResultCount,
     });
-  }, [analytics, currentSearchParams, debouncedQuery, exploreResultCount, loading, renderResults]);
+  }, [
+    analytics,
+    currentSearchParams,
+    debouncedQuery,
+    deliveryError,
+    deliveryLoading,
+    exploreResultCount,
+    loading,
+    renderResults,
+  ]);
 
   return (
     <ExploreBasketTargetContext.Provider value={basketTargetValue}>
@@ -228,6 +242,10 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
                 query={query}
                 debouncedQuery={debouncedQuery}
                 onClearFilters={() => handleFilterChange(EMPTY_FILTERS)}
+                deliveryActive={filters.delivery !== null}
+                deliveryLoading={deliveryLoading}
+                schedulesError={schedulesError}
+                retrySchedules={retrySchedules}
                 professorsFirst={professorsFirst}
                 displayedCourses={displayedCourses}
                 displayedProfessors={displayedProfessors}
@@ -238,6 +256,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
                 disciplineCourseCount={disciplineCourseCount}
                 professorRatings={professorRatings}
                 currentSearchParams={currentSearchParams}
+                virtualCourseComponents={virtualCourseComponents}
               />
             ) : (
               <m.div

@@ -7,10 +7,12 @@ import {
   SegmentedControl,
   Stack,
   Text,
+  VisuallyHidden,
 } from "@mantine/core";
 import type { ComboboxItem } from "@mantine/core";
 import { useMemo } from "react";
 import { tr, useTr } from "../../i18n";
+import type { ExploreDeliveryMode } from "../../lib/explore/deliveryMode";
 import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import type {
   ExploreFilterDifficulty,
@@ -53,6 +55,15 @@ const FEEDBACKS: { value: number; labelKey: string }[] = [
   { value: 3.0, labelKey: "explore.filter.feedback.good" },
   { value: 3.5, labelKey: "explore.filter.feedback.great" },
   { value: 4.0, labelKey: "explore.filter.feedback.excellent" },
+];
+
+const DELIVERY_OPTIONS: {
+  value: "any" | ExploreDeliveryMode;
+  labelKey: string;
+}[] = [
+  { value: "any", labelKey: "explore.filter.delivery.any" },
+  { value: "virtual", labelKey: "explore.filter.delivery.virtual" },
+  { value: "in-person", labelKey: "explore.filter.delivery.inPerson" },
 ];
 
 const SORT_OPTIONS: { value: ExploreSortKey; labelKey: string }[] = [
@@ -280,6 +291,34 @@ export function ExploreFilterPopoverContent({
               onClick={() => {
                 if (filters.minFeedback === value) onChange({ minFeedback: null });
               }}
+            />
+          ))}
+        </Stack>
+      </Radio.Group>
+    );
+  }
+
+  if (filterKey === "delivery") {
+    return (
+      <Radio.Group
+        aria-label={tr("explore.filter.delivery")}
+        label={<VisuallyHidden>{tr("explore.filter.delivery")}</VisuallyHidden>}
+        value={filters.delivery ?? "any"}
+        onChange={(value) =>
+          onChange({
+            delivery: value === "any" ? null : (value as ExploreDeliveryMode),
+          })
+        }
+      >
+        <Stack gap={8}>
+          {DELIVERY_OPTIONS.map(({ value, labelKey }) => (
+            <Radio
+              key={value}
+              value={value}
+              label={tr(labelKey)}
+              styles={radioStyles}
+              classNames={radioClassNames}
+              iconColor="var(--app-on-accent)"
             />
           ))}
         </Stack>

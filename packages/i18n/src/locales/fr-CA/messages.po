@@ -1573,6 +1573,9 @@ msgstr "Aussi connu sous le nom de :"
 msgid "explore.backToSearch"
 msgstr "Résultats pour \"{q}\""
 
+msgid "explore.badge.virtual"
+msgstr "Virtuel"
+
 #: apps/web/src/components/explore/ExploreCoursePage.tsx:186
 msgid "explore.course.credits"
 msgstr "{count, plural, one {# crédit} other {# crédits}}"
@@ -1683,6 +1686,34 @@ msgstr "Tout effacer"
 
 msgid "explore.filter.clearFilters"
 msgstr "Effacer les filtres"
+
+msgid "explore.filter.delivery"
+msgstr "Mode d’enseignement"
+
+msgid "explore.filter.delivery.any"
+msgstr "Tous"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:428
+msgid "explore.filter.delivery.error"
+msgstr "Impossible de charger les modes d’enseignement."
+
+msgid "explore.filter.delivery.inPerson"
+msgstr "En personne"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:423
+msgid "explore.filter.delivery.loading"
+msgstr "Chargement des modes d’enseignement…"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:100
+msgid "explore.filter.delivery.retry"
+msgstr "Réessayer"
+
+msgid "explore.filter.delivery.virtual"
+msgstr "Virtuel"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:407
+msgid "explore.filter.delivery.warning"
+msgstr "Certains détails d’horaire n’ont pas pu être chargés."
 
 msgid "explore.filter.difficulty"
 msgstr "Difficulté"

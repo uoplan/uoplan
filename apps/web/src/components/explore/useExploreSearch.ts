@@ -28,6 +28,7 @@ function buildSearchParams(
     difficulty: params.difficulty ?? undefined,
     rating: params.rating ?? undefined,
     feedback: params.feedback ?? undefined,
+    delivery: params.delivery ?? undefined,
     term: params.term ?? undefined,
     reqs: params.reqs ?? undefined,
     sort: params.sort ?? undefined,

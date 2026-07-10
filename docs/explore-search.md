@@ -17,6 +17,18 @@ Accepts a `?q=` URL param. As the user types, the URL is updated via `replace` (
 
 Section order (courses first vs professors first) mirrors the relevance logic in `searchExplore`.
 
+#### Delivery filter
+
+The Delivery filter adds three course-only modes:
+
+- **Any** leaves results unscoped by delivery.
+- **Virtual** keeps courses whose selected alias component has at least one virtual meeting.
+- **In-person** keeps courses whose selected alias component has at least one in-person meeting.
+
+Mixed components match both Virtual and In-person. If a **Term** filter is selected, delivery matching uses only that term's loaded offerings. If no Term is selected, delivery matching uses the union across all loaded terms. A matching virtual course card shows a compact **Virtual** badge beside the course code.
+
+Delivery matching is alias-component aware, so historical grade aggregates still stay attached to the retained course card even when newer offerings only match through an alias component. While Delivery is active, the search page hides professor, discipline, faculty, and program result sections because delivery is offering-specific and only meaningfully filters course results.
+
 ### Description keyword matching (compact BM25 index)
 
 Course search also matches **course descriptions**, without ever shipping the raw

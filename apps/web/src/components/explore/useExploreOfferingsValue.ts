@@ -5,6 +5,11 @@ import { normalizeCourseCode } from "@uoplan/core";
 import { useAllSchedulesData } from "../../hooks/useAllSchedulesData";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import {
+  buildExploreDeliveryPresenceIndex,
+  EMPTY_EXPLORE_DELIVERY_PRESENCE,
+} from "../../lib/explore/deliveryMode";
+import type { ExploreDeliveryPresenceIndex } from "../../lib/explore/deliveryMode";
+import {
   buildAliasGroups,
   buildCourseSearchEntries,
   buildExploreOfferings,
@@ -27,6 +32,10 @@ import type {
 export type ExploreOfferingsValue = {
   offerings: ExploreOfferingFlat[];
   loading: boolean;
+  schedulesLoading: boolean;
+  schedulesError: string | null;
+  retrySchedules: () => void;
+  deliveryPresence: ExploreDeliveryPresenceIndex;
   /** Per-course offering groups, keyed by normalized course code. Built eagerly (cheap O(n)). */
   offeringsByCourseNorm: Map<string, ExploreOfferingFlat[]>;
   /** Connected-component alias grouping derived from the catalogue. */
@@ -72,10 +81,22 @@ export function useExploreOfferingsValue(
   registry: ProfessorRegistry | null,
 ): ExploreOfferingsValue {
   const { loading, data: grades } = useCourseGradesPb();
-  const allSchedules = useAllSchedulesData();
+  const {
+    data: allSchedules,
+    loading: schedulesLoading,
+    error: schedulesError,
+    retry: retrySchedules,
+  } = useAllSchedulesData();
 
   const titleByCode = useMemo(() => buildTitleByCode(catalogue), [catalogue]);
   const aliasGroups = useMemo(() => buildAliasGroups(catalogue), [catalogue]);
+  const deliveryPresence = useMemo(
+    () =>
+      allSchedules.length > 0
+        ? buildExploreDeliveryPresenceIndex(allSchedules, aliasGroups.componentByNorm)
+        : EMPTY_EXPLORE_DELIVERY_PRESENCE,
+    [allSchedules, aliasGroups],
+  );
 
   const offerings = useMemo(() => {
     const gradeOfferings = grades ? buildExploreOfferings(grades, titleByCode, registry) : [];
@@ -156,6 +177,10 @@ export function useExploreOfferingsValue(
     () => ({
       offerings,
       loading,
+      schedulesLoading,
+      schedulesError,
+      retrySchedules,
+      deliveryPresence,
       offeringsByCourseNorm,
       aliasGroups,
       offeringsByComponent,
@@ -168,6 +193,10 @@ export function useExploreOfferingsValue(
     [
       offerings,
       loading,
+      schedulesLoading,
+      schedulesError,
+      retrySchedules,
+      deliveryPresence,
       offeringsByCourseNorm,
       aliasGroups,
       offeringsByComponent,

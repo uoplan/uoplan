@@ -9,9 +9,10 @@
  * group survives that selection it keeps **all** of its offerings across **every**
  * term, since a prof's earlier terms / a course's earlier sections are useful
  * context. Every other filter (rating / feedback / level / language / discipline /
- * difficulty / requirements) removes whole groups too, never individual offerings —
- * so the rendered rows always equal the group's full record, and the summary grade
- * histogram is built straight from `group.offerings`.
+ * difficulty / requirements) removes whole groups too, never individual offerings.
+ * The delivery filter is search-results-only, so detail pages explicitly ignore it.
+ * The rendered rows therefore always equal the group's full record, and the summary
+ * grade histogram is built straight from `group.offerings`.
  */
 import { normalizeCourseCode } from "@uoplan/core";
 import type { ProfessorRegistry } from "@uoplan/core";
@@ -92,8 +93,14 @@ export function filterCourseProfessorGroups(
   const byFeedback = filters.minFeedback !== null && deps.sentiment?.professorByGroupId != null;
   if (filters.minRating !== null || byFeedback) {
     // Reuse the index professor predicate (rating + feedback only; term is handled
-    // structurally above and discipline is uniform across one course's professors).
-    const profFilters: ExploreFilterState = { ...filters, disciplines: [], termId: null };
+    // structurally above, discipline is uniform across one course's professors, and
+    // delivery is a search-results-only filter that must not hide detail groups).
+    const profFilters: ExploreFilterState = {
+      ...filters,
+      disciplines: [],
+      delivery: null,
+      termId: null,
+    };
     groups = groups.filter((g) => {
       const entry = deps.profEntryByGroupId.get(g.groupId);
       if (!entry) return false;
@@ -151,8 +158,14 @@ export function filterProfessorCourseGroups(
     byFeedback ||
     (filters.contributesToRequirements && deps.requirementCandidateSet != null);
   if (needsCourseFilter) {
-    // Drop the professor-level rating filter and the structurally-applied term filter.
-    const courseFilters: ExploreFilterState = { ...filters, minRating: null, termId: null };
+    // Drop the professor-level rating filter, the structurally-applied term filter,
+    // and the search-results-only delivery filter.
+    const courseFilters: ExploreFilterState = {
+      ...filters,
+      minRating: null,
+      delivery: null,
+      termId: null,
+    };
     groups = groups.filter((g) => {
       const entry = deps.courseEntryByNorm.get(normalizeCourseCode(g.courseCode));
       if (!entry) return true;
@@ -173,8 +186,9 @@ export function filterProfessorCourseGroups(
 
 /**
  * Whether the course itself passes the course-level filters (level / language /
- * discipline / difficulty / requirements). Rating, feedback and term are excluded —
- * those narrow the professor list, not the course as a whole.
+ * discipline / difficulty / requirements). Rating, feedback, delivery and term are
+ * excluded — those narrow the professor list or only the search-result index, not
+ * the course as a whole.
  */
 export function courseMatchesCourseLevelFilters(
   entry: ExploreCourseSearchEntry | undefined,
@@ -186,6 +200,7 @@ export function courseMatchesCourseLevelFilters(
     ...filters,
     minRating: null,
     minFeedback: null,
+    delivery: null,
     termId: null,
   };
   return (

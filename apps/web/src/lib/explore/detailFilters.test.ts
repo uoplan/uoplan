@@ -63,6 +63,33 @@ const filters = (overrides: Partial<ExploreFilterState>): ExploreFilterState => 
   ...overrides,
 });
 
+const levelCourseEntryByNorm = new Map<string, ExploreCourseSearchEntry>([
+  [normalizeCourseCode("CSI 1100"), makeCourseEntry({ courseCode: "CSI 1100", level: 1000 })],
+  [normalizeCourseCode("MAT 2125"), makeCourseEntry({ courseCode: "MAT 2125", level: 2000 })],
+]);
+
+function expectCourseProfessorGroupIds(
+  courseOfferings: ExploreOfferingFlat[],
+  overrides: Partial<ExploreFilterState>,
+  expectedGroupIds: string[],
+) {
+  const { groups } = filterCourseProfessorGroups(courseOfferings, filters(overrides), {
+    profEntryByGroupId: new Map(),
+  });
+  expect(groups.map((group) => group.groupId).sort()).toEqual(expectedGroupIds);
+}
+
+function expectProfessorCourseGroupCodes(
+  professorOfferings: ExploreOfferingFlat[],
+  overrides: Partial<ExploreFilterState>,
+  courseEntryByNorm: Map<string, ExploreCourseSearchEntry>,
+) {
+  const { groups } = filterProfessorCourseGroups(professorOfferings, filters(overrides), {
+    courseEntryByNorm,
+  });
+  expect(groups.map((group) => group.courseCode)).toEqual([normalizeCourseCode("CSI 1100")]);
+}
+
 describe("filterCourseProfessorGroups", () => {
   // Two professors teaching one course; Ada also teaches it in an earlier term.
   const courseOfferings: ExploreOfferingFlat[] = [
@@ -70,12 +97,17 @@ describe("filterCourseProfessorGroups", () => {
     makeOffering({ id: "a-winter", professorName: "Ada Lovelace", legacyId: 101, termId: 2261 }),
     makeOffering({ id: "b-winter", professorName: "Alan Turing", legacyId: 102, termId: 2261 }),
   ];
+  const ratedProfEntryByGroupId = new Map<string, ExploreProfessorSearchEntry>([
+    ["id:101", makeProfessorEntry({ groupId: "id:101", maxRating: 4.5 })],
+    ["id:102", makeProfessorEntry({ groupId: "id:102", maxRating: 2 })],
+  ]);
 
   it("returns every professor group when no filters are active", () => {
-    const { groups } = filterCourseProfessorGroups(courseOfferings, filters({}), {
-      profEntryByGroupId: new Map(),
-    });
-    expect(groups.map((g) => g.groupId).sort()).toEqual(["id:101", "id:102"]);
+    expectCourseProfessorGroupIds(courseOfferings, {}, ["id:101", "id:102"]);
+  });
+
+  it("ignores the search-results-only delivery filter on course detail pages", () => {
+    expectCourseProfessorGroupIds(courseOfferings, { delivery: "virtual" }, ["id:101", "id:102"]);
   });
 
   it("term filter drops professors absent that term but keeps survivors' full record", () => {
@@ -89,13 +121,40 @@ describe("filterCourseProfessorGroups", () => {
   });
 
   it("min-rating drops whole professor groups below the threshold", () => {
-    const profEntryByGroupId = new Map<string, ExploreProfessorSearchEntry>([
-      ["id:101", makeProfessorEntry({ groupId: "id:101", maxRating: 4.5 })],
-      ["id:102", makeProfessorEntry({ groupId: "id:102", maxRating: 2 })],
-    ]);
     const { groups } = filterCourseProfessorGroups(courseOfferings, filters({ minRating: 3 }), {
-      profEntryByGroupId,
+      profEntryByGroupId: ratedProfEntryByGroupId,
     });
+    expect(groups.map((g) => g.groupId)).toEqual(["id:101"]);
+  });
+
+  it("keeps rating filters working when delivery is also active", () => {
+    const { groups } = filterCourseProfessorGroups(
+      courseOfferings,
+      filters({ delivery: "virtual", minRating: 3 }),
+      { profEntryByGroupId: ratedProfEntryByGroupId },
+    );
+    expect(groups.map((g) => g.groupId)).toEqual(["id:101"]);
+  });
+
+  it("keeps feedback filters working when delivery is also active", () => {
+    const profEntryByGroupId = new Map<string, ExploreProfessorSearchEntry>([
+      ["id:101", makeProfessorEntry({ groupId: "id:101" })],
+      ["id:102", makeProfessorEntry({ groupId: "id:102" })],
+    ]);
+    const { groups } = filterCourseProfessorGroups(
+      courseOfferings,
+      filters({ delivery: "virtual", minFeedback: 4 }),
+      {
+        profEntryByGroupId,
+        sentiment: {
+          courseByNorm: null,
+          professorByGroupId: new Map([
+            ["id:101", 4.2],
+            ["id:102", 3.1],
+          ]),
+        },
+      },
+    );
     expect(groups.map((g) => g.groupId)).toEqual(["id:101"]);
   });
 
@@ -158,6 +217,15 @@ describe("filterProfessorCourseGroups", () => {
     expect(groups).toHaveLength(2);
   });
 
+  it("ignores the search-results-only delivery filter on professor detail pages", () => {
+    const { groups } = filterProfessorCourseGroups(
+      professorOfferings,
+      filters({ delivery: "virtual" }),
+      { courseEntryByNorm: new Map() },
+    );
+    expect(groups).toHaveLength(2);
+  });
+
   it("term filter narrows to courses taught that term, survivors keep all terms", () => {
     const offerings: ExploreOfferingFlat[] = [
       ...professorOfferings,
@@ -174,18 +242,15 @@ describe("filterProfessorCourseGroups", () => {
   });
 
   it("course-level filters drop whole course groups", () => {
-    const courseEntryByNorm = new Map<string, ExploreCourseSearchEntry>([
-      [normalizeCourseCode("CSI 1100"), makeCourseEntry({ courseCode: "CSI 1100", level: 1000 })],
-      [normalizeCourseCode("MAT 2125"), makeCourseEntry({ courseCode: "MAT 2125", level: 2000 })],
-    ]);
-    const { groups } = filterProfessorCourseGroups(
+    expectProfessorCourseGroupCodes(professorOfferings, { levels: [1000] }, levelCourseEntryByNorm);
+  });
+
+  it("keeps course-level filters working when delivery is also active", () => {
+    expectProfessorCourseGroupCodes(
       professorOfferings,
-      filters({ levels: [1000] }),
-      {
-        courseEntryByNorm,
-      },
+      { delivery: "virtual", levels: [1000] },
+      levelCourseEntryByNorm,
     );
-    expect(groups.map((g) => g.courseCode)).toEqual([normalizeCourseCode("CSI 1100")]);
   });
 });
 
@@ -200,14 +265,24 @@ describe("courseMatchesCourseLevelFilters", () => {
     expect(courseMatchesCourseLevelFilters(entry, filters({ levels: [2000] }))).toBe(false);
   });
 
-  it("ignores rating, feedback and term (those narrow the professor list)", () => {
+  it("ignores rating, feedback, delivery and term (those narrow the professor list)", () => {
     const entry = makeCourseEntry({ level: 1000, maxProfessorRating: 1 });
     expect(
       courseMatchesCourseLevelFilters(
         entry,
-        filters({ minRating: 5, minFeedback: 5, termId: 2269 }),
+        filters({ delivery: "virtual", minRating: 5, minFeedback: 5, termId: 2269 }),
       ),
     ).toBe(true);
+  });
+
+  it("still applies course-level filters when delivery is active", () => {
+    const entry = makeCourseEntry({ level: 1000 });
+    expect(
+      courseMatchesCourseLevelFilters(entry, filters({ delivery: "virtual", levels: [1000] })),
+    ).toBe(true);
+    expect(
+      courseMatchesCourseLevelFilters(entry, filters({ delivery: "virtual", levels: [2000] })),
+    ).toBe(false);
   });
 });
 

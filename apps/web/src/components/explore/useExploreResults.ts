@@ -17,6 +17,7 @@ import {
   filterCourseEntries,
   filterProfessorEntries,
 } from "../../lib/explore/exploreFilters";
+import { deliverySetsForTerm } from "../../lib/explore/deliveryMode";
 import type {
   ExploreFilterState,
   ExploreSentimentSets,
@@ -71,7 +72,11 @@ export function useExploreResults({
   completedCourses,
 }: UseExploreResultsArgs) {
   const {
-    loading,
+    loading: gradeLoading,
+    schedulesLoading,
+    schedulesError,
+    retrySchedules,
+    deliveryPresence,
     getCourseEntries,
     getCourseEntryByNorm,
     getProfessorEntries,
@@ -122,6 +127,14 @@ export function useExploreResults({
       profGroups: presence.profGroupsByTerm.get(filters.termId) ?? null,
     };
   }, [filters.termId, getTermPresence]);
+  const deliverySets = useMemo(
+    () => deliverySetsForTerm(deliveryPresence, filters.termId),
+    [deliveryPresence, filters.termId],
+  );
+  const virtualCourseComponents = deliverySets.virtual;
+  const deliveryActive = filters.delivery !== null;
+  const deliveryLoading = deliveryActive && schedulesLoading;
+  const deliveryError = deliveryActive ? schedulesError : null;
 
   const feedbackActive = filters.minFeedback !== null || filters.sortKey === "feedback";
   const { data: feedbackIndex } = useFeedbackData(feedbackActive);
@@ -151,6 +164,7 @@ export function useExploreResults({
       termSets,
       sentimentSets,
       requirementCandidateSet,
+      deliverySets,
     );
     const filteredProfessors = filterProfessorEntries(
       rawSearchResults.professors,
@@ -190,14 +204,29 @@ export function useExploreResults({
             )
         : filteredProfessors,
     };
-  }, [rawSearchResults, activeFilters, filters, termSets, sentimentSets, requirementCandidateSet]);
+  }, [
+    rawSearchResults,
+    activeFilters,
+    filters,
+    termSets,
+    sentimentSets,
+    requirementCandidateSet,
+    deliverySets,
+  ]);
 
   const isFilterOnlyMode = debouncedQuery.trim().length === 0 && activeFilters;
 
   const filterOnlyCourses = useMemo(() => {
     if (!isFilterOnlyMode) return null;
     const filtered = dedupeCourseEntriesByComponent(
-      filterCourseEntries(courseEntries, filters, termSets, sentimentSets, requirementCandidateSet),
+      filterCourseEntries(
+        courseEntries,
+        filters,
+        termSets,
+        sentimentSets,
+        requirementCandidateSet,
+        deliverySets,
+      ),
     );
     if (filters.sortKey === "relevance") return filtered.slice(0, 24);
     if (filters.sortKey === "rating") return filtered.slice(0, 24);
@@ -207,7 +236,15 @@ export function useExploreResults({
         compareCourseEntries(a, b, filters.sortKey, filters.sortDir, sentimentSets?.courseByNorm),
       )
       .slice(0, 24);
-  }, [isFilterOnlyMode, courseEntries, filters, termSets, sentimentSets, requirementCandidateSet]);
+  }, [
+    isFilterOnlyMode,
+    courseEntries,
+    filters,
+    termSets,
+    sentimentSets,
+    requirementCandidateSet,
+    deliverySets,
+  ]);
 
   const filterOnlyProfessors = useMemo(() => {
     if (!isFilterOnlyMode) return null;
@@ -262,23 +299,33 @@ export function useExploreResults({
   );
 
   const displayedCourses = filterOnlyCourses ?? searchResults?.courses ?? [];
-  const displayedProfessors = filterOnlyProfessors ?? searchResults?.professors ?? [];
+  const displayedProfessors = deliveryActive
+    ? []
+    : (filterOnlyProfessors ?? searchResults?.professors ?? []);
+  const scopedDisciplineResults = deliveryActive ? [] : disciplineResults;
+  const scopedFacultyResults = deliveryActive ? [] : facultyResults;
+  const scopedProgramResults = deliveryActive ? [] : programResults;
   const hasResults =
     displayedCourses.length > 0 ||
     displayedProfessors.length > 0 ||
-    disciplineResults.length > 0 ||
-    facultyResults.length > 0 ||
-    programResults.length > 0;
+    scopedDisciplineResults.length > 0 ||
+    scopedFacultyResults.length > 0 ||
+    scopedProgramResults.length > 0;
 
   return {
-    loading,
+    loading: gradeLoading,
+    deliveryLoading,
+    deliveryError,
+    schedulesError,
+    retrySchedules,
     displayedCourses,
     displayedProfessors,
-    disciplineResults,
-    facultyResults,
-    programResults,
+    disciplineResults: scopedDisciplineResults,
+    facultyResults: scopedFacultyResults,
+    programResults: scopedProgramResults,
     disciplineCourseCount,
     hasResults,
     professorsFirst: searchResults?.professorsFirst ?? false,
+    virtualCourseComponents,
   };
 }

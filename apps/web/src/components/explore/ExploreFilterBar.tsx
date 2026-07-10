@@ -5,23 +5,14 @@ import { AnimatePresence, m } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
+import { EXPLORE_FILTER_KEYS } from "../../lib/explore/filterLabels";
+import type { FilterKey } from "../../lib/explore/filterLabels";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
 import type { DisciplineOption, TermOption } from "./ExploreFilterPopoverContent";
 import { ExploreFilterDrawer } from "./ExploreFilterDrawer";
 
-const FILTER_KEYS = [
-  "level",
-  "language",
-  "discipline",
-  "difficulty",
-  "rating",
-  "feedback",
-  "term",
-  "sort",
-] as const;
-type FilterKey = (typeof FILTER_KEYS)[number];
 export const FILTER_PILL_RADIUS = "var(--app-radius-pill)";
 export const FILTER_POPOVER_RADIUS = "var(--app-radius)";
 
@@ -59,6 +50,12 @@ function pillLabel(key: FilterKey, filters: ExploreFilterState, termOptions: Ter
     const fk = FEEDBACK_KEY[filters.minFeedback];
     return fk ? tr(`explore.filter.feedback.${fk}`) : tr("explore.filter.feedback");
   }
+  if (key === "delivery") {
+    if (filters.delivery === null) return tr("explore.filter.delivery");
+    return filters.delivery === "virtual"
+      ? tr("explore.filter.delivery.virtual")
+      : tr("explore.filter.delivery.inPerson");
+  }
   if (key === "term") {
     if (filters.termId === null) return tr("explore.filter.term");
     const match = termOptions.find((t) => t.value === String(filters.termId));
@@ -81,6 +78,7 @@ function pillIsActive(key: FilterKey, filters: ExploreFilterState): boolean {
   if (key === "difficulty") return filters.difficulty !== null;
   if (key === "rating") return filters.minRating !== null;
   if (key === "feedback") return filters.minFeedback !== null;
+  if (key === "delivery") return filters.delivery !== null;
   if (key === "term") return filters.termId !== null;
   if (key === "sort") return filters.sortKey !== "relevance";
   return false;
@@ -100,6 +98,9 @@ function pillColors(key: FilterKey, filters: ExploreFilterState): { bg: string; 
     return { bg: "var(--app-info-soft)", border: "var(--app-info)" };
   }
   if (key === "feedback" && filters.minFeedback !== null) {
+    return { bg: "var(--app-info-soft)", border: "var(--app-info)" };
+  }
+  if (key === "delivery" && filters.delivery !== null) {
     return { bg: "var(--app-info-soft)", border: "var(--app-info)" };
   }
   return { bg: "var(--app-translucent)", border: "var(--app-translucent-strong)" };
@@ -220,7 +221,7 @@ export function ExploreFilterBar({
   const [openedPopover, setOpenedPopover] = useState<FilterKey | null>(null);
   const [popoverPos, setPopoverPos] = useState<{ top: number; left: number } | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerSection, setDrawerSection] = useState<FilterKey>("level");
+  const [drawerSection, setDrawerSection] = useState<FilterKey>(EXPLORE_FILTER_KEYS[0]);
 
   const pillBarRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -270,6 +271,7 @@ export function ExploreFilterBar({
     filters.difficulty !== null ||
     filters.minRating !== null ||
     filters.minFeedback !== null ||
+    filters.delivery !== null ||
     filters.termId !== null ||
     filters.contributesToRequirements ||
     filters.sortKey !== "relevance";
@@ -289,7 +291,7 @@ export function ExploreFilterBar({
               onChange({ contributesToRequirements: !filters.contributesToRequirements });
             }}
           />
-          {FILTER_KEYS.map((key) => {
+          {EXPLORE_FILTER_KEYS.map((key) => {
             const active = pillIsActive(key, filters);
             const { bg, border } = pillColors(key, filters);
             return (

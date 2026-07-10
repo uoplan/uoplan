@@ -1,24 +1,13 @@
 import { ActionIcon, Box, Divider, Stack, Text, Tooltip } from "@mantine/core";
 import { IconEraser } from "@tabler/icons-react";
 import { tr, useTr } from "../../i18n";
+import { EXPLORE_FILTER_KEYS, filterSectionLabel } from "../../lib/explore/filterLabels";
+import type { FilterKey } from "../../lib/explore/filterLabels";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { BottomDrawer } from "../shared/BottomDrawer";
 import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
-import { filterSectionLabel } from "../../lib/explore/filterLabels";
 import type { DisciplineOption, TermOption } from "./ExploreFilterPopoverContent";
-
-const FILTER_KEYS = [
-  "level",
-  "language",
-  "discipline",
-  "difficulty",
-  "rating",
-  "feedback",
-  "term",
-  "sort",
-] as const;
-type FilterKey = (typeof FILTER_KEYS)[number];
 
 export function ExploreFilterDrawer({
   opened,
@@ -60,7 +49,7 @@ export function ExploreFilterDrawer({
       }
     >
       <Stack gap={0} pb={24} pt={8}>
-        {FILTER_KEYS.map((key, i) => (
+        {EXPLORE_FILTER_KEYS.map((key, i) => (
           <Box key={key} id={`drawer-section-${key}`}>
             {i > 0 && <Divider color="var(--app-border)" my={16} />}
             <Box px={16}>

@@ -1573,6 +1573,9 @@ msgstr "Also known as:"
 msgid "explore.backToSearch"
 msgstr "Search results for \"{q}\""
 
+msgid "explore.badge.virtual"
+msgstr "Virtual"
+
 #: apps/web/src/components/explore/ExploreCoursePage.tsx:186
 msgid "explore.course.credits"
 msgstr "{count, plural, one {# credit} other {# credits}}"
@@ -1683,6 +1686,34 @@ msgstr "Clear all"
 
 msgid "explore.filter.clearFilters"
 msgstr "Clear filters"
+
+msgid "explore.filter.delivery"
+msgstr "Delivery"
+
+msgid "explore.filter.delivery.any"
+msgstr "Any"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:428
+msgid "explore.filter.delivery.error"
+msgstr "Couldn’t load delivery availability."
+
+msgid "explore.filter.delivery.inPerson"
+msgstr "In-person"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:423
+msgid "explore.filter.delivery.loading"
+msgstr "Loading delivery availability…"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:100
+msgid "explore.filter.delivery.retry"
+msgstr "Try again"
+
+msgid "explore.filter.delivery.virtual"
+msgstr "Virtual"
+
+#: apps/web/src/components/explore/ExploreSearchResults.tsx:407
+msgid "explore.filter.delivery.warning"
+msgstr "Some schedule details couldn’t load."
 
 msgid "explore.filter.difficulty"
 msgstr "Difficulty"

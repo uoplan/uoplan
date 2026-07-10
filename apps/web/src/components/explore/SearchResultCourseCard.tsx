@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Box, Text } from "@mantine/core";
+import { Badge, Box, Group, Text } from "@mantine/core";
 import type { CSSProperties } from "react";
 import { tr, useTr } from "../../i18n";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
@@ -22,14 +22,24 @@ const COURSE_CARD_LINK_STYLE: CSSProperties = {
   textDecoration: "none",
 };
 
+const COURSE_DELIVERY_BADGE_STYLE: CSSProperties = {
+  backgroundColor: "var(--app-info-soft)",
+  borderRadius: "var(--app-radius-pill)",
+  color: "var(--app-info)",
+  flexShrink: 0,
+  textTransform: "none",
+};
+
 export function SearchResultCourseCard({
   entry,
   sentiment,
   searchParams,
+  virtual,
 }: {
   entry: ExploreCourseSearchEntry;
   sentiment?: number | null;
   searchParams: ExploreSearchParams;
+  virtual: boolean;
 }) {
   useTr();
   const { gradeViz } = entry;
@@ -43,9 +53,16 @@ export function SearchResultCourseCard({
         style={COURSE_CARD_LINK_STYLE}
       >
         <SearchResultCardBody>
-          <Text size="sm" fw={700} c="var(--app-text)" lh={1.3}>
-            {entry.courseCode}
-          </Text>
+          <Group gap={6} wrap="nowrap">
+            <Text size="sm" fw={700} c="var(--app-text)" lh={1.3} style={{ whiteSpace: "nowrap" }}>
+              {entry.courseCode}
+            </Text>
+            {virtual ? (
+              <Badge size="xs" radius="xl" variant="light" style={COURSE_DELIVERY_BADGE_STYLE}>
+                {tr("explore.badge.virtual")}
+              </Badge>
+            ) : null}
+          </Group>
           {entry.courseTitle ? (
             <Text
               size="xs"

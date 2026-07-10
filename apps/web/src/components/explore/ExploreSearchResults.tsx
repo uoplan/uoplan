@@ -1,7 +1,13 @@
-import { Box, Stack, Text } from "@mantine/core";
+import { Box, Button, Group, Loader, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import { AnimatePresence, m } from "framer-motion";
-import type { Discipline, Faculty, GradeVizData, ProfessorRatingsMap } from "@uoplan/core";
+import type {
+  Discipline,
+  Faculty,
+  GradeVizData,
+  NormalizedCourseCode,
+  ProfessorRatingsMap,
+} from "@uoplan/core";
 import {
   courseSentimentByNorm,
   normalizeProfessorName,
@@ -55,9 +61,53 @@ type ExploreSearchResultsProps = {
   disciplineCourseCount: Map<string, number>;
   professorRatings: ProfessorRatingsMap | null;
   currentSearchParams: ExploreSearchParams;
+  virtualCourseComponents: ReadonlySet<NormalizedCourseCode>;
+  deliveryActive: boolean;
+  deliveryLoading: boolean;
+  schedulesError: string | null;
+  retrySchedules: () => void;
 };
 
 type SearchCardItem = { key: string; node: ReactNode };
+
+function DeliveryStatusNotice({
+  tone,
+  message,
+  onRetry,
+}: {
+  tone: "loading" | "warning" | "error";
+  message: string;
+  onRetry?: () => void;
+}) {
+  const role = tone === "error" ? "alert" : "status";
+  const ariaLive = tone === "error" ? "assertive" : "polite";
+  return (
+    <Box
+      role={role}
+      aria-live={ariaLive}
+      style={{
+        padding: "12px 14px",
+        borderRadius: "var(--mantine-radius-lg)",
+        backgroundColor: "var(--app-surface)",
+        border: "1px solid var(--app-border)",
+      }}
+    >
+      <Group gap="sm" align="center" wrap="wrap" justify="space-between">
+        <Group gap="xs" align="center" wrap="nowrap">
+          {tone === "loading" ? <Loader size="xs" aria-hidden="true" /> : null}
+          <Text size="sm" c="dimmed">
+            {message}
+          </Text>
+        </Group>
+        {onRetry ? (
+          <Button type="button" size="xs" radius="xl" variant="light" onClick={onRetry}>
+            {tr("explore.filter.delivery.retry")}
+          </Button>
+        ) : null}
+      </Group>
+    </Box>
+  );
+}
 
 function SearchCardSection({
   label,
@@ -117,6 +167,10 @@ export function ExploreSearchResults({
   query,
   debouncedQuery,
   onClearFilters,
+  deliveryActive,
+  deliveryLoading,
+  schedulesError,
+  retrySchedules,
   professorsFirst,
   displayedCourses,
   displayedProfessors,
@@ -127,6 +181,7 @@ export function ExploreSearchResults({
   disciplineCourseCount,
   professorRatings,
   currentSearchParams,
+  virtualCourseComponents,
 }: ExploreSearchResultsProps) {
   useTr();
 
@@ -249,6 +304,7 @@ export function ExploreSearchResults({
               entry={entry}
               sentiment={courseSentiment?.get(entry.normCode) ?? null}
               searchParams={currentSearchParams}
+              virtual={virtualCourseComponents.has(entry.componentId)}
             />
           ),
         }))}
@@ -334,8 +390,31 @@ export function ExploreSearchResults({
     ) : null;
 
   const orderedSections = professorsFirst
-    ? [professorsSection, coursesSection, disciplinesSection, facultiesSection, programsSection]
-    : [coursesSection, disciplinesSection, facultiesSection, programsSection, professorsSection];
+    ? [
+        { key: "professors", node: professorsSection },
+        { key: "courses", node: coursesSection },
+        { key: "disciplines", node: disciplinesSection },
+        { key: "faculties", node: facultiesSection },
+        { key: "programs", node: programsSection },
+      ]
+    : [
+        { key: "courses", node: coursesSection },
+        { key: "disciplines", node: disciplinesSection },
+        { key: "faculties", node: facultiesSection },
+        { key: "programs", node: programsSection },
+        { key: "professors", node: professorsSection },
+      ];
+  const renderedSections = orderedSections.map(({ key, node }) =>
+    node ? <Box key={key}>{node}</Box> : null,
+  );
+  const scheduleWarning =
+    !deliveryActive && schedulesError ? (
+      <DeliveryStatusNotice
+        tone="warning"
+        message={tr("explore.filter.delivery.warning")}
+        onRetry={retrySchedules}
+      />
+    ) : null;
 
   return (
     <m.div
@@ -346,33 +425,53 @@ export function ExploreSearchResults({
       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       style={{ flex: 1 }}
     >
-      {hasResults ? (
-        <Stack gap={28} mt={8}>
-          {orderedSections}
+      {deliveryActive && deliveryLoading ? (
+        <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs, paddingRight: 24 }} mt={8}>
+          <DeliveryStatusNotice tone="loading" message={tr("explore.filter.delivery.loading")} />
+        </Box>
+      ) : deliveryActive && schedulesError ? (
+        <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs, paddingRight: 24 }} mt={8}>
+          <DeliveryStatusNotice
+            tone="error"
+            message={tr("explore.filter.delivery.error")}
+            onRetry={retrySchedules}
+          />
+        </Box>
+      ) : hasResults ? (
+        <Stack gap={16} mt={8}>
+          {scheduleWarning}
+          <Stack gap={28}>{renderedSections}</Stack>
         </Stack>
       ) : (
-        <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs, paddingRight: 24 }} mt={8}>
-          <Text size="sm" c="dimmed">
-            {activeFilters && !debouncedQuery.trim()
-              ? tr("explore.filter.noResults")
-              : tr("search.noResults", { q: query.trim() })}
-          </Text>
-          {activeFilters && (
-            <Text
-              size="sm"
-              c="var(--app-accent)"
-              mt={4}
-              style={{
-                cursor: "pointer",
-                textDecoration: "underline",
-                textUnderlineOffset: 2,
-              }}
-              onClick={onClearFilters}
-            >
-              {tr("explore.filter.clearFilters")}
+        <Stack
+          gap={12}
+          mt={8}
+          style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs, paddingRight: 24 }}
+        >
+          {scheduleWarning}
+          <Box>
+            <Text size="sm" c="dimmed">
+              {activeFilters && !debouncedQuery.trim()
+                ? tr("explore.filter.noResults")
+                : tr("search.noResults", { q: query.trim() })}
             </Text>
-          )}
-        </Box>
+            {activeFilters && (
+              <Text
+                size="sm"
+                c="var(--app-accent)"
+                mt={4}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  textUnderlineOffset: 2,
+                }}
+                onClick={onClearFilters}
+              >
+                {tr("explore.filter.clearFilters")}
+              </Text>
+            )}
+          </Box>
+        </Stack>
       )}
     </m.div>
   );
