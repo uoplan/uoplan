@@ -97,7 +97,10 @@
     "bench": "vitest bench"
   },
   "dependencies": {
+    "@uoplan/domain": "workspace:*",
+    "@uoplan/grades": "workspace:*",
     "@uoplan/proto": "workspace:*",
+    "@uoplan/search": "workspace:*",
     "fflate": "^0.8.3",
     "ical-generator": "^10.2.0"
   },

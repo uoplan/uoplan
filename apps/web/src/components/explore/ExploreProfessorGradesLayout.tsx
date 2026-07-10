@@ -32,7 +32,7 @@ import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
 import { ProfessorRatingBadges } from "../shared/RatingBadge";
 import { WhyNotPredictedHoverDetails } from "./WhyNotPredictedHoverDetails";
-import { useLazyData } from "../../store/hooks";
+import { useLazyData } from "@uoplan/store/hooks";
 import {
   EXPLORE_ACCORDION_PAD_INLINE,
   EXPLORE_ACCORDION_PAD_RIGHT,

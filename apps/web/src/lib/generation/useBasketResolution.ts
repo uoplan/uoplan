@@ -8,7 +8,7 @@ import {
   useDataCache,
   useProgramSelection,
   useRequirementState,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { useRequirementAssignmentState } from "../../components/requirements/useRequirementAssignmentState";
 
 /** A requirement and the basket courses the resolver assigned to it, with a display title. */

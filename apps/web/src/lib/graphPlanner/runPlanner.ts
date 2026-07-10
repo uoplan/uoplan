@@ -1,5 +1,5 @@
 import type { GenerateSchedulesResult } from "../generateSchedulesAction";
-import type { AppState } from "../../store/types";
+import type { AppState } from "@uoplan/store/types";
 import { generatePlannerTermViaWorker } from "../../workers/plannerWorkerClient";
 import type { PlannerTermStatus } from "../../store/graphPlannerStore";
 import { buildPlannerTermInput, plannerTermDataKey } from "./buildTermInput";

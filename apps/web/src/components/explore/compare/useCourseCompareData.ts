@@ -5,7 +5,7 @@ import type { GradeVizData, NormalizedCourseCode } from "@uoplan/core";
 import type { ExploreFilterLevel } from "../../../lib/explore/exploreFilters";
 import { facultyForDisciplineCode, localizeFacultyName } from "../../../lib/explore/faculty";
 import { useScheduleSentiment } from "../../../hooks/useScheduleSentiment";
-import { useDataCache, useDisciplines, useFaculties, useTerms } from "../../../store/hooks";
+import { useDataCache, useDisciplines, useFaculties, useTerms } from "@uoplan/store/hooks";
 import { useExploreOfferings } from "../exploreOfferingsContext";
 
 /** One course's fully-resolved comparison attributes. */

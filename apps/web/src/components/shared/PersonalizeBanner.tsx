@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Text } from "@mantine/core";
 import { Link, useLocation } from "@tanstack/react-router";
 import { IconAdjustments, IconSparkles } from "@tabler/icons-react";
-import { useActiveProgram, useCompletedCourses, useIndices } from "../../store/hooks";
+import { useActiveProgram, useCompletedCourses, useIndices } from "@uoplan/store/hooks";
 import { tr, useTr } from "../../i18n";
 import { TopBanner, TopBannerSlot } from "./TopBanner";
 import classes from "./PersonalizeBanner.module.css";

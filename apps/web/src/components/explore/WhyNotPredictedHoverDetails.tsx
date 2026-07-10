@@ -5,7 +5,7 @@ import { explainUnpredictedInstructorsForCourse, normalizeCourseCode } from "@uo
 import { useTr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
 import { useTermScheduleData } from "../../hooks/useTermScheduleData";
-import { useProfessorRegistry } from "../../store/hooks";
+import { useProfessorRegistry } from "@uoplan/store/hooks";
 import { UnpredictedInstructorList } from "./UnpredictedInstructorList";
 
 /** Cap on the number of excluded professors listed in the predicted-badge card. */

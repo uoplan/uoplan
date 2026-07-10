@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import type { DataCache, DayOfWeekCode } from "@uoplan/core";
 import type { CalendarEvent } from "../../../hooks/useCalendarEvents";
-import type { BlockedTime } from "../../../store/types";
-import { useBlockedTimes, useGenerationTimeWindow } from "../../../store/hooks";
+import type { BlockedTime } from "@uoplan/store/types";
+import { useBlockedTimes, useGenerationTimeWindow } from "@uoplan/store/hooks";
 import { FULL_WEEK_CODES, WEEKDAY_CODES } from "./weekCalendarLayout";
 import { WeekCalendarGrid } from "./WeekCalendarGrid";
 import { BlockedTimeLayer } from "./BlockedTimeLayer";

@@ -4,7 +4,7 @@ import { IconArrowsDiagonal } from "@tabler/icons-react";
 import { Handle, NodeResizeControl, Position } from "@xyflow/react";
 import type { Node, NodeProps, ResizeParams } from "@xyflow/react";
 import { tr } from "../../i18n";
-import { useDataCache, useProfessorRatings } from "../../store/hooks";
+import { useDataCache, useProfessorRatings } from "@uoplan/store/hooks";
 import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import type { PlannerTermStatus } from "../../store/graphPlannerStore";
 import type { PlannerBandData } from "../../lib/graphPlanner/buildPlannerGraph";

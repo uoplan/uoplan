@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { flushPersistedAppState } from "../lib/persistAppState";
 import { useAppStoreApi } from "../store/appStore";
-import type { AppStore } from "../store/types";
+import type { AppStore } from "@uoplan/store/types";
 
 const DEBOUNCE_MS = 400;
 

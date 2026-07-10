@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { useCourseSelectOptions } from "../../shared/useCourseSelectOptions";
 import { useBasketSelection } from "../../../hooks/useBasket";
-import { useCompletedCourses } from "../../../store/hooks/useCompletedCourses";
-import { useDataCache } from "../../../store/hooks/useDataset";
-import { useGenerationConstraints } from "../../../store/hooks/useGenerationConstraints";
-import { useProgramSelection } from "../../../store/hooks/useProgramSelection";
-import { useAdditionalElectives } from "../../../store/hooks/useScheduleGeneration";
+import { useCompletedCourses } from "@uoplan/store/hooks/useCompletedCourses";
+import { useDataCache } from "@uoplan/store/hooks/useDataset";
+import { useGenerationConstraints } from "@uoplan/store/hooks/useGenerationConstraints";
+import { useProgramSelection } from "@uoplan/store/hooks/useProgramSelection";
+import { useAdditionalElectives } from "@uoplan/store/hooks/useScheduleGeneration";
 
 /**
  * Rich generation-options projection for the calendar sidebars: the shared generation

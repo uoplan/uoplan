@@ -7,7 +7,7 @@ import { buildShareUrl } from "../lib/buildShareUrl";
 import { flushPersistedAppState } from "../lib/persistAppState";
 import { fetchProtoBytes, optionalProtoBytes } from "../lib/protoFetch";
 import { LOCAL_STORAGE_KEY } from "./constants";
-import { getEffectiveCatalogue } from "./slices/catalogueUtils";
+import { getEffectiveCatalogue } from "@uoplan/store/slices/catalogueUtils";
 import type { WizardStep } from "../lib/wizardSteps";
 
 function currentWindow(): Window | null {

@@ -21,7 +21,7 @@ import { buildProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import type { ProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import { fromProtoProfessorsData } from "@uoplan/core/professorRegistry";
 import type { ProfessorRegistryEntry } from "@uoplan/core/professorRegistry";
-import { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
+import { DescriptionSearchIndex } from "@uoplan/search/descriptionSearch";
 import {
   Catalogue as ProtoCatalogue,
   CatalogueManifest as ProtoCatalogueManifest,

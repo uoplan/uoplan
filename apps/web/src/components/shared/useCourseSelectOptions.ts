@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { normalizeCourseCode } from "@uoplan/core";
-import { useCompletedCourses } from "../../store/hooks/useCompletedCourses";
-import { useDataCache } from "../../store/hooks/useDataset";
+import { useCompletedCourses } from "@uoplan/store/hooks/useCompletedCourses";
+import { useDataCache } from "@uoplan/store/hooks/useDataset";
 import { createCourseOptionsFilter, renderCourseOption } from "./CourseSelect";
 
 /**

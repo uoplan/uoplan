@@ -2,8 +2,8 @@ import type { TranscriptTerm } from "@uoplan/core/transcript";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
-import type { AppState } from "./types";
-import { DEFAULT_COURSES_THIS_SEMESTER } from "./generationDefaults";
+import type { AppState } from "@uoplan/store/types";
+import { DEFAULT_COURSES_THIS_SEMESTER } from "@uoplan/store/generationDefaults";
 
 /** localStorage key + schema version for the degree-planner graph (beta). */
 const STORAGE_KEY = "uoplan.graphPlanner.v1";

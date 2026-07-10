@@ -1,4 +1,4 @@
-import type { GenerationErrorDetails } from "../store/types";
+import type { GenerationErrorDetails } from "@uoplan/store/types";
 
 /**
  * True when a generation error carries structured context worth showing beyond

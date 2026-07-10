@@ -41,7 +41,7 @@ import {
   useProfessorRatings,
   useProfessorRegistry,
   useRequirementState,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";

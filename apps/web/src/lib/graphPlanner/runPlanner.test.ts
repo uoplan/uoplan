@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import type { AppState } from "../../store/types";
+import type { AppState } from "@uoplan/store/types";
 import type { GenerateSchedulesResult } from "../generateSchedulesAction";
 import { runPlanner } from "./runPlanner";
 

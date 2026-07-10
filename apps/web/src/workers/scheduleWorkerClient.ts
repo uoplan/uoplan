@@ -1,8 +1,9 @@
 import { notifications } from "@mantine/notifications";
-import type { AppState } from "../store/types";
+import type { AppState } from "@uoplan/store/types";
 import type { CacheDataKey } from "../lib/dataCacheLoader";
-import { pickGenerateSchedulesInput } from "../lib/generateSchedulesInput";
-import type { GenerateSchedulesInput, GenerateSchedulesMode } from "../lib/generateSchedulesInput";
+import { pickGenerateSchedulesInput } from "@uoplan/store/generationInput";
+import type { GenerateSchedulesInput } from "@uoplan/store/generationInput";
+import type { GenerateSchedulesMode } from "@uoplan/store/services";
 import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { tr } from "../i18n";
 import { formatTermNameEn } from "@uoplan/core";
@@ -254,7 +255,7 @@ async function runScheduleGenerationInternal(
   if (state.catalogue && state.schedulesData && state.cache) {
     const [{ getInMemoryEngine }, { getEffectiveCatalogue }] = await Promise.all([
       import("../lib/engine/engineHost"),
-      import("../store/slices/catalogueUtils"),
+      import("@uoplan/store/slices/catalogueUtils"),
     ]);
     const effectiveCatalogue =
       getEffectiveCatalogue(state.catalogue, state.yearCatalogueCourses, state.completedCourses) ??

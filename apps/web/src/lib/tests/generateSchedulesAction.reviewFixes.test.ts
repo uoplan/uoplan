@@ -4,7 +4,7 @@ import type { Catalogue, ScheduleEngine, SchedulesData } from "@uoplan/core";
 import { buildDataCache, defaultOptimizationPriorities } from "@uoplan/core";
 import { generateSchedulesAction } from "../generateSchedulesAction";
 import type { GenerateSchedulesInput } from "../generateSchedulesAction";
-import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
+import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 import { testCourseCode } from "../../test/brands";
 import { testScheduledCourse } from "../../test/courseScheduleFixtures";
 

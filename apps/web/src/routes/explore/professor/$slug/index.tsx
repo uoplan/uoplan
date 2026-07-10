@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { ExploreProfessorPage } from "../../../../components/explore/ExploreProfessorPage";
 import { resolveProfessorRoute } from "../../../../lib/explore/professorRoute";
 import { buildProfessorDocumentTitle, buildProfessorHead } from "../../../../lib/seo";
-import { useProfessorRegistry } from "../../../../store/hooks";
+import { useProfessorRegistry } from "@uoplan/store/hooks";
 
 export const Route = createFileRoute("/explore/professor/$slug/")({
   head: ({ params }) => buildProfessorHead(params.slug),

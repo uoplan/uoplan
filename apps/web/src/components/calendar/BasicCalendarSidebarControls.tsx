@@ -7,16 +7,16 @@ import {
   useCompletedCourses,
   useCoursesThisSemester,
   useScheduleGeneration,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { BasketContents } from "../basket/BasketContents";
 import { createCourseOptions } from "../shared/CourseSelect";
 import { GenerationOptionsFields } from "./generationOptions/GenerationOptionsFields";
-import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
+import { avoidedDaysFromBlocks } from "@uoplan/store/blockedTimes";
 import { tr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
 import { navigateToWizardStep } from "../../lib/appNavigation";
 import { WizardStep } from "../../lib/wizardSteps";
-import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
+import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 import { useSharedGenerationOptions } from "./generationOptions/useSharedGenerationOptions";
 
 const FIRST_YEAR_CREDIT_CAP = 48;

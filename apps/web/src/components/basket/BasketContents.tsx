@@ -42,7 +42,7 @@ import {
   useDataCache,
   useRequirementState,
   useTermSelection,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { useCourseSelectOptions } from "../shared/useCourseSelectOptions";
 import classes from "./BasketContents.module.css";
 

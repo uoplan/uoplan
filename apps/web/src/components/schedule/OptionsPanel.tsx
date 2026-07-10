@@ -1,5 +1,9 @@
 import { Box } from "@mantine/core";
-import { useCompletedCourses, useRequirementActions, useRequirementState } from "../../store/hooks";
+import {
+  useCompletedCourses,
+  useRequirementActions,
+  useRequirementState,
+} from "@uoplan/store/hooks";
 import { OptionsStep } from "../requirements/OptionsStep";
 
 export function OptionsPanel() {

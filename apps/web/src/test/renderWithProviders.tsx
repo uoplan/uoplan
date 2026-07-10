@@ -7,10 +7,10 @@ import type { AppServiceOverrides } from "@uoplan/store/services";
 
 import { i18n } from "../i18n";
 import { AppThemeProvider } from "../theme/AppThemeProvider";
-import { AppStoreProvider } from "../store/AppStoreProvider";
+import { AppStoreProvider } from "@uoplan/store/AppStoreProvider";
 import { createAppStore } from "../store/appStore";
 import type { AppStoreApi } from "../store/appStore";
-import type { AppStore } from "../store/types";
+import type { AppStore } from "@uoplan/store/types";
 
 interface TestProviderOptions {
   /** A fresh store to back the tree. Defaults to a new isolated `createAppStore()`. */

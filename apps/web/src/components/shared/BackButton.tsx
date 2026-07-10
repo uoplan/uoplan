@@ -3,7 +3,7 @@ import { IconChevronLeft } from "@tabler/icons-react";
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { locationLabel } from "../../lib/navigation/backState";
 import { usePreviousLocation } from "../../lib/navigation/navigationHistory";
-import { useProfessorRegistry } from "../../store/hooks";
+import { useProfessorRegistry } from "@uoplan/store/hooks";
 import styles from "./BackButton.module.css";
 
 type BackButtonProps = {

@@ -1,5 +1,5 @@
 import { Button, Group, Modal, rem, Stack, Text } from "@mantine/core";
-import { useShareState } from "../../store/hooks";
+import { useShareState } from "@uoplan/store/hooks";
 import { tr, useTr } from "../../i18n";
 
 const MODAL_PAD = rem(24);

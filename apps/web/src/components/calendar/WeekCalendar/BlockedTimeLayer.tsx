@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import type { DayOfWeekCode } from "@uoplan/core";
-import type { BlockedTime } from "../../../store/types";
+import type { BlockedTime } from "@uoplan/store/types";
 import { tr } from "../../../i18n";
 import {
   CAL_END_MINUTES,

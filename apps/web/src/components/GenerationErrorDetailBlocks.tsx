@@ -1,5 +1,5 @@
 import { List, Stack, Text } from "@mantine/core";
-import type { GenerationErrorDetails } from "../store/types";
+import type { GenerationErrorDetails } from "@uoplan/store/types";
 import { tr, useTr } from "../i18n";
 import { formatFilterHint, formatSuggestions } from "../lib/generationDiagnosticsText";
 import { hasDetailContent } from "../lib/generationErrorDetail";

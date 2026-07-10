@@ -1,0 +1,278 @@
+import type {
+  ComponentSection,
+  CourseGradesData,
+  GradeDistribution,
+  SchedulesData,
+} from "@uoplan/domain/dataTypes";
+import type { InstructorNameKey, NormalizedCourseCode } from "@uoplan/domain/brand";
+import { normalizeCourseCode } from "@uoplan/domain/utils/courseUtils";
+
+/**
+ * Runtime grade-lookup contract — a direct port of the build-time enrichment in
+ * `apps/scraper/src/schedules/enrich.ts` (`buildGradeLookups` +
+ * `distributionForSection`). It reproduces, at runtime from `grades.pb`, the
+ * per-section grade distribution that was historically baked into
+ * `schedules.NNNN.pb`. Keeping a single algorithm here lets the scraper and the
+ * app agree byte-for-byte (guarded by a contract test against committed assets).
+ *
+ * Identity: course code → schedules-file term id → normalized instructor name.
+ * Per matched instructor distributions are summed; if ANY instructor matches,
+ * there is NO fallback; otherwise the course aggregate (across all professor
+ * rows) is used; otherwise the section has no grade data.
+ */
+
+export interface GradeLookups {
+  /** courseCode → termId → normalized instructor name → merged distribution. */
+  byCourseTermName: Map<
+    NormalizedCourseCode,
+    Map<number, Map<InstructorNameKey, GradeDistribution>>
+  >;
+  /** courseCode → distribution summed across every professor row. */
+  aggregateByCourse: Map<NormalizedCourseCode, GradeDistribution>;
+}
+
+export type SectionGradeKind = "matched" | "fallback" | "none";
+
+export interface SectionGradeResult {
+  distribution?: GradeDistribution;
+  kind: SectionGradeKind;
+}
+
+/** Normalize an instructor name for matching: NFD, strip accents, lowercase, collapse spaces. */
+export function normalizeInstructorName(value: string): InstructorNameKey {
+  return String(value)
+    .normalize("NFD")
+    .replaceAll(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .replaceAll(/\s+/g, " ") as InstructorNameKey;
+}
+
+/** Sum grade distributions bucket-by-bucket, ignoring non-finite values. */
+export function sumGradeDistributions(
+  dists: Array<GradeDistribution | null | undefined>,
+): GradeDistribution {
+  const out: GradeDistribution = {};
+  for (const d of dists) {
+    if (!d || typeof d !== "object") continue;
+    for (const [k, v] of Object.entries(d)) {
+      const n = Number(v);
+      if (!Number.isFinite(n)) continue;
+      out[k] = (out[k] ?? 0) + n;
+    }
+  }
+  return out;
+}
+
+/** True if a distribution has at least one positive bucket. */
+export function hasGradeData(dist: GradeDistribution | null | undefined): boolean {
+  if (!dist || typeof dist !== "object") return false;
+  for (const v of Object.values(dist)) {
+    if (Number(v) > 0) return true;
+  }
+  return false;
+}
+
+/**
+ * Insert `dist` into the nested `course → term → instructor` map, merging it
+ * with any distribution already stored for that key (via {@link sumGradeDistributions}).
+ *
+ * Generic over the course- and instructor-key types so both the runtime path
+ * (branded `NormalizedCourseCode` / `InstructorNameKey`) and the build-time
+ * enricher (raw string codes) share one accumulation routine.
+ */
+export function accumulateInstructorDistribution<CodeKey, NameKey>(
+  byCourseTermName: Map<CodeKey, Map<number, Map<NameKey, GradeDistribution>>>,
+  code: CodeKey,
+  termId: number,
+  key: NameKey,
+  dist: GradeDistribution,
+): void {
+  let termMap = byCourseTermName.get(code);
+  if (!termMap) {
+    termMap = new Map();
+    byCourseTermName.set(code, termMap);
+  }
+  let profMap = termMap.get(termId);
+  if (!profMap) {
+    profMap = new Map();
+    termMap.set(termId, profMap);
+  }
+  const existing = profMap.get(key);
+  profMap.set(key, existing ? sumGradeDistributions([existing, dist]) : { ...dist });
+}
+
+/**
+ * Guard + normalize a raw instructor `name`, then accumulate `dist` under it via
+ * {@link accumulateInstructorDistribution}. Blank or non-string names are skipped.
+ * Shared by the runtime lookup builder ({@link buildGradeLookups}) and the
+ * build-time enricher (`apps/scraper/src/schedules/enrich.ts`). Generic over the
+ * name-key type so both the branded (`InstructorNameKey`) and raw-string maps
+ * reuse it; the normalized key is a normalized instructor name either way.
+ */
+export function accumulateInstructorDistributionByName<CodeKey, NameKey>(
+  byCourseTermName: Map<CodeKey, Map<number, Map<NameKey, GradeDistribution>>>,
+  code: CodeKey,
+  termId: number,
+  name: unknown,
+  dist: GradeDistribution,
+): void {
+  if (typeof name !== "string" || !name.trim()) return;
+  const key = normalizeInstructorName(name) as unknown as NameKey;
+  if (!key) return;
+  accumulateInstructorDistribution(byCourseTermName, code, termId, key, dist);
+}
+
+/**
+ * Build the per-course/term/instructor lookup and the per-course aggregate from
+ * runtime grades data. Rows with a non-positive term id are skipped (matching
+ * the build-time enricher's `termId === 0` guard).
+ */
+export function buildGradeLookups(grades: CourseGradesData): GradeLookups {
+  const byCourseTermName = new Map<
+    NormalizedCourseCode,
+    Map<number, Map<InstructorNameKey, GradeDistribution>>
+  >();
+  const aggregateByCourse = new Map<NormalizedCourseCode, GradeDistribution>();
+
+  for (const course of grades.courses) {
+    const rawCode = course.code;
+    if (typeof rawCode !== "string" || !rawCode.trim()) continue;
+    const code = normalizeCourseCode(rawCode);
+
+    const allDists: GradeDistribution[] = [];
+
+    for (const prof of course.sections) {
+      const dist = prof.distribution;
+      if (!dist || typeof dist !== "object") continue;
+
+      const termId = Number(prof.termId);
+      if (!Number.isFinite(termId) || termId === 0) continue;
+
+      allDists.push(dist);
+
+      accumulateInstructorDistributionByName(byCourseTermName, code, termId, prof.name, dist);
+    }
+
+    aggregateByCourse.set(code, sumGradeDistributions(allDists));
+  }
+
+  return { byCourseTermName, aggregateByCourse };
+}
+
+/**
+ * Resolve the distribution for a section given its instructor names, the
+ * per-instructor map for the relevant course+term, and the course aggregate.
+ */
+export function distributionForSection(
+  instructors: ReadonlyArray<string | null | undefined>,
+  profMap: Map<InstructorNameKey, GradeDistribution> | undefined,
+  courseAggregate: GradeDistribution | undefined,
+): SectionGradeResult {
+  const matchedParts: GradeDistribution[] = [];
+  const seen = new Set<InstructorNameKey>();
+
+  for (const raw of instructors) {
+    if (typeof raw !== "string") continue;
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    const norm = normalizeInstructorName(trimmed);
+    if (!norm || norm === "staff") continue;
+    if (seen.has(norm)) continue;
+    seen.add(norm);
+
+    const entry = profMap?.get(norm);
+    if (entry && hasGradeData(entry)) {
+      matchedParts.push(entry);
+    }
+  }
+
+  if (matchedParts.length > 0) {
+    const merged = sumGradeDistributions(matchedParts);
+    if (hasGradeData(merged)) {
+      return { distribution: merged, kind: "matched" };
+    }
+  }
+
+  if (courseAggregate && hasGradeData(courseAggregate)) {
+    return { distribution: courseAggregate, kind: "fallback" };
+  }
+
+  return { kind: "none" };
+}
+
+/**
+ * Convenience: resolve a section's distribution directly from {@link GradeLookups}
+ * using the course code, the schedules-file term id, and the section instructors.
+ */
+export function lookupSectionDistribution(
+  lookups: GradeLookups,
+  courseCode: string,
+  termId: number,
+  instructors: ReadonlyArray<string | null | undefined>,
+): SectionGradeResult {
+  const code = normalizeCourseCode(courseCode);
+  const termMap = lookups.byCourseTermName.get(code);
+  const profMap = termId !== 0 ? termMap?.get(termId) : undefined;
+  const aggregate = lookups.aggregateByCourse.get(code);
+  return distributionForSection(instructors, profMap, aggregate);
+}
+
+const lookupsByGrades = new WeakMap<CourseGradesData, GradeLookups>();
+
+/**
+ * Memoized {@link buildGradeLookups} keyed by the grades object identity. Lets
+ * callers (e.g. every term switch) reuse the lookup tables for a given
+ * `grades.pb` decode without rebuilding them, while staying free of mutable
+ * module singletons (the WeakMap is keyed purely by data identity).
+ */
+export function getGradeLookups(grades: CourseGradesData): GradeLookups {
+  let lookups = lookupsByGrades.get(grades);
+  if (!lookups) {
+    lookups = buildGradeLookups(grades);
+    lookupsByGrades.set(grades, lookups);
+  }
+  return lookups;
+}
+
+/**
+ * Runtime equivalent of the build-time `enrichSchedulesPayload`: returns a NEW
+ * {@link SchedulesData} whose sections carry the `distribution` resolved from
+ * `grades.pb`, reproducing the values historically baked into
+ * `schedules.NNNN.pb`. The input is never mutated — course/component/section
+ * objects are recreated so a memoized, ungraded decode can't be contaminated.
+ *
+ * `termId` is the schedules-file term id (e.g. `Number(schedulesData.termId)`),
+ * matching the build-time enricher's `parseSchedulesTermId`.
+ */
+export function enrichSchedulesDataWithGrades(
+  data: SchedulesData,
+  lookups: GradeLookups,
+  termId: number,
+): SchedulesData {
+  const schedules = data.schedules.map((course) => {
+    const code = normalizeCourseCode(course.courseCode);
+    const termMap = lookups.byCourseTermName.get(code);
+    const profMap = termId !== 0 ? termMap?.get(termId) : undefined;
+    const aggregate = lookups.aggregateByCourse.get(code);
+
+    const components: Record<string, ComponentSection[]> = {};
+    for (const [component, sections] of Object.entries(course.components)) {
+      components[component] = sections.map((section) => {
+        const instructors = section.times.map((t) => t.instructor);
+        const { distribution, kind } = distributionForSection(instructors, profMap, aggregate);
+        const next: ComponentSection = { ...section };
+        if (distribution && kind !== "none") {
+          next.distribution = distribution;
+        } else {
+          delete next.distribution;
+        }
+        return next;
+      });
+    }
+
+    return { ...course, components };
+  });
+
+  return { ...data, schedules };
+}

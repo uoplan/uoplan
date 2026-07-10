@@ -11,7 +11,7 @@ import {
   useFaculties,
   useProfessorRegistry,
   useTerms,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { facultyForDisciplineCode, localizeFacultyName } from "../../lib/explore/faculty";
 import { formatTermLabel } from "../../lib/term/termLabel";
 import type {

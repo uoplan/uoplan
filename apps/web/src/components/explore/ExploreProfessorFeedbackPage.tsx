@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { pickCanonicalProfessorName } from "@uoplan/core";
 import { resolveProfessorRoute } from "../../lib/explore/professorRoute";
-import { useProfessorRegistry } from "../../store/hooks";
+import { useProfessorRegistry } from "@uoplan/store/hooks";
 import { tr } from "../../i18n";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";
 import { useRedirectToExploreWhenNoFeedback } from "../../hooks/useRedirectToExploreWhenNoFeedback";

@@ -5,7 +5,7 @@ import {
   parseCoursePathParam,
 } from "../../../../lib/explore/courseSearchParams";
 import { buildCourseHead } from "../../../../lib/seo";
-import { useProfessorRatings } from "../../../../store/hooks";
+import { useProfessorRatings } from "@uoplan/store/hooks";
 
 export const Route = createFileRoute("/explore/course/$course/")({
   head: ({ params }) => {

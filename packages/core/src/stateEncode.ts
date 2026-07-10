@@ -19,6 +19,9 @@ import {
 } from "@uoplan/proto/state";
 import { hasBreakParams, normalizeOptimizationPriorities } from "./optimizationPriorities";
 import type { OptimizationKind, OptimizationPriority } from "./optimizationPriorities";
+import { urlToSlug } from "@uoplan/domain/utils/urlToSlug";
+
+export { urlToSlug };
 
 const OPTIMIZATION_KIND_TO_STATE_PROTO: Record<OptimizationKind, ProtoOptimizationKind> = {
   free_days: ProtoOptimizationKind.OPTIMIZATION_KIND_FREE_DAYS,
@@ -72,12 +75,6 @@ export function requirementIdsFromTree(nodes: RequirementWithStatus[]): string[]
   }
   walk(nodes);
   return out;
-}
-
-export function urlToSlug(url: string): string {
-  return url
-    .replace(/^https?:\/\/catalogue\.uottawa\.ca(?:\/archive\/\d{4}-\d{4})?\/en\//, "")
-    .replace(/\/$/, "");
 }
 
 export const STATE_MAGIC = 0x554f504e; // "UOPN" — bumped from "UOPM" (0x554f504d) when the hard min-professor-rating field was removed in favour of the soft prefer-higher-professor-rating preference

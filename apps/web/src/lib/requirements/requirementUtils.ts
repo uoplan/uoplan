@@ -13,7 +13,7 @@ import {
   isElectiveRequirementType,
   isWithinElectiveLevelCap,
   virtualScheduleFilterApplies,
-} from "../electiveEligibility";
+} from "@uoplan/store/electiveEligibility";
 import { tr } from "../../i18n";
 import { courseMatchesElectiveLevelBuckets } from "@uoplan/store/requirements/selectionUtils";
 export {

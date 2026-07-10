@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { nextSeed } from "../seedNavigation";
-import { useStoreApi } from "../../store/hooks";
+import { nextSeed } from "@uoplan/store/seedNavigation";
+import { useStoreApi } from "@uoplan/store/hooks";
 import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import type { PlannerRunConfig } from "./types";
 import { runPlanner } from "./runPlanner";

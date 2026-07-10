@@ -5,7 +5,7 @@ import {
   useDisciplines,
   useFaculties,
   useProfessorRatings,
-} from "../../../store/hooks";
+} from "@uoplan/store/hooks";
 import { buildDisciplineHead } from "../../../lib/seo";
 
 export const Route = createFileRoute("/explore/discipline/$discipline")({

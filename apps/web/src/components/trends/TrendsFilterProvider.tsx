@@ -12,7 +12,7 @@ import type { TermSeason } from "@uoplan/core";
 import { i18n } from "@lingui/core";
 import { tr } from "../../i18n";
 import { useCourseGradesPb } from "../../hooks/useCourseGradesPb";
-import { useCatalogue, useDisciplines } from "../../store/hooks";
+import { useCatalogue, useDisciplines } from "@uoplan/store/hooks";
 import { createRankedOptionsFilter } from "../../lib/explore/optionRanking";
 import { formatMetricValue } from "../../lib/trends/metrics";
 import type { TrendsMetric, TrendsSearch } from "../../lib/trends/searchParams";

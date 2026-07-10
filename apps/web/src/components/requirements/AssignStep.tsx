@@ -7,7 +7,7 @@ import type {
   RequirementWithStatus,
 } from "@uoplan/core";
 import { normalizeCourseCode } from "@uoplan/core";
-import { useProgramSelection } from "../../store/hooks";
+import { useProgramSelection } from "@uoplan/store/hooks";
 import { RequirementNode } from "./RequirementNode";
 import { getStableNodeKey } from "../../lib/requirements/requirementNodeUtils";
 import {

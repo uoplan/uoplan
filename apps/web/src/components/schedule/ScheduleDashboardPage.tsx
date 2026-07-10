@@ -16,7 +16,7 @@ import {
   useStoreApi,
   useTermSelection,
   useYearCatalogue,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
 import {

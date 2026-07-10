@@ -2,81 +2,119 @@
 
 ## What it is
 
-The application uses Zustand for state management, combined with the slice pattern to break down a very large monolithic store into manageable pieces. The `appStore.ts` acts as the root orchestrator, merging all slices together.
+The application uses Zustand for state management, combined with the slice pattern
+to break down a large store into manageable pieces. The **canonical implementation**
+lives in **`packages/store`** (`@uoplan/store`). Web and (eventually) native mount
+it via platform `AppServices` adapters.
+
+```
+packages/store/src/
+  appStore.ts              # createAppStore(services) factory + React hooks
+  AppStoreProvider.tsx
+  services.ts              # AppServices seam (nav, persistence, data, engine, …)
+  types.ts                 # AppState / AppActions
+  slices/                  # data, selection, constraints, schedules, url, compare
+  hooks/                   # projection hooks (useSeedNavigation, useDataset, …)
+  requirementCompute/      # pure requirement recomputation
+  scheduleHelpers.ts
+  …
+```
+
+Web-only glue (not the planner core):
+
+```
+apps/web/src/store/
+  webServices.ts           # browser AppServices implementation
+  appStore.ts              # thin factory wiring + defaultAppStore registry
+  graphPlannerStore.ts     # degree-planner overlay (web-only)
+  commandCenterStore.ts
+  uiHelpStore.ts
+  hooks/                   # re-exports of @uoplan/store/hooks (transition shims)
+  slices/                  # re-exports (transition shims; to be deleted)
+```
+
+See [modularization.md](./modularization.md) for the package graph and shim-removal plan.
 
 ## How it works
 
-The store is defined by `AppState` and `AppActions` in `src/store/types.ts`.
-It is divided into multiple slices under `src/store/slices/`:
+`AppState` and `AppActions` are defined in `packages/store/src/types.ts`.
+Slices under `packages/store/src/slices/`:
 
-- **`data.ts`**: Handles fetching, caching, and storing catalogues, schedules, indices, terms, and professor ratings.
-- **`selection.ts`**: Manages user selections such as the chosen program, completed courses, and selected options for requirements. Also handles filtering logic via recomputations.
-- **`constraints.ts`**: Maintains user preferences for schedule generation (allowed days, start/end times, limit first year credits, minimum professor ratings, closed components, etc.).
-- **`schedules.ts`**: Manages current schedule generation, seed navigation, schedule pool/color mapping, and swap history.
-- **`url.ts`**: Handles encoding and decoding the application state to and from base64 URLs or localStorage.
+- **`data.ts`**: Fetching/caching catalogues, schedules, indices, terms, professor ratings.
+- **`selection.ts`**: Program, completed courses, requirement options; recomputations.
+- **`constraints.ts`**: Generation preferences (days, times, first-year cap, ratings, …).
+- **`schedules.ts`**: Generation results, seed navigation, pool/color maps, swap history.
+- **`url.ts`**: Encode/decode state to base64 URLs or local persistence.
+- **`compare.ts`**: Compare tray selections.
 
-`appStore.ts` merges these slices together and provides common reset actions across all slices. Pure business logic is intentionally kept outside of slices (e.g. `src/store/requirementCompute/` or `src/lib/generateSchedulesAction.ts`) and is only called by the slices.
+`createAppStore(services)` merges slices and injects platform services so slices stay
+framework-agnostic (no direct router or `localStorage` imports).
+
+Pure business logic stays outside slices where possible
+(`requirementCompute/`, generation input builders, `@uoplan/core` helpers) and is
+called by slices or by the schedule runner service.
 
 ### Lazy data loading
 
-Protobuf assets are loaded on demand, not all at once:
+Protobuf assets load on demand:
 
-- **Core boot** (`data.ts` → `loadData`) loads only the essentials needed by every data-gated route: the catalogue manifest, latest catalogue, `terms.pb`, `indices.pb`, the initial term's `schedules.pb`, and the `DataCache`. It also restores any shared (`?s=`) / persisted state. `loadData` is **idempotent** (guards on an in-flight promise + `cache`) and is triggered by `AppDataRouteGate`, _not_ from `__root` — so the landing page (`/`) and `changelog` fetch **no** `.pb` data.
-- **Secondary assets** are pulled in by idempotent, memoized `ensureX` actions only when a consumer needs them: `ensureCourseGrades` (`grades.pb`, then re-enriches schedules + rebuilds the cache), `ensureProfessorRatings` (`ratemyprofessors.pb`), `ensureDisciplines` (`disciplines.pb`), and `ensureYearCatalogue` (`catalogue.<firstYear>.pb`). Routes declare what they need via `AppDataRouteGate`'s `requires` prop; hooks like `useCourseGradesPb` / `useFeedbackData` trigger their own fetch on first use. `feedback.pb` is lazy via `useFeedbackData`.
-- The schedule worker / WASM engine build their own dataset (including grades) via `@uoplan/data`'s `createDataClient`, so deferring store-side grades does not change generation results. Worker pre-warm is deferred to the `/schedule` route (`AppDataRouteGate prewarm`).
+- **Core boot** (`data.ts` → `loadData`) loads essentials for data-gated routes:
+  catalogue manifest, latest catalogue, `terms.pb`, `indices.pb`, the initial term's
+  `schedules.pb`, and `DataCache`. Restores shared (`?s=`) / persisted state.
+  `loadData` is **idempotent** and is triggered by `AppDataRouteGate`, not from the
+  landing page.
+- **Secondary assets** via `ensureX` actions: grades, professor ratings, disciplines,
+  year catalogues, feedback. Routes declare needs via `AppDataRouteGate`'s `requires`.
+- The schedule worker / WASM engine builds its own dataset via `@uoplan/data`'s
+  `createDataClient`.
 
-## Consuming the store: the projection-hooks layer
+## Consuming the store: projection hooks
 
-Components, routes, and `lib/` code **must not** call `useAppStore` / `useAppStoreApi`
-directly. Instead they consume small, domain-oriented **projection hooks** under
-`src/store/hooks/` (barrel: `src/store/hooks/index.ts`). Each hook is the single place
-that knows which store fields a domain needs; it groups related reads behind `useShallow`
-(so a component re-renders only when _its_ slice of state changes) and bundles the matching
-actions (which are stable references). Components import a domain hook instead of N raw
-selectors.
+Components, routes, and `lib/` code **must not** call `useAppStore` /
+`useAppStoreApi` directly. They consume domain **projection hooks** from
+`@uoplan/store/hooks` (web may still import via `apps/web/src/store/hooks` shims).
+
+Each hook groups related reads behind `useShallow` and bundles stable actions.
 
 ```ts
-// ❌ before — every component coupled to raw field names + re-render concerns
+// ❌ coupled to raw field names
 const currentSeed = useAppStore((s) => s.currentSeed);
 const goToNextSeed = useAppStore((s) => s.goToNextSeed);
-// …a dozen more selectors…
 
-// ✅ after — one domain hook
+// ✅ domain hook
 const { currentSeed, goToNextSeed, goToPreviousSeed, randomizeSeed } = useSeedNavigation();
 ```
 
-The hooks map roughly onto the store's domains — e.g. `useDataset`/`useDataCache`/
-`useIndices`/`useLazyData` (data slice), `useTermSelection` / `useProgramSelection` /
-`useCompletedCourses` (selection), `useRequirementState` / `useRequirementActions`
-(requirements), `useGenerationConstraints` (constraints), `useScheduleGeneration` /
-`useSeedNavigation` / `useScheduleSwaps` / `useScheduleResultMaps` (schedules),
-`useCalendarView`, `useShareState`, `useSaveStatus`, and `useGlobalActions`. Imperative
-`getState` / `subscribe` access goes through `useStoreApi()` (the sanctioned wrapper around
-`useAppStoreApi`), so even imperative consumers import from `store/hooks` rather than
-`store/appStore`.
+Hooks map onto domains: `useDataset` / `useDataCache` / `useLazyData`,
+`useTermSelection` / `useProgramSelection` / `useCompletedCourses`,
+`useRequirementState` / `useRequirementActions`, `useGenerationConstraints`,
+`useScheduleGeneration` / `useSeedNavigation` / `useScheduleSwaps` /
+`useScheduleResultMaps`, `useCalendarView`, `useShareState`, `useSaveStatus`,
+`useGlobalActions`. Imperative access goes through `useStoreApi()`.
 
-**Sanctioned direct consumers** of `useAppStore` / `useAppStoreApi` are limited to the
-`store/hooks/**` layer itself and the existing cross-cutting hooks under `src/hooks/**`
-(e.g. `useBasket`, `useSwapActions`, `usePersistState`). This is enforced by
-`scripts/check-architecture.ts` (`pnpm check:arch`): a raw `useAppStore`/`useAppStoreApi`
-import from `store/appStore` anywhere under `components/**`, `routes/**`, or `lib/**` fails
-the build.
+**Sanctioned direct consumers** of the raw store hooks are limited to
+`packages/store/src/hooks/**` and cross-cutting app hooks (e.g. web
+`apps/web/src/hooks/**`). Enforced by `scripts/check-architecture.ts`
+(`pnpm check:arch`).
 
 ## How to change it
 
-1. Update `AppState` or `AppActions` in `src/store/types.ts` to add the new state/action definitions.
-2. Find the relevant slice in `src/store/slices/` (e.g. `selection.ts` if it relates to a user's chosen courses) and add the state defaults and action implementation there.
-3. Update `src/store/appStore.ts` with the default state values.
-4. Expose the new field/action to the UI by adding it to the matching projection hook in
-   `src/store/hooks/` (or add a new domain hook + barrel export). Components consume that
-   hook, never `useAppStore` directly.
-5. If the new state needs to be serialized to the URL or localStorage, update the encoding logic in `packages/core/src/stateEncode.ts` and the store hydration/share logic in `src/store/slices/url.ts`.
+1. Update `AppState` / `AppActions` in `packages/store/src/types.ts`.
+2. Implement in the relevant slice under `packages/store/src/slices/`.
+3. Update defaults in `packages/store/src/appStore.ts` if needed.
+4. Expose via a projection hook in `packages/store/src/hooks/`.
+5. If the field is serialized, update `packages/core/src/stateEncode.ts` and
+   `packages/store/src/slices/url.ts`.
+6. Wire platform behavior only through `AppServices` (`packages/store/src/services.ts`),
+   never by importing app routers into slices.
 
 ## Configuration
 
-The only constant is `LOCAL_STORAGE_KEY` which defines where the app persists its state in the browser.
+`LOCAL_STORAGE_KEY` (web) defines where the browser persists encoded state.
+Native will use its own `PersistenceService` implementation against the same codec.
 
 ## Dependencies
 
-- `zustand` — the state management library.
-- Domain logic in `src/lib/` such as `generateSchedulesAction.ts`, plus shared core logic in `packages/core/src/` such as `dataCache.ts` and `stateEncode.ts`.
+- `zustand` — state management.
+- `@uoplan/core`, `@uoplan/data`, `@uoplan/proto` — domain + loaders.
+- Platform shells provide `AppServices` (web: `apps/web/src/store/webServices.ts`).

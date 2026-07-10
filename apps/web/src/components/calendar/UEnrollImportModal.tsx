@@ -6,7 +6,7 @@ import {
   useScheduleGeneration,
   useStoreApi,
   useTermSelection,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { parseUEnrollUrl, resolveUEnrollSchedule } from "../../lib/importFromUEnroll";
 import type { ParsedUEnrollData, UEnrollResolveResult } from "../../lib/importFromUEnroll";
 import { tr, useTr } from "../../i18n";

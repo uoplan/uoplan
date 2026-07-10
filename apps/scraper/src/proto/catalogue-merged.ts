@@ -23,6 +23,21 @@ function prereqSignature(course: CatalogueCourseInput): string {
   });
 }
 
+/** Shared year-bit + union-code index used by prereq and program history builders. */
+function historyIndex(
+  yearInputs: readonly YearCatalogue[],
+  unionCourseCodes: readonly string[],
+): {
+  years: number[];
+  yearBit: Map<number, number>;
+  codeIndex: Map<string, number>;
+} {
+  const years = yearInputs.map((y) => y.year);
+  const yearBit = new Map(years.map((y, i) => [y, 1 << i]));
+  const codeIndex = new Map(unionCourseCodes.map((c, i) => [c, i]));
+  return { years, yearBit, codeIndex };
+}
+
 /**
  * Union of every course seen across all years, keeping the **latest** metadata
  * per course (later years overwrite earlier ones), plus the **latest** year's
@@ -59,9 +74,7 @@ export function buildPrereqHistory(
   unionInput: CatalogueJsonInput,
   unionCourseCodes: readonly string[],
 ): DataProto.CataloguePrereqHistory {
-  const years = yearInputs.map((y) => y.year);
-  const yearBit = new Map(years.map((y, i) => [y, 1 << i]));
-  const codeIndex = new Map(unionCourseCodes.map((c, i) => [c, i]));
+  const { years, yearBit, codeIndex } = historyIndex(yearInputs, unionCourseCodes);
 
   // Baseline = the union (latest-seen) prereq value per course; the year that
   // matches it is skipped, so a course with stable prereqs produces no overlay.
@@ -149,9 +162,7 @@ export function buildProgramHistory(
   unionInput: CatalogueJsonInput,
   unionCourseCodes: readonly string[],
 ): DataProto.CatalogueProgramHistory {
-  const years = yearInputs.map((y) => y.year);
-  const yearBit = new Map(years.map((y, i) => [y, 1 << i]));
-  const codeIndex = new Map(unionCourseCodes.map((c, i) => [c, i]));
+  const { years, yearBit, codeIndex } = historyIndex(yearInputs, unionCourseCodes);
 
   // Shared accumulator: program-requirement codes absent from the union
   // course_codes dictionary go into the overlay's extra_codes, referenced past

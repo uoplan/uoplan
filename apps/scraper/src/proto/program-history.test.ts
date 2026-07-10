@@ -42,6 +42,21 @@ function currentPerYearPrograms(data: CatalogueJsonInput): Program[] {
   return fromProtoCatalogue(proto).programs;
 }
 
+/** Register one parity test per year: reconstruct(history) === current per-year asset. */
+function registerReconstructionParityTests(
+  yearInputs: readonly YearInput[],
+  unionProto: DataProto.Catalogue,
+  history: DataProto.CatalogueProgramHistory,
+): void {
+  for (const { year, data } of yearInputs) {
+    it(`reconstructs ${year} identically to the per-year asset`, () => {
+      const expected = sortedEntries(bySlug(currentPerYearPrograms(data)));
+      const actual = sortedEntries(bySlug(reconstructProgramsForYear(unionProto, history, year)));
+      expect(actual).toEqual(expected);
+    });
+  }
+}
+
 /** Programs keyed by slug; asserts no slug carries two DIFFERENT values (which
  * the overlay's per-key model could not represent losslessly). */
 function bySlug(programs: Program[]): Map<string, Program> {
@@ -107,13 +122,7 @@ describe("buildProgramHistory / reconstructProgramsForYear (synthetic)", () => {
   const unionProto = roundTripUnion(unionInput);
   const history = roundTripHistory(YEARS, unionInput, unionProto.courseCodes);
 
-  for (const { year, data } of YEARS) {
-    it(`reconstructs ${year} identically to the per-year asset`, () => {
-      const expected = sortedEntries(bySlug(currentPerYearPrograms(data)));
-      const actual = sortedEntries(bySlug(reconstructProgramsForYear(unionProto, history, year)));
-      expect(actual).toEqual(expected);
-    });
-  }
+  registerReconstructionParityTests(YEARS, unionProto, history);
 
   it("fully-stable programs produce no overlay entry", () => {
     expect(history.overlays.some((o) => o.programKey === "stable")).toBe(false);
@@ -148,12 +157,6 @@ describe.skipIf(yearFiles.length === 0)(
     const unionProto = roundTripUnion(unionInput);
     const history = roundTripHistory(yearInputs, unionInput, unionProto.courseCodes);
 
-    for (const { year, data } of yearInputs) {
-      it(`reconstructs ${year} identically to the per-year asset`, () => {
-        const expected = sortedEntries(bySlug(currentPerYearPrograms(data)));
-        const actual = sortedEntries(bySlug(reconstructProgramsForYear(unionProto, history, year)));
-        expect(actual).toEqual(expected);
-      });
-    }
+    registerReconstructionParityTests(yearInputs, unionProto, history);
   },
 );

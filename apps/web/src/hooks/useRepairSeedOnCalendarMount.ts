@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { flushPersistedAppState } from "../lib/persistAppState";
-import { repairSeedPosition } from "../lib/seedNavigation";
+import { repairSeedPosition } from "@uoplan/store/seedNavigation";
 import { useAppStoreApi } from "../store/appStore";
 
 /** Repair corrupt currentSeed (< firstSeed) when entering a calendar route. */

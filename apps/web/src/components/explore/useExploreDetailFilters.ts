@@ -5,7 +5,7 @@ import {
   normalizeProfessorName,
   professorSentimentByName,
 } from "@uoplan/core";
-import { useCompletedCourses, useRequirementState } from "../../store/hooks";
+import { useCompletedCourses, useRequirementState } from "@uoplan/store/hooks";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import {
   buildRequirementCandidateSet,

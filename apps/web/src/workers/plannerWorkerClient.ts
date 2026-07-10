@@ -1,5 +1,5 @@
 import type { CacheDataKey } from "../lib/dataCacheLoader";
-import type { GenerateSchedulesInput } from "../lib/generateSchedulesInput";
+import type { GenerateSchedulesInput } from "@uoplan/store/generationInput";
 import type { GenerateSchedulesResult } from "../lib/generateSchedulesAction";
 import { createScheduleWorkerHandle, isWorkerAvailable } from "./scheduleWorkerRemote";
 

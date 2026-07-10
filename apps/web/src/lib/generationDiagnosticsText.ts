@@ -1,5 +1,5 @@
 import type { LeadDescriptor, SuggestionCode, TimetableFailureDiagnostics } from "@uoplan/core";
-import type { FilterHintDescriptor, GenerationMessageDescriptor } from "../store/types";
+import type { FilterHintDescriptor, GenerationMessageDescriptor } from "@uoplan/store/types";
 import { tr } from "../i18n";
 
 const LEAD_COURSE_PREVIEW = 4;

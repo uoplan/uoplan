@@ -15,7 +15,7 @@ import "./styles/global.css";
 import { i18n, I18nProvider, initializeI18n } from "./i18n";
 import { registerServiceWorker } from "./workers/serviceWorkerClient";
 import { printConsoleGreeting } from "./lib/easterEggs/consoleGreeting";
-import { AppStoreProvider } from "./store/AppStoreProvider";
+import { AppStoreProvider } from "@uoplan/store/AppStoreProvider";
 import { defaultAppStore } from "./store/appStore";
 
 await initializeI18n();

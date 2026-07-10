@@ -1,8 +1,8 @@
 import { recomputeStateForProgram } from "@uoplan/store/requirementCompute";
 import type { CacheDataKey } from "../dataCacheLoader";
-import type { GenerateSchedulesInput } from "../generateSchedulesInput";
-import { pickGenerateSchedulesInput } from "../generateSchedulesInput";
-import type { AppState } from "../../store/types";
+import type { GenerateSchedulesInput } from "@uoplan/store/generationInput";
+import { pickGenerateSchedulesInput } from "@uoplan/store/generationInput";
+import type { AppState } from "@uoplan/store/types";
 
 /**
  * Build the schedule-generation input for one hypothetical future term.

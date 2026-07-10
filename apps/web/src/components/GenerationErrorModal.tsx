@@ -1,5 +1,5 @@
 import { Modal, Stack, Text } from "@mantine/core";
-import type { GenerationErrorState } from "../store/types";
+import type { GenerationErrorState } from "@uoplan/store/types";
 import { tr, useTr } from "../i18n";
 import { formatGenerationMessage } from "../lib/generationDiagnosticsText";
 import { GenerationErrorDetailBlocks } from "./GenerationErrorDetailBlocks";

@@ -91,6 +91,9 @@ importers:
       '@uoplan/proto':
         specifier: workspace:*
         version: link:../../packages/proto
+      '@uoplan/search':
+        specifier: workspace:*
+        version: link:../../packages/search
       '@uoplan/theme':
         specifier: workspace:*
         version: link:../../packages/theme
@@ -227,6 +230,9 @@ importers:
       '@uoplan/proto':
         specifier: workspace:*
         version: link:../../packages/proto
+      '@uoplan/search':
+        specifier: workspace:*
+        version: link:../../packages/search
       cheerio:
         specifier: ^1.2.0
         version: 1.2.0
@@ -354,6 +360,9 @@ importers:
       '@uoplan/proto':
         specifier: workspace:^
         version: link:../../packages/proto
+      '@uoplan/search':
+        specifier: workspace:*
+        version: link:../../packages/search
       '@uoplan/store':
         specifier: workspace:^
         version: link:../../packages/store
@@ -574,9 +583,18 @@ importers:
 
   packages/core:
     dependencies:
+      '@uoplan/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@uoplan/grades':
+        specifier: workspace:*
+        version: link:../grades
       '@uoplan/proto':
         specifier: workspace:*
         version: link:../proto
+      '@uoplan/search':
+        specifier: workspace:*
+        version: link:../search
       fflate:
         specifier: ^0.8.3
         version: 0.8.3
@@ -616,7 +634,39 @@ importers:
         specifier: ^4.1.0
         version: 4.1.7(@types/node@25.5.0)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(@vitest/ui@4.1.7)(jsdom@28.1.0)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.47.1)(tsx@4.22.2)(yaml@2.8.3))
 
+  packages/domain:
+    dependencies:
+      '@uoplan/proto':
+        specifier: workspace:*
+        version: link:../proto
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: 4.1.7
+        version: 4.1.7(@vitest/browser@4.1.7)(vitest@4.1.7)
+      vitest:
+        specifier: 4.1.7
+        version: 4.1.7(@types/node@25.5.0)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(@vitest/ui@4.1.7)(jsdom@28.1.0)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.47.1)(tsx@4.22.2)(yaml@2.8.3))
+
   packages/engine: {}
+
+  packages/grades:
+    dependencies:
+      '@uoplan/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@uoplan/proto':
+        specifier: workspace:*
+        version: link:../proto
+    devDependencies:
+      '@types/node':
+        specifier: ^25.5.0
+        version: 25.5.0
+      '@vitest/coverage-v8':
+        specifier: 4.1.7
+        version: 4.1.7(@vitest/browser@4.1.7)(vitest@4.1.7)
+      vitest:
+        specifier: 4.1.7
+        version: 4.1.7(@types/node@25.5.0)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(@vitest/ui@4.1.7)(jsdom@28.1.0)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.47.1)(tsx@4.22.2)(yaml@2.8.3))
 
   packages/i18n:
     dependencies:
@@ -676,6 +726,19 @@ importers:
       ts-proto:
         specifier: ^2.11.6
         version: 2.11.6
+
+  packages/search:
+    dependencies:
+      '@uoplan/proto':
+        specifier: workspace:*
+        version: link:../proto
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: 4.1.7
+        version: 4.1.7(@vitest/browser@4.1.7)(vitest@4.1.7)
+      vitest:
+        specifier: 4.1.7
+        version: 4.1.7(@types/node@25.5.0)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(@vitest/ui@4.1.7)(jsdom@28.1.0)(vite@8.0.2(@types/node@25.5.0)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.47.1)(tsx@4.22.2)(yaml@2.8.3))
 
   packages/store:
     dependencies:
@@ -13914,7 +13977,9 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
+      - bufferutil
       - supports-color
+      - utf-8-validate
 
   '@react-native/normalize-colors@0.74.89': {}
 

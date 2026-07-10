@@ -4,7 +4,7 @@ import type {
   GenerationErrorDetails,
   GenerationErrorState,
   GenerationMessageDescriptor,
-} from "../store/types";
+} from "@uoplan/store/types";
 import {
   buildEffectiveRemainingRequirements,
   cacheWithClosedFilter,
@@ -28,13 +28,13 @@ import type {
   TimetableFailureDiagnostics,
 } from "@uoplan/core";
 import { buildColorMap } from "./colorMap";
-import { avoidedDaysFromBlocks } from "./blockedTimes";
-import type { GenerateSchedulesInput } from "./generateSchedulesInput";
-import { SCHEDULE_COURSE_COUNT_MAX } from "../store/generationDefaults";
+import { avoidedDaysFromBlocks } from "@uoplan/store/blockedTimes";
+import type { GenerateSchedulesInput } from "@uoplan/store/generationInput";
+import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
-export { type GenerateSchedulesInput } from "./generateSchedulesInput";
+export { type GenerateSchedulesInput } from "@uoplan/store/generationInput";
 
 /** Pool diagnostics shape carried by a mapped engine response. */
 type PoolDiagnostics = NonNullable<MappedGenerationResult["poolDiagnostics"]>;

@@ -6,7 +6,7 @@ import {
   nextSeed,
   noteLowestVisitedSeed,
   repairSeedPosition,
-} from "./seedNavigation";
+} from "@uoplan/store/seedNavigation";
 
 describe("seedNavigation", () => {
   const firstSeed = 1_000_000;

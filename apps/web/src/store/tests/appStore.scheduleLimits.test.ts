@@ -3,7 +3,7 @@ import type { Catalogue, Program } from "@uoplan/core";
 import { buildDataCache, computeRequirementsState } from "@uoplan/core";
 import { defaultAppStore } from "../appStore";
 import { testCourseCode } from "../../test/brands";
-import { testCourse, testSchedule, testSchedulesData } from "./scheduleTestHelpers";
+import { testCourse, testSchedule, testSchedulesData } from "@uoplan/store/tests/scheduleBuilders";
 
 const testCatalogue: Catalogue = {
   courses: [

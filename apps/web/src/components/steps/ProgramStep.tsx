@@ -20,7 +20,7 @@ import {
   useProgramSelection,
   useStoreApi,
   useYearCatalogue,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { findBestMatchingProgram, parseTranscriptPdf } from "@uoplan/transcript";
 import { isOptCourse, normalizeCourseCode } from "@uoplan/core";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";

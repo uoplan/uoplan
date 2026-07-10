@@ -24,7 +24,7 @@ import { tr } from "../../i18n";
 
 import { CompletedRequirementsAccordion } from "./CompletedRequirementsAccordion";
 import { FrenchImmersionRequirementsReadout } from "./FrenchImmersionRequirementsReadout";
-import { useCompletedCourses, useProgramSelection } from "../../store/hooks";
+import { useCompletedCourses, useProgramSelection } from "@uoplan/store/hooks";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

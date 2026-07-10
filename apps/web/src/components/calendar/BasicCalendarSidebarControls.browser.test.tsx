@@ -2,7 +2,7 @@ import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { page } from "vitest/browser";
 import { expect, test, vi } from "vitest";
 
-import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
+import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 import { renderWithProviders } from "../../test/renderWithProviders";
 import { BasicCalendarSidebarControls } from "./BasicCalendarSidebarControls";
 

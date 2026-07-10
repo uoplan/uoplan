@@ -11,7 +11,7 @@ import {
   professorMatchesRatingFilter,
 } from "../../lib/explore/detailFilters";
 import { professorRouteParam, resolveProfessorRoute } from "../../lib/explore/professorRoute";
-import { useLazyData } from "../../store/hooks";
+import { useLazyData } from "@uoplan/store/hooks";
 import { useExploreOfferings } from "./exploreOfferingsContext";
 import { useExploreDetailFilters } from "./useExploreDetailFilters";
 import { useProfessorFeedbackViews } from "../../hooks/useFeedbackViews";

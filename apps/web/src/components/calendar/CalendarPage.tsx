@@ -1,5 +1,6 @@
 import "./calendar.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import {
   ActionIcon,
   Alert,
@@ -36,7 +37,7 @@ import {
   useSeedNavigation,
   useStoreApi,
   useTermSelection,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { useBasketCourses } from "../../hooks/useBasket";
 import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 import { CalendarView } from "./CalendarView";
@@ -49,12 +50,12 @@ import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
 import { useGenerationErrorToast } from "../../hooks/useGenerationErrorToast";
 import { GenerationErrorModal } from "../GenerationErrorModal";
-import type { GenerationErrorState } from "../../store/types";
+import type { GenerationErrorState } from "@uoplan/store/types";
 import { useGenerationSentiment } from "../../hooks/useGenerationSentiment";
 import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
-import { canGenerateBasicSchedule } from "../../lib/basicCalendarPins";
-import { canGoToPreviousSeed } from "../../lib/seedNavigation";
+import { canGenerateBasicSchedule } from "@uoplan/store/basicCalendarPins";
+import { canGoToPreviousSeed } from "@uoplan/store/seedNavigation";
 import { SidebarResizeHandle } from "../shared/SidebarResizeHandle";
 import { useSidebarResize } from "../shared/useSidebarResize";
 import { BasicCalendarHeaderActions } from "./BasicCalendarHeaderActions";
@@ -116,6 +117,68 @@ function ScheduleNavigationButtons({
         {nextLabel}
       </Button>
     </Button.Group>
+  );
+}
+
+function UndoSwapButton({
+  swapCount,
+  onUndo,
+  style,
+}: {
+  swapCount: number;
+  onUndo: () => void;
+  style?: CSSProperties;
+}) {
+  useTr();
+  if (swapCount <= 0) return null;
+  return (
+    <Button
+      variant="subtle"
+      color="gray"
+      size="xs"
+      radius="md"
+      leftSection={<IconArrowBackUp size={12} />}
+      onClick={onUndo}
+      style={style}
+    >
+      {swapCount === 1
+        ? tr("calendarPage.undoSwap")
+        : tr("calendarPage.undoSwapCount", { count: swapCount })}
+    </Button>
+  );
+}
+
+function NoMoreSchedulesAlert({ hasProgram }: { hasProgram: boolean }) {
+  useTr();
+  return (
+    <Alert color="yellow" variant="light" radius="md" py="xs" style={{ flexShrink: 0 }}>
+      {tr(hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules")}
+    </Alert>
+  );
+}
+
+type CalendarTimetableProps = React.ComponentProps<typeof CalendarView> & {
+  /** Extra styles for the section wrapper (page mode pads; embedded does not). */
+  sectionStyle?: CSSProperties;
+};
+
+function CalendarTimetable({ sectionStyle, ...viewProps }: CalendarTimetableProps) {
+  return (
+    <Box
+      component="section"
+      aria-label="Timetable"
+      style={{
+        flex: 1,
+        minWidth: 0,
+        minHeight: 0,
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        ...sectionStyle,
+      }}
+    >
+      <CalendarView {...viewProps} />
+    </Box>
   );
 }
 
@@ -320,6 +383,63 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
   const calendarTitle = tr("calendarPage.title");
   const calendarSubtitle = tr(hasProgram ? "calendarPage.subtitle" : "basicCalendar.subtitle");
 
+  const scheduleNavProps: ScheduleNavigationButtonsProps = {
+    canGoPrevious,
+    canUseSeedNavigation,
+    generationOptionsDirty,
+    nextLabel,
+    scheduleGenerating,
+    onNext: () => {
+      void handleNext();
+    },
+    onPrevious: () => {
+      void handlePrevious();
+    },
+  };
+
+  const utilityToolbarProps = {
+    downloadDisabled: !dateRangeOk || !currentSchedule,
+    onDownloadIcs: handleDownloadIcs,
+    shareShow: Boolean(indices),
+    shareCopied,
+    onCopyShare: handleCopyShare,
+    randomizeDisabled: scheduleGenerating || !canUseSeedNavigation,
+    onRandomize: () => void randomizeSeed(),
+    onClear: handleClearGenerationOptions,
+    onImport: () => setUenrollImportOpen(true),
+    cliDisabled: !cliCommand,
+    onEnrolCli: () => setEnrolCliOpen(true),
+  };
+
+  const calendarViewProps = useMemo(
+    () => ({
+      schedule: currentSchedule,
+      cache,
+      professorRatings,
+      getSwapCandidates,
+      onSwap: (enrollmentIndex: number, newCourseCode: string) => {
+        analytics.capture("schedule_swapped_course", { courseCode: newCourseCode });
+        void swapCourseInSchedule(enrollmentIndex, normalizeCourseCode(newCourseCode));
+      },
+      colorMap: currentColorMap,
+      weekGroups,
+      weekIndex,
+      setWeekIndex,
+    }),
+    [
+      analytics,
+      cache,
+      currentColorMap,
+      currentSchedule,
+      getSwapCandidates,
+      professorRatings,
+      setWeekIndex,
+      swapCourseInSchedule,
+      weekGroups,
+      weekIndex,
+    ],
+  );
+
   const sidebarControls = (
     <>
       {onExit ? (
@@ -366,49 +486,18 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
             onDownloadIcs={handleDownloadIcs}
             downloadDisabled={!dateRangeOk || !currentSchedule}
           />
-          {!isMobile && (
-            <ScheduleNavigationButtons
-              canGoPrevious={canGoPrevious}
-              canUseSeedNavigation={canUseSeedNavigation}
-              generationOptionsDirty={generationOptionsDirty}
-              nextLabel={nextLabel}
-              scheduleGenerating={scheduleGenerating}
-              onNext={handleNext}
-              onPrevious={handlePrevious}
-            />
-          )}
+          {!isMobile && <ScheduleNavigationButtons {...scheduleNavProps} />}
           <NoTimeslotBanner />
           <BasicGenerationOptions />
         </>
       ) : (
         <Stack gap="md">
-          {/* Utility toolbar: download, share, randomize, clear */}
-          <CalendarUtilityToolbar
-            downloadDisabled={!dateRangeOk || !currentSchedule}
-            onDownloadIcs={handleDownloadIcs}
-            shareShow={Boolean(indices)}
-            shareCopied={shareCopied}
-            onCopyShare={handleCopyShare}
-            randomizeDisabled={scheduleGenerating || !canUseSeedNavigation}
-            onRandomize={() => void randomizeSeed()}
-            onClear={handleClearGenerationOptions}
-            onImport={() => setUenrollImportOpen(true)}
-            cliDisabled={!cliCommand}
-            onEnrolCli={() => setEnrolCliOpen(true)}
-          />
+          <CalendarUtilityToolbar {...utilityToolbarProps} />
 
           {/* Prev/Next - desktop only */}
           {!isMobile && (
             <Stack gap={6}>
-              <ScheduleNavigationButtons
-                canGoPrevious={canGoPrevious}
-                canUseSeedNavigation={canUseSeedNavigation}
-                generationOptionsDirty={generationOptionsDirty}
-                nextLabel={nextLabel}
-                scheduleGenerating={scheduleGenerating}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
-              />
+              <ScheduleNavigationButtons {...scheduleNavProps} />
             </Stack>
           )}
 
@@ -420,22 +509,11 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
 
           <Divider color="var(--app-border)" />
 
-          {/* Undo swap */}
-          {currentSwaps.length > 0 && (
-            <Button
-              variant="subtle"
-              color="gray"
-              size="xs"
-              radius="md"
-              leftSection={<IconArrowBackUp size={12} />}
-              onClick={() => undoLastSwap()}
-              style={{ alignSelf: "flex-start", paddingInline: 6 }}
-            >
-              {currentSwaps.length === 1
-                ? tr("calendarPage.undoSwap")
-                : tr("calendarPage.undoSwapCount", { count: currentSwaps.length })}
-            </Button>
-          )}
+          <UndoSwapButton
+            swapCount={currentSwaps.length}
+            onUndo={() => undoLastSwap()}
+            style={{ alignSelf: "flex-start", paddingInline: 6 }}
+          />
         </Stack>
       )}
 
@@ -446,11 +524,7 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
       />
       <UEnrollImportModal opened={uenrollImportOpen} onClose={() => setUenrollImportOpen(false)} />
 
-      {scheduleNoVariety && !generationError && (
-        <Alert color="yellow" variant="light" radius="md" py="xs" style={{ flexShrink: 0 }}>
-          {tr(hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules")}
-        </Alert>
-      )}
+      {scheduleNoVariety && !generationError && <NoMoreSchedulesAlert hasProgram={hasProgram} />}
     </>
   );
 
@@ -508,84 +582,25 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
               </Tooltip>
             ) : null}
             <Box style={{ flex: "0 1 260px", minWidth: 160 }}>
-              <ScheduleNavigationButtons
-                canGoPrevious={canGoPrevious}
-                canUseSeedNavigation={canUseSeedNavigation}
-                generationOptionsDirty={generationOptionsDirty}
-                nextLabel={nextLabel}
-                scheduleGenerating={scheduleGenerating}
-                onNext={handleNext}
-                onPrevious={handlePrevious}
-              />
+              <ScheduleNavigationButtons {...scheduleNavProps} />
             </Box>
-            {currentSwaps.length > 0 && (
-              <Button
-                variant="subtle"
-                color="gray"
-                size="xs"
-                radius="md"
-                leftSection={<IconArrowBackUp size={12} />}
-                onClick={() => undoLastSwap()}
-                style={{ flexShrink: 0, paddingInline: 6 }}
-              >
-                {currentSwaps.length === 1
-                  ? tr("calendarPage.undoSwap")
-                  : tr("calendarPage.undoSwapCount", { count: currentSwaps.length })}
-              </Button>
-            )}
+            <UndoSwapButton
+              swapCount={currentSwaps.length}
+              onUndo={() => undoLastSwap()}
+              style={{ flexShrink: 0, paddingInline: 6 }}
+            />
             <Box style={{ marginLeft: "auto" }}>
-              <CalendarUtilityToolbar
-                downloadDisabled={!dateRangeOk || !currentSchedule}
-                onDownloadIcs={handleDownloadIcs}
-                shareShow={Boolean(indices)}
-                shareCopied={shareCopied}
-                onCopyShare={handleCopyShare}
-                randomizeDisabled={scheduleGenerating || !canUseSeedNavigation}
-                onRandomize={() => void randomizeSeed()}
-                onClear={handleClearGenerationOptions}
-                onImport={() => setUenrollImportOpen(true)}
-                cliDisabled={!cliCommand}
-                onEnrolCli={() => setEnrolCliOpen(true)}
-                tooltipPosition="bottom"
-              />
+              <CalendarUtilityToolbar {...utilityToolbarProps} tooltipPosition="bottom" />
             </Box>
           </Group>
 
           {scheduleNoVariety && !generationError && (
             <Stack gap={8} style={{ flexShrink: 0, padding: "10px 12px 0" }}>
-              <Alert color="yellow" variant="light" radius="md" py="xs">
-                {tr(hasProgram ? "calendarPage.noMoreSchedules" : "basicCalendar.noMoreSchedules")}
-              </Alert>
+              <NoMoreSchedulesAlert hasProgram={hasProgram} />
             </Stack>
           )}
 
-          <Box
-            component="section"
-            aria-label="Timetable"
-            style={{
-              flex: 1,
-              minWidth: 0,
-              minHeight: 0,
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-            }}
-          >
-            <CalendarView
-              schedule={currentSchedule}
-              cache={cache}
-              professorRatings={professorRatings}
-              getSwapCandidates={getSwapCandidates}
-              onSwap={(enrollmentIndex, newCourseCode) => {
-                analytics.capture("schedule_swapped_course", { courseCode: newCourseCode });
-                void swapCourseInSchedule(enrollmentIndex, normalizeCourseCode(newCourseCode));
-              }}
-              colorMap={currentColorMap}
-              weekGroups={weekGroups}
-              weekIndex={weekIndex}
-              setWeekIndex={setWeekIndex}
-            />
-          </Box>
+          <CalendarTimetable {...calendarViewProps} />
         </Box>
         {calendarModals}
       </>
@@ -642,34 +657,7 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
         )}
 
         {/* Calendar area */}
-        <Box
-          component="section"
-          aria-label="Timetable"
-          style={{
-            flex: 1,
-            minWidth: 0,
-            minHeight: 0,
-            display: "flex",
-            flexDirection: "column",
-            padding: 0,
-            width: "100%",
-          }}
-        >
-          <CalendarView
-            schedule={currentSchedule}
-            cache={cache}
-            professorRatings={professorRatings}
-            getSwapCandidates={getSwapCandidates}
-            onSwap={(enrollmentIndex, newCourseCode) => {
-              analytics.capture("schedule_swapped_course", { courseCode: newCourseCode });
-              void swapCourseInSchedule(enrollmentIndex, normalizeCourseCode(newCourseCode));
-            }}
-            colorMap={currentColorMap}
-            weekGroups={weekGroups}
-            weekIndex={weekIndex}
-            setWeekIndex={setWeekIndex}
-          />
-        </Box>
+        <CalendarTimetable {...calendarViewProps} sectionStyle={{ padding: 0 }} />
 
         {/* Mobile week navigation bar (above the bottom nav) */}
         {isMobile && weekGroups.length > 0 && (

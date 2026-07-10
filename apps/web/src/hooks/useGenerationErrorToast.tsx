@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Anchor } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import type { GenerationErrorState } from "../store/types";
+import type { GenerationErrorState } from "@uoplan/store/types";
 import { formatGenerationToastTitle } from "../lib/generationDiagnosticsText";
 import { hasDetailContent } from "../lib/generationErrorDetail";
 import { tr } from "../i18n";

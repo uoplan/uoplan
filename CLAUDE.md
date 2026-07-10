@@ -97,10 +97,13 @@ React 19 + TypeScript, Zustand, Mantine v9, FullCalendar + a custom `WeekCalenda
 
 ### Package layering
 
-`pnpm check:arch` (`scripts/check-architecture.ts`) enforces that dependencies only point "downward":
+`pnpm check:arch` (`scripts/check-architecture.ts`) enforces that dependencies only point "downward".
+The full graph (including store/ui/app/theme/i18n) is documented in `docs/modularization.md`.
+Simplified view:
 
 ```
-proto  ←  core  ←  { data, calendar, transcript }  ←  apps (web, worker, scraper)
+proto  ←  core  ←  { data, calendar, transcript, store }  ←  apps (web, native, worker, scraper)
+theme / i18n / navigation / analytics / ui  →  app  →  apps (web, native)
 ```
 
 Apps are leaves (nothing depends on them). The deployed Worker bundle must **never** contain `pdfjs-dist` — transcript parsing is browser-only, and the arch check fails the build if it leaks in.
@@ -112,40 +115,45 @@ apps/scraper/data/*.json        (source datasets, committed for diffability)
   → proto build (pnpm build:data-proto → apps/scraper/src/cli/proto.ts)
   → apps/web/public/data/*.pb    (git-ignored build artifacts, regenerated; NOT committed)
   → protobuf decode + DataCache (packages/core) via @uoplan/data client
-  → Zustand slices (apps/web/src/store/)
-  → React components (apps/web/src/components/)
+  → @uoplan/store slices (packages/store; web mounts via apps/web/src/store adapters)
+  → React components (apps/web/src/components/ or packages/app screens)
 ```
 
 ### Key paths
 
-- **`apps/web/src/store/`** — Zustand slices (`appStore.ts` composes them; see `docs/store-architecture.md`), `requirementCompute.ts`, `scheduleHelpers.ts` (requirement pools + `computeCoursesPerPool`).
-- **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule-generation orchestration: builds the request, runs the WASM engine, maps the response), `engine/engineHost.ts` (web WASM init + engine memoization), URL/state glue, `encodeSchedulePayload.ts`, `importFromUEnroll.ts`.
-- **`packages/engine/`** — Rust crate (`src/lib.rs`, `advanced.rs`, …) compiled to WASM. `package.json` exports `./wasm` (Vite `?url`) and `./engine.wasm` (wrangler). Scripts: `build:wasm`(release)/`build:wasm:dev`/`test:rust`/`coverage`(cargo-llvm-cov HTML)/`coverage:lcov`/`bench` (criterion).
-- **`packages/core/src/`** — `engineBridge.ts` (TS↔engine boundary: `buildBasicRequest`/`buildAdvancedRequest`, `mapGenerationResponse`, `ScheduleEngine` interface, runners), `scheduleFromStateEngine.ts` (OG reconstruction via the engine), `reconstruct.ts`, `engine/` (retained TS **relaxation diagnostics** only — `constraints/`, `timetable/`, `diagnostics/`), `generation/` (shared primitives + types: `sectionCombos.ts`, `overlaps.ts`, `types.ts`, `fingerprint.ts`), `requirements/`, `prerequisites/`, `dataCache.ts`, `stateEncode.ts`, `implicitHonours.ts`.
-- **`packages/proto/`** — `proto/{state,data,cli,engine}.proto`; generated TS in `src/generated/*` (git-ignored), exported via `@uoplan/proto` namespaces (`StateProto`/`DataProto`/`CliProto`/`EngineProto`) or subpaths (`@uoplan/proto/state|data|cli|engine`). Regenerate with `pnpm --filter @uoplan/proto generate`. `cli.proto` is synced to the Rust CLI via `pnpm sync:proto-cli`; the Rust engine decodes `engine.proto`/`data.proto` directly via `prost`.
+- **`packages/store/`** — Canonical Zustand planner (`appStore`, slices, projection hooks, `AppServices`). See `docs/store-architecture.md`.
+- **`apps/web/src/store/`** — Web adapters (`webServices.ts`) + temporary re-export shims + web-only stores (`graphPlannerStore`, …).
+- **`apps/web/src/lib/`** — `generateSchedulesAction.ts` (schedule-generation orchestration), `engine/engineHost.ts` (web WASM init), URL/state glue, `encodeSchedulePayload.ts`, `importFromUEnroll.ts`.
+- **`packages/engine/`** — Rust crate compiled to WASM / native FFI. Scripts: `build:wasm` / `build:wasm:dev` / `test:rust` / coverage / bench.
+- **`packages/core/src/`** — Domain kitchen sink (to be split; see `docs/modularization.md`): `engineBridge.ts`, generation helpers, requirements, grades, search, `stateEncode.ts`, …
+- **`packages/ui/`**, **`packages/app/`**, **`packages/navigation/`** — Write-once UI stack (primitives + screens + route contract).
+- **`packages/i18n/`** — Shared Lingui catalogs + `tr` / `useTr` (not under `apps/web/src/locales`).
+- **`packages/proto/`** — `proto/{state,data,cli,engine,feedback}.proto`; generate with `pnpm --filter @uoplan/proto generate`.
 - **`apps/scraper/data/`** — source JSON datasets (committed).
 - **`apps/web/public/data/`** — runtime protobuf `.pb` assets (git-ignored build artifacts).
 
 ### Schedule generation
 
-Generation is implemented in **Rust → WASM** (`packages/engine`); there is **no JS generation implementation**. TS only builds the `GenerationRequest`, runs the engine, and maps the `GenerationResponse`. Orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`** (via the Comlink worker `scheduleWorker.ts` + `engineHost.ts`); the TS↔engine bridge is **`packages/core/src/engineBridge.ts`**. The OG-image worker generates from a `DecodedState` in-process via **`packages/core/src/scheduleFromStateEngine.ts`** + `apps/worker/src/engineHost.ts`, then renders with resvg. Pool sizing and pinned-credit rules still use **`apps/web/src/store/scheduleHelpers.ts`**. Build the engine before web/worker builds (`pnpm build:engine-wasm`). See `docs/schedule-generation.md`.
+Generation is implemented in **Rust → WASM / native FFI** (`packages/engine`); there is **no JS generation implementation**. TS only builds the `GenerationRequest`, runs the engine, and maps the `GenerationResponse`. Web orchestration lives in **`apps/web/src/lib/generateSchedulesAction.ts`** (Comlink worker + `engineHost.ts`); the TS↔engine bridge is **`packages/core/src/engineBridge.ts`**. The OG-image worker uses **`packages/core/src/scheduleFromStateEngine.ts`**. Pool sizing / pinned-credit rules live in **`packages/store`** (`scheduleHelpers`). Build the engine before web/worker builds (`pnpm build:engine-wasm`). See `docs/schedule-generation.md`.
 
 ### Documentation
 
-`docs/` documents the non-obvious subsystems — consult it before changing them (`docs/README.md` is the index): store architecture, state/URL encoding, schedule generation, requirements steps, course prerequisites, the custom calendar view, multi-year catalogue scraping, explore search, web-push notifications, and the CLI.
+`docs/` documents non-obvious subsystems (`docs/README.md` is the index). Start with **`docs/modularization.md`** for package boundaries, then store architecture, state/URL encoding, schedule generation, requirements, prerequisites, calendar, multi-year catalogue, explore search, web-push, CLI, native deploy.
 
 ### Internationalisation (i18n)
 
-All user-visible text in `apps/web` must be translated into both **English** and **French (Canadian)**. The app uses [Lingui](https://lingui.dev/) with ICU message format, but with **explicit string IDs** rather than Lingui macros — so `lingui extract` is NOT used (it finds no macros and obsoletes the whole catalog). Catalogs are managed by the custom tooling below.
+All user-visible text must be translated into both **English** and **French (Canadian)**. The app uses [Lingui](https://lingui.dev/) with ICU message format and **explicit string IDs** (no Lingui macros / no `lingui extract`). Catalogs are managed by the custom tooling below.
 
-- Translation catalogs: `apps/web/src/locales/en/messages.po` and `apps/web/src/locales/fr-CA/messages.po`
-- Translation helper: `tr(id, values?)` from `apps/web/src/i18n` — usable anywhere (components, utility functions, etc.)
+- Translation catalogs: `packages/i18n/src/locales/en/messages.po` and `packages/i18n/src/locales/fr-CA/messages.po`
+- Compile catalogs: `pnpm --filter @uoplan/i18n i18n:compile` (compiled `messages.ts` is gitignored)
+- Translation helper: `tr(id, values?)` from `@uoplan/i18n` (web also re-exports via `apps/web/src/i18n`)
 - Plural forms use ICU syntax: `{count, plural, one {# item} other {# items}}`
-- Components that render translated text must call the `useTr()` hook from `apps/web/src/i18n` (it returns `tr` and re-renders on locale change). Non-React modules import `tr` directly.
-- IDs reached only through dynamic `tr()` calls (template literals / record lookups) are enumerated in `scripts/i18n/dynamic-keys.ts` so the tooling can see them.
+- Components that render translated text must call `useTr()` (returns `tr`, re-renders on locale change). Non-React modules import `tr` directly.
+- IDs reached only through dynamic `tr()` calls are enumerated in `scripts/i18n/dynamic-keys.ts`.
 - Workflow for new strings:
   1. Add the `tr("my.id")` call (or a dynamic family entry in `scripts/i18n/dynamic-keys.ts`).
   2. Run `pnpm i18n:sync` to scaffold the missing `msgid` (empty `msgstr`) into **both** PO files (`--check` is the CI dry-run).
   3. Fill in the English and French `msgstr` for the new ids.
-  4. `pnpm check:i18n` (CI + pre-commit) enforces completeness, locale parity, no empty `msgstr`, and **no obsolete (`#~`) entries**.
+  4. Compile with `pnpm --filter @uoplan/i18n i18n:compile` when needed locally.
+  5. `pnpm check:i18n` (CI + pre-commit) enforces completeness, locale parity, no empty `msgstr`, and **no obsolete (`#~`) entries**.
 - **Do not run `pnpm i18n:sync --prune`** to clean up a few ids. `check:i18n` tolerates extra/unused catalog keys, and the catalogs carry hundreds of them (ids reachable only via patterns `--prune`'s scan doesn't capture), so `--prune` mass-deletes ~hundreds of legitimately-used entries. When removing a string, delete just that `msgid`/`msgstr` block from **both** PO files (and its `dynamic-keys.ts` entry) by hand.

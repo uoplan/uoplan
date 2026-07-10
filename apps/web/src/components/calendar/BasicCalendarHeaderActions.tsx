@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ActionIcon, Group, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconEraser, IconFileImport, IconTerminal } from "@tabler/icons-react";
-import { useGetShareUrl, useIndices } from "../../store/hooks";
+import { useGetShareUrl, useIndices } from "@uoplan/store/hooks";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { tr } from "../../i18n";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";

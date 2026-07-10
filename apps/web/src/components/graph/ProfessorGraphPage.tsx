@@ -32,7 +32,7 @@ import {
   searchProfessors,
 } from "../../lib/graph/professorGraphSearch";
 import type { ProfessorSearchEntry } from "../../lib/graph/professorGraphSearch";
-import { useProfessorRatings } from "../../store/hooks";
+import { useProfessorRatings } from "@uoplan/store/hooks";
 import { ProfessorGraphDesktopPanel } from "./ProfessorGraphDesktopPanel";
 import { ProfessorGraphMobileDrawer } from "./ProfessorGraphMobileDrawer";
 import { ProfessorGraphView } from "./ProfessorGraphView";

@@ -9,7 +9,7 @@ import {
   useDataCache,
   useProgramSelection,
   useScheduleGeneration,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 
 export function useFrenchImmersionProgressState() {
   const { frenchImmersionStream, program } = useProgramSelection();

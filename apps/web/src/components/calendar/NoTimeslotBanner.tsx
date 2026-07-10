@@ -1,7 +1,7 @@
 import { Alert, Badge, Group, Text } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { tr, useTr } from "../../i18n";
-import { useDataCache, useScheduleGeneration } from "../../store/hooks";
+import { useDataCache, useScheduleGeneration } from "@uoplan/store/hooks";
 
 /**
  * "Some courses don't appear on the schedule" — lists courses in the current

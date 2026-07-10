@@ -7,7 +7,7 @@ import { IconAdjustments } from "@tabler/icons-react";
 import { useShallow } from "zustand/react/shallow";
 import "@xyflow/react/dist/style.css";
 import { i18n, tr, useTr } from "../../i18n";
-import { useActiveProgram, useDataCache, useStoreApi, useTerms } from "../../store/hooks";
+import { useActiveProgram, useDataCache, useStoreApi, useTerms } from "@uoplan/store/hooks";
 import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlannerStore";
 import { useGraphPlanner } from "../../lib/graphPlanner/useGraphPlanner";
 import { buildPlannerGraph } from "../../lib/graphPlanner/buildPlannerGraph";

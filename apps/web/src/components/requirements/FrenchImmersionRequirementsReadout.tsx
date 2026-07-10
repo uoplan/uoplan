@@ -5,7 +5,7 @@ import {
   frenchImmersionOverallVolumePercent,
   groupCountedFrenchImmersionCodesByCategory,
 } from "@uoplan/core";
-import { useCompletedCourses } from "../../store/hooks";
+import { useCompletedCourses } from "@uoplan/store/hooks";
 import { tr } from "../../i18n";
 import { useFrenchImmersionProgressState } from "../shared/useFrenchImmersionProgressState";
 

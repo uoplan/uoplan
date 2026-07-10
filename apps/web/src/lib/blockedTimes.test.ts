@@ -9,8 +9,8 @@ import {
   reconcileAvoidedDays,
   toBlockedWindows,
   withBlockedIds,
-} from "./blockedTimes";
-import type { BlockedTime } from "../store/types";
+} from "@uoplan/store/blockedTimes";
+import type { BlockedTime } from "@uoplan/store/types";
 
 const block = (day: BlockedTime["day"], startMinutes: number, endMinutes: number): BlockedTime => ({
   id: "x",

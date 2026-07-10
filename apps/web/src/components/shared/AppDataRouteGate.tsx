@@ -2,7 +2,7 @@ import { Alert, Box } from "@mantine/core";
 import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { tr, useTr } from "../../i18n";
-import { useDataset, useLazyData, useLoadData, useStoreApi } from "../../store/hooks";
+import { useDataset, useLazyData, useLoadData, useStoreApi } from "@uoplan/store/hooks";
 import { AppDataLoader } from "./AppDataLoader";
 import { AppCard } from "./AppCard";
 

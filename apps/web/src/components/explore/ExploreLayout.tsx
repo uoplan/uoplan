@@ -18,7 +18,7 @@ import {
   useProfessorRatings,
   useRequirementState,
   useTerms,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { AddToBasketButton } from "../basket/AddToBasketButton";
 import { BasketFab } from "../basket/BasketFab";
 import { AddToCompareButton } from "./compare/AddToCompareButton";

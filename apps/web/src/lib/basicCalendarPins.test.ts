@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { basicElectivesAfterPinnedDelta, canGenerateBasicSchedule } from "./basicCalendarPins";
-import { SCHEDULE_COURSE_COUNT_MAX } from "../store/generationDefaults";
+import {
+  basicElectivesAfterPinnedDelta,
+  canGenerateBasicSchedule,
+} from "@uoplan/store/basicCalendarPins";
+import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 
 describe("canGenerateBasicSchedule", () => {
   it("is false when there are no required courses and electives are 0", () => {

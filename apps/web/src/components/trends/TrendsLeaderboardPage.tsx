@@ -8,7 +8,7 @@ import {
 } from "@uoplan/core";
 import { useMemo } from "react";
 import { formatLocaleNumber, tr, useTr } from "../../i18n";
-import { useCatalogue } from "../../store/hooks";
+import { useCatalogue } from "@uoplan/store/hooks";
 import { courseNormToPathParam } from "../../lib/explore/courseSearchParams";
 import { programSlugToPathParam } from "../../lib/explore/programSearch";
 import { EMPTY_EXPLORE_SEARCH } from "../../lib/explore/exploreFilters";

@@ -1,0 +1,36 @@
+{
+  "name": "@uoplan/domain",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./brand": "./src/brand.ts",
+    "./dataCache": "./src/dataCache.ts",
+    "./dataTypes": "./src/dataTypes/index.ts",
+    "./dataTypes/*": "./src/dataTypes/*.ts",
+    "./facultyIdentity": "./src/facultyIdentity.ts",
+    "./courseAlias": "./src/courseAlias.ts",
+    "./courseFilters": "./src/courseFilters.ts",
+    "./termDefaults": "./src/termDefaults.ts",
+    "./seededRandom": "./src/seededRandom.ts",
+    "./utils/courseUtils": "./src/utils/courseUtils.ts",
+    "./utils/timeUtils": "./src/utils/timeUtils.ts",
+    "./utils/groupToken": "./src/utils/groupToken.ts",
+    "./utils/urlToSlug": "./src/utils/urlToSlug.ts"
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@uoplan/proto": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "4.1.7",
+    "vitest": "4.1.7"
+  }
+}

@@ -1,7 +1,7 @@
 import { page } from "vitest/browser";
 import { expect, test } from "vitest";
 
-import type { GenerationErrorState } from "../store/types";
+import type { GenerationErrorState } from "@uoplan/store/types";
 import { GenerationErrorModal } from "./GenerationErrorModal";
 import { renderWithProviders } from "../test/renderWithProviders";
 

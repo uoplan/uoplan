@@ -10,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { tr, useTr } from "../../i18n";
 import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlannerStore";
-import { useSeedNavigation } from "../../store/hooks";
+import { useSeedNavigation } from "@uoplan/store/hooks";
 import { canDownloadTerm } from "../../lib/graphPlanner/downloadPlannerIcs";
 import { NoTimeslotBanner } from "../calendar/NoTimeslotBanner";
 import { usePlannerActions } from "./plannerActionsContext";

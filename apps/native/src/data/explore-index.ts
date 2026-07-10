@@ -15,7 +15,7 @@ import {
 } from "@uoplan/core/gradeDistribution";
 import { normalizeProfessorName, type ProfessorRatingsMap } from "@uoplan/core/professorRatings";
 import type { ProfessorRegistryEntry } from "@uoplan/core/professorRegistry";
-import type { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
+import type { DescriptionSearchIndex } from "@uoplan/search/descriptionSearch";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 
 /** Grades excluded from the GPA denominator (mirrors web `gradedHeadcount`). */

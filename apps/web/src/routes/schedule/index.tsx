@@ -10,9 +10,9 @@ import {
   useScheduleGeneration,
   useSeedNavigation,
   useTermSelection,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { buildPageHead } from "../../lib/seo";
-import { hasPersistedGeneratedSchedule } from "../../lib/seedNavigation";
+import { hasPersistedGeneratedSchedule } from "@uoplan/store/seedNavigation";
 import { formatTermLabel } from "../../lib/term/termLabel";
 
 export const Route = createFileRoute("/schedule/")({

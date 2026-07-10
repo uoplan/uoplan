@@ -18,7 +18,7 @@ import {
 } from "@uoplan/core";
 import { buildAliasGroups, resolveComponentId } from "@uoplan/core/courseAlias";
 import type { AliasGroups } from "@uoplan/core/courseAlias";
-import type { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
+import type { DescriptionSearchIndex } from "@uoplan/search";
 import { searchProfessorsScored } from "../graph/professorGraphSearch";
 import type { ProfessorSearchEntry } from "../graph/professorGraphSearch";
 import { formatTermLabelPlain } from "../term/termLabelPlain";

@@ -1,6 +1,6 @@
 import { Group, NumberInput, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconHelpCircle } from "@tabler/icons-react";
-import { useRequirementActions, useRequirementState } from "../../store/hooks";
+import { useRequirementActions, useRequirementState } from "@uoplan/store/hooks";
 import { tr } from "../../i18n";
 import { priorityForIds, stampPriorityForIds } from "../../lib/requirements/requirementPriority";
 

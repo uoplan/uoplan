@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import * as DataProto from "@uoplan/proto/data";
-import { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
+import { DescriptionSearchIndex } from "@uoplan/search/descriptionSearch";
 import { buildCourseSearchIndex } from "./search-index.ts";
 import type { CourseDescriptionInput } from "./search-index.ts";
 

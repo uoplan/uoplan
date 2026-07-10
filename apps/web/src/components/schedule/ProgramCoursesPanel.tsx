@@ -4,7 +4,7 @@ import {
   useDataset,
   useProgramSelection,
   useRequirementState,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
 import { ProgramStep } from "../steps/ProgramStep";

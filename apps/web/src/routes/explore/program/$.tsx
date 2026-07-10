@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ExploreProgramPage } from "../../../components/explore/ExploreProgramPage";
 import { parseProgramPathParam, programSlugToPathParam } from "../../../lib/explore/programSearch";
 import { buildProgramHead } from "../../../lib/seo";
-import { useCatalogue } from "../../../store/hooks";
+import { useCatalogue } from "@uoplan/store/hooks";
 
 export const Route = createFileRoute("/explore/program/$")({
   head: ({ params }) => {

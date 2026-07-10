@@ -13,7 +13,7 @@ import { Box, Text } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { LazyMotion, m, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
-import { useIndices } from "../store/hooks";
+import { useIndices } from "@uoplan/store/hooks";
 import { tr, useTr } from "../i18n";
 import { recordLocation } from "../lib/navigation/navigationHistory";
 import { AppFooter } from "../components/shared/AppFooter";

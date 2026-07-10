@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconCloudCheck, IconDeviceFloppy } from "@tabler/icons-react";
-import { useSaveStatus } from "../../store/hooks";
+import { useSaveStatus } from "@uoplan/store/hooks";
 import { flushPersistedAppState } from "../../lib/persistAppState";
 import { tr, useTr } from "../../i18n";
 import { AnimatedIconSwap } from "../shared/AnimatedIconSwap";

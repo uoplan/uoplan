@@ -13,7 +13,7 @@ import { dynamicActivate, tr, useTr } from "../../i18n";
 import type { AppLocale } from "../../i18n";
 import { readPersistedPersonalized } from "../../lib/hasPersonalized";
 import { useBasketCourses } from "../../hooks/useBasket";
-import { useActiveProgram, useCompletedCourses } from "../../store/hooks";
+import { useActiveProgram, useCompletedCourses } from "@uoplan/store/hooks";
 import { ChromeControls } from "../shared/ChromeControls";
 import { PageContainer } from "../shared/PageContainer";
 import { ExperimentalCarousel } from "./ExperimentalCarousel";

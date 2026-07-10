@@ -39,20 +39,32 @@ const LAYERS: Record<string, string[]> = {
   "@uoplan/i18n": [],
   "@uoplan/navigation": [],
   "@uoplan/analytics": [],
+  "@uoplan/search": ["@uoplan/proto"],
+  "@uoplan/domain": ["@uoplan/proto"],
+  "@uoplan/grades": ["@uoplan/proto", "@uoplan/domain"],
   "@uoplan/ui": ["@uoplan/theme"],
-  "@uoplan/core": ["@uoplan/proto"],
-  "@uoplan/data": ["@uoplan/proto", "@uoplan/core"],
-  "@uoplan/calendar": ["@uoplan/proto", "@uoplan/core"],
-  "@uoplan/transcript": ["@uoplan/proto", "@uoplan/core"],
-  "@uoplan/store": ["@uoplan/proto", "@uoplan/core", "@uoplan/data"],
+  "@uoplan/core": ["@uoplan/proto", "@uoplan/search", "@uoplan/domain", "@uoplan/grades"],
+  "@uoplan/data": ["@uoplan/proto", "@uoplan/core", "@uoplan/domain"],
+  "@uoplan/calendar": ["@uoplan/proto", "@uoplan/core", "@uoplan/domain"],
+  "@uoplan/transcript": ["@uoplan/proto", "@uoplan/core", "@uoplan/domain"],
+  "@uoplan/store": [
+    "@uoplan/proto",
+    "@uoplan/core",
+    "@uoplan/data",
+    "@uoplan/domain",
+    "@uoplan/grades",
+  ],
   "@uoplan/app": ["@uoplan/ui", "@uoplan/navigation", "@uoplan/theme", "@uoplan/i18n"],
   web: [
+    "@uoplan/grades",
+    "@uoplan/domain",
     "@uoplan/proto",
     "@uoplan/engine",
     "@uoplan/theme",
     "@uoplan/i18n",
     "@uoplan/navigation",
     "@uoplan/analytics",
+    "@uoplan/search",
     "@uoplan/ui",
     "@uoplan/app",
     "@uoplan/core",
@@ -65,19 +77,22 @@ const LAYERS: Record<string, string[]> = {
   // Native (Expo) app — a leaf like `web`. May consume the portable packages
   // (NOT @uoplan/transcript: pdfjs is browser-only; native gets its own impl).
   native: [
+    "@uoplan/grades",
+    "@uoplan/domain",
     "@uoplan/proto",
     "@uoplan/engine",
     "@uoplan/theme",
     "@uoplan/i18n",
     "@uoplan/navigation",
     "@uoplan/analytics",
+    "@uoplan/search",
     "@uoplan/ui",
     "@uoplan/app",
     "@uoplan/core",
     "@uoplan/data",
     "@uoplan/calendar",
   ],
-  scraper: ["@uoplan/proto", "@uoplan/core"],
+  scraper: ["@uoplan/grades", "@uoplan/proto", "@uoplan/core", "@uoplan/search", "@uoplan/domain"],
   // Isolated Remotion launch-video project (deliberately NOT a pnpm workspace
   // member); it must never depend on any @uoplan/* package, so its allow-list is empty.
   marketing: [],
@@ -283,12 +298,13 @@ function forEachSourceImport(
 }
 
 /**
- * Intra-app layering for `apps/web`. These guardrails codify the Phase 4 store
- * seams so the refactor can't silently regress:
- *   - the Zustand store must not import React components (dependency direction);
- *   - components/routes/lib must consume the store via the `store/hooks/**`
+ * Intra-app layering for `apps/web`. These guardrails codify the store seams so
+ * the modularization can't silently regress:
+ *   - web store adapters must not import React components (dependency direction);
+ *   - components/routes/lib must consume the store via `@uoplan/store/hooks/**`
  *     projection hooks, never the raw `useAppStore`/`useAppStoreApi`;
  *   - `lib/requirements` must stay framework-neutral (no React/Mantine).
+ * Planner slices live in `packages/store` (checked by {@link checkStorePurity}).
  */
 function checkWebInternalLayering(): string[] {
   const errors: string[] = [];
@@ -297,17 +313,6 @@ function checkWebInternalLayering(): string[] {
   forEachSourceImport(storeDir, (spec, _statement, rel) => {
     if (/(^|\/)components\//.test(spec)) {
       errors.push(`apps/web store must not import components: "${rel}" imports "${spec}".`);
-    }
-  });
-
-  // Store slices must not import navigation/router modules directly; navigation is injected
-  // via the `AppServices` seam (store/services.ts) so slices stay framework/route-agnostic.
-  const slicesDir = join(repoRoot, "apps/web/src/store/slices");
-  forEachSourceImport(slicesDir, (spec, _statement, rel) => {
-    if (/(^|\/)(appNavigation|routerRef)$/.test(spec)) {
-      errors.push(
-        `store slices must not import navigation/router (inject via AppServices): "${rel}" imports "${spec}".`,
-      );
     }
   });
 
@@ -337,23 +342,23 @@ function checkWebInternalLayering(): string[] {
   }
 
   // Projection-hooks layer: components/routes/lib must consume the store through the
-  // domain hooks in `store/hooks/**` (re-rendering + field-coupling are encapsulated there),
-  // never by importing the raw `useAppStore`/`useAppStoreApi` from `store/appStore`. The
-  // `store/hooks/**` layer and the existing cross-cutting `hooks/**` are the only sanctioned
-  // direct consumers (allowlisted by virtue of not being scanned here).
+  // domain hooks in `@uoplan/store/hooks/**` (re-rendering + field-coupling are
+  // encapsulated there), never by importing the raw `useAppStore`/`useAppStoreApi`
+  // from the store factory. Cross-cutting `apps/web/src/hooks/**` may still use the
+  // raw factory (allowlisted by not being scanned here).
   const projectionConsumerDirs = [
     join(repoRoot, "apps/web/src/components"),
     join(repoRoot, "apps/web/src/routes"),
     join(repoRoot, "apps/web/src/lib"),
   ];
-  const appStoreSpecRe = /(^|\/)store\/appStore$/;
+  const appStoreSpecRe = /(^|\/)store\/appStore$|^@uoplan\/store\/appStore$/;
   const rawStoreHookRe = /\buseAppStore(Api)?\b/;
   for (const dir of projectionConsumerDirs) {
     forEachSourceImport(dir, (spec, statement, rel) => {
       if (appStoreSpecRe.test(spec) && rawStoreHookRe.test(statement)) {
         errors.push(
-          `${rel}: components/routes/lib must consume the store via the projection hooks in ` +
-            `store/hooks, not useAppStore/useAppStoreApi from "${spec}".`,
+          `${rel}: components/routes/lib must consume the store via @uoplan/store/hooks, ` +
+            `not useAppStore/useAppStoreApi from "${spec}".`,
         );
       }
     });

@@ -1,4 +1,4 @@
-import { useCompletedCourses, useRequirementState } from "../../store/hooks";
+import { useCompletedCourses, useRequirementState } from "@uoplan/store/hooks";
 
 export function useRequirementAssignmentState() {
   const {

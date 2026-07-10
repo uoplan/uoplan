@@ -4,7 +4,7 @@ import {
   useDataCache,
   useGenerationConstraints,
   useRequirementActions,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { AssignStep } from "../requirements/AssignStep";
 import { useRequirementAssignmentState } from "../requirements/useRequirementAssignmentState";
 

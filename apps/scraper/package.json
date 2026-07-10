@@ -23,6 +23,7 @@
   "dependencies": {
     "@uoplan/core": "workspace:*",
     "@uoplan/proto": "workspace:*",
+    "@uoplan/search": "workspace:*",
     "cheerio": "^1.2.0",
     "csv-parse": "^6.2.1",
     "exceljs": "^4.4.0",

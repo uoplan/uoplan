@@ -1,0 +1,30 @@
+{
+  "name": "@uoplan/grades",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./gradeLookup": "./src/gradeLookup.ts",
+    "./gradeDistribution": "./src/gradeDistribution.ts",
+    "./gradeTrends": "./src/gradeTrends.ts",
+    "./gradeAnalytics": "./src/gradeAnalytics.ts",
+    "./programTrends": "./src/programTrends.ts"
+  },
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@uoplan/domain": "workspace:*",
+    "@uoplan/proto": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "4.1.7",
+    "vitest": "4.1.7"
+  }
+}

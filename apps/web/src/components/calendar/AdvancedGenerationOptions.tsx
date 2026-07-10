@@ -4,14 +4,14 @@ import {
   useAdditionalElectives,
   useCoursesThisSemester,
   useRequirementActions,
-} from "../../store/hooks";
+} from "@uoplan/store/hooks";
 import { tr, useTr } from "../../i18n";
 import { computeFirstYearCredits } from "../../lib/generation/advancedGenerationDerivations";
 import { AdvancedGenerationOptionsView } from "./AdvancedGenerationOptionsView";
 import { BasketContents } from "../basket/BasketContents";
 import { useBasketResolution } from "../../lib/generation/useBasketResolution";
-import { avoidedDaysFromBlocks } from "../../lib/blockedTimes";
-import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
+import { avoidedDaysFromBlocks } from "@uoplan/store/blockedTimes";
+import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 import { useSharedGenerationOptions } from "./generationOptions/useSharedGenerationOptions";
 import { useRequirementAssignmentState } from "../requirements/useRequirementAssignmentState";
 

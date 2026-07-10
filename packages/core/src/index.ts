@@ -29,7 +29,14 @@ export * from "./ics";
 export * from "./frenchImmersionDiploma";
 export * from "./stateEncode";
 export * from "./termDefaults";
-export * from "./search/descriptionSearch";
+/** @deprecated Prefer `@uoplan/search` — re-exported for compatibility. */
+export {
+  DescriptionSearchIndex,
+  buildDescriptionSearchIndexFixture,
+  encodeTermDictionary,
+  tokenizeDescription,
+} from "@uoplan/search";
+export type { DescriptionMatch, DescriptionSearchFixtureCourse } from "@uoplan/search";
 export * from "./prerequisites";
 export * from "./requirements";
 export * as DataProto from "@uoplan/proto/data";

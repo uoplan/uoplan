@@ -8,7 +8,7 @@ import { AdvancedGenerationOptions } from "./AdvancedGenerationOptions";
 import { renderWithProviders } from "../../test/renderWithProviders";
 import { testCourseCode } from "../../test/brands";
 import { testScheduledCourse } from "../../test/courseScheduleFixtures";
-import { SCHEDULE_COURSE_COUNT_MAX } from "../../store/generationDefaults";
+import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 
 interface MockLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   children?: ReactNode;

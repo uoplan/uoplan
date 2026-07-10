@@ -1,5 +1,5 @@
 import type { StoreApi } from "zustand/vanilla";
-import type { AppStore } from "./types";
+import type { AppStore } from "@uoplan/store/types";
 
 /**
  * Holds the running singleton store so imperative helpers (e.g.

@@ -16,7 +16,7 @@ import { CalendarMobileDrawer } from "./CalendarMobileDrawer";
 import { CalendarEventDetails } from "./CalendarEventDetails";
 import { SwapContextProvider } from "./swapContext";
 import type { SwapContextValue, SwapDifficulty, SwapSortKey } from "./swapContext";
-import { useGenerationConstraints } from "../../store/hooks";
+import { useGenerationConstraints } from "@uoplan/store/hooks";
 import { CALENDAR_HEADER_MIN_HEIGHT } from "./calendarHeaderLayout";
 import {
   CALENDAR_PREVIEW_BAR_LARGE_QUERY,

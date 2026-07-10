@@ -1,5 +1,5 @@
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
-import { tokenizeDescription } from "@uoplan/core/search/descriptionSearch";
+import { encodeTermDictionary, tokenizeDescription } from "@uoplan/search/descriptionSearch";
 import type * as DataProto from "@uoplan/proto/data";
 
 /**
@@ -46,40 +46,6 @@ const MAX_FREQ = 255;
 interface CourseTokens {
   code: string;
   freqs: Map<string, number>;
-}
-
-/** Append a base-128 varint encoding of `value` to `out`. */
-function pushVarint(out: number[], value: number): void {
-  let v = value;
-  while (v > 0x7f) {
-    out.push((v & 0x7f) | 0x80);
-    v = Math.floor(v / 128);
-  }
-  out.push(v);
-}
-
-/**
- * Front-code a sorted term list into a single byte blob. Each entry is
- * `varint(prefixLen) + varint(suffixLen) + suffix bytes`, where `prefixLen` is
- * the number of leading bytes shared with the previous term.
- */
-function encodeTermDictionary(sortedTerms: readonly string[]): Uint8Array {
-  const out: number[] = [];
-  const encoder = new TextEncoder();
-  let previous = "";
-  for (const term of sortedTerms) {
-    let prefixLength = 0;
-    const maxPrefix = Math.min(previous.length, term.length);
-    while (prefixLength < maxPrefix && previous[prefixLength] === term[prefixLength]) {
-      prefixLength += 1;
-    }
-    const suffix = encoder.encode(term.slice(prefixLength));
-    pushVarint(out, prefixLength);
-    pushVarint(out, suffix.length);
-    for (const byte of suffix) out.push(byte);
-    previous = term;
-  }
-  return Uint8Array.from(out);
 }
 
 export function buildCourseSearchIndex(

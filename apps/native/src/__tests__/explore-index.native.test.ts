@@ -1,5 +1,5 @@
 import type { SchedulesData } from "@uoplan/core/dataTypes";
-import { DescriptionSearchIndex } from "@uoplan/core/search/descriptionSearch";
+import { DescriptionSearchIndex } from "@uoplan/search/descriptionSearch";
 import { normalizeCourseCode } from "@uoplan/core/utils/courseUtils";
 import type { CourseSearchIndex } from "@uoplan/proto/data";
 
