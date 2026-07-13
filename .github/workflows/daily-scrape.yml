@@ -78,6 +78,43 @@ jobs:
           path: apps/scraper/data
           if-no-files-found: error
 
+  important_dates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Clear scraper caches (no cache mode)
+        run: rm -rf .cache
+
+      - name: Run important dates scraper
+        run: pnpm --filter scraper scrape:important-dates
+
+      - name: Upload important dates data
+        uses: actions/upload-artifact@v4
+        with:
+          name: important-dates-data
+          path: |
+            apps/scraper/data/important-dates.en.json
+            apps/scraper/data/important-dates.fr.json
+          if-no-files-found: error
+
   schedule_term:
     needs: catalogue_and_terms
     runs-on: ubuntu-latest
@@ -169,8 +206,14 @@ jobs:
   merge_and_push:
     needs:
       - catalogue_and_terms
+      - important_dates
       - schedule_term
       - ratemyprofessors
+    if: >-
+      always() &&
+      needs.catalogue_and_terms.result == 'success' &&
+      needs.schedule_term.result == 'success' &&
+      needs.ratemyprofessors.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -199,6 +242,8 @@ jobs:
           # Only the current year is re-scraped every run
           cp "apps/scraper/data/catalogue/catalogue.${CURRENT_YEAR}.json" "/tmp/catalogue_current_old.json" || true
 
+          cp apps/scraper/data/important-dates.en.json /tmp/important_dates_en_old.json || true
+          cp apps/scraper/data/important-dates.fr.json /tmp/important_dates_fr_old.json || true
           cp apps/scraper/data/terms.json /tmp/terms_old.json || true
           cp apps/scraper/data/ratemyprofessors.json /tmp/ratemyprofessors_old.json || true
           mkdir -p /tmp/schedules_old
@@ -212,6 +257,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: catalogue-data
+          path: apps/scraper/data
+
+      - name: Download refreshed important dates data
+        if: needs.important_dates.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: important-dates-data
           path: apps/scraper/data
 
       - name: Download per-term schedule JSONs
@@ -259,6 +311,14 @@ jobs:
           diff -u /tmp/terms_old.json apps/scraper/data/terms.json || true
           echo "::endgroup::"
 
+          echo "::group::Diff important-dates.en.json"
+          diff -u /tmp/important_dates_en_old.json apps/scraper/data/important-dates.en.json || true
+          echo "::endgroup::"
+
+          echo "::group::Diff important-dates.fr.json"
+          diff -u /tmp/important_dates_fr_old.json apps/scraper/data/important-dates.fr.json || true
+          echo "::endgroup::"
+
           echo "::group::Diff ratemyprofessors.json"
           diff -u /tmp/ratemyprofessors_old.json apps/scraper/data/ratemyprofessors.json || true
           echo "::endgroup::"
@@ -286,6 +346,8 @@ jobs:
             apps/scraper/data/catalogue/catalogue.*.json \
             'apps/scraper/data/indices.json' \
             apps/scraper/data/terms.json \
+            apps/scraper/data/important-dates.en.json \
+            apps/scraper/data/important-dates.fr.json \
             apps/scraper/data/ratemyprofessors.json \
             apps/scraper/data/schedules/schedules.*.json \
           | wc -l)
@@ -311,7 +373,7 @@ jobs:
           fi
           git stash pop
 
-          git add apps/scraper/data/catalogue/catalogue.json apps/scraper/data/catalogue/catalogue.missing.json apps/scraper/data/catalogue/catalogue.*.json apps/scraper/data/indices.json apps/scraper/data/terms.json apps/scraper/data/ratemyprofessors.json apps/scraper/data/schedules/schedules.*.json
+          git add apps/scraper/data/catalogue/catalogue.json apps/scraper/data/catalogue/catalogue.missing.json apps/scraper/data/catalogue/catalogue.*.json apps/scraper/data/indices.json apps/scraper/data/terms.json apps/scraper/data/important-dates.en.json apps/scraper/data/important-dates.fr.json apps/scraper/data/ratemyprofessors.json apps/scraper/data/schedules/schedules.*.json
 
           BOT_EMAIL="github-actions[bot]@users.noreply.github.com"
           LAST_AUTHOR_EMAIL=$(git log -1 --format='%ae')

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ProfessorGraphRouteImport } from './routes/professor-graph'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ImportantDatesAndDeadlinesRouteImport } from './routes/important-dates-and-deadlines'
 import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as CompareRouteImport } from './routes/compare'
@@ -56,6 +57,12 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImportantDatesAndDeadlinesRoute =
+  ImportantDatesAndDeadlinesRouteImport.update({
+    id: '/important-dates-and-deadlines',
+    path: '/important-dates-and-deadlines',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const FeaturesRoute = FeaturesRouteImport.update({
   id: '/features',
   path: '/features',
@@ -213,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
   '/features': typeof FeaturesRoute
+  '/important-dates-and-deadlines': typeof ImportantDatesAndDeadlinesRoute
   '/privacy': typeof PrivacyRoute
   '/professor-graph': typeof ProfessorGraphRoute
   '/terms': typeof TermsRoute
@@ -242,6 +250,7 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
   '/features': typeof FeaturesRoute
+  '/important-dates-and-deadlines': typeof ImportantDatesAndDeadlinesRoute
   '/privacy': typeof PrivacyRoute
   '/professor-graph': typeof ProfessorGraphRoute
   '/terms': typeof TermsRoute
@@ -276,6 +285,7 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/donate': typeof DonateRoute
   '/features': typeof FeaturesRoute
+  '/important-dates-and-deadlines': typeof ImportantDatesAndDeadlinesRoute
   '/privacy': typeof PrivacyRoute
   '/professor-graph': typeof ProfessorGraphRoute
   '/terms': typeof TermsRoute
@@ -311,6 +321,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/donate'
     | '/features'
+    | '/important-dates-and-deadlines'
     | '/privacy'
     | '/professor-graph'
     | '/terms'
@@ -340,6 +351,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/donate'
     | '/features'
+    | '/important-dates-and-deadlines'
     | '/privacy'
     | '/professor-graph'
     | '/terms'
@@ -373,6 +385,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/donate'
     | '/features'
+    | '/important-dates-and-deadlines'
     | '/privacy'
     | '/professor-graph'
     | '/terms'
@@ -407,6 +420,7 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   DonateRoute: typeof DonateRoute
   FeaturesRoute: typeof FeaturesRoute
+  ImportantDatesAndDeadlinesRoute: typeof ImportantDatesAndDeadlinesRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfessorGraphRoute: typeof ProfessorGraphRoute
   TermsRoute: typeof TermsRoute
@@ -434,6 +448,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/important-dates-and-deadlines': {
+      id: '/important-dates-and-deadlines'
+      path: '/important-dates-and-deadlines'
+      fullPath: '/important-dates-and-deadlines'
+      preLoaderRoute: typeof ImportantDatesAndDeadlinesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/features': {
@@ -720,6 +741,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   DonateRoute: DonateRoute,
   FeaturesRoute: FeaturesRoute,
+  ImportantDatesAndDeadlinesRoute: ImportantDatesAndDeadlinesRoute,
   PrivacyRoute: PrivacyRoute,
   ProfessorGraphRoute: ProfessorGraphRoute,
   TermsRoute: TermsRoute,

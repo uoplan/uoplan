@@ -8,6 +8,7 @@ import {
   fromProtoCatalogueManifest,
   fromProtoCourseGradesData,
   fromProtoDisciplinesData,
+  fromProtoImportantDatesData,
   fromProtoIndices,
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
@@ -53,6 +54,28 @@ describe("committed .pb assets decode with current proto contract", () => {
   it("decodes terms", () => {
     const terms = fromProtoTermsData(DataProto.TermsData.decode(read("terms.pb")));
     expect(terms.terms.length).toBeGreaterThan(0);
+  });
+
+  it("decodes locale-specific important dates assets", () => {
+    const en = fromProtoImportantDatesData(
+      DataProto.ImportantDatesData.decode(read("important-dates.en.pb")),
+    );
+    const fr = fromProtoImportantDatesData(
+      DataProto.ImportantDatesData.decode(read("important-dates.fr.pb")),
+    );
+
+    expect(en.locale).toBe("en");
+    expect(fr.locale).toBe("fr-CA");
+    expect(en.terms.length).toBeGreaterThan(0);
+    expect(fr.terms.length).toBeGreaterThan(0);
+    expect(en.terms[0]?.termInterval).toMatchObject({
+      startDate: expect.any(String),
+      endDate: expect.any(String),
+    });
+    expect(fr.terms[0]?.courseInterval).toMatchObject({
+      startDate: expect.any(String),
+      endDate: expect.any(String),
+    });
   });
 
   it("decodes indices when present", () => {

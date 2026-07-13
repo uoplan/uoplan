@@ -1,8 +1,7 @@
 import type { DataCache } from "@uoplan/core";
-import { buildCombinedScheduleIcs, buildScheduleIcs } from "@uoplan/core";
 import type { GenerateSchedulesResult } from "../generateSchedulesAction";
 import { computeScheduleDateBounds } from "../../hooks/useTimetableDateRange";
-import { downloadTextFile } from "../downloadFile";
+import type { ScheduleExportRequest, ScheduleExportSegment } from "../scheduleExport";
 
 /** Slugify a term label for use in a download filename. */
 function slugify(label: string): string {
@@ -45,47 +44,70 @@ export function canDownloadTerm(bundle?: GenerateSchedulesResult): boolean {
 }
 
 /**
- * Download a single planned term's timetable as an `.ics` file. No-op (returns
- * `false`) when the term has no dated schedule to export.
+ * Build the deterministic export request for a single planned term. Returns
+ * `null` when the term has no dated schedule to export (mirrors
+ * {@link canDownloadTerm} exactly). Pure — no I/O, no ICS generation; callers
+ * pass the result to `buildScheduleExport` (see `lib/scheduleExport.ts`)
+ * whenever they're ready to render + download it.
  */
-export function downloadTermIcs(term: PlannerTermDownload, cache: DataCache | null): boolean {
+export function buildTermExportRequest(
+  term: PlannerTermDownload,
+  cache: DataCache | null,
+): ScheduleExportRequest | null {
   const range = termDateRange(term.bundle);
-  if (!range) return false;
-  const ics = buildScheduleIcs({
+  if (!range) return null;
+
+  const segment: ScheduleExportSegment = {
+    key: term.termId,
     schedule: range.schedule,
-    cache,
     startDate: range.start,
     endDate: range.end,
-  });
-  downloadTextFile(
-    `uoplan-${slugify(term.label)}-${range.start}-to-${range.end}.ics`,
-    ics,
-    "text/calendar;charset=utf-8",
-  );
-  return true;
+  };
+
+  return {
+    scope: "single",
+    segments: [segment],
+    cache,
+    filename: `uoplan-${slugify(term.label)}-${range.start}-to-${range.end}.ics`,
+  };
 }
 
 /**
- * Download every planned term with a dated schedule as one combined `.ics`
- * (each term keeps its own recurrence window). Returns the number of terms
- * included; `0` means nothing was downloadable.
+ * Build the deterministic export request covering every planned term with a
+ * dated schedule (each segment keeps its own recurrence window). Returns
+ * `null` when no term is downloadable (mirrors the previous `downloadAllTermsIcs`
+ * no-op case). Segment order follows the input order — callers already pass
+ * terms in chronological order via `enabledTermIds` — and inactive/empty/
+ * non-downloadable terms are omitted, each remaining term appearing exactly
+ * once. Pure — no I/O, no ICS generation.
  */
-export function downloadAllTermsIcs(terms: PlannerTermDownload[], cache: DataCache | null): number {
-  const segments = terms
-    .map((term) => {
-      const range = termDateRange(term.bundle);
-      return range
-        ? { key: term.termId, schedule: range.schedule, startDate: range.start, endDate: range.end }
-        : null;
-    })
-    .filter((s): s is NonNullable<typeof s> => s !== null);
-  if (segments.length === 0) return 0;
-  const ics = buildCombinedScheduleIcs({ segments, cache });
+export function buildAllTermsExportRequest(
+  terms: PlannerTermDownload[],
+  cache: DataCache | null,
+): ScheduleExportRequest | null {
+  const segments: ScheduleExportSegment[] = [];
+  for (const term of terms) {
+    const range = termDateRange(term.bundle);
+    if (!range) continue;
+    segments.push({
+      key: term.termId,
+      schedule: range.schedule,
+      startDate: range.start,
+      endDate: range.end,
+    });
+  }
+  if (segments.length === 0) return null;
+
   const start = segments.reduce(
     (min, s) => (s.startDate < min ? s.startDate : min),
     segments[0].startDate,
   );
   const end = segments.reduce((max, s) => (s.endDate > max ? s.endDate : max), segments[0].endDate);
-  downloadTextFile(`uoplan-plan-${start}-to-${end}.ics`, ics, "text/calendar;charset=utf-8");
-  return segments.length;
+
+  return {
+    scope: "all",
+    segments,
+    cache,
+    filename: `uoplan-plan-${start}-to-${end}.ics`,
+  };
 }

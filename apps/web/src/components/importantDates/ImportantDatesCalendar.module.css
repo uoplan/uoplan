@@ -1,0 +1,319 @@
+/* ── Container ───────────────────────────────────────────── */
+
+.calendar {
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  background: var(--app-surface);
+  padding: 14px 16px 16px;
+  margin-block-end: 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Header: prev/next/today + month label ──────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block-end: 12px;
+  flex-wrap: wrap;
+}
+
+.monthLabel {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--app-text);
+  min-width: 10ch;
+  text-align: center;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--app-radius-sm);
+  background: var(--app-surface);
+  color: var(--app-text);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: background var(--app-transition);
+}
+
+.navButton:hover {
+  background: var(--app-surface-hover);
+}
+
+.navButton:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 2px;
+}
+
+.todayButton {
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--app-radius-pill);
+  background: var(--app-surface);
+  color: var(--app-text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background var(--app-transition);
+  margin-inline-start: auto;
+}
+
+.todayButton:hover {
+  background: var(--app-surface-hover);
+}
+
+.todayButton:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ── Legend ──────────────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendDot[data-variant="break"] {
+  background: var(--app-success);
+}
+
+.legendDot[data-variant="schedule-change"] {
+  background: var(--app-warning);
+}
+
+.legendDot[data-variant="deadline"] {
+  background: var(--app-danger);
+}
+
+.legendDot[data-variant="information"] {
+  background: var(--app-info);
+}
+
+/* ── Grid ────────────────────────────────────────────────── */
+
+.grid {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.grid th {
+  text-align: center;
+  padding: 4px 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+}
+
+.dayCell {
+  vertical-align: top;
+  padding: 2px 3px 4px;
+  border-top: 1px solid var(--app-border);
+}
+
+.dayCell[data-in-month="false"] {
+  color: var(--app-text-dim);
+}
+
+.dayNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 2px;
+  font-size: 0.75rem;
+  color: inherit;
+}
+
+.dayNumber[data-today="true"] {
+  background: var(--app-accent);
+  color: var(--app-accent-contrast, #fff);
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.laneCell {
+  vertical-align: top;
+  padding: 1px 2px;
+}
+
+.eventButton {
+  width: 100%;
+  display: block;
+  border: none;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-variant-soft, var(--app-info-soft));
+  color: var(--app-variant, var(--app-info));
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  padding: 2px 6px;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: filter var(--app-transition);
+}
+
+.eventButton:hover {
+  filter: brightness(1.08);
+}
+
+.eventButton:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 1px;
+}
+
+.eventButton[data-variant="break"] {
+  background: var(--app-success-soft);
+  color: var(--app-success);
+}
+
+.eventButton[data-variant="schedule-change"] {
+  background: var(--app-warning-soft);
+  color: var(--app-warning);
+}
+
+.eventButton[data-variant="deadline"] {
+  background: var(--app-danger-soft);
+  color: var(--app-danger);
+}
+
+.eventButton[data-variant="information"] {
+  background: var(--app-info-soft);
+  color: var(--app-info);
+}
+
+.eventButton[aria-pressed="true"] {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+  font-weight: 600;
+}
+
+/* ── Overflow "+N more" control ───────────────────────────── */
+
+.overflowCell {
+  vertical-align: top;
+  padding: 0 2px 3px;
+}
+
+.overflowWrapper {
+  position: relative;
+}
+
+.overflowButton {
+  width: 100%;
+  border: 1px dashed var(--app-border-strong);
+  border-radius: var(--app-radius-sm);
+  background: transparent;
+  color: var(--app-text-muted);
+  font-size: 0.625rem;
+  padding: 1px 4px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.overflowButton:hover {
+  color: var(--app-text);
+  border-color: var(--app-text-muted);
+}
+
+.overflowButton:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 1px;
+}
+
+.overflowList {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  margin: 2px 0 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--app-radius-sm);
+  box-shadow: none;
+}
+
+.overflowList li + li {
+  margin-block-start: 2px;
+}
+
+.overflowList button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--app-text);
+  font-size: 0.75rem;
+  padding: 3px 4px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--app-radius-sm);
+}
+
+.overflowList button:hover {
+  background: var(--app-surface-hover);
+}
+
+.overflowList button:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 1px;
+}
+
+/* ── Reduced motion ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .navButton,
+  .todayButton,
+  .eventButton {
+    transition: none;
+  }
+}
+
+/* ── Small screens ───────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .grid {
+    min-width: 420px;
+  }
+
+  .eventButton {
+    font-size: 0.625rem;
+    padding: 1px 4px;
+  }
+}

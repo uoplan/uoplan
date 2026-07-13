@@ -2459,6 +2459,116 @@ msgstr "Strength"
 msgid "graph.title"
 msgstr "Professor network"
 
+#: apps/web/src/components/importantDates/ImportantDateBadge.tsx:55
+msgid "importantDates.badge.dateRange"
+msgstr "{topic}, {start} to {end}"
+
+#: apps/web/src/components/importantDates/ImportantDateBadge.tsx:60
+msgid "importantDates.badge.singleDate"
+msgstr "{topic} on {date}"
+
+#: apps/web/src/components/importantDates/ImportantDatesPage.tsx:304
+msgid "importantDates.calendar.announceSelection"
+msgstr "Selected {topic}, {dateText}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:96
+msgid "importantDates.calendar.gridLabel"
+msgstr "Calendar for {month}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:23
+msgid "importantDates.calendar.legend.break"
+msgstr "Break"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:27
+msgid "importantDates.calendar.legend.deadline"
+msgstr "Deadline"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:29
+msgid "importantDates.calendar.legend.information"
+msgstr "Information"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:25
+msgid "importantDates.calendar.legend.scheduleChange"
+msgstr "Schedule change"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:121
+msgid "importantDates.calendar.legendLabel"
+msgstr "Legend"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:111
+msgid "importantDates.calendar.nextMonth"
+msgstr "Next month"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:57
+msgid "importantDates.calendar.overflowListLabel"
+msgstr "More events on {date}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:51
+msgid "importantDates.calendar.overflowMore"
+msgstr "{count, plural, one {+# more} other {+# more}}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:102
+msgid "importantDates.calendar.previousMonth"
+msgstr "Previous month"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:117
+msgid "importantDates.calendar.today"
+msgstr "Today"
+
+msgid "importantDates.currentTerms"
+msgstr "{count, plural, one {# current term} other {# current terms}}"
+
+msgid "importantDates.disclaimer"
+msgstr "Dates and deadlines are sourced from the University of Ottawa website. Verify directly with your faculty or the registrar for the most current information."
+
+msgid "importantDates.download"
+msgstr "Download calendar"
+
+msgid "importantDates.downloadError"
+msgstr "Calendar download failed. Please try again."
+
+msgid "importantDates.downloading"
+msgstr "Downloading..."
+
+msgid "importantDates.empty"
+msgstr "No important dates are available."
+
+msgid "importantDates.error"
+msgstr "Important dates could not be loaded."
+
+msgid "importantDates.fallback"
+msgstr "English only"
+
+msgid "importantDates.loading"
+msgstr "Loading important dates..."
+
+msgid "importantDates.previousTerms"
+msgstr "{count, plural, one {# previous term} other {# previous terms}}"
+
+msgid "importantDates.retry"
+msgstr "Retry"
+
+msgid "importantDates.reviewed"
+msgstr "Last reviewed"
+
+msgid "importantDates.source"
+msgstr "Source"
+
+msgid "importantDates.table.dates"
+msgstr "Dates"
+
+msgid "importantDates.table.topic"
+msgstr "Activity"
+
+msgid "importantDates.term.passed"
+msgstr "(passed)"
+
+msgid "importantDates.termsLabel"
+msgstr "Terms"
+
+msgid "importantDates.title"
+msgstr "Important dates and deadlines"
+
 #: scripts/i18n/dynamic-keys.ts
 msgid "landing.banner.android.cta"
 msgstr "Email us"
@@ -2534,6 +2644,9 @@ msgstr "Search courses and professors with grade distributions."
 
 msgid "landing.graph.description"
 msgstr "See how professors connect through shared courses."
+
+msgid "landing.importantDates.link"
+msgstr "Important dates and deadlines"
 
 #: apps/web/src/components/calendar/CalendarPage.tsx:362
 #: apps/web/src/components/schedule/ScheduleDashboardPage.tsx:97
@@ -3523,6 +3636,27 @@ msgstr "Latest class end"
 
 msgid "scheduleCount.time.rangeLabel"
 msgstr "Class times between"
+
+msgid "scheduleExport.cancel"
+msgstr "Cancel"
+
+msgid "scheduleExport.description"
+msgstr "Official breaks, class cancellations, and replacement days are always applied."
+
+msgid "scheduleExport.download"
+msgstr "Download calendar"
+
+msgid "scheduleExport.downloading"
+msgstr "Downloading…"
+
+msgid "scheduleExport.error"
+msgstr "Calendar export failed. Please try again."
+
+msgid "scheduleExport.includeDeadlines"
+msgstr "Include other important dates and deadlines"
+
+msgid "scheduleExport.title"
+msgstr "Export calendar"
 
 msgid "search.noGradeData"
 msgstr "No grade data"

@@ -20,3 +20,17 @@ export {
 export { fromProtoIndices, toProtoIndices } from "./indices";
 export { reconstructCatalogueForYear } from "./catalogueHistory";
 export { reconstructProgramsForYear } from "./programHistory";
+export type {
+  ImportantDateCategory,
+  ImportantDateEffect,
+  ImportantDateGroup,
+  ImportantDateInterval,
+  ImportantDateItem,
+  ImportantDateSeason,
+  ImportantDateSection,
+  ImportantDateTerm,
+  ImportantDatesData,
+  ImportantDatesLocale,
+  ScheduleReplacement,
+} from "./importantDates";
+export { fromProtoImportantDatesData, toProtoImportantDatesData } from "./importantDates";

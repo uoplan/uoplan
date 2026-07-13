@@ -117,6 +117,14 @@
   //    shapes (SizeReport vs AssetSize[]) with different print + snapshot-path
   //    logic, so the shared surface is just this inert CLI boilerplate; a generic
   //    helper would add more indirection than the 8 lines it removes.
+  //  - Important Dates tests: independent package/browser fixtures intentionally
+  //    exercise the same serialized contract and export behavior at each boundary.
+  //    Sharing them across scraper/data/domain/ICS/web packages would expose
+  //    test-only package APIs, while aggressively deduplicating Browser Mode setup
+  //    would obscure each interaction contract.
+  //  - importantDates.ts ↔ schedules.ts: small explicit DayOfWeek enum converters.
+  //    Keeping protobuf conversion local to each data type avoids coupling otherwise
+  //    independent domain codecs through a helper used by only these two modules.
   "duplicates": {
     "ignore": [
       "apps/web/src/store/tests/generationOptionsDirty.test.ts",
@@ -126,7 +134,17 @@
       "apps/web/src/lib/requirements/requirementUtils.test.ts",
       "apps/web/src/test/appStoreProvider.browser.test.tsx",
       "apps/web/src/components/calendar/BasicCalendarSidebarControls.browser.test.tsx",
-      "scripts/route-js-sizes.ts"
+      "scripts/route-js-sizes.ts",
+      "apps/scraper/src/importantDates/parse.test.ts",
+      "apps/scraper/src/proto/important-dates.test.ts",
+      "apps/web/src/components/calendar/ScheduleExportDialog.browser.test.tsx",
+      "apps/web/src/components/importantDates/ImportantDatesPage.browser.test.tsx",
+      "apps/web/src/hooks/useImportantDates.browser.test.tsx",
+      "apps/web/src/lib/graphPlanner/usePlannerScheduleExport.browser.test.tsx",
+      "apps/web/src/lib/scheduleExport.test.ts",
+      "packages/domain/src/dataTypes/importantDates.ts",
+      "packages/ics/src/ics.test.ts",
+      "packages/ics/src/importantDateTransforms.test.ts"
     ]
   }
 }

@@ -1,8 +1,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import * as DataProto from "@uoplan/proto/data";
 import * as FeedbackProto from "@uoplan/proto/feedback";
 import { toProtoIndices } from "@uoplan/core/dataTypes/indices";
+import { toProtoImportantDatesData } from "../../../../packages/domain/src/dataTypes/importantDates.ts";
+import type {
+  ImportantDatesData,
+  ImportantDatesLocale,
+} from "../../../../packages/domain/src/dataTypes/importantDates.ts";
 import {
   CATALOGUE_DATA_DIR,
   DATA_MANIFEST_FILE,
@@ -49,9 +55,49 @@ interface RateMyProfessorInput {
   numRatings?: number;
 }
 
+const IMPORTANT_DATES_BUILD_TARGETS = [
+  {
+    locale: "en",
+    sourceFile: path.join(SCRAPER_DATA_DIR, "important-dates.en.json"),
+    assetFile: "important-dates.en.pb",
+  },
+  {
+    locale: "fr-CA",
+    sourceFile: path.join(SCRAPER_DATA_DIR, "important-dates.fr.json"),
+    assetFile: "important-dates.fr.pb",
+  },
+] as const satisfies ReadonlyArray<{
+  locale: ImportantDatesLocale;
+  sourceFile: string;
+  assetFile: string;
+}>;
+
 async function writePb(filePath: string, bytes: Uint8Array): Promise<void> {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, bytes);
+}
+
+async function writeImportantDatesAssets(): Promise<readonly string[]> {
+  const assets = await Promise.all(
+    IMPORTANT_DATES_BUILD_TARGETS.map(async ({ locale, sourceFile, assetFile }) => {
+      const data = await readJson<ImportantDatesData>(sourceFile);
+      if (data.locale !== locale) {
+        throw new Error(
+          `Important dates locale mismatch in ${path.basename(sourceFile)}: expected ${locale}, received ${data.locale}`,
+        );
+      }
+      return {
+        assetFile,
+        bytes: DataProto.ImportantDatesData.encode(toProtoImportantDatesData(data)).finish(),
+      };
+    }),
+  );
+
+  await Promise.all(
+    assets.map(({ assetFile, bytes }) => writePb(path.join(WEB_ASSETS_DATA_DIR, assetFile), bytes)),
+  );
+
+  return assets.map(({ assetFile }) => assetFile);
 }
 
 /**
@@ -137,6 +183,8 @@ export async function main(): Promise<void> {
       })),
     }).finish(),
   );
+
+  const importantDatesAssets = await writeImportantDatesAssets();
 
   const indices = await readJson<{ courses: string[]; programs: string[]; disciplines?: string[] }>(
     path.join(SCRAPER_DATA_DIR, "indices.json"),
@@ -309,16 +357,18 @@ export async function main(): Promise<void> {
   await scaffoldDataManifest();
 
   console.log(
-    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + catalogue.history.pb + catalogue.programs.history.pb, ${COURSE_DESCRIPTION_SHARD_IDS.length} description shards, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
+    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + catalogue.history.pb + catalogue.programs.history.pb, ${importantDatesAssets.join(" + ")}, ${COURSE_DESCRIPTION_SHARD_IDS.length} description shards, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
   );
 }
 
-void (async () => {
-  try {
-    await main();
-  } catch (err) {
-    console.error("Failed to build protobuf data artifacts.");
-    console.error(err);
-    process.exit(1);
-  }
-})();
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  void (async () => {
+    try {
+      await main();
+    } catch (err) {
+      console.error("Failed to build protobuf data artifacts.");
+      console.error(err);
+      process.exit(1);
+    }
+  })();
+}

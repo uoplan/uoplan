@@ -198,5 +198,15 @@
     "structuredName": "uoPlan terms of service",
     "noscriptTitle": "uoPlan terms of service",
     "noscriptBody": "The terms of service for using uoPlan, a free planner for University of Ottawa students."
+  },
+  "importantDates": {
+    "canonicalPath": "/important-dates-and-deadlines",
+    "tabTitle": "Important dates",
+    "title": "uOttawa important dates and deadlines | uoPlan",
+    "description": "University of Ottawa important academic dates and deadlines: enrolment windows, tuition payment dates, exam periods, holidays, and term start and end dates for every semester.",
+    "keywords": "uottawa important dates, uottawa academic deadlines, university of ottawa enrolment dates, uottawa exam dates, uottawa tuition deadlines, uottawa academic calendar",
+    "structuredName": "uOttawa important dates and deadlines",
+    "noscriptTitle": "uOttawa important dates and deadlines | uoPlan",
+    "noscriptBody": "Key University of Ottawa academic dates: enrolment, tuition, exams, holidays, and term dates for every semester."
   }
 }

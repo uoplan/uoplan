@@ -11,6 +11,7 @@
     "scrape:schedules": "node src/cli/schedules.ts",
     "scrape:feedback": "node src/cli/feedback.ts",
     "scrape:disciplines": "node src/cli/disciplines.ts",
+    "scrape:important-dates": "node --experimental-transform-types src/cli/importantDates.ts",
     "enrich:schedules": "node --experimental-transform-types src/cli/enrich.ts",
     "scrape:ratemyprofessors": "node src/cli/ratemyprofessors.ts",
     "grades:convert": "node src/cli/convertGradesXlsx.ts",

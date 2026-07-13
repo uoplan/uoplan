@@ -44,7 +44,7 @@ import { CalendarView } from "./CalendarView";
 import { NoTimeslotBanner } from "./NoTimeslotBanner";
 import { BackButton } from "../shared/BackButton";
 import { PersonalizeBanner } from "../shared/PersonalizeBanner";
-import { buildScheduleIcs, normalizeCourseCode } from "@uoplan/core";
+import { normalizeCourseCode } from "@uoplan/core";
 import { downloadTextFile } from "../../lib/downloadFile";
 import { useShareUrl } from "../../hooks/useShareUrl";
 import { useTimetableDateRangeFromSchedule } from "../../hooks/useTimetableDateRange";
@@ -54,6 +54,10 @@ import type { GenerationErrorState } from "@uoplan/store/types";
 import { useGenerationSentiment } from "../../hooks/useGenerationSentiment";
 import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
+import { useImportantDates } from "../../hooks/useImportantDates";
+import { buildScheduleExport } from "../../lib/scheduleExport";
+import type { ScheduleExportRequest } from "../../lib/scheduleExport";
+import { ScheduleExportDialog } from "./ScheduleExportDialog";
 import { canGenerateBasicSchedule } from "@uoplan/store/basicCalendarPins";
 import { canGoToPreviousSeed } from "@uoplan/store/seedNavigation";
 import { SidebarResizeHandle } from "../shared/SidebarResizeHandle";
@@ -252,8 +256,9 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
   const professorRatings = useProfessorRatings();
   const basketCourses = useBasketCourses();
   const { additionalElectivesCount } = useAdditionalElectives();
-  const { selectedTermId } = useTermSelection();
+  const { terms, selectedTermId } = useTermSelection();
   const program = useActiveProgram();
+  const importantDates = useImportantDates();
 
   // When a term is opened from the degree planner it links that term into this
   // calendar (see `openInCalendar`). While that link is live for the term on
@@ -307,6 +312,7 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
   const [controlsOpen, setControlsOpen] = useState(false);
   const [enrolCliOpen, setEnrolCliOpen] = useState(false);
   const [uenrollImportOpen, setUenrollImportOpen] = useState(false);
+  const [exportRequest, setExportRequest] = useState<ScheduleExportRequest | null>(null);
   const sidebarResize = useSidebarResize();
   const sidebarWidth = sidebarResize.width;
 
@@ -367,21 +373,79 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
     void generateSchedules();
   };
 
-  const handleDownloadIcs = () => {
-    if (!currentSchedule) return;
-    analytics.capture("schedule_exported", { target: "ics" });
-    const ics = buildScheduleIcs({
-      schedule: currentSchedule,
+  // Opens the shared export dialog with a snapshot of the current schedule,
+  // term, and export bounds. Snapshotting (rather than reading live state from
+  // inside `handleExportSchedule`) means a schedule/term change while the
+  // dialog stays open can never silently export something other than what the
+  // user opened the dialog for. `exportRequest` doubles as the dialog's
+  // `opened` flag, so a duplicate trigger click while already open is a no-op.
+  const handleOpenExportDialog = () => {
+    if (!currentSchedule || !selectedTermId || exportRequest) return;
+    setExportRequest({
+      scope: "single",
+      segments: [
+        {
+          key: selectedTermId,
+          schedule: currentSchedule,
+          startDate: timetableStartDate,
+          endDate: timetableEndDate,
+        },
+      ],
       cache,
-      startDate: timetableStartDate,
-      endDate: timetableEndDate,
+      filename: `uoplan-schedule-${currentSeed}-${timetableStartDate}-to-${timetableEndDate}.ics`,
     });
-    const filename = `uoplan-schedule-${currentSeed}-${timetableStartDate}-to-${timetableEndDate}.ics`;
-    downloadTextFile(filename, ics, "text/calendar;charset=utf-8");
+  };
+
+  const handleCloseExportDialog = () => {
+    setExportRequest(null);
+  };
+
+  // The dialog's only export path: always resolves important dates through
+  // `useImportantDates()` and always calls `buildScheduleExport` with them —
+  // never `buildScheduleIcs` directly, never without `{ data, includeDeadlines }`
+  // — so the mandatory break/cancellation/replacement transforms are never
+  // skippable. Missing/loading/failed important-date data blocks the export
+  // (the dialog renders the thrown message); a loader failure also triggers a
+  // retry so a later click can succeed once it recovers. Both a build failure
+  // (`buildScheduleExport`) and a browser-download-boundary failure
+  // (`downloadTextFile`) share one try/catch so either normalizes to the same
+  // localized generic error — no technical English text ever reaches the
+  // user. Analytics only fires after that try block fully succeeds.
+  const handleExportSchedule = async ({
+    includeDeadlines,
+  }: {
+    includeDeadlines: boolean;
+  }): Promise<void> => {
+    const request = exportRequest;
+    if (!request) {
+      throw new Error(tr("scheduleExport.error"));
+    }
+
+    if (importantDates.loading || !importantDates.data) {
+      if (importantDates.error) {
+        importantDates.retry();
+      }
+      throw new Error(tr("scheduleExport.error"), { cause: importantDates.error ?? undefined });
+    }
+
+    try {
+      const resolved = buildScheduleExport(request, {
+        data: importantDates.data,
+        includeDeadlines,
+      });
+      downloadTextFile(resolved.filename, resolved.ics, "text/calendar;charset=utf-8");
+    } catch (err) {
+      throw new Error(tr("scheduleExport.error"), { cause: err });
+    }
+
+    analytics.capture("schedule_exported", { target: "ics" });
   };
 
   const calendarTitle = tr("calendarPage.title");
   const calendarSubtitle = tr(hasProgram ? "calendarPage.subtitle" : "basicCalendar.subtitle");
+  // Localized term context shown in the export dialog (e.g. "Winter 2026"),
+  // purely cosmetic — the export itself is keyed by `selectedTermId`.
+  const exportScopeLabel = terms?.find((term) => term.termId === selectedTermId)?.name;
 
   const scheduleNavProps: ScheduleNavigationButtonsProps = {
     canGoPrevious,
@@ -399,7 +463,7 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
 
   const utilityToolbarProps = {
     downloadDisabled: !dateRangeOk || !currentSchedule,
-    onDownloadIcs: handleDownloadIcs,
+    onDownloadIcs: handleOpenExportDialog,
     shareShow: Boolean(indices),
     shareCopied,
     onCopyShare: handleCopyShare,
@@ -483,7 +547,7 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
             cliCommand={cliCommand}
             onEnrolCli={() => setEnrolCliOpen(true)}
             onClearOptions={handleClearOptions}
-            onDownloadIcs={handleDownloadIcs}
+            onDownloadIcs={handleOpenExportDialog}
             downloadDisabled={!dateRangeOk || !currentSchedule}
           />
           {!isMobile && <ScheduleNavigationButtons {...scheduleNavProps} />}
@@ -523,6 +587,12 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
         command={cliCommand ?? ""}
       />
       <UEnrollImportModal opened={uenrollImportOpen} onClose={() => setUenrollImportOpen(false)} />
+      <ScheduleExportDialog
+        opened={exportRequest !== null}
+        onClose={handleCloseExportDialog}
+        onExport={handleExportSchedule}
+        scopeLabel={exportScopeLabel}
+      />
 
       {scheduleNoVariety && !generationError && <NoMoreSchedulesAlert hasProgram={hasProgram} />}
     </>
@@ -536,6 +606,12 @@ export function CalendarPage({ onExit, variant = "page" }: CalendarPageProps = {
         command={cliCommand ?? ""}
       />
       <UEnrollImportModal opened={uenrollImportOpen} onClose={() => setUenrollImportOpen(false)} />
+      <ScheduleExportDialog
+        opened={exportRequest !== null}
+        onClose={handleCloseExportDialog}
+        onExport={handleExportSchedule}
+        scopeLabel={exportScopeLabel}
+      />
       <GenerationErrorModal
         error={generationErrorDetail}
         onClose={() => setGenerationErrorDetail(null)}

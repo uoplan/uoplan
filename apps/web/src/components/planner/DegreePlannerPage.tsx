@@ -12,13 +12,14 @@ import { plannerTermCount, useGraphPlannerStore } from "../../store/graphPlanner
 import { useGraphPlanner } from "../../lib/graphPlanner/useGraphPlanner";
 import { buildPlannerGraph } from "../../lib/graphPlanner/buildPlannerGraph";
 import { planCoursesFromCalendar } from "../../lib/graphPlanner/calendarBridge";
-import { downloadAllTermsIcs, downloadTermIcs } from "../../lib/graphPlanner/downloadPlannerIcs";
+import { usePlannerScheduleExport } from "../../lib/graphPlanner/usePlannerScheduleExport";
 import { formatTermLabel, formatTranscriptTermLabel } from "../../lib/term/termLabel";
 import { PlannerCanvas } from "./PlannerCanvas";
 import { PlannerSidebar } from "./PlannerSidebar";
 import { PlannerEmptyState } from "./PlannerEmptyState";
 import { FloatingPlannerPanel } from "./FloatingPlannerPanel";
 import { CalendarPage } from "../calendar/CalendarPage";
+import { ScheduleExportDialog } from "../calendar/ScheduleExportDialog";
 import { BottomDrawer } from "../shared/BottomDrawer";
 import { PlannerActionsProvider } from "./plannerActionsContext";
 import type { PlannerActions } from "./plannerActionsContext";
@@ -276,12 +277,25 @@ export function DegreePlannerPage() {
     [setNodePosition],
   );
 
+  // Owns the export dialog: clicking either download action below only
+  // snapshots the deterministic request + opens `ScheduleExportDialog`
+  // (rendered once, at the end of this component); the dialog itself resolves
+  // important-dates enrichment, downloads, and tracks analytics on confirm.
+  const {
+    request: exportRequest,
+    scopeLabel: exportScopeLabel,
+    openTermExport,
+    openAllTermsExport,
+    close: closeExportDialog,
+    onExport: handleScheduleExport,
+  } = usePlannerScheduleExport(cache);
+
   const downloadTerm = useCallback(
     (termId: string) => {
       const bundle = useGraphPlannerStore.getState().resultByTermId[termId];
-      downloadTermIcs({ termId, label: formatTermLabel(termId), bundle }, cache);
+      openTermExport({ termId, label: formatTermLabel(termId), bundle });
     },
-    [cache],
+    [openTermExport],
   );
 
   const downloadAllTerms = useCallback(() => {
@@ -291,8 +305,8 @@ export function DegreePlannerPage() {
       label: formatTermLabel(termId),
       bundle: pstate.resultByTermId[termId],
     }));
-    downloadAllTermsIcs(terms, cache);
-  }, [cache]);
+    openAllTermsExport(terms);
+  }, [openAllTermsExport]);
 
   const actions = useMemo<PlannerActions>(
     () => ({
@@ -466,6 +480,13 @@ export function DegreePlannerPage() {
       >
         {expandedTermId ? <CalendarPage onExit={minimizeCalendar} /> : null}
       </Modal>
+
+      <ScheduleExportDialog
+        opened={exportRequest !== null}
+        onClose={closeExportDialog}
+        onExport={handleScheduleExport}
+        scopeLabel={exportScopeLabel}
+      />
     </PlannerActionsProvider>
   );
 }

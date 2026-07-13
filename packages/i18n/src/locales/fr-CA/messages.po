@@ -2459,6 +2459,116 @@ msgstr "Force"
 msgid "graph.title"
 msgstr "Réseau de professeurs"
 
+#: apps/web/src/components/importantDates/ImportantDateBadge.tsx:55
+msgid "importantDates.badge.dateRange"
+msgstr "{topic}, du {start} au {end}"
+
+#: apps/web/src/components/importantDates/ImportantDateBadge.tsx:60
+msgid "importantDates.badge.singleDate"
+msgstr "{topic} le {date}"
+
+#: apps/web/src/components/importantDates/ImportantDatesPage.tsx:304
+msgid "importantDates.calendar.announceSelection"
+msgstr "{topic} sélectionné, {dateText}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:96
+msgid "importantDates.calendar.gridLabel"
+msgstr "Calendrier de {month}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:23
+msgid "importantDates.calendar.legend.break"
+msgstr "Congé"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:27
+msgid "importantDates.calendar.legend.deadline"
+msgstr "Échéance"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:29
+msgid "importantDates.calendar.legend.information"
+msgstr "Information"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:25
+msgid "importantDates.calendar.legend.scheduleChange"
+msgstr "Changement d’horaire"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:121
+msgid "importantDates.calendar.legendLabel"
+msgstr "Légende"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:111
+msgid "importantDates.calendar.nextMonth"
+msgstr "Mois suivant"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:57
+msgid "importantDates.calendar.overflowListLabel"
+msgstr "Autres événements le {date}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:51
+msgid "importantDates.calendar.overflowMore"
+msgstr "{count, plural, one {+# de plus} other {+# de plus}}"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:102
+msgid "importantDates.calendar.previousMonth"
+msgstr "Mois précédent"
+
+#: apps/web/src/components/importantDates/ImportantDatesCalendar.tsx:117
+msgid "importantDates.calendar.today"
+msgstr "Aujourd’hui"
+
+msgid "importantDates.currentTerms"
+msgstr "{count, plural, one {# trimestre actuel} other {# trimestres actuels}}"
+
+msgid "importantDates.disclaimer"
+msgstr "Les dates et les échéances proviennent du site Web de l'Université d'Ottawa. Vérifiez auprès de votre faculté ou du registraire pour l'information la plus récente."
+
+msgid "importantDates.download"
+msgstr "Télécharger le calendrier"
+
+msgid "importantDates.downloadError"
+msgstr "Le téléchargement du calendrier a échoué. Veuillez réessayer."
+
+msgid "importantDates.downloading"
+msgstr "Téléchargement..."
+
+msgid "importantDates.empty"
+msgstr "Aucune date importante n'est disponible."
+
+msgid "importantDates.error"
+msgstr "Les dates importantes n'ont pas pu être chargées."
+
+msgid "importantDates.fallback"
+msgstr "Anglais seulement"
+
+msgid "importantDates.loading"
+msgstr "Chargement des dates importantes..."
+
+msgid "importantDates.previousTerms"
+msgstr "{count, plural, one {# trimestre précédent} other {# trimestres précédents}}"
+
+msgid "importantDates.retry"
+msgstr "Réessayer"
+
+msgid "importantDates.reviewed"
+msgstr "Dernière révision"
+
+msgid "importantDates.source"
+msgstr "Source"
+
+msgid "importantDates.table.dates"
+msgstr "Dates"
+
+msgid "importantDates.table.topic"
+msgstr "Activité"
+
+msgid "importantDates.term.passed"
+msgstr "(terminé)"
+
+msgid "importantDates.termsLabel"
+msgstr "Trimestres"
+
+msgid "importantDates.title"
+msgstr "Dates et échéances importantes"
+
 #: scripts/i18n/dynamic-keys.ts
 msgid "landing.banner.android.cta"
 msgstr "Écrivez-nous"
@@ -2534,6 +2644,9 @@ msgstr "Recherchez des cours et des professeurs avec les distributions de notes.
 
 msgid "landing.graph.description"
 msgstr "Découvrez comment les professeurs sont liés par des cours communs."
+
+msgid "landing.importantDates.link"
+msgstr "Dates et échéances importantes"
 
 #: apps/web/src/components/calendar/CalendarPage.tsx:362
 #: apps/web/src/components/schedule/ScheduleDashboardPage.tsx:97
@@ -3523,6 +3636,27 @@ msgstr "Fin de cours la plus tard"
 
 msgid "scheduleCount.time.rangeLabel"
 msgstr "Cours entre"
+
+msgid "scheduleExport.cancel"
+msgstr "Annuler"
+
+msgid "scheduleExport.description"
+msgstr "Les congés officiels, les annulations de cours et les journées de remplacement sont toujours appliqués."
+
+msgid "scheduleExport.download"
+msgstr "Télécharger le calendrier"
+
+msgid "scheduleExport.downloading"
+msgstr "Téléchargement…"
+
+msgid "scheduleExport.error"
+msgstr "L'exportation du calendrier a échoué. Veuillez réessayer."
+
+msgid "scheduleExport.includeDeadlines"
+msgstr "Inclure les autres dates et échéances importantes"
+
+msgid "scheduleExport.title"
+msgstr "Exporter le calendrier"
 
 msgid "search.noGradeData"
 msgstr "Pas de données"

@@ -232,3 +232,8 @@ writePrerenderedPage(template, "changelog", path.join(distDir, "changelog", "ind
 writePrerenderedPage(template, "donate", path.join(distDir, "donate", "index.html"));
 writePrerenderedPage(template, "privacy", path.join(distDir, "privacy", "index.html"));
 writePrerenderedPage(template, "terms", path.join(distDir, "terms", "index.html"));
+writePrerenderedPage(
+  template,
+  "importantDates",
+  path.join(distDir, "important-dates-and-deadlines", "index.html"),
+);

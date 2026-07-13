@@ -7,6 +7,7 @@ import {
   fromProtoCatalogueManifest,
   fromProtoCourseGradesData,
   fromProtoDisciplinesData,
+  fromProtoImportantDatesData,
   fromProtoIndices,
   fromProtoProfessorsData,
   fromProtoRateMyProfessorsData,
@@ -18,6 +19,8 @@ import type {
   Catalogue,
   CourseGradesData,
   DisciplinesData,
+  ImportantDatesData,
+  ImportantDatesLocale,
   Indices,
   ProfessorRatingsMap,
   ProfessorRegistryEntry,
@@ -40,6 +43,14 @@ export const dataAssetIds = {
   rateMyProfessors: "ratemyprofessors.pb",
   grades: "grades.pb",
   disciplines: "disciplines.pb",
+  importantDates: (locale: ImportantDatesLocale): string => {
+    switch (locale) {
+      case "en":
+        return "important-dates.en.pb";
+      case "fr-CA":
+        return "important-dates.fr.pb";
+    }
+  },
   feedback: "feedback.pb",
   professors: "professors.pb",
   courseDescriptionShard: (shardId: string): string => `catalogue.descriptions.${shardId}.pb`,
@@ -152,6 +163,15 @@ export async function loadGrades(fetchBytes: FetchBytes): Promise<CourseGradesDa
 export async function loadDisciplines(fetchBytes: FetchBytes): Promise<DisciplinesData> {
   return fromProtoDisciplinesData(
     DataProto.DisciplinesData.decode(await fetchBytes(dataAssetIds.disciplines)),
+  );
+}
+
+export async function loadImportantDates(
+  fetchBytes: FetchBytes,
+  locale: ImportantDatesLocale,
+): Promise<ImportantDatesData> {
+  return fromProtoImportantDatesData(
+    DataProto.ImportantDatesData.decode(await fetchBytes(dataAssetIds.importantDates(locale))),
   );
 }
 

@@ -74,6 +74,110 @@ message Term {
   string name = 2;
 }
 
+enum ImportantDatesLocale {
+  IMPORTANT_DATES_LOCALE_UNSPECIFIED = 0;
+  IMPORTANT_DATES_LOCALE_EN = 1;
+  IMPORTANT_DATES_LOCALE_FR_CA = 2;
+}
+
+enum ImportantDateEffect {
+  IMPORTANT_DATE_EFFECT_UNSPECIFIED = 0;
+  IMPORTANT_DATE_EFFECT_STRUCTURAL = 1;
+  IMPORTANT_DATE_EFFECT_NO_CLASSES = 2;
+  IMPORTANT_DATE_EFFECT_SCHEDULE_REPLACEMENT = 3;
+  IMPORTANT_DATE_EFFECT_DEADLINE = 4;
+  IMPORTANT_DATE_EFFECT_INFORMATIONAL = 5;
+}
+
+enum ImportantDateCategory {
+  IMPORTANT_DATE_CATEGORY_UNSPECIFIED = 0;
+  IMPORTANT_DATE_CATEGORY_OVERVIEW = 1;
+  IMPORTANT_DATE_CATEGORY_BREAKS = 2;
+  IMPORTANT_DATE_CATEGORY_SCHEDULE_CHANGES = 3;
+  IMPORTANT_DATE_CATEGORY_ENROLMENT = 4;
+  IMPORTANT_DATE_CATEGORY_GRADES_EXAMS = 5;
+  IMPORTANT_DATE_CATEGORY_TUITION = 6;
+  IMPORTANT_DATE_CATEGORY_STUDENT_SERVICES = 7;
+  IMPORTANT_DATE_CATEGORY_GRADUATE_REPORTS = 8;
+  IMPORTANT_DATE_CATEGORY_ACADEMIC_INTEGRITY = 9;
+  IMPORTANT_DATE_CATEGORY_PROGRAM_CHANGES = 10;
+  IMPORTANT_DATE_CATEGORY_OTHER = 11;
+}
+
+enum ImportantDateSeason {
+  IMPORTANT_DATE_SEASON_UNSPECIFIED = 0;
+  IMPORTANT_DATE_SEASON_WINTER = 1;
+  IMPORTANT_DATE_SEASON_SPRING_SUMMER = 2;
+  IMPORTANT_DATE_SEASON_FALL = 3;
+}
+
+message ImportantDateInterval {
+  uint32 start_yyyymmdd = 1;
+  uint32 end_yyyymmdd = 2;
+  optional uint32 start_minutes = 3;
+  optional uint32 end_minutes = 4;
+}
+
+message ScheduleReplacement {
+  uint32 cancelled_yyyymmdd = 1;
+  uint32 replacement_yyyymmdd = 2;
+  DayOfWeek source_day = 3;
+}
+
+message ImportantDateItem {
+  string id = 1;
+  string topic = 2;
+  string date_text = 3;
+  ImportantDateEffect effect = 4;
+  optional ImportantDateInterval interval = 5;
+  optional ScheduleReplacement replacement = 6;
+  optional bool used_english_fallback = 7;
+}
+
+message ImportantDateGroup {
+  string id = 1;
+  optional string label = 2;
+  repeated ImportantDateItem items = 3;
+  // Canonical scoped session code (e.g. "A"), copied verbatim from English to
+  // French. Unscoped groups (the general group, "All other sessions…") omit it.
+  optional string session_code = 4;
+}
+
+message ImportantDateSection {
+  string id = 1;
+  string label = 2;
+  ImportantDateCategory category = 3;
+  repeated ImportantDateGroup groups = 4;
+}
+
+// A named course session (e.g. Spring-Summer sessions "A"/"B"/"C") within a
+// term, exposing the canonical, English-authoritative code and its course
+// date range. See ImportantDateGroup.session_code for the scoped-group link.
+message ImportantDateSession {
+  string code = 1;
+  ImportantDateInterval course_interval = 2;
+}
+
+message ImportantDateTerm {
+  string source_id = 1;
+  optional uint32 term_id = 2;
+  string label = 3;
+  ImportantDateSeason season = 4;
+  uint32 year = 5;
+  string source_published = 6;
+  ImportantDateInterval term_interval = 7;
+  ImportantDateInterval course_interval = 8;
+  repeated ImportantDateSection sections = 9;
+  repeated ImportantDateSession sessions = 10;
+}
+
+message ImportantDatesData {
+  ImportantDatesLocale locale = 1;
+  string source_url = 2;
+  optional string reviewed_text = 3;
+  repeated ImportantDateTerm terms = 4;
+}
+
 message RateMyProfessorsData {
   uint32 result_count = 1;
   repeated Professor professors = 2;

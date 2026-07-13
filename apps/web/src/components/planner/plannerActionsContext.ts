@@ -24,9 +24,9 @@ export interface PlannerActions {
   openInCalendar: (termId: string) => void;
   /** Focus a term in the panel (or `null` for the Overview tab). */
   selectTerm: (termId: string | null) => void;
-  /** Download a single planned term's timetable as an `.ics` file. */
+  /** Open the export dialog for a single planned term's `.ics` timetable. */
   downloadTerm: (termId: string) => void;
-  /** Download every planned term as one combined `.ics` file. */
+  /** Open the export dialog covering every planned term as one combined `.ics` file. */
   downloadAllTerms: () => void;
   /** Route the user to Personalize to pick a program. */
   goToPersonalize: () => void;

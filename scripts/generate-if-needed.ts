@@ -29,6 +29,8 @@ const OUTPUT_MARKERS = [
   "packages/proto/src/generated/data.ts",
   "packages/i18n/src/locales/en/messages.ts",
   "apps/web/src/assets/data/catalogue.union.pb",
+  "apps/web/src/assets/data/important-dates.en.pb",
+  "apps/web/src/assets/data/important-dates.fr.pb",
   "apps/web/src/assets/data/terms.pb",
 ];
 

@@ -1,0 +1,379 @@
+.page {
+  min-height: 100dvh;
+  background-color: var(--app-bg);
+  padding-block-start: 8px;
+  padding-block-end: 40px;
+  box-sizing: border-box;
+}
+
+/* ── Header area ─────────────────────────────────────────── */
+
+.chromeRow {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-block-end: 4px;
+}
+
+.titleRow {
+  margin-block-start: 8px;
+  margin-block-end: 4px;
+}
+
+.meta {
+  max-width: 75ch;
+  margin-block-end: 20px;
+}
+
+.disclaimer {
+  color: var(--app-text-muted);
+  line-height: 1.6;
+  margin-block-end: 6px;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  align-items: baseline;
+}
+
+/* ── Term strip ──────────────────────────────────────────── */
+
+.termStripWrapper {
+  overflow-x: auto;
+  overflow-y: visible;
+  /* Hide scrollbar on browsers that support it, but keep functionality */
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  margin-block-end: 20px;
+}
+
+.termStripWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.termStrip {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding-block: 2px;
+}
+
+/* Inner tablist: holds only role=tab buttons. Owns its own gap so the
+   outer strip can keep gap:0 and avoid layout coupling with the toggle. */
+.termTabList {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.termTab {
+  flex-shrink: 0;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--app-radius-pill);
+  background: var(--app-surface);
+  color: var(--app-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition:
+    background var(--app-transition),
+    border-color var(--app-transition);
+  white-space: nowrap;
+  outline-offset: 2px;
+}
+
+.termTab:hover {
+  background: var(--app-surface-hover);
+  border-color: var(--app-border-strong);
+}
+
+.termTab:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+}
+
+.termTab:active {
+  background: var(--app-surface-overlay);
+}
+
+.termTabActive {
+  background: var(--app-accent-soft);
+  border-color: var(--app-accent);
+  color: var(--app-accent);
+}
+
+.termTabActive:hover {
+  background: var(--app-accent-soft);
+}
+
+.termTabPassed {
+  opacity: 0.55;
+}
+
+/* Accessibility: do not reduce contrast below WCAG AA even when muted */
+.termTabPassed:focus-visible {
+  opacity: 1;
+}
+
+/* Restore full opacity when a passed term is also the active selection */
+.termTabActive.termTabPassed {
+  opacity: 1;
+}
+
+.groupToggle {
+  flex-shrink: 0;
+  border: 1px dashed var(--app-border-strong);
+  border-radius: var(--app-radius-pill);
+  background: transparent;
+  color: var(--app-text-muted);
+  font-size: 0.8125rem;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition:
+    color var(--app-transition),
+    border-color var(--app-transition);
+  white-space: nowrap;
+  outline-offset: 2px;
+  margin-inline-start: 4px;
+}
+
+.groupToggle:hover {
+  color: var(--app-text);
+  border-color: var(--app-text-muted);
+}
+
+.groupToggle:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+}
+
+/* ── Action area (download) ──────────────────────────────── */
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-block-end: 20px;
+}
+
+.downloadError {
+  color: var(--app-danger);
+  font-size: 0.875rem;
+}
+
+/* ── Table ───────────────────────────────────────────────── */
+
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--app-radius);
+  border: 1px solid var(--app-border);
+}
+
+.table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--app-text);
+}
+
+.table th {
+  text-align: left;
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+  background: var(--app-surface-sunken);
+  border-bottom: 1px solid var(--app-border);
+}
+
+.table th:first-child {
+  width: 55%;
+}
+
+.table th:last-child {
+  width: 45%;
+}
+
+.table td {
+  padding: 8px 14px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.groupRow th {
+  background: var(--app-surface-sunken);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+  padding-block: 6px;
+  padding-inline: 14px;
+  text-align: left;
+}
+
+.fallbackBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-warning-soft);
+  color: var(--app-warning);
+  margin-inline-start: 6px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* ── Date cell (badge + retained source text) ───────────── */
+
+.dateCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.dateText {
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+}
+
+/* Compact calendar-like badge button in the dates column. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  border-radius: var(--app-radius-sm);
+}
+
+.badge:focus-visible {
+  outline: 2px solid var(--app-focus-ring);
+  outline-offset: 2px;
+}
+
+.badgeTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 2px 6px;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--app-radius-sm);
+  background: var(--app-surface-sunken);
+  line-height: 1.15;
+}
+
+.badgeMonth {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+}
+
+.badgeDay {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.badgeConnector {
+  width: 10px;
+  height: 2px;
+  background: var(--app-border-strong);
+  flex-shrink: 0;
+}
+
+.badge[aria-pressed="true"] .badgeTile {
+  border-color: var(--app-accent);
+  background: var(--app-accent-soft);
+}
+
+/* ── Selected/highlighted row ─────────────────────────────
+   Background-only highlight: never shifts layout (no border/size change). */
+
+.rowSelected td {
+  background: var(--app-accent-soft);
+}
+
+/* ── Visually-hidden live region ──────────────────────────── */
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Overview section ───────────────────────────────────── */
+
+.overviewSection {
+  margin-block-end: 20px;
+}
+
+/* ── Accordion sections ─────────────────────────────────── */
+
+.accordionSections {
+  margin-block-start: 8px;
+}
+
+/* ── Loading skeletons ──────────────────────────────────── */
+
+.skeletonStrip {
+  display: flex;
+  gap: 8px;
+  margin-block-end: 20px;
+  flex-wrap: nowrap;
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Error / empty states ───────────────────────────────── */
+
+.statusBox {
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  background: var(--app-surface);
+  padding: 20px 24px;
+  margin-block-end: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 480px;
+}
+
+/* ── Reduced motion ─────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .termTab,
+  .groupToggle {
+    transition: none;
+  }
+}

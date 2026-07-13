@@ -7,6 +7,7 @@ import {
   IconCompass,
   IconSitemap,
 } from "@tabler/icons-react";
+import { Link } from "@tanstack/react-router";
 import { m } from "framer-motion";
 import { useCallback, useMemo, useState } from "react";
 import { dynamicActivate, tr, useTr } from "../../i18n";
@@ -142,6 +143,12 @@ export function LandingPage() {
               />
               <ExperimentalCarousel items={experimentalFeatures} />
             </SimpleGrid>
+
+            <div className={classes.importantDatesRow}>
+              <Link to="/important-dates-and-deadlines" className={classes.importantDatesLink}>
+                {tr("landing.importantDates.link")}
+              </Link>
+            </div>
           </Stack>
         </PageContainer>
       </Box>
