@@ -1,14 +1,17 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Linking, Pressable, StyleSheet, View } from "react-native";
 
 import { Text } from "@uoplan/ui";
 
 import { MAX_COMPARE_ITEMS, compareIdsForKind, type CompareRef } from "@uoplan/core";
+import { buildPrereqGraph, normalizeCourseCode } from "@uoplan/core";
 import { normalizeProfessorName } from "@uoplan/core/professorRatings";
 
 import { AppIcon } from "@/components/app-icon";
 import { type CollapsibleEntry, CollapsibleList } from "@/components/explore/collapsible-list";
+import { CourseDescriptionSection } from "@/components/explore/course-description-section";
+import { CoursePrereqGraph } from "@/components/explore/course-prereq-graph";
 import { FeedbackSummaryCard } from "@/components/explore/feedback-summary-card";
 import { SectionOfferingsList } from "@/components/explore/section-offerings-list";
 import { GradeHistogram } from "@/components/grade-histogram";
@@ -24,7 +27,7 @@ import { feedbackViewsForCourse, professorSentimentByName } from "@/data/feedbac
 import { formatTermLabel } from "@/data/trends-data";
 import { useTr } from "@/i18n";
 import { useAnalytics } from "@/lib/analytics";
-import { useCourseStatus } from "@/lib/use-basket-status";
+import { useCourseStatus, useNativePrereqGraphContext } from "@/lib/use-basket-status";
 
 /** Course detail — grade distribution + professors who have taught it. */
 export default function CourseDetailScreen() {
@@ -67,6 +70,31 @@ export default function CourseDetailScreen() {
       analytics.capture("explore_course_viewed", { courseCode: viewedCourseCode });
     }
   }, [analytics, viewedCourseCode]);
+
+  // Prerequisite graph: look up the full Course from the catalogue to get prereqRoot,
+  // then build the graph with the shared prereq context.
+  const { cache: prereqCache, plannerContext } = useNativePrereqGraphContext();
+  const prereqGraph = useMemo(() => {
+    if (!detail) return null;
+    const catalogueCourse = bundle.catalogue.courses.find(
+      (c) => normalizeCourseCode(c.code) === normalizeCourseCode(detail.course.code),
+    );
+    if (!catalogueCourse?.prerequisites) return null;
+    return buildPrereqGraph({
+      courseCode: normalizeCourseCode(detail.course.code),
+      prereqRoot: catalogueCourse.prerequisites,
+      plannerContext,
+      cache: prereqCache,
+      tr,
+    });
+  }, [detail, bundle.catalogue.courses, plannerContext, prereqCache, tr]);
+
+  const navigateCourse = useCallback(
+    (courseCode: string) => {
+      router.push({ pathname: "/explore/course/[code]", params: { code: courseCode } });
+    },
+    [router],
+  );
 
   const professorEntries = useMemo<CollapsibleEntry[]>(() => {
     if (!detail) return [];
@@ -290,6 +318,17 @@ export default function CourseDetailScreen() {
         empty gap. A single vertical flow reads cleanly at every width.
       */}
       <ResponsiveColumns maxColumns={1}>
+        <CourseDescriptionSection
+          courseCode={course.code}
+          facultyId={discipline?.facultyId ?? null}
+        />
+
+        {prereqGraph ? (
+          <SectionCard title={tr("explore.course.prereqs")}>
+            <CoursePrereqGraph graph={prereqGraph} onNavigateCourse={navigateCourse} />
+          </SectionCard>
+        ) : null}
+
         {scheduleTerms.length > 0 ? (
           <SectionCard title="Weekly schedule">
             <View style={styles.termList}>

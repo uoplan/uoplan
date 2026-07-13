@@ -12,6 +12,11 @@
  *   - native: a relative i18n import resolving to `apps/native/src/i18n`, or the
  *             `@/i18n` path alias,
  *   - either: a direct `@uoplan/i18n` package import.
+ *
+ * For packages that accept `tr` as a function parameter (rather than importing it),
+ * the binding is detected by presence of a parameter named `tr` in any function.
+ * Only roots listed in PARAM_TR_SOURCE_ROOTS are scanned this way to keep the
+ * heuristic narrow.
  */
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -20,8 +25,15 @@ import ts from "typescript";
 import { repoRoot } from "./catalog.ts";
 import { staticTsIds } from "./static-ids.ts";
 
-/** Source roots scanned for `tr()` usages. */
+/** Source roots scanned for `tr()` usages via import binding. */
 const SOURCE_ROOTS = [resolve(repoRoot, "apps/web/src"), resolve(repoRoot, "apps/native/src")];
+
+/**
+ * Source roots scanned for `tr()` usages via function-parameter binding.
+ * Files here pass tr as a `tr: SomeTrType` parameter rather than importing it.
+ * Only literal-string and conditional tr() arguments are captured (same rules as above).
+ */
+const PARAM_TR_SOURCE_ROOTS = [resolve(repoRoot, "packages/requirements/src")];
 
 /** Absolute paths that an i18n import specifier may resolve to (per shell). */
 const I18N_MODULE_DIRS = new Set(SOURCE_ROOTS.map((root) => resolve(root, "i18n")));
@@ -75,7 +87,35 @@ function findTrBinding(sf: ts.SourceFile, filePath: string): string | null {
       }
     }
   }
-  return local;
+  if (local !== null) return local;
+
+  // Files in parameter-bound roots pass tr as a function parameter rather than
+  // importing it. Detect by checking whether any function in the file declares a
+  // parameter named "tr".
+  if (PARAM_TR_SOURCE_ROOTS.some((root) => filePath.startsWith(`${root}/`) && hasTrParameter(sf))) {
+    return "tr";
+  }
+
+  return null;
+}
+
+/**
+ * Returns true when the source file contains at least one function parameter
+ * whose name is literally `tr`.  Used to identify files that receive the i18n
+ * helper as a callback parameter instead of importing it.
+ */
+function hasTrParameter(sf: ts.SourceFile): boolean {
+  let found = false;
+  const visit = (node: ts.Node): void => {
+    if (found) return;
+    if (ts.isParameter(node) && ts.isIdentifier(node.name) && node.name.text === "tr") {
+      found = true;
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return found;
 }
 
 export interface TrUsage {
@@ -92,7 +132,7 @@ export interface TrUsage {
 export function collectTrUsages(): TrUsage[] {
   const usages: TrUsage[] = [];
 
-  for (const root of SOURCE_ROOTS) {
+  for (const root of [...SOURCE_ROOTS, ...PARAM_TR_SOURCE_ROOTS]) {
     let files: string[];
     try {
       files = collectSourceFiles(root);

@@ -11,6 +11,8 @@ import {
 import type { Catalogue, Course, DataCache, DisciplinesData, SchedulesData } from "@uoplan/core";
 import type { FetchBytes } from "./transport";
 import {
+  courseDescriptionMapDecoder,
+  dataAssetIds,
   loadCatalogueManifest,
   loadCataloguePrereqHistory,
   loadCatalogueUnionProto,
@@ -90,6 +92,17 @@ export interface DataClient {
   }>;
   /** Drop all cached promises and built caches. */
   clear(): void;
+  /**
+   * Fetch and decode the description shard for `shardId` (memoized), then look
+   * up `courseCode`. Returns `undefined` when the code is absent from the shard.
+   * Transport/decode errors propagate. `shardId` null/undefined falls back to
+   * the `"other"` shard. The decoded map is evicted on error, so failures are
+   * retryable.
+   */
+  loadCourseDescription(
+    shardId: string | null | undefined,
+    courseCode: string,
+  ): Promise<string | undefined>;
 }
 
 /** A protobuf message type that can decode bytes into `T` (e.g. `DataProto.TermsData`). */
@@ -205,11 +218,27 @@ export function createDataClient(options: DataClientOptions): DataClient {
     return (await loadEffectiveDataset(dataKey)).cache;
   }
 
+  async function loadCourseDescription(
+    shardId: string | null | undefined,
+    courseCode: string,
+  ): Promise<string | undefined> {
+    const id = dataAssetIds.courseDescriptionShard(shardId ?? "other");
+    const map = await load(courseDescriptionMapDecoder, id);
+    return map.get(normalizeCourseCode(courseCode));
+  }
+
   function clear(): void {
     bytesMemo.clear();
     decodedMemo.clear();
     cacheMemo.clear();
   }
 
-  return { fetchBytes, load, loadEffectiveCache, loadEffectiveDataset, clear };
+  return {
+    fetchBytes,
+    load,
+    loadEffectiveCache,
+    loadEffectiveDataset,
+    loadCourseDescription,
+    clear,
+  };
 }

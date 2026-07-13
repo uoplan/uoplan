@@ -1,4 +1,8 @@
-import { planDataAssets } from "@/data/asset-plan";
+import {
+  backgroundPrefetchAssetIds,
+  isCourseDescriptionAsset,
+  planDataAssets,
+} from "@/data/asset-plan";
 
 describe("planDataAssets", () => {
   const keys = [
@@ -34,5 +38,67 @@ describe("planDataAssets", () => {
     expect(plan.catalogueYears).toEqual([]);
     expect(plan.scheduleTermIds).toEqual([]);
     expect(plan.latestCatalogueYear).toBeNull();
+  });
+});
+
+describe("isCourseDescriptionAsset", () => {
+  it("returns true for description shard IDs", () => {
+    expect(isCourseDescriptionAsset("catalogue.descriptions.science.pb")).toBe(true);
+    expect(isCourseDescriptionAsset("catalogue.descriptions.other.pb")).toBe(true);
+    expect(isCourseDescriptionAsset("catalogue.descriptions.arts-humanities.pb")).toBe(true);
+  });
+
+  it("returns false when the prefix does not match exactly", () => {
+    expect(isCourseDescriptionAsset("xcatalogue.descriptions.science.pb")).toBe(false);
+    expect(isCourseDescriptionAsset("catalogue.pb")).toBe(false);
+    expect(isCourseDescriptionAsset("catalogue.union.pb")).toBe(false);
+    // "descriptions" without "catalogue." prefix
+    expect(isCourseDescriptionAsset("descriptions.science.pb")).toBe(false);
+  });
+
+  it("returns false when the .pb suffix is missing or wrong", () => {
+    expect(isCourseDescriptionAsset("catalogue.descriptions.science")).toBe(false);
+    expect(isCourseDescriptionAsset("catalogue.descriptions.science.json")).toBe(false);
+    expect(isCourseDescriptionAsset("catalogue.descriptions.science.pb.extra")).toBe(false);
+  });
+});
+
+describe("backgroundPrefetchAssetIds", () => {
+  const manifestIds = [
+    "catalogue.union.pb",
+    "catalogue.descriptions.science.pb",
+    "catalogue.descriptions.other.pb",
+    "schedules.2265.pb",
+    "feedback.pb",
+    "catalogue.2024.pb",
+  ];
+  const eagerIds = new Set(["catalogue.union.pb", "schedules.2265.pb"]);
+
+  it("excludes description shard IDs from background prefetch", () => {
+    const ids = backgroundPrefetchAssetIds(manifestIds, eagerIds);
+    expect(ids).not.toContain("catalogue.descriptions.science.pb");
+    expect(ids).not.toContain("catalogue.descriptions.other.pb");
+  });
+
+  it("excludes eager IDs from background prefetch", () => {
+    const ids = backgroundPrefetchAssetIds(manifestIds, eagerIds);
+    expect(ids).not.toContain("catalogue.union.pb");
+    expect(ids).not.toContain("schedules.2265.pb");
+  });
+
+  it("includes non-eager, non-description IDs", () => {
+    const ids = backgroundPrefetchAssetIds(manifestIds, eagerIds);
+    expect(ids).toContain("feedback.pb");
+    expect(ids).toContain("catalogue.2024.pb");
+  });
+
+  it("does not exclude near-matches that are not description assets", () => {
+    const nearMatches = [
+      "xcatalogue.descriptions.bar.pb", // wrong prefix
+      "catalogue.descriptions.science", // missing .pb
+    ];
+    const ids = backgroundPrefetchAssetIds(nearMatches, new Set());
+    expect(ids).toContain("xcatalogue.descriptions.bar.pb");
+    expect(ids).toContain("catalogue.descriptions.science");
   });
 });

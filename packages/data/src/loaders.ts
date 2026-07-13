@@ -12,6 +12,7 @@ import {
   fromProtoRateMyProfessorsData,
   fromProtoSchedulesData,
   fromProtoTermsData,
+  normalizeCourseCode,
 } from "@uoplan/core";
 import type {
   Catalogue,
@@ -41,7 +42,31 @@ export const dataAssetIds = {
   disciplines: "disciplines.pb",
   feedback: "feedback.pb",
   professors: "professors.pb",
+  courseDescriptionShard: (shardId: string): string => `catalogue.descriptions.${shardId}.pb`,
 } as const;
+
+/**
+ * Structural decoder for a {@link DataProto.CourseDescriptionShard}. Returns a
+ * `ReadonlyMap` keyed by normalized course code. Column lengths must match;
+ * throws otherwise so callers can surface data integrity failures.
+ *
+ * Defined here (not in dataClient) to avoid a circular import — dataClient
+ * imports loaders, so loaders must not import ProtoDecoder from dataClient.
+ * The structural shape satisfies `ProtoDecoder<ReadonlyMap<string,string>>`.
+ */
+export const courseDescriptionMapDecoder = {
+  decode(bytes: Uint8Array): ReadonlyMap<string, string> {
+    const shard = DataProto.CourseDescriptionShard.decode(bytes);
+    if (shard.courseCodes.length !== shard.descriptions.length) {
+      throw new Error("Course description shard column lengths differ");
+    }
+    const map = new Map<string, string>();
+    for (let i = 0; i < shard.courseCodes.length; i++) {
+      map.set(normalizeCourseCode(shard.courseCodes[i]!), shard.descriptions[i]!);
+    }
+    return map;
+  },
+};
 
 export interface CatalogueManifest {
   years: number[];

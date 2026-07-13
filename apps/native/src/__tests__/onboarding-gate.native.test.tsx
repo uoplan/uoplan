@@ -21,6 +21,13 @@ jest.mock("expo-router", () => {
     DefaultTheme: {},
     Stack,
     ThemeProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    usePathname: () => "/",
+    useRouter: () => ({
+      back: jest.fn(),
+      canGoBack: jest.fn(() => false),
+      push: jest.fn(),
+      replace: jest.fn(),
+    }),
   };
 });
 

@@ -9,6 +9,7 @@ import {
 } from "@uoplan/core";
 import type { Catalogue } from "@uoplan/core";
 import {
+  courseDescriptionMapDecoder,
   dataAssetIds,
   loadCatalogueManifest,
   loadCatalogueUnion,
@@ -216,5 +217,42 @@ describe("supporting dataset loaders", () => {
       professorRefs: [1],
       terms: [{ termId: 2261 }],
     });
+  });
+});
+
+describe("courseDescriptionMapDecoder", () => {
+  it("decodes a valid shard and supports normalized course code lookup", () => {
+    const bytes = encode(
+      DataProto.CourseDescriptionShard.encode({
+        courseCodes: ["MAT 1320", "MAT 1720"],
+        descriptions: ["Calculus I", "Calculus II"],
+      }),
+    );
+
+    const map = courseDescriptionMapDecoder.decode(bytes);
+
+    expect(map.get(normalizeCourseCode("MAT 1320"))).toBe("Calculus I");
+    expect(map.get(normalizeCourseCode("MAT 1720"))).toBe("Calculus II");
+    expect(map.size).toBe(2);
+  });
+
+  it("returns a ReadonlyMap with correct asset id pattern", () => {
+    expect(dataAssetIds.courseDescriptionShard("science")).toBe(
+      "catalogue.descriptions.science.pb",
+    );
+    expect(dataAssetIds.courseDescriptionShard("other")).toBe("catalogue.descriptions.other.pb");
+  });
+
+  it("throws exactly 'Course description shard column lengths differ' on unequal columns", () => {
+    const bytes = encode(
+      DataProto.CourseDescriptionShard.encode({
+        courseCodes: ["MAT 1320", "MAT 1720"],
+        descriptions: ["Calculus I"],
+      }),
+    );
+
+    expect(() => courseDescriptionMapDecoder.decode(bytes)).toThrow(
+      "Course description shard column lengths differ",
+    );
   });
 });

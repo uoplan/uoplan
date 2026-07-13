@@ -41,3 +41,26 @@ export function planDataAssets(keys: string[]): DataAssetPlan {
       catalogueYears.length > 0 ? catalogueYears[catalogueYears.length - 1] : null,
   };
 }
+
+/**
+ * Returns `true` if `id` is a course-description shard asset
+ * (`catalogue.descriptions.<shardId>.pb`). These are loaded on-demand by
+ * {@link DataClient.loadCourseDescription} and must never be eagerly or
+ * background-fetched.
+ */
+export function isCourseDescriptionAsset(id: string): boolean {
+  return id.startsWith("catalogue.descriptions.") && id.endsWith(".pb");
+}
+
+/**
+ * Returns the subset of `manifestIds` that should be fetched in the background
+ * (i.e. cached for offline use but not decoded up front). Excludes both the
+ * IDs already fetched eagerly (`eagerIds`) and course-description shards, which
+ * are loaded on-demand by {@link DataClient.loadCourseDescription}.
+ */
+export function backgroundPrefetchAssetIds(
+  manifestIds: readonly string[],
+  eagerIds: ReadonlySet<string>,
+): string[] {
+  return manifestIds.filter((id) => !eagerIds.has(id) && !isCourseDescriptionAsset(id));
+}

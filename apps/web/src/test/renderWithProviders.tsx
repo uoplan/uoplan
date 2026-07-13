@@ -54,5 +54,7 @@ export async function renderWithProviders(ui: ReactNode, options: TestProviderOp
     store.setState(options.initialState);
   }
   const result = await render(<AppTestProviders store={store}>{ui}</AppTestProviders>);
-  return { store, ...result };
+  const rerender = (newUi: ReactNode) =>
+    result.rerender(<AppTestProviders store={store}>{newUi}</AppTestProviders>);
+  return { store, ...result, rerender };
 }

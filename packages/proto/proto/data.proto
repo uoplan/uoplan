@@ -292,6 +292,11 @@ message CourseSearchIndex {
   repeated uint32 posting_freqs = 6 [packed = true];
 }
 
+message CourseDescriptionShard {
+  repeated string course_codes = 1;
+  repeated string descriptions = 2;
+}
+
 enum RequirementType {
   REQUIREMENT_TYPE_UNSPECIFIED = 0;
   REQUIREMENT_TYPE_COURSE = 1;

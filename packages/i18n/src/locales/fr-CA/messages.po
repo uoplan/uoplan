@@ -1576,9 +1576,27 @@ msgstr "Résultats pour \"{q}\""
 msgid "explore.badge.virtual"
 msgstr "Virtuel"
 
+msgid "explore.course.about"
+msgstr "À propos"
+
 #: apps/web/src/components/explore/ExploreCoursePage.tsx:186
 msgid "explore.course.credits"
 msgstr "{count, plural, one {# crédit} other {# crédits}}"
+
+msgid "explore.course.description.error"
+msgstr "Impossible de charger la description du cours."
+
+msgid "explore.course.description.retry"
+msgstr "Réessayer"
+
+msgid "explore.course.description.showLess"
+msgstr "Réduire"
+
+msgid "explore.course.description.showMore"
+msgstr "Lire la suite"
+
+msgid "explore.course.prereqs"
+msgstr "Préalables"
 
 #: apps/web/src/components/explore/DisciplineCourseList.tsx:254
 #: apps/web/src/components/explore/DisciplineCourseList.tsx:60
@@ -2992,6 +3010,105 @@ msgstr "Planificateur de parcours"
 #: apps/web/src/components/planner/PlannerSidebar.tsx:129
 msgid "planner.uploadHint"
 msgstr "Téléversez votre relevé de notes dans Personnaliser pour regrouper les cours terminés par trimestre."
+
+msgid "prereqGraph.a11y.andGroup"
+msgstr "Tous les suivants ({status}) : {children}"
+
+msgid "prereqGraph.a11y.course"
+msgstr "{code} : {status}"
+
+msgid "prereqGraph.a11y.orGroup"
+msgstr "L'un ou l'autre des suivants ({status}) : {children}"
+
+msgid "prereqGraph.a11y.semantic"
+msgstr "{label} : {status}"
+
+msgid "prereqGraph.aggregate.all"
+msgstr "L'ensemble de"
+
+msgid "prereqGraph.aggregate.any"
+msgstr "L'un ou l'autre de"
+
+msgid "prereqGraph.details"
+msgstr "Détails"
+
+#: packages/requirements/src/prerequisites/graph.ts:215
+msgid "prereqGraph.gate.and"
+msgstr "ET"
+
+#: packages/requirements/src/prerequisites/graph.ts:215
+msgid "prereqGraph.gate.or"
+msgstr "OU"
+
+msgid "prereqGraph.kind.audition"
+msgstr "Audition requise"
+
+msgid "prereqGraph.kind.coursework"
+msgstr "Travaux préalables"
+
+msgid "prereqGraph.kind.equivalent"
+msgstr "Cours équivalent"
+
+msgid "prereqGraph.kind.highschool"
+msgstr "Préalable du secondaire"
+
+msgid "prereqGraph.kind.knowledge"
+msgstr "Connaissances préalables"
+
+msgid "prereqGraph.kind.language"
+msgstr "Exigence linguistique"
+
+msgid "prereqGraph.kind.permission"
+msgstr "Permission de l'enseignant"
+
+msgid "prereqGraph.kind.recommended"
+msgstr "Préparation recommandée"
+
+msgid "prereqGraph.kind.standing"
+msgstr "Statut académique"
+
+msgid "prereqGraph.kind.topic"
+msgstr "Connaissance préalable du sujet"
+
+msgid "prereqGraph.kind.unclassified"
+msgstr "Autre exigence"
+
+#: packages/requirements/src/prerequisites/graph.ts:642
+msgid "prereqGraph.programQualifier"
+msgstr "{label} — programmes : {programs}"
+
+#: packages/requirements/src/prerequisites/graph.ts:633
+msgid "prereqGraph.programs"
+msgstr "Programmes : {programs}"
+
+msgid "prereqGraph.semantic.creditTotal"
+msgstr "{credits, plural, one {# crédit} other {# crédits}}"
+
+msgid "prereqGraph.semantic.disciplineLevels"
+msgstr "{credits, plural, one {# crédit en {description}} other {# crédits en {description}}}"
+
+msgid "prereqGraph.semantic.disciplines"
+msgstr "{credits, plural, one {# crédit en {disciplines}} other {# crédits en {disciplines}}}"
+
+msgid "prereqGraph.semantic.levels"
+msgstr "{credits, plural, one {# crédit au niveau {levels}} other {# crédits au niveau {levels}}}"
+
+msgid "prereqGraph.status.met"
+msgstr "satisfait"
+
+msgid "prereqGraph.status.missing"
+msgstr "non satisfait"
+
+msgid "prereqGraph.status.unknown"
+msgstr "inconnu"
+
+#: packages/requirements/src/prerequisites/graph.ts:655
+msgid "prereqGraph.summary.andGroup"
+msgstr "Tous les éléments suivants : {children}"
+
+#: packages/requirements/src/prerequisites/graph.ts:660
+msgid "prereqGraph.summary.orGroup"
+msgstr "Un des éléments suivants : {children}"
 
 msgid "programStep.disciplines.description"
 msgstr "Utilisé pour évaluer les préalables propres au programme. Rempli automatiquement à partir des cours de votre programme."

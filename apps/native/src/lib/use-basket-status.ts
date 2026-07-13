@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 
 import type { SchedulesData } from "@uoplan/core/dataTypes";
+import type { DataCache } from "@uoplan/core/dataCache";
+import { buildPrereqContext, getDisciplineCodesForProgram, type PrereqContext } from "@uoplan/core";
 
 import { useBasket } from "@/data/basket-provider";
 import { useCompletedCourses } from "@/data/completed-courses-provider";
@@ -140,5 +142,45 @@ function useBasketStatusContext() {
     });
   }, [bundle.catalogue, bundle.disciplines, bundle.faculties, schedulesByTerm, selectedTermId]);
 
-  return { statusCache, selectedTermId, termNameById, hasProfileContext, completedCodes };
+  const studentPrograms = useMemo(
+    () =>
+      getDisciplineCodesForProgram(
+        bundle.catalogue.programs.find((p) => p.url === personalization.programUrl) ?? null,
+      ),
+    [bundle.catalogue.programs, personalization.programUrl],
+  );
+
+  return {
+    statusCache,
+    selectedTermId,
+    termNameById,
+    hasProfileContext,
+    completedCodes,
+    studentPrograms,
+  };
+}
+
+/**
+ * Expose the prerequisite graph context (DataCache + PrereqContext) for use by
+ * the native prerequisite graph renderer. Reuses the same memoized statusCache
+ * built by {@link useBasketStatusContext} — no duplicate expensive cache builds.
+ *
+ * Returns `null` for `plannerContext` when the user has no academic grounding
+ * (no profile context and no completed courses), because prerequisite status
+ * can't be evaluated without either. Otherwise builds a {@link PrereqContext}
+ * from the user's completed courses against the status cache.
+ */
+export function useNativePrereqGraphContext(): {
+  cache: DataCache;
+  plannerContext: PrereqContext | null;
+} {
+  const { statusCache, hasProfileContext, completedCodes, studentPrograms } =
+    useBasketStatusContext();
+
+  const plannerContext = useMemo<PrereqContext | null>(() => {
+    if (!hasProfileContext && completedCodes.length === 0) return null;
+    return buildPrereqContext([...completedCodes], statusCache, studentPrograms);
+  }, [hasProfileContext, completedCodes, statusCache, studentPrograms]);
+
+  return { cache: statusCache, plannerContext };
 }

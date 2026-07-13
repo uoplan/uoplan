@@ -21,6 +21,11 @@ import {
 } from "./catalogue-merged.ts";
 import type { YearCatalogue } from "./catalogue-merged.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
+import {
+  buildCourseDescriptionShards,
+  collectLatestCourseDescriptions,
+  COURSE_DESCRIPTION_SHARD_IDS,
+} from "./description-shards.ts";
 import { buildCourseSearchIndex } from "./search-index.ts";
 import type { CourseDescriptionInput } from "./search-index.ts";
 import { mapSchedules } from "./schedules.ts";
@@ -164,9 +169,10 @@ export async function main(): Promise<void> {
   );
 
   const disciplinesJson = await readJson<unknown>(path.join(SCRAPER_DATA_DIR, "disciplines.json"));
+  const disciplinesProto = mapDisciplinesJson(disciplinesJson);
   await writePb(
     path.join(WEB_ASSETS_DATA_DIR, "disciplines.pb"),
-    DataProto.DisciplinesData.encode(mapDisciplinesJson(disciplinesJson)).finish(),
+    DataProto.DisciplinesData.encode(disciplinesProto).finish(),
   );
 
   // Canonical professor registry (committed data/professors.json): emit the
@@ -247,6 +253,20 @@ export async function main(): Promise<void> {
     );
   }
 
+  // Description shards: 13 faculty-bucketed files shipped to the client on
+  // demand. Collect the latest non-empty description per course across all
+  // catalogue years, then split by faculty using the disciplines map.
+  const courseDescriptions = collectLatestCourseDescriptions(yearInputs.map(({ data }) => data));
+  const descriptionShards = buildCourseDescriptionShards(courseDescriptions, disciplinesProto);
+  await Promise.all(
+    COURSE_DESCRIPTION_SHARD_IDS.map((shardId) =>
+      writePb(
+        path.join(WEB_ASSETS_DATA_DIR, `catalogue.descriptions.${shardId}.pb`),
+        DataProto.CourseDescriptionShard.encode(descriptionShards.get(shardId)!).finish(),
+      ),
+    ),
+  );
+
   const gradesJson = await readJson<unknown[]>(path.join(SCRAPER_DATA_DIR, "grades.json"));
 
   // Load every schedule file once so build-time instructor prediction can draw
@@ -289,7 +309,7 @@ export async function main(): Promise<void> {
   await scaffoldDataManifest();
 
   console.log(
-    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + catalogue.history.pb + catalogue.programs.history.pb, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
+    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + catalogue.history.pb + catalogue.programs.history.pb, ${COURSE_DESCRIPTION_SHARD_IDS.length} description shards, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
   );
 }
 

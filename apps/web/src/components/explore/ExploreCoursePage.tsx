@@ -3,13 +3,20 @@ import { useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/core";
+import {
+  buildPrereqContext,
+  buildPrereqGraph,
+  normalizeCourseCode,
+  normalizeProfessorName,
+} from "@uoplan/core";
 import { i18n, tr, useTr } from "../../i18n";
 import {
+  useCompletedCourses,
   useDataCache,
   useDisciplines,
   useFaculties,
   useProfessorRegistry,
+  useProgramSelection,
   useTerms,
 } from "@uoplan/store/hooks";
 import { facultyForDisciplineCode, localizeFacultyName } from "../../lib/explore/faculty";
@@ -42,10 +49,13 @@ import { useAnalytics } from "../../lib/analytics";
 import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import {
   ExploreAccordion,
+  ExploreEntityDetailRow,
   ExploreEntityHeader,
   ExploreFeedbackAside,
   ExploreFullBleed,
 } from "./ExploreEntityLayout";
+import { CourseDescriptionSection } from "./CourseDescriptionSection";
+import { CoursePrereqGraph } from "./CoursePrereqGraph";
 
 /**
  * A single schedule-term chip (clock icon + term label) shown under the course
@@ -114,7 +124,7 @@ export function ExploreCoursePage({
   urlCourseParam: string;
   professorRatings: ProfessorRatingsMap | null;
 }) {
-  useTr();
+  const trFn = useTr();
   const analytics = useAnalytics();
   const lastViewedCourse = useRef<string | null>(null);
   const {
@@ -181,6 +191,38 @@ export function ExploreCoursePage({
 
   const courseCredits =
     catalogueCourse && Number.isFinite(catalogueCourse.credits) ? catalogueCourse.credits : null;
+
+  // ─── Prerequisite graph ────────────────────────────────────────────────────
+  const { completedCourses } = useCompletedCourses();
+  const { program, studentPrograms } = useProgramSelection();
+
+  const hasPlannerContext =
+    completedCourses.length > 0 || program !== null || studentPrograms.length > 0;
+
+  const prereqContext = useMemo(() => {
+    if (!hasPlannerContext || !dataCache) return null;
+    return buildPrereqContext(completedCourses, dataCache, studentPrograms);
+  }, [hasPlannerContext, completedCourses, dataCache, studentPrograms]);
+
+  const prereqGraph = useMemo(() => {
+    if (!catalogueCourse?.prerequisites) return null;
+    const courseCode = selectedCourseMeta?.courseCode ?? urlNorm;
+    if (!courseCode) return null;
+    return buildPrereqGraph({
+      courseCode,
+      prereqRoot: catalogueCourse.prerequisites,
+      plannerContext: prereqContext,
+      cache: dataCache ?? null,
+      tr: trFn,
+    });
+  }, [
+    catalogueCourse?.prerequisites,
+    selectedCourseMeta?.courseCode,
+    urlNorm,
+    prereqContext,
+    dataCache,
+    trFn,
+  ]);
 
   // Other codes in the same alias group that actually have data, for the "also known as" note.
   const aliasCodes = useMemo(() => {
@@ -371,6 +413,24 @@ export function ExploreCoursePage({
           </Group>
         </ExploreEntityHeader>
       ) : null}
+
+      <ExploreEntityDetailRow
+        aside={
+          prereqGraph ? (
+            <ExploreFeedbackAside>
+              <Title order={3} c="var(--app-text)" fw={600} fz="sm" mb="xs">
+                {tr("explore.course.prereqs")}
+              </Title>
+              <CoursePrereqGraph graph={prereqGraph} linkSearch={linkSearch} />
+            </ExploreFeedbackAside>
+          ) : null
+        }
+      >
+        <CourseDescriptionSection
+          courseCode={selectedCourseMeta?.courseCode ?? null}
+          facultyId={faculty?.id ?? null}
+        />
+      </ExploreEntityDetailRow>
 
       {displayedProfessorGroups.length === 0 ? (
         <Box style={{ paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs }}>

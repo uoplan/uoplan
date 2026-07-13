@@ -119,6 +119,30 @@ export function ExploreEntityHeader({
   );
 }
 
+export function ExploreEntityDetailRow({
+  children,
+  aside,
+}: {
+  children: ReactNode;
+  aside?: ReactNode;
+}) {
+  return (
+    <Box
+      data-detail-row
+      pb="lg"
+      style={{
+        paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
+        paddingRight: EXPLORE_ACCORDION_PAD_INLINE.xs,
+      }}
+    >
+      <Flex direction={{ base: "column", md: "row" }} gap="lg" align="flex-start">
+        <Box style={{ flex: 1, minWidth: 0, width: "100%" }}>{children}</Box>
+        {aside}
+      </Flex>
+    </Box>
+  );
+}
+
 export function ExploreFeedbackAside({ children }: { children: ReactNode }) {
   return <Box style={{ width: "100%", maxWidth: 420 }}>{children}</Box>;
 }

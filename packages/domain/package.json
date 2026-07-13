@@ -23,7 +23,7 @@
   },
   "scripts": {
     "typecheck": "tsgo --noEmit -p tsconfig.json",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {

@@ -1,0 +1,164 @@
+.viewport {
+  max-width: 100%;
+  overflow: clip;
+  position: relative;
+  border-radius: var(--app-radius);
+  border: var(--app-border-width) solid var(--app-border);
+  background-color: var(--app-surface-sunken);
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--app-border-strong) 58%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 16px 16px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.panning {
+  cursor: grabbing;
+}
+
+.canvas {
+  position: relative;
+  will-change: transform;
+}
+
+.edgeLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--app-radius-sm);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  text-align: center;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 2px solid var(--app-border);
+  background: var(--app-surface);
+  color: var(--app-text);
+  text-decoration: none;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.node:focus-visible {
+  outline: 2px solid var(--mantine-color-accentBlue-5);
+  outline-offset: 2px;
+}
+
+/* Status variants */
+.met {
+  border-color: var(--mantine-color-constructGreen-6);
+  color: var(--mantine-color-constructGreen-7);
+}
+
+.missing {
+  border-color: var(--mantine-color-constructRed-6);
+  border-style: dashed;
+  color: var(--mantine-color-constructRed-7);
+}
+
+.unknown {
+  border-color: var(--app-border-strong);
+  border-style: dotted;
+}
+
+/* Target node is visually distinct */
+.target {
+  border-width: 3px;
+  font-weight: 700;
+  background: var(--app-surface-hover);
+}
+
+/* Interactive link nodes */
+.linkNode:hover {
+  background: var(--app-surface-hover);
+}
+
+.courseContent {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.programLabel {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--app-text-muted);
+  font-size: 10px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Gate nodes are circular */
+.gate {
+  border-radius: 50%;
+  padding: 0;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+}
+
+/* Aggregate/semantic button nodes */
+.disclosure {
+  cursor: pointer;
+  padding-inline: 8px;
+}
+
+.disclosure:hover {
+  background: var(--app-surface-hover);
+}
+
+/* Popover child list */
+.childList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.childItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.childLink {
+  color: var(--app-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.childLink:hover {
+  text-decoration: underline;
+}
+
+.childMet {
+  color: var(--mantine-color-constructGreen-7);
+}
+
+.childMissing {
+  color: var(--mantine-color-constructRed-7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node {
+    transition: none;
+  }
+}

@@ -16,6 +16,7 @@
     "./prerequisites": "./src/prerequisites/index.ts",
     "./prerequisites/context": "./src/prerequisites/context.ts",
     "./prerequisites/evaluator": "./src/prerequisites/evaluator.ts",
+    "./prerequisites/graph": "./src/prerequisites/graph.ts",
     "./prerequisites/types": "./src/prerequisites/types.ts",
     "./requirementExpansion": "./src/requirementExpansion/index.ts",
     "./frenchImmersionDiploma": "./src/frenchImmersionDiploma.ts"

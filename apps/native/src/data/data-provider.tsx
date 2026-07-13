@@ -1,6 +1,7 @@
 import type { SchedulesData } from "@uoplan/core/dataTypes";
 import { type AliasGroups, buildAliasGroups } from "@uoplan/core/courseAlias";
 import { buildFeedbackIndex, type FeedbackIndex } from "@uoplan/core/feedback";
+import { createDataClient, type DataClient } from "@uoplan/data";
 import type { FetchBytes } from "@uoplan/data/transport";
 import {
   createContext,
@@ -12,7 +13,7 @@ import {
   useState,
 } from "react";
 
-import { planDataAssets } from "./asset-plan";
+import { backgroundPrefetchAssetIds, planDataAssets } from "./asset-plan";
 import { BUNDLED_DATA_MANIFEST, createBundledDataTransport } from "./bundled-data";
 import { type DataAssetManifest } from "./manifest";
 import {
@@ -55,11 +56,6 @@ import {
   type TrendsOverview,
 } from "./trends-data";
 
-/** Asset ids prefetched (bytes cached for offline) but not eagerly decoded. */
-function deferredAssetIds(manifest: DataAssetManifest, eager: Set<string>): string[] {
-  return Object.keys(manifest).filter((id) => !eager.has(id));
-}
-
 export interface AppData {
   bundle: AppDataBundle;
   index: ExploreIndex;
@@ -68,15 +64,10 @@ export interface AppData {
   aliasGroups: AliasGroups;
   /** Every catalogue year published in the manifest (`catalogue.<year>.pb`). */
   catalogueYears: number[];
+  /** DataClient bound to the transport for the active manifest or fallback. */
+  dataClient: DataClient;
 }
 
-/**
- * Downloads + decodes every asset a manifest points at into the runtime {@link
- * AppData}, then kicks off a background prefetch of the remaining (deferred)
- * assets so their bytes are cached for offline use. Rejects if any eager asset
- * fails to decode (e.g. an incompatible proto format) — the caller
- * ({@link loadAppDataWithFallback}) turns that into a known-good fallback.
- */
 async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes): Promise<AppData> {
   const load = async <T,>(id: string, decode: (b: Uint8Array) => T): Promise<T> =>
     decode(await fetchBytes(id));
@@ -139,7 +130,14 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
   const index = buildExploreIndex(bundle, schedulesByTerm, await descriptionIndexPromise);
   const aliasGroups = buildAliasGroups(catalogue);
 
-  // Background: cache remaining catalogue-year + feedback bytes for offline.
+  // DataClient bound to this manifest's transport — used for on-demand loads
+  // (e.g. course-description shards) so callers get the exact same transport
+  // and byte-cache as the eager loads above.
+  const dataClient = createDataClient({ transport: fetchBytes });
+
+  // Background: cache remaining non-description assets for offline use.
+  // Description shards (catalogue.descriptions.*.pb) are intentionally excluded
+  // — they are fetched on demand via dataClient.loadCourseDescription.
   const eager = new Set<string>([
     "terms.pb",
     "disciplines.pb",
@@ -153,9 +151,11 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
     "catalogue.search.pb",
     ...plan.scheduleTermIds.map((t) => `schedules.${t}.pb`),
   ]);
-  void Promise.allSettled(deferredAssetIds(manifest, eager).map((id) => fetchBytes(id)));
+  void Promise.allSettled(
+    backgroundPrefetchAssetIds(Object.keys(manifest), eager).map((id) => fetchBytes(id)),
+  );
 
-  return { bundle, index, schedulesByTerm, feedback, aliasGroups, catalogueYears };
+  return { bundle, index, schedulesByTerm, feedback, aliasGroups, catalogueYears, dataClient };
 }
 
 type AppDataState =

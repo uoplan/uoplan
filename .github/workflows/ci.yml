@@ -132,6 +132,8 @@ jobs:
           path: packages/engine/pkg
       - name: Run generator
         run: pnpm generate
+      - name: Check description payload budgets
+        run: pnpm check:data-descriptions
       - name: Check architecture guardrails
         run: pnpm check:arch
       - name: Check translations
