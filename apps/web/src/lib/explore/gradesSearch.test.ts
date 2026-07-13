@@ -161,6 +161,27 @@ describe("buildExploreOfferings", () => {
 });
 
 describe("searchExploreCourses", () => {
+  it("includes catalogue courses without grade or schedule offerings", () => {
+    const entries = buildCourseSearchEntries(
+      [],
+      new Map([["TMM 3009", "Biomedical Research Laboratory"]]),
+    );
+
+    expect(entries).toEqual([
+      expect.objectContaining({
+        normCode: "TMM 3009",
+        courseCode: "TMM 3009",
+        courseTitle: "Biomedical Research Laboratory",
+        gradeViz: null,
+        maxProfessorRating: null,
+      }),
+    ]);
+
+    const fuse = createExploreCourseFuse(entries);
+    expect(searchExploreCourses(fuse, entries, "tmm 3009")).toHaveLength(1);
+    expect(searchExploreCourses(fuse, entries, "biomedical research")).toHaveLength(1);
+  });
+
   it("matches courses by code or title, not professor names", () => {
     const offerings = [
       sampleOffering({

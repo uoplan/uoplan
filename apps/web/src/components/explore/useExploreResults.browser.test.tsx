@@ -188,6 +188,12 @@ const courseEntries = [
     courseTitle: "Applied Mathematics",
     componentId: norm("MAT 1320"),
   }),
+  makeCourseEntry({
+    normCode: norm("TMM 3009"),
+    courseCode: norm("TMM 3009"),
+    courseTitle: "Biomedical Research Laboratory",
+    componentId: norm("TMM 3009"),
+  }),
 ];
 
 const professorEntries = [
@@ -210,6 +216,12 @@ const catalogue: Catalogue = {
     {
       code: norm("MAT 1320"),
       title: "Applied Mathematics",
+      credits: 3,
+      description: "",
+    },
+    {
+      code: norm("TMM 3009"),
+      title: "Biomedical Research Laboratory",
       credits: 3,
       description: "",
     },
@@ -271,6 +283,10 @@ function makeProps(overrides: Partial<HarnessProps> = {}): HarnessProps {
 
 function displayedCourseComponents(): string[] {
   return hookResult.displayedCourses.map((entry) => entry.componentId);
+}
+
+function displayedCourseCodes(): string[] {
+  return hookResult.displayedCourses.map((entry) => entry.courseCode);
 }
 
 function setValues(values: ReadonlySet<string> | undefined): string[] {
@@ -407,5 +423,50 @@ describe("useExploreResults delivery filtering", () => {
     expect((hookResult as { schedulesError?: string | null }).schedulesError).toBe(
       "delivery load failed",
     );
+  });
+});
+
+describe("useExploreResults catalogue-only courses", () => {
+  test("returns a catalogue-only entry by code and title", async () => {
+    setOfferingsState();
+
+    const screen = await render(
+      <Harness
+        {...makeProps({
+          query: "tmm 3009",
+          debouncedQuery: "tmm 3009",
+        })}
+      />,
+    );
+
+    expect(displayedCourseCodes()).toEqual(["TMM 3009"]);
+
+    await screen.rerender(
+      <Harness
+        {...makeProps({
+          query: "biomedical research",
+          debouncedQuery: "biomedical research",
+        })}
+      />,
+    );
+
+    expect(displayedCourseCodes()).toEqual(["TMM 3009"]);
+  });
+
+  test("keeps catalogue-only entries out of grade-dependent filters", async () => {
+    setOfferingsState();
+
+    await render(
+      <Harness
+        {...makeProps({
+          query: "tmm 3009",
+          debouncedQuery: "tmm 3009",
+          activeFilters: true,
+          filters: { ...EMPTY_FILTERS, difficulty: "tough" },
+        })}
+      />,
+    );
+
+    expect(displayedCourseCodes()).toEqual([]);
   });
 });

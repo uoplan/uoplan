@@ -296,6 +296,15 @@ export function buildCourseSearchEntries(
     professorNames: string[];
   };
   const byNorm = new Map<NormalizedCourseCode, Acc>();
+  for (const [courseCode, courseTitle] of titleByCode ?? []) {
+    const norm = normalizeCourseCode(courseCode);
+    byNorm.set(norm, {
+      courseCode: norm,
+      courseTitle: courseTitle.trim(),
+      dists: [],
+      professorNames: [],
+    });
+  }
   for (const o of offerings) {
     const norm = o.courseCode;
     const existing = byNorm.get(norm);

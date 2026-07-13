@@ -3,12 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { IconClock } from "@tabler/icons-react";
 import type { ProfessorRatingsMap } from "@uoplan/core";
-import {
-  buildPrereqContext,
-  buildPrereqGraph,
-  normalizeCourseCode,
-  normalizeProfessorName,
-} from "@uoplan/core";
+import { buildPrereqContext, buildPrereqGraph, normalizeProfessorName } from "@uoplan/core";
 import { i18n, tr, useTr } from "../../i18n";
 import {
   useCompletedCourses,
@@ -129,6 +124,7 @@ export function ExploreCoursePage({
   const lastViewedCourse = useRef<string | null>(null);
   const {
     loading,
+    schedulesLoading,
     offeringsByCourseNorm,
     offeringsByComponent,
     aliasGroups,
@@ -150,28 +146,30 @@ export function ExploreCoursePage({
   const { professorByName } = useScheduleSentiment();
 
   const { urlNorm, componentId } = useCourseAliasResolution(urlCourseParam, aliasGroups);
+  const courseSearchEntry = useMemo(
+    () => (urlNorm == null ? undefined : getCourseEntryByNorm().get(urlNorm)),
+    [urlNorm, getCourseEntryByNorm],
+  );
 
   const courseOfferings = useMemo(() => {
     if (urlNorm === null || componentId === null) return [];
     return offeringsByComponent.get(componentId) ?? offeringsByCourseNorm.get(urlNorm) ?? [];
   }, [offeringsByComponent, offeringsByCourseNorm, componentId, urlNorm]);
 
-  // Redirect to /explore if course has no offerings once data loads.
+  // Redirect only when neither the catalogue nor the offering data contains this course.
   useEffect(() => {
-    if (loading || urlNorm == null) return;
-    if (courseOfferings.length > 0) return;
+    if (loading || schedulesLoading || urlNorm == null) return;
+    if (courseSearchEntry) return;
     void navigate({ to: "/explore", search: EMPTY_EXPLORE_SEARCH, replace: true });
-  }, [loading, urlNorm, courseOfferings, navigate]);
+  }, [loading, schedulesLoading, urlNorm, courseSearchEntry, navigate]);
 
   const selectedCourseMeta = useMemo(() => {
-    if (loading || urlNorm == null || courseOfferings.length === 0) return null;
-    // Display the requested code (the one the user navigated to), even when the data is
-    // sourced from an aliased member code.
-    const requested = courseOfferings.find((o) => normalizeCourseCode(o.courseCode) === urlNorm);
-    const courseCode = requested?.courseCode ?? urlNorm;
-    const courseTitle = requested?.courseTitle ?? courseOfferings[0].courseTitle;
-    return { courseCode, courseTitle };
-  }, [loading, urlNorm, courseOfferings]);
+    if (loading || !courseSearchEntry) return null;
+    return {
+      courseCode: courseSearchEntry.courseCode,
+      courseTitle: courseSearchEntry.courseTitle,
+    };
+  }, [loading, courseSearchEntry]);
 
   useEffect(() => {
     if (!selectedCourseMeta) return;
@@ -224,13 +222,14 @@ export function ExploreCoursePage({
     trFn,
   ]);
 
-  // Other codes in the same alias group that actually have data, for the "also known as" note.
+  // Other codes in the same alias group that have their own Explore entry.
   const aliasCodes = useMemo(() => {
     if (urlNorm == null || componentId == null) return [];
     const members = aliasGroups.membersByComponent.get(componentId);
     if (!members) return [];
-    return members.filter((m) => m !== urlNorm && offeringsByCourseNorm.has(m));
-  }, [urlNorm, componentId, aliasGroups, offeringsByCourseNorm]);
+    const entryByNorm = getCourseEntryByNorm();
+    return members.filter((m) => m !== urlNorm && entryByNorm.has(m));
+  }, [urlNorm, componentId, aliasGroups, getCourseEntryByNorm]);
 
   const profEntryByGroupId = useMemo(() => {
     if (filters.minRating === null && filters.minFeedback === null) {
@@ -251,10 +250,6 @@ export function ExploreCoursePage({
 
   // Course-level filters (level / language / discipline / difficulty / requirements)
   // describe the whole course: when it doesn't match, hide every professor.
-  const courseSearchEntry = useMemo(
-    () => (urlNorm == null ? undefined : getCourseEntryByNorm().get(urlNorm)),
-    [urlNorm, getCourseEntryByNorm],
-  );
   const courseMatchesFilters = useMemo(
     () => courseMatchesCourseLevelFilters(courseSearchEntry, filters, requirementCandidateSet),
     [courseSearchEntry, filters, requirementCandidateSet],
