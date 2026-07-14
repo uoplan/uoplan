@@ -1,7 +1,7 @@
 {
   "termId": "2271",
-  "totalCourses": 11113,
-  "totalWithSchedules": 3210,
+  "totalCourses": 11141,
+  "totalWithSchedules": 3212,
   "schedules": [
     {
       "subject": "ADM",
@@ -14901,6 +14901,45 @@
     },
     {
       "subject": "ADM",
+      "catalogNumber": "4907",
+      "courseCode": "ADM 4907",
+      "title": "Management Consulting Project",
+      "timeZone": "America/Toronto",
+      "components": {
+        "PRA": [
+          {
+            "section": "M00-PRA FullSess.",
+            "sectionCode": "M00",
+            "component": "PRA",
+            "session": null,
+            "times": [],
+            "status": "Open",
+            "distribution": {
+              "A+": 3,
+              "A": 13,
+              "A-": 0,
+              "B+": 0,
+              "B": 0,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "DR": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "ADM",
       "catalogNumber": "4964",
       "courseCode": "ADM 4964",
       "title": "Application of Business Analytics",
@@ -23100,7 +23139,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 105,
               "A": 40,
@@ -41317,7 +41356,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 197,
               "A": 153,
@@ -45698,7 +45737,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1710,
               "A": 1232,
@@ -57798,7 +57837,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 31,
               "A": 94,
@@ -57929,7 +57968,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 19,
               "A": 138,
@@ -58195,7 +58234,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LEC Session F",
@@ -59850,7 +59889,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 9,
               "A": 56,
@@ -59943,7 +59982,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "C00-LEC Session H",
@@ -63178,7 +63217,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 5,
               "A": 27,
@@ -65241,7 +65280,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -84360,7 +84399,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 40,
               "A": 47,
@@ -92457,7 +92496,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 314,
               "A": 173,
@@ -95772,7 +95811,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Frederick J. Packer",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101984,7 +102023,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 6,
               "A": 3,
@@ -102872,7 +102911,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 351,
@@ -129971,7 +130010,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Osasuyi Emmanuel Okungbowa",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -130011,7 +130050,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Osasuyi Emmanuel Okungbowa",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -137058,7 +137097,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Alessia Mastrorillo",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -141309,6 +141348,68 @@
               "ABS": 0,
               "P": 0,
               "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "FRA",
+      "catalogNumber": "1518",
+      "courseCode": "FRA 1518",
+      "title": "Le français, langue des affaires",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "C00-LEC FullSess.",
+            "sectionCode": "C00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 196,
+              "A": 388,
+              "A-": 616,
+              "B+": 663,
+              "B": 426,
+              "C+": 259,
+              "C": 119,
+              "D+": 63,
+              "D": 29,
+              "E": 14,
+              "F": 14,
+              "DR": 9,
+              "EIN": 19,
+              "NS": 8,
+              "NC": 0,
+              "ABS": 20,
+              "P": 0,
+              "S": 73
             }
           }
         ]
@@ -160692,7 +160793,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1135,
               "A": 543,
@@ -172858,7 +172959,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 779,
               "A": 412,
@@ -176227,7 +176328,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176238,7 +176339,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176249,7 +176350,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -176260,7 +176361,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -177916,24 +178017,13 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-08",
-                  "2027-01-08"
-                ]
-              },
-              {
                 "day": "Mo",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-01-11",
+                  "2027-01-04",
                   "2027-02-08"
                 ]
               }
@@ -178080,24 +178170,13 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Umar Ruhi",
-                "meetingDates": [
-                  "2027-01-08",
-                  "2027-01-08"
-                ]
-              },
-              {
                 "day": "Mo",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
                 "instructor": "Umar Ruhi",
                 "meetingDates": [
-                  "2027-01-11",
+                  "2027-01-04",
                   "2027-02-08"
                 ]
               }
@@ -178371,24 +178450,13 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-08",
-                  "2027-01-08"
-                ]
-              },
-              {
                 "day": "Mo",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-01-11",
+                  "2027-01-04",
                   "2027-02-08"
                 ]
               }
@@ -182033,7 +182101,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 130,
               "A": 135,
@@ -195974,19 +196042,7 @@
             "sectionCode": "MF00",
             "component": "LAB",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
+            "times": [],
             "status": "Closed"
           },
           {
@@ -195994,40 +196050,16 @@
             "sectionCode": "MG00",
             "component": "LAB",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open"
+            "times": [],
+            "status": "Closed"
           },
           {
             "section": "MH00-LAB FullSess.",
             "sectionCode": "MH00",
             "component": "LAB",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 540,
-                "endMinutes": 710,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open"
+            "times": [],
+            "status": "Closed"
           },
           {
             "section": "MI00-LAB FullSess.",
@@ -196373,6 +196405,26 @@
               }
             ],
             "status": "Open"
+          },
+          {
+            "section": "ML00-LAB FullSess.",
+            "sectionCode": "ML00",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Closed"
           }
         ]
       }
@@ -202134,7 +202186,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "M03-LAB FullSess.",
@@ -212723,6 +212775,79 @@
           {
             "section": "P06-DGD Multi-Term",
             "sectionCode": "P06",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-15",
+                  "2027-03-15"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-04-12",
+                  "2027-04-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-05-14",
+                  "2027-05-14"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 540,
+                "endMinutes": 710,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-06-18",
+                  "2027-06-18"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 0,
+              "A": 0,
+              "A-": 0,
+              "B+": 0,
+              "B": 0,
+              "C+": 0,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 3,
+              "F": 0,
+              "DR": 0,
+              "EIN": 6,
+              "NS": 1,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 911
+            }
+          },
+          {
+            "section": "P07-DGD Multi-Term",
+            "sectionCode": "P07",
             "component": "DGD",
             "session": null,
             "times": [
@@ -225733,7 +225858,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 45,
               "A": 8,
@@ -225993,7 +226118,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 94,
               "A": 12,
@@ -226242,7 +226367,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 27,
               "A": 36,
@@ -226568,7 +226693,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 10,
               "A": 85,
@@ -226740,7 +226865,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 50,
               "A": 125,
@@ -231240,7 +231365,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -231324,7 +231449,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -232920,7 +233045,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -251348,7 +251473,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 88,
               "A": 105,
@@ -252214,7 +252339,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 474,
               "A": 409,

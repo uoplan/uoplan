@@ -1,6 +1,6 @@
 {
   "termId": "2265",
-  "totalCourses": 11113,
+  "totalCourses": 11141,
   "totalWithSchedules": 883,
   "schedules": [
     {
@@ -35620,7 +35620,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -44121,7 +44121,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "David Wright",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -44132,7 +44132,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "David Wright",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-06-12"
@@ -45714,7 +45714,7 @@
               {
                 "day": "We",
                 "startMinutes": 1110,
-                "endMinutes": 1220,
+                "endMinutes": 1280,
                 "virtual": true,
                 "instructor": "Cécile L R Catalfo",
                 "meetingDates": [
@@ -46502,7 +46502,7 @@
               {
                 "day": "Th",
                 "startMinutes": 1110,
-                "endMinutes": 1220,
+                "endMinutes": 1280,
                 "virtual": true,
                 "instructor": "Chaymaa Marouf",
                 "meetingDates": [
@@ -46764,7 +46764,7 @@
               {
                 "day": "Tu",
                 "startMinutes": 1110,
-                "endMinutes": 1220,
+                "endMinutes": 1280,
                 "virtual": true,
                 "instructor": "Maryam Jabbari",
                 "meetingDates": [

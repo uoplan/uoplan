@@ -4193,12 +4193,12 @@
       "title": "Projet en conseil de gestion / Management Consulting Project",
       "credits": 3,
       "description": "Définition du problème, diagnostic, analyse et recommandations de solution/action au sein d’une organisation sélectionnée. Sera normalement réalisé en groupes de quatre ou cinq étudiants et étudiantes. Supervision et évaluation faites par le professeur et mentorat par un conseiller en management certifié (CMC). / Problem definition, diagnosis, analysis, and recommendations for solution/action within a selected organization. Normally to be completed in groups of four or five students. Supervision done by the professor and mentoring by a Certified Management Consultant (CMC).",
-      "component": "Expérience pratique / PraticumPréalable : ADM 3704. Réservé aux étudiants et étudiantes de 4e année admis au Programme de la profession de consultant en gestion (PMPC) dont la MPC est de 6,0 ou plus. / Prerequisite: ADM 3304. Open only to fourth year students admitted in the Profession of Management Consulting Program (PMCP) whose CGPA is 6.0 or higher.",
-      "prereqText": "ADM 3704",
+      "component": "Expérience pratique / PraticumPréalable : ADM 3704 (B+ ou plus). Réservé aux étudiants et étudiantes de 4e année admis au Microprogramme Conseil en gestion dont la MPC est de 6,0 ou plus. / Prerequisite: ADM 3304 (B+ or higher). Open only to fourth year students admitted in the Microprogram Management Consulting whose CGPA is 6.0 or higher.",
+      "prereqText": "ADM 3704 (B+ ou plus)",
       "prerequisites": {
         "type": "course",
         "code": "ADM 3704",
-        "text": "ADM 3704"
+        "text": "ADM 3704 (B+ ou plus)"
       }
     },
     {
@@ -10620,7 +10620,7 @@
       "title": "Introduction à la biomécanique appliquée",
       "credits": 3,
       "description": "Principes biomécaniques appliqués à la compréhension et à l'analyse des causes du mouvement humain et de leurs effets sur le corps. Cinématique et cinétique des corps rigides, impulsion, quantité de mouvement, travail, énergie et puissance; mécanique des fluides, conservation et friction sèche. Évaluations de laboratoires à être complétées lors des heures de laboratoires.",
-      "component": "Laboratoire, Cours magistralPréalable : APA 1505 ou APA 1713. Les cours APA 2715, APA 2514 ne peuvent être combinés pour l'obtention de crédits. Cours réservé aux étudiantes et étudiants inscrits au programme du B.S.A.P.",
+      "component": "Cours magistral, LaboratoirePréalable : APA 1505 ou APA 1713. Les cours APA 2715, APA 2514 ne peuvent être combinés pour l'obtention de crédits. Cours réservé aux étudiantes et étudiants inscrits au programme du B.S.A.P.",
       "prereqText": "APA 1505 ou APA 1713",
       "prerequisites": {
         "type": "or_group",
@@ -10984,7 +10984,7 @@
       "title": "Musculoskeletal Biomechanics",
       "credits": 3,
       "description": "Study of the physical and mechanical structures of human tissues from the locomotive system. An in-depth look at their mechanical properties and at both their functional and structural limits. The kinematics and kinetics of human motion will also be studied for particular applications.",
-      "component": "Lecture, LaboratoryPrerequisite: APA 2114 or APA 2315.",
+      "component": "Laboratory, LecturePrerequisite: APA 2114 or APA 2315.",
       "prereqText": "APA 2114 or APA 2315",
       "prerequisites": {
         "type": "or_group",
@@ -19606,18 +19606,15 @@
     },
     {
       "code": "BIO 3146",
-      "title": "Ecophysiology of Plants",
+      "title": "Integrative Plant Biology",
       "credits": 3,
-      "description": "Experiments in physiological adaptations of plants to different environmental conditions. Effects of biotic and abiotic factors such as symbiosis, herbivory, nutrients on plant growth and metabolism (Offered in alternate years.) Limited enrolment. Previously BIO 3156.",
-      "component": "LaboratoryPrerequisite: BIO 3140.",
-      "aliases": [
-        "BIO 3156"
-      ],
-      "prereqText": "BIO 3140",
+      "description": "Hands-on laboratory and greenhouse experiments using molecular, biochemical, and microscopy techniques to explore the genetics, cell biology, physiology, and phenology of diverse plant taxa. Limited enrolment.",
+      "component": "LaboratoryPrerequisite: BIO 2137.",
+      "prereqText": "BIO 2137",
       "prerequisites": {
         "type": "course",
-        "code": "BIO 3140",
-        "text": "BIO 3140"
+        "code": "BIO 2137",
+        "text": "BIO 2137"
       }
     },
     {
@@ -19765,7 +19762,7 @@
       "code": "BIO 3303",
       "title": "Animal Physiology I",
       "credits": 3,
-      "description": "Regulatory systems in animals. Physiological adjustments to environmental changes. Nervous systems, sensory physiology, nutrition, endocrinology, animal metabolism and locomotion.",
+      "description": "Regulatory systems in animals. Physiological adjustments to environmental changes. Nervous systems, nutrition, endocrinology, animal metabolism, muscles and movement.",
       "component": "LecturePrerequisite: BIO 1141.",
       "prereqText": "BIO 1141",
       "prerequisites": {
@@ -20007,18 +20004,15 @@
     },
     {
       "code": "BIO 3546",
-      "title": "Écophysiologie des plantes",
+      "title": "Biologie végétale intégrative",
       "credits": 3,
-      "description": "Expériences sur les adaptations physiologiques des plantes à diverses conditions environnementales. Effets de facteurs biotiques et abiotiques tels que les symbioses, herbivorie, minéraux sur la croissance et le métabolisme des plantes. (Offert tous les deux ans.) Cours contingenté. Antérieurement BIO 3556.",
-      "component": "LaboratoirePréalable : BIO 3540.",
-      "aliases": [
-        "BIO 3556"
-      ],
-      "prereqText": "BIO 3540",
+      "description": "Expériences pratiques en laboratoire et en serre, utilisant des techniques moléculaires, biochimiques et microscopiques pour explorer la génétique, la biologie cellulaire, la physiologie et la phénologie de divers taxons de plantes. Cours contingenté.",
+      "component": "LaboratoirePréalable : BIO 2537.",
+      "prereqText": "BIO 2537",
       "prerequisites": {
         "type": "course",
-        "code": "BIO 3540",
-        "text": "BIO 3540"
+        "code": "BIO 2537",
+        "text": "BIO 2537"
       }
     },
     {
@@ -20166,7 +20160,7 @@
       "code": "BIO 3703",
       "title": "Physiologie animale I",
       "credits": 3,
-      "description": "Systèmes régulateurs des animaux. Ajustements physiologiques aux changements de l'environnement. Systèmes nerveux, physiologie sensorielle, nutrition, endocrinologie, métabolisme des animaux et locomotion.",
+      "description": "Systèmes régulateurs des animaux. Ajustements physiologiques aux changements de l'environnement. Systèmes nerveux, nutrition, endocrinologie, métabolisme des animaux, muscles et mouvement.",
       "component": "Cours magistralPréalable : BIO 1541.",
       "prereqText": "BIO 1541",
       "prerequisites": {
@@ -20512,7 +20506,7 @@
       "code": "BIO 4145",
       "title": "Eukaryotic Microbiology",
       "credits": 3,
-      "description": "Biodiversity, behavioural ecology, evolution and genomics of eukaryotic microbes, including the current six phylogenetic supergroups that compose the eukaryotic domain. Topics will include a taxonomic and research overview of those evolutionary clades that are most relevant to human health and those that defy our conventional understanding of the processes of ecology, evolution and genomics in a broad sense. Offered in alternate years.",
+      "description": "Biodiversity, behavioural ecology, evolution and genomics of eukaryotic microbes, including the current six phylogenetic supergroups that compose the eukaryotic domain. Topics will include a taxonomic and research overview of those evolutionary clades that are most relevant to human health and those that defy our conventional understanding of the processes of ecology, evolution and genomics in a broad sense. (Offered in alternate years.)",
       "component": "LecturePrerequisites: BPS 3101, BIO 3124.",
       "prereqText": "BPS 3101, BIO 3124",
       "prerequisites": {
@@ -20801,7 +20795,7 @@
       "code": "BIO 4545",
       "title": "Microbiologie des eucaryotes",
       "credits": 3,
-      "description": "Biodiversité, écologie comportementale, évolution et génomique des six super-groupes qui composent actuellement le domaine des eucaryotes. Vue globale de la taxonomie et de la recherche en protistologie, en mettant l'accent sur les groupes qui sont les plus importants d'un point de vue médical, ainsi que sur les espèces qui défient radicalement notre compréhension générale des processus d'écologie, d'évolution et de génomique. Offert tous les deux ans.",
+      "description": "Biodiversité, écologie comportementale, évolution et génomique des six super-groupes qui composent actuellement le domaine des eucaryotes. Vue globale de la taxonomie et de la recherche en protistologie, en mettant l'accent sur les groupes qui sont les plus importants d'un point de vue médical, ainsi que sur les espèces qui défient radicalement notre compréhension générale des processus d'écologie, d'évolution et de génomique. (Offert tous les deux ans.)",
       "component": "Cours magistralPréalables : BPS 3501, BIO 3524.",
       "prereqText": "BPS 3501, BIO 3524",
       "prerequisites": {
@@ -22795,7 +22789,7 @@
       "title": "Architecture d'ordinateurs II",
       "credits": 3,
       "description": "Microprocesseurs et leur architecture générale. Architectures CISC et RISC. Micro-contrôleurs. Systèmes inclus. Conception des ordinateurs à base de microprocesseurs. Introduction à la co-conception logiciel- matériel.",
-      "component": "Laboratoire, Cours magistral, TutorielPréalable : CEG 2536.",
+      "component": "Tutoriel, Laboratoire, Cours magistralPréalable : CEG 2536.",
       "prereqText": "CEG 2536",
       "prerequisites": {
         "type": "course",
@@ -23959,7 +23953,7 @@
       "title": "Data Collection and Interpretation",
       "credits": 3,
       "description": "Combinatorial analysis; probability and random variables; discrete and continuous densities and distribution functions; expectation and variance; normal (Gaussian), distributions; statistical estimation and hypothesis testing; method of least squares, correlation and regression. Basic principles and techniques for the efficient design of experiments and effective analysis of data. Topics include: the nature and analysis of process variability, comparing processes, blocking and randomization, empirical model building for quantifying relationships between process inputs and outputs, two-level factorial and fractional factorial designs for screening out inert input variables, other designs, a practical approach to experimental design.",
-      "component": "Lecture, TutorialPrerequisites: CHG 1125, CHG 1371, MAT 2384.",
+      "component": "Tutorial, LecturePrerequisites: CHG 1125, CHG 1371, MAT 2384.",
       "prereqText": "CHG 1125, CHG 1371, MAT 2384",
       "prerequisites": {
         "type": "and_group",
@@ -51290,31 +51284,209 @@
     },
     {
       "code": "EAS 1101",
-      "title": "Introduction to Indigenous Studies",
+      "title": "Indigeneity in Canada",
       "credits": 3,
       "description": "Introduction to the discipline of Indigenous studies, focusing on the history and contemporary conditions of Indigenous peoples in Canada and around the world. Provides a basis for more advanced study.",
       "component": "Lecture"
     },
     {
       "code": "EAS 1501",
-      "title": "Introduction aux études autochtones",
+      "title": "L'autochtonie au Canada",
       "credits": 3,
-      "description": "Introduction au domaine des études autochtones, axée sur l'histoire et les conditions contemporaines des peuples autochtones au Canada et dans le monde. Apporte une base pour des cours plus avancés.",
+      "description": "Introduction au domaine des études autochtones, axée sur l'histoire et les conditions contemporaines des peuples autochtones au Canada et dans le monde. Fournit une base pour des études plus avancées.",
       "component": "Cours magistral"
     },
     {
       "code": "EAS 2101",
       "title": "Colonialism and Indigenous Peoples",
       "credits": 3,
-      "description": "Study of the concept and history of colonialism from an Indigenous perspective.",
-      "component": "Lecture"
+      "description": "Study of the concept and history of colonialism from an Indigenous perspective. Exploration of how Canada's legal and political systems lead to regulation of identity, governance, land-bases, and other relevant dimensions, and how Indigenous nations have fought for resurgence, recognition, sovereignty, and the constitutionalization of rights.",
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course units.",
+      "prereqText": "EAS 1101 or 18 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course units",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course units",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2102",
+      "title": "Indigenous History of this Territory",
+      "credits": 3,
+      "description": "Examination of the historical significance of worldviews as captured by First Nations' intellectual and cultural traditions as well as social, political and economic developments. Focuses on First Nations history from the late eighteenth century to the end of the nineteenth century with an emphasis on First Nations history in the Ottawa-Gatineau region.",
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course units.",
+      "prereqText": "EAS 1101 or 18 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course units",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course units",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2103",
+      "title": "Indigenous Relationality",
+      "credits": 3,
+      "description": "Examination of how First Nation, Metis and Inuit societies forged systems of relationships as a key to understanding how they operationalized and understood the world and how these forms persisted and were adapted in response to colonization. Focuses on concepts, theories and methodologies that centre Indigenous relationality, which is based on worldviews that are embedded in and expressed through the particular languages, stories, and traditions of Indigenous nations.",
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course units.",
+      "prereqText": "EAS 1101 or 18 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course units",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course units",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2104",
+      "title": "Indigenous Grassroots Resistance",
+      "credits": 3,
+      "description": "Exploration of the history of Indigenous activism from the 1960s to the present, including the Red Power movement, the struggles of Indigenous women, and the Idle No More movement. Focuses on the context in which critical events took place as well as the role of central figures and seminal works, contextualized within the evolving Indigenous political landscape.",
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course units.",
+      "prereqText": "EAS 1101 or 18 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course units",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course units",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2105",
+      "title": "Indigenous Legal Issues",
+      "credits": 3,
+      "description": "A critical introduction to Indigenous legal issues in Canada through historical and theoretical interpretations of legislation and major court cases from 1763 to the present. Examination of the role of law in the colonial context (with a focus on gender), the development of treaty and Aboriginal rights, the obligations of the Crown, the criminalization of Indigenous people, and reconciliation.",
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course units.",
+      "prereqText": "EAS 1101 or 18 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course units",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course units",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2106",
+      "title": "Contemporary Indigenous Political Thought",
+      "credits": 3,
+      "description": "Introduction to key ideas, debates, and theories in Indigenous political thinking. Exploration of concepts such as sovereignty, self-determination, colonialism and decolonization, governance, and resurgence. Focuses on how Indigenous thinkers challenge colonial systems and offer alternative pathways for their nations.",
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course units.",
+      "prereqText": "EAS 1101 or 18 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course units",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course units",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2107",
+      "title": "Indigenous Media",
+      "credits": 3,
+      "description": "Examination of how Indigenous peoples use diverse creative practices — such as traditional arts, visual art, digital media, film, and performance art, among others — to represent themselves, their relations, and their communities, and to disrupt colonial narratives and assert sovereignty.",
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course credits.",
+      "prereqText": "EAS 1101 or 18 university course credits",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course credits",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course credits",
+            "credits": 18
+          }
+        ]
+      }
     },
     {
       "code": "EAS 2110",
       "title": "Selected Topics in Indigenous Studies I",
       "credits": 3,
       "description": "Examination of specific artistic, cultural, economic, political and social issues concerning Indigenous peoples.",
-      "component": "Lecture"
+      "component": "LecturePrerequisite: EAS 1101 or 18 university course units.",
+      "prereqText": "EAS 1101 or 18 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1101 or 18 university course units",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1101",
+            "text": "EAS 1101"
+          },
+          {
+            "type": "non_course",
+            "text": "18 university course units",
+            "credits": 18
+          }
+        ]
+      }
     },
     {
       "code": "EAS 2172",
@@ -51327,7 +51499,151 @@
       "code": "EAS 2501",
       "title": "Colonialisme et peuples autochtones",
       "credits": 3,
-      "description": "Étude conceptuelle et historique du colonialisme du point de vue des peuples autochtones.",
+      "description": "Étude du concept et de l'histoire du colonialisme depuis une perspective autochtone. Exploration de la manière dont les systèmes juridiques et politiques du Canada mènent à la réglementation de l'identité, de la gouvernance, des territoires, et d’autres dimensions connexes, ainsi que la manière dont les nations autochtones ont lutté pour la résurgence, la reconnaissance, la souveraineté et la constitutionnalisation des droits.",
+      "component": "Cours magistralPréalable : EAS 1501 ou 18 crédits de cours universitaires.",
+      "prereqText": "EAS 1501 ou 18 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1501 ou 18 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1501",
+            "text": "EAS 1501"
+          },
+          {
+            "type": "non_course",
+            "text": "18 crédits de cours universitaires",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2502",
+      "title": "Histoire autochtone de ce territoire",
+      "credits": 3,
+      "description": "Analyse de l'importance historique des visions du monde telles qu'elles s’expriment dans les traditions intellectuelles et culturelles des Premières Nations, ainsi que des transformations sociales, politiques et économiques connexes. Étude de l’histoire des Premières Nations de la fin du XVIIIe siècle à la fin du XIXe siècle, avec une attention particulière portée à la région d'Ottawa-Gatineau.",
+      "component": "Cours magistralPréalable : EAS 1501 ou 18 crédits de cours universitaires.",
+      "prereqText": "EAS 1501 ou 18 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1501 ou 18 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1501",
+            "text": "EAS 1501"
+          },
+          {
+            "type": "non_course",
+            "text": "18 crédits de cours universitaires",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2503",
+      "title": "Relationalités autochtones",
+      "credits": 3,
+      "description": "Examen des manières dont les sociétés des Premières Nations, Métis et Inuit ont élaboré des systèmes relationnels permettant de comprendre leur conception et leur interprétation du monde, ainsi que la persistance et l’adaptation de ces relations face à la colonisation. L’accent est mis sur les concepts, théories et méthodologies centrés sur la relationalité autochtone, ancrée dans des visions du monde intégrées et exprimées par les langues, les récits et les traditions des nations autochtones.",
+      "component": "Cours magistralPréalable : EAS 1501 ou 18 crédits de cours universitaires.",
+      "prereqText": "EAS 1501 ou 18 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1501 ou 18 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1501",
+            "text": "EAS 1501"
+          },
+          {
+            "type": "non_course",
+            "text": "18 crédits de cours universitaires",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2504",
+      "title": "Résistance populaire autochtone",
+      "credits": 3,
+      "description": "Exploration de l'histoire de l'activisme autochtone des années 1960 à aujourd'hui, incluant le mouvement Red Power, les luttes des femmes autochtones et le mouvement Idle No More. Examen des contextes d’émergence des principaux évènements, du rôle des figures clés et des écrits marquants, situés dans un paysage politique autochtone en transformation.",
+      "component": "Cours magistralPréalable : EAS 1501 ou 18 crédits de cours universitaires.",
+      "prereqText": "EAS 1501 ou 18 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1501 ou 18 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1501",
+            "text": "EAS 1501"
+          },
+          {
+            "type": "non_course",
+            "text": "18 crédits de cours universitaires",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2505",
+      "title": "Questions juridiques autochtones",
+      "credits": 3,
+      "description": "Une introduction critique aux enjeux juridiques autochtones au Canada fondée sur des interprétations historiques et théoriques de la législation et des principales affaires judiciaires majeures de 1763 à nos jours. Analyse du rôle du droit dans le contexte colonial (avec un accent sur le genre), de l’évolution des droits issus des traités et des droits des Autochtones, des obligations de la Couronne, de la criminalisation des peuples autochtones et des processus de réconciliation.",
+      "component": "Cours magistralPréalable : EAS 1501 ou 18 crédits de cours universitaires.",
+      "prereqText": "EAS 1501 ou 18 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1501 ou 18 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1501",
+            "text": "EAS 1501"
+          },
+          {
+            "type": "non_course",
+            "text": "18 crédits de cours universitaires",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2506",
+      "title": "Pensée politique autochtone contemporaine",
+      "credits": 3,
+      "description": "Introduction aux idées, débats et théories clés de la pensée politique autochtone. Analyse de concepts tels que la souveraineté, l'autodétermination, le colonialisme et la décolonisation, la gouvernance et la résurgence. L’accent est mis sur la manière dont les penseurs autochtones interrogent les systèmes coloniaux et proposent des voies alternatives pour leurs nations.",
+      "component": "Cours magistralPréalable : EAS 1501 ou 18 crédits de cours universitaires.",
+      "prereqText": "EAS 1501 ou 18 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1501 ou 18 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1501",
+            "text": "EAS 1501"
+          },
+          {
+            "type": "non_course",
+            "text": "18 crédits de cours universitaires",
+            "credits": 18
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 2507",
+      "title": "Médias autochtones",
+      "credits": 3,
+      "description": "Examen de la manière dont les peuples autochtones utilisent diverses pratiques créatives — telles que les arts traditionnels, les arts visuels, les médias numériques, le cinéma et l’art de la performance, entre autres — pour se représenter eux-mêmes, leurs relations et leurs communautés, ainsi que pour remettre en question les récits coloniaux et affirmer leur souveraineté.",
       "component": "Cours magistral"
     },
     {
@@ -51335,23 +51651,50 @@
       "title": "Thèmes choisis en études autochtones I",
       "credits": 3,
       "description": "Étude de questions artistiques, culturelles, économiques, politiques et sociales concernant les peuples autochtones.",
-      "component": "Cours magistral"
+      "component": "Cours magistralPréalable : EAS 1501 ou 18 crédits de cours universitaires.",
+      "prereqText": "EAS 1501 ou 18 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "EAS 1501 ou 18 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "course",
+            "code": "EAS 1501",
+            "text": "EAS 1501"
+          },
+          {
+            "type": "non_course",
+            "text": "18 crédits de cours universitaires",
+            "credits": 18
+          }
+        ]
+      }
     },
     {
       "code": "EAS 3101",
       "title": "Research and Methodologies in Indigenous Studies",
       "credits": 3,
       "description": "Study and analysis of methodologies associated with Indigenous approaches to research.",
-      "component": "LecturePrerequisite: EAS 2101 or 54 university course units.",
-      "prereqText": "EAS 2101 or 54 university course units",
+      "component": "LecturePrerequisite: 6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units.",
+      "prereqText": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
       "prerequisites": {
         "type": "or_group",
-        "text": "EAS 2101 or 54 university course units",
+        "text": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 2101",
-            "text": "EAS 2101"
+            "type": "non_course",
+            "text": "6 course units in Indigenous studies (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "in Indigenous Languages (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
           },
           {
             "type": "non_course",
@@ -51366,117 +51709,26 @@
       "title": "Selected Topics in Indigenous Studies II",
       "credits": 3,
       "description": "Examination of specific artistic, cultural, economic, political and social issues concerning Indigenous peoples.",
-      "component": "LecturePrerequisite: EAS 1101.",
-      "prereqText": "EAS 1101",
-      "prerequisites": {
-        "type": "course",
-        "code": "EAS 1101",
-        "text": "EAS 1101"
-      }
-    },
-    {
-      "code": "EAS 3103",
-      "title": "Indigenous Spiritualities in the Americas",
-      "credits": 3,
-      "description": "The historical nature and the contemporary role of spirituality in the Indigenous world of the Americas, the meanings and applications of the Indigenous idea of the sacred Circle. The importance of spirituality as factor of inclusivity of Indigenous peoples and realities in larger society.",
-      "component": "Lecture"
-    },
-    {
-      "code": "EAS 3501",
-      "title": "Recherche et méthodologies en études autochtones",
-      "credits": 3,
-      "description": "Étude et analyse des différentes méthodes développées dans le cadre des approches autochtones à la recherche.",
-      "component": "Cours magistralPréalable : EAS 2501 ou 54 crédits universitaires.",
-      "prereqText": "EAS 2501 ou 54 crédits universitaires",
+      "component": "LecturePrerequisite: 6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units.",
+      "prereqText": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
       "prerequisites": {
         "type": "or_group",
-        "text": "EAS 2501 ou 54 crédits universitaires",
+        "text": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 2501",
-            "text": "EAS 2501"
+            "type": "non_course",
+            "text": "6 course units in Indigenous studies (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
           },
           {
             "type": "non_course",
-            "text": "54 crédits universitaires",
-            "credits": 54
-          }
-        ]
-      }
-    },
-    {
-      "code": "EAS 3502",
-      "title": "Thèmes choisis en études autochtones II",
-      "credits": 3,
-      "description": "Étude de questions artistiques, culturelles, économiques, politiques et sociales concernant les peuples autochtones.",
-      "component": "Cours magistralPréalable : EAS 1501.",
-      "prereqText": "EAS 1501",
-      "prerequisites": {
-        "type": "course",
-        "code": "EAS 1501",
-        "text": "EAS 1501"
-      }
-    },
-    {
-      "code": "EAS 3503",
-      "title": "Spiritualités autochtones dans les Amériques",
-      "credits": 3,
-      "description": "La nature historique et le rôle contemporain dans le monde autochtone des Amériques, les significations et les applications de l'idée autochtone du Cercle sacré. L'importance de la spiritualité comme facteur d'inclusivité des peuples et des réalités autochtones dans la société au sens large.",
-      "component": "Cours magistral"
-    },
-    {
-      "code": "EAS 4101",
-      "title": "Fieldwork and Directed Research in Indigenous Studies",
-      "credits": 3,
-      "description": "Students will participate in a practicum from 100 to 120 hours allowing them to establish links with Indigenous sectors of government, First Nations political and/or territorial organizations, First Nations governments or agencies.",
-      "component": "LecturePrerequisite: 54 university course units and permission of the Coordinating Committee of the program.",
-      "prereqText": "54 university course units and permission of the Coordinating Committee of the program",
-      "prerequisites": {
-        "type": "non_course",
-        "text": "54 university course units and permission of the Coordinating Committee of the program",
-        "credits": 54
-      }
-    },
-    {
-      "code": "EAS 4102",
-      "title": "Contemporary Indigenous Political Thought",
-      "credits": 3,
-      "description": "Study of political theories associated with contemporary Indigenous political thought and literature: anti- and post-colonialism, environmental Indigenous thought, traditionalism, feminism and the politics of indigeneity.",
-      "component": "LecturePrerequisite: EAS 2101 or 54 university units.",
-      "prereqText": "EAS 2101 or 54 university units",
-      "prerequisites": {
-        "type": "or_group",
-        "text": "EAS 2101 or 54 university units",
-        "children": [
-          {
-            "type": "course",
-            "code": "EAS 2101",
-            "text": "EAS 2101"
-          },
-          {
-            "type": "non_course",
-            "text": "54 university units",
-            "credits": 54
-          }
-        ]
-      }
-    },
-    {
-      "code": "EAS 4103",
-      "title": "Seminar in Indigenous Studies",
-      "credits": 3,
-      "description": "Advanced study of topics in Indigenous Studies.",
-      "component": "SeminarPrerequisite: EAS 2101 or 54 university course units.",
-      "prereqText": "EAS 2101 or 54 university course units",
-      "prerequisites": {
-        "type": "or_group",
-        "text": "EAS 2101 or 54 university course units",
-        "children": [
-          {
-            "type": "course",
-            "code": "EAS 2101",
-            "text": "EAS 2101"
+            "text": "in Indigenous Languages (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
           },
           {
             "type": "non_course",
@@ -51487,28 +51739,605 @@
       }
     },
     {
+      "code": "EAS 3105",
+      "title": "Critical Indigenous Theory",
+      "credits": 3,
+      "description": "Examination of how Indigenous feminisms use intersectional analysis to challenge the ongoing impacts of colonialism and patriarchy on Indigenous peoples—particularly women, as well as queer and 2SLGBTQI+ people and communities—while re-centering Indigenous worldviews, sovereignty, and community well-being.",
+      "component": "LecturePrerequisite: 6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units.",
+      "prereqText": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 course units in Indigenous studies (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "in Indigenous Languages (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 university course units",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3106",
+      "title": "Decolonial Research-Creation",
+      "credits": 3,
+      "description": "Exploration of how Indigenous knowledges (beliefs, practices, and innovations) shape a decolonial approach to research creation – an interdisciplinary and experimental method that merges artistic expression with academic inquiry to generate new knowledge and foster innovation.",
+      "component": "LecturePrerequisite: 6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units.",
+      "prereqText": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 course units in Indigenous studies (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "in Indigenous Languages (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 university course units",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3107",
+      "title": "Water Protection and Land Defense",
+      "credits": 3,
+      "description": "Exploration of the emergence and significance of frontline Water Protection and Land Defense, particularly since the inception of the Land Back movement. Examination of the reasons and conditions that give rise to this as an anticolonial strategy and form of traditional governance and way in which Indigenous law is enforced.",
+      "component": "LecturePrerequisite: 6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units.",
+      "prereqText": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 course units in Indigenous studies (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "in Indigenous Languages (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 university course units",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3108",
+      "title": "Indigeneity in Global Perspective",
+      "credits": 3,
+      "description": "Examination of a selection of global Indigenous worldviews, experiences, and current realities. Discussion of colonial impacts, reclamation of Indigenous land and culture, and Indigenous aspirations for the future, focusing on both commonalities and connections among Indigenous Peoples in different parts of the world.",
+      "component": "LecturePrerequisite: 6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units.",
+      "prereqText": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 course units in Indigenous studies (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "in Indigenous Languages (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 university course units",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3109",
+      "title": "Indigenous Environmental Health",
+      "credits": 3,
+      "description": "Examination of the environment as one among many determinants of Indigenous health and well-being, how the relationship between environment and health varies and changes over space and time, and implications for Indigenous communities in Canada and elsewhere in the world.",
+      "component": "LecturePrerequisite: 6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units.",
+      "prereqText": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) or 54 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 course units in Indigenous studies (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "in Indigenous Languages (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 university course units",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3501",
+      "title": "Recherche et méthodologies en études autochtones",
+      "credits": 3,
+      "description": "Étude et analyse des différentes méthodes développées dans le cadre des approches autochtones à la recherche.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires.",
+      "prereqText": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en études autochtones (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "en langues autochtones (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 crédits de cours universitaires",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3502",
+      "title": "Thèmes choisis en études autochtones II",
+      "credits": 3,
+      "description": "Étude de questions artistiques, culturelles, économiques, politiques et sociales concernant les peuples autochtones.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires.",
+      "prereqText": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en études autochtones (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "en langues autochtones (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 crédits de cours universitaires",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3505",
+      "title": "Théorie critique autochtone",
+      "credits": 3,
+      "description": "Analyse de la manière dont les féminismes autochtones mobilisent une approche intersectionnelle afin de remettre en question les effets persistants du colonialisme et du patriarcat sur les peuples autochtones — en particulier les femmes, ainsi que les personnes et communautés queer et 2ELGBTQI+ — tout en recentrant les visions du monde autochtones, la souveraineté et le bien-être communautaire.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires.",
+      "prereqText": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en études autochtones (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "en langues autochtones (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 crédits de cours universitaires",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3506",
+      "title": "Recherche-création décoloniale",
+      "credits": 3,
+      "description": "Exploration de la manière dont les savoirs autochtones (croyances, pratiques et innovations) façonnent une approche décoloniale de recherche-création – une méthode interdisciplinaire et expérimentale qui conjugue l'expression artistique et la recherche académique afin de produire de nouvelles connaissances et stimuler l'innovation.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires.",
+      "prereqText": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en études autochtones (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "en langues autochtones (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 crédits de cours universitaires",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3507",
+      "title": "Protection de l’eau et défense des terres",
+      "credits": 3,
+      "description": "Analyse de l'émergence et de l'importance de la protection de l'eau et de la défense des terres de première ligne, notamment depuis l’essor du mouvement Land Back. Examen des conditions et des dynamiques qui sous-tendent ces pratiques en tant que stratégie anticoloniale et formes de gouvernance traditionnelle, ainsi que la mise en œuvre du droit autochtone.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires.",
+      "prereqText": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en études autochtones (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "en langues autochtones (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 crédits de cours universitaires",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3508",
+      "title": "L’autochtonie dans une perspective mondiale",
+      "credits": 3,
+      "description": "Analyse comparative de diverses visions du monde autochtones à l'échelle mondiale, de leurs expériences et de leurs réalités actuelles. Examen des effets du colonialisme, des processus de réappropriation des terres et de la culture autochtones, ainsi que des aspirations des peuples autochtones pour l'avenir, en mettant en lumière les convergences et les liens entre les peuples autochtones dans différentes contextes régionaux.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires.",
+      "prereqText": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en études autochtones (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "en langues autochtones (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 crédits de cours universitaires",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 3509",
+      "title": "Santé environnementale autochtone",
+      "credits": 3,
+      "description": "Analyse de l’environnement en tant que déterminant de la santé et du bien-être des peuples autochtones, des dynamiques évolutives reliant environnement et santé dans le temps et l’espace, ainsi que leurs effets sur les communautés autochtones au Canada et à l’échelle mondiale.",
+      "component": "Cours magistralPréalable : 6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires.",
+      "prereqText": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "or_group",
+        "text": "6 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) ou 54 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours en études autochtones (EAS)",
+            "credits": 6,
+            "disciplines": [
+              "EAS"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "en langues autochtones (ILA)",
+            "disciplines": [
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "54 crédits de cours universitaires",
+            "credits": 54
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4101",
+      "title": "Fieldwork and Directed Research in Indigenous Studies",
+      "credits": 3,
+      "description": "Students will participate in a practicum from 100 to 120 hours allowing them to establish links with Indigenous sectors of government, First Nations political and/or territorial organizations, First Nations governments or agencies.",
+      "component": "LecturePrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units. Permission of the Department.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 university course units",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4103",
+      "title": "Seminar in Indigenous Studies",
+      "credits": 3,
+      "description": "Advanced study of topics in Indigenous Studies.",
+      "component": "SeminarPrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 university course units",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4109",
+      "title": "Indigenous Self-Determination and the Economy",
+      "credits": 3,
+      "description": "Exploration of the relationship between Indigenous peoples and the economy, especially in terms of pro- and anti-capitalist tendencies, and its effect on Indigenous self-determination.",
+      "component": "SeminarPrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 university course units",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
       "code": "EAS 4110",
       "title": "Selected Topics in Indigenous Studies III",
       "credits": 3,
       "description": "Examination of specific artistic, cultural, economic, political and social issues concerning Indigenous peoples.",
-      "component": "LecturePrerequisite: EAS 1101 and 3 course units in Indigenous Studies (EAS).",
-      "prereqText": "EAS 1101 and 3 course units in Indigenous Studies (EAS)",
+      "component": "LecturePrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
       "prerequisites": {
         "type": "and_group",
-        "text": "EAS 1101 and 3 course units in Indigenous Studies (EAS)",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 1101",
-            "text": "EAS 1101"
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
           },
           {
             "type": "non_course",
-            "text": "3 course units in Indigenous Studies (EAS)",
-            "credits": 3,
+            "text": "45 university course units",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4111",
+      "title": "Why Land Matters",
+      "credits": 3,
+      "description": "Examination of issues related to Indigenous conceptions of land, the colonial structures of dispossession, and how Indigenous peoples have asserted their rights to land up to and including the Land Back movement. Engagement with examples of how different understandings of land are shaped by the lenses of Indigenous rights and Canadian colonialism.",
+      "component": "SeminarPrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
             "disciplines": [
-              "EAS"
+              "EAS",
+              "ILA"
             ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 university course units",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4112",
+      "title": "Concepts of Indigenous Leadership",
+      "credits": 3,
+      "description": "Examination of the nature and concept of leadership through an exploration of topics related to law, governance, the foundations of family and community, the arts, and spirituality. Focuses on Indigenous philosophical and intellectual concepts about leadership in both historical and contemporary cultural contexts.",
+      "component": "SeminarPrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 university course units",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4113",
+      "title": "Indigenous Food Systems",
+      "credits": 3,
+      "description": "Examination of Indigenous food systems, how they vary and change over space and time, and implications for food security and food sovereignty in Canada and elsewhere in the world.",
+      "component": "SeminarPrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 university course units",
+            "credits": 45
           }
         ]
       }
@@ -51518,50 +52347,27 @@
       "title": "Learning on the Land",
       "credits": 3,
       "description": "Examination of Indigenous knowledge from an on-the-land perspective. Exploration of the lived experience of students and of the physical, mental, emotional, and spiritual aspects of Indigenous knowledge as taught by Elders and other knowledge keepers.",
-      "component": "LecturePrerequisite: EAS 1101, EAS 2101 and 3 course units in Indigenous Studies (EAS).",
-      "prereqText": "EAS 1101, EAS 2101 and 3 course units in Indigenous Studies (EAS)",
+      "component": "LecturePrerequisite: 9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units.",
+      "prereqText": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
       "prerequisites": {
         "type": "and_group",
-        "text": "EAS 1101, EAS 2101 and 3 course units in Indigenous Studies (EAS)",
+        "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA) and 45 university course units",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 1101",
-            "text": "EAS 1101"
+            "type": "non_course",
+            "text": "9 course units in Indigenous studies (EAS) or in Indigenous Languages (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
           },
           {
-            "type": "and_group",
-            "text": "EAS 2101 and 3 course units in Indigenous Studies (EAS)",
-            "children": [
-              {
-                "type": "course",
-                "code": "EAS 2101",
-                "text": "EAS 2101"
-              },
-              {
-                "type": "non_course",
-                "text": "3 course units in Indigenous Studies (EAS)",
-                "credits": 3,
-                "disciplines": [
-                  "EAS"
-                ]
-              }
-            ]
+            "type": "non_course",
+            "text": "45 university course units",
+            "credits": 45
           }
         ]
-      }
-    },
-    {
-      "code": "EAS 4364",
-      "title": "Selected Topics in Indigenous History",
-      "credits": 3,
-      "description": "",
-      "component": "LecturePrerequisite: EAS 1101.",
-      "prereqText": "EAS 1101",
-      "prerequisites": {
-        "type": "course",
-        "code": "EAS 1101",
-        "text": "EAS 1101"
       }
     },
     {
@@ -51569,34 +52375,25 @@
       "title": "Travail sur le terrain et recherche dirigée en études autochtones",
       "credits": 3,
       "description": "Les étudiants participeront à un stage de 100 à 120 heures leur permettant d'établir des contacts avec les secteurs autochtones des gouvernements, les agences et les organisations politiques et territoriales des Premières Nations.",
-      "component": "Cours magistralPréalables : 54 crédits universitaires et permission du Comité de coordination du programme.",
-      "prereqText": "54 crédits universitaires et permission du Comité de coordination du programme",
+      "component": "Cours magistralPréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires. Permission du département.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
       "prerequisites": {
-        "type": "non_course",
-        "text": "54 crédits universitaires et permission du Comité de coordination du programme",
-        "credits": 54
-      }
-    },
-    {
-      "code": "EAS 4502",
-      "title": "Pensée politique autochtone contemporaine",
-      "credits": 3,
-      "description": "Étude des principaux courants de pensée traversant la littérature politique autochtone contemporaine : anti et post-colonialisme, pensée environnementale autochtone, traditionalisme, féminisme, indigénisme.",
-      "component": "Cours magistralPréalable : EAS 2501 ou 54 crédits universitaires.",
-      "prereqText": "EAS 2501 ou 54 crédits universitaires",
-      "prerequisites": {
-        "type": "or_group",
-        "text": "EAS 2501 ou 54 crédits universitaires",
+        "type": "and_group",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 2501",
-            "text": "EAS 2501"
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
           },
           {
             "type": "non_course",
-            "text": "54 crédits universitaires",
-            "credits": 54
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
           }
         ]
       }
@@ -51606,21 +52403,53 @@
       "title": "Séminaire en études autochtones",
       "credits": 3,
       "description": "Étude approfondie d'une thématique spécifique en études autochtones.",
-      "component": "SéminairePréalable : EAS 2501 ou 54 crédits universitaires.",
-      "prereqText": "EAS 2501 ou 54 crédits universitaires",
+      "component": "SéminairePréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
       "prerequisites": {
-        "type": "or_group",
-        "text": "EAS 2501 ou 54 crédits universitaires",
+        "type": "and_group",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 2501",
-            "text": "EAS 2501"
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
           },
           {
             "type": "non_course",
-            "text": "54 crédits universitaires",
-            "credits": 54
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4509",
+      "title": "Autodétermination des peuples autochtones et l’économie",
+      "credits": 3,
+      "description": "Exploration de la relation entre les peuples autochtones et l'économie, en particulier à la lumière des tendances pro- et anticapitalistes, et de ses répercussions sur l'autodétermination des peuples autochtones.",
+      "component": "SéminairePréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
           }
         ]
       }
@@ -51630,24 +52459,109 @@
       "title": "Thèmes choisis en études autochtones III",
       "credits": 3,
       "description": "Étude de questions artistiques, culturelles, économiques, politiques et sociales concernant les peuples autochtones.",
-      "component": "Cours magistralPréalable: EAS 1501 et 3 crédits de cours en études autochtones (EAS).",
-      "prereqText": "EAS 1501 et 3 crédits de cours en études autochtones (EAS)",
+      "component": "Cours magistralPréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
       "prerequisites": {
         "type": "and_group",
-        "text": "EAS 1501 et 3 crédits de cours en études autochtones (EAS)",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 1501",
-            "text": "EAS 1501"
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
           },
           {
             "type": "non_course",
-            "text": "3 crédits de cours en études autochtones (EAS)",
-            "credits": 3,
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4511",
+      "title": "L’importance de la terre",
+      "credits": 3,
+      "description": "Étude des questions liées aux conceptions autochtones de la terre, aux structures coloniales de dépossession et des revendications relatives au droit à la terre des peuples autochtones jusqu’à l’émergence du mouvement Land Back. Analyse d’exemples illustrant la manière dont différentes conceptions de la terre sont influencées par les perspectives sur les droits autochtones et par le colonialisme canadien.",
+      "component": "SéminairePréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
             "disciplines": [
-              "EAS"
+              "EAS",
+              "ILA"
             ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4512",
+      "title": "Concepts de leadership autochtone",
+      "credits": 3,
+      "description": "Examen du concept de leadership et de ses fondements à travers l’exploration de thèmes liés au droit, à la gouvernance, aux structures familiales et communautaires, aux arts et à la spiritualité. L’accent est mis sur les concepts philosophiques et intellectuels autochtones touchant au leadership dans des contextes culturels à la fois historiques et contemporains.",
+      "component": "SéminairePréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
+          }
+        ]
+      }
+    },
+    {
+      "code": "EAS 4513",
+      "title": "Systèmes alimentaires autochtones",
+      "credits": 3,
+      "description": "Étude des systèmes alimentaires des peuples autochtones, de leurs dynamiques de variation, d’adaptation et de transformation, ainsi que de leurs effets sur la sécurité et la souveraineté alimentaire au Canada et à l’échelle mondiale.",
+      "component": "SéminairePréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
+        "children": [
+          {
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
           }
         ]
       }
@@ -51657,50 +52571,27 @@
       "title": "Apprentissage sur le territoire",
       "credits": 3,
       "description": "Examen des connaissances autochtones du point de vue sur terrain. Exploration des expériences vécues par les étudiants et des aspects physiques, mentaux, émotionnels et spirituels des connaissances autochtones enseignées par les Aînés et les autres gardiens des connaissances.",
-      "component": "Cours magistralPréalables : EAS 1501, EAS 2501 et 3 crédits de cours en études autochtones (EAS).",
-      "prereqText": "EAS 1501, EAS 2501 et 3 crédits de cours en études autochtones (EAS)",
+      "component": "Cours magistralPréalable : 9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires.",
+      "prereqText": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
       "prerequisites": {
         "type": "and_group",
-        "text": "EAS 1501, EAS 2501 et 3 crédits de cours en études autochtones (EAS)",
+        "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA) et 45 crédits de cours universitaires",
         "children": [
           {
-            "type": "course",
-            "code": "EAS 1501",
-            "text": "EAS 1501"
+            "type": "non_course",
+            "text": "9 crédits de cours en études autochtones (EAS) ou en langues autochtones (ILA)",
+            "credits": 9,
+            "disciplines": [
+              "EAS",
+              "ILA"
+            ]
           },
           {
-            "type": "and_group",
-            "text": "EAS 2501 et 3 crédits de cours en études autochtones (EAS)",
-            "children": [
-              {
-                "type": "course",
-                "code": "EAS 2501",
-                "text": "EAS 2501"
-              },
-              {
-                "type": "non_course",
-                "text": "3 crédits de cours en études autochtones (EAS)",
-                "credits": 3,
-                "disciplines": [
-                  "EAS"
-                ]
-              }
-            ]
+            "type": "non_course",
+            "text": "45 crédits de cours universitaires",
+            "credits": 45
           }
         ]
-      }
-    },
-    {
-      "code": "EAS 4764",
-      "title": "Thèmes choisis en histoire autochtone",
-      "credits": 3,
-      "description": "",
-      "component": "Cours magistralPréalable : EAS 1501.",
-      "prereqText": "EAS 1501",
-      "prerequisites": {
-        "type": "course",
-        "code": "EAS 1501",
-        "text": "EAS 1501"
       }
     },
     {
@@ -61158,7 +62049,7 @@
       "title": "Circuit Theory I",
       "credits": 3,
       "description": "DC and sinusoidal steady state (AC) analysis of circuits. Basic passive circuit elements (resistors, capacitors, inductors). Voltage and current sources. Kirchoff laws. Loop and nodal analysis. Circuit theorems: Superposition, Maximum power transfer, Thevenin, Norton. Forced and natural responses of RL and RC circuits using the differential equation approach. Sinusoidal signals, complex numbers, phasors and impedance concepts. Average and RMS quantities. Steady state time-domain behaviour of inductors and capacitors. Complex, average and apparent power. Introduction to the use of electrical measurement equipment and Computer-Aided Design tools to support circuit analysis.",
-      "component": "Laboratory, Lecture, TutorialPrerequisites: ITI 1100, MAT 1341, MAT 1322.",
+      "component": "Lecture, Tutorial, LaboratoryPrerequisites: ITI 1100, MAT 1341, MAT 1322.",
       "prereqText": "ITI 1100, MAT 1341, MAT 1322",
       "prerequisites": {
         "type": "and_group",
@@ -73559,7 +74450,7 @@
       "title": "Création littéraire I",
       "credits": 3,
       "description": "Atelier d'initiation à la création littéraire. Pratique des techniques de la poésie, de la narration et du dialogue.",
-      "component": "Cours magistral"
+      "component": "Séminaire"
     },
     {
       "code": "FRA 2565",
@@ -75760,28 +76651,64 @@
       "title": "Recherche dirigée en sciences sociales / Directed Research in Social Sciences",
       "credits": 3,
       "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different.",
-      "component": "Recherche / Research"
+      "component": "Recherche / ResearchPréalable : 81 crédits de cours universitaires. L'inscription est limitée et exige l'approbation de la Faculté. Antérieurement SCS 4550. / Prerequisite: 81 university course units. Enrolment is limited and must be approved by the Faculty. Previously SCS 4150.",
+      "aliases": [
+        "SCS 4550",
+        "SCS 4150"
+      ],
+      "prereqText": "81 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "81 crédits de cours universitaires",
+        "credits": 81
+      }
     },
     {
       "code": "FSS 4951",
       "title": "Recherche dirigée en sciences sociales / Directed Research in Social Sciences",
       "credits": 6,
       "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different.",
-      "component": "Recherche / Research"
+      "component": "Recherche / ResearchPréalable : 81 crédits de cours universitaires. L'inscription est limitée et exige l'approbation de la Faculté. Antérieurement SCS 4550. / Prerequisite: 81 university course units. Enrolment is limited and must be approved by the Faculty. Previously SCS 4150.",
+      "aliases": [
+        "SCS 4550",
+        "SCS 4150"
+      ],
+      "prereqText": "81 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "81 crédits de cours universitaires",
+        "credits": 81
+      }
     },
     {
       "code": "FSS 49511",
       "title": "Recherche dirigée en sciences sociales (Partie 1 de 2) / Directed Research in Social Sciences (Part 1 of 2)",
       "credits": 0,
       "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. (Partie 1 de 2) / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different. (Part 1 of 2)",
-      "component": "Recherche / Research"
+      "component": "Recherche / ResearchPréalable : 81 crédits de cours universitaires. L'inscription est limitée et exige l'approbation de la Faculté. Antérieurement SCS 4550. / Prerequisite: 81 university course units. Enrolment is limited and must be approved by the Faculty. Previously SCS 4150.",
+      "aliases": [
+        "SCS 4550",
+        "SCS 4150"
+      ],
+      "prereqText": "81 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "81 crédits de cours universitaires",
+        "credits": 81
+      }
     },
     {
       "code": "FSS 49512",
       "title": "Recherche dirigée en sciences sociales (Partie 2 de 2) / Directed Research in Social Sciences (Part 2 of 2)",
       "credits": 6,
       "description": "Réalisation, individuellement ou en petit groupe, d'une recherche sous la supervision d'un professeur. Ce cours permet l'application d'habiletés déjà acquises et l'acquisition de nouvelles connaissances liées à l'exécution d'une recherche. Le cours peut être répété si le thème est différent. (Partie 2 de 2) / Completion, individually or in a small group, of a research project under the supervision of a professor. This course allows for the application of already acquired abilities and the acquisition of new knowledge related to carrying out research. Course may be repeated if theme is different. (Part 2 of 2)",
-      "component": "Recherche / Research"
+      "component": "Recherche / ResearchPréalable : FSS 49511. / Prerequisite: FSS 49511.",
+      "prereqText": "FSS 49511",
+      "prerequisites": {
+        "type": "course",
+        "code": "FSS 49511",
+        "text": "FSS 49511"
+      }
     },
     {
       "code": "FSS 5151",
@@ -92417,7 +93344,7 @@
       "title": "Mathématiques discrètes pour l'informatique",
       "credits": 3,
       "description": "Introduction aux structures discrètes comme base de l'informatique. Logique des propositions. Structures fondamentales: fonctions, relations, ensembles. Principes de base du dénombrement: argument de comptage, principe des tiroirs, permutations et combinaisons. Introduction aux structures d'une démonstration mathématique: directe, par l'absurde, cas par cas, par récurrence. Éléments de la théorie des graphes: isomorphisme, cycles arbres, graphes orientés. Les exemples seront principalement choisis dans le domaine de l'informatique.",
-      "component": "Cours magistral, Groupe de discussionPréalable : MAT 1718/Math. 4U de l'Ontario Fonctions avancées (MHF4U) ou l'équiv. Ce cours ne peut être crédité pour un étudiant qui a déjà reçu les crédits pour MAT 2748. Les cours MAT 1748, MAT 1762 ne peuvent être combinés pour l'obtention de crédits.",
+      "component": "Groupe de discussion, Cours magistralPréalable : MAT 1718/Math. 4U de l'Ontario Fonctions avancées (MHF4U) ou l'équiv. Ce cours ne peut être crédité pour un étudiant qui a déjà reçu les crédits pour MAT 2748. Les cours MAT 1748, MAT 1762 ne peuvent être combinés pour l'obtention de crédits.",
       "prereqText": "MAT 1718/Math. 4U de l'Ontario Fonctions avancées (MHF4U) ou l'équiv",
       "prerequisites": {
         "type": "and_group",
@@ -95601,12 +96528,41 @@
       "title": "Stochastic Analysis",
       "credits": 3,
       "description": "Introduction to stochastic processes from a non-measure theoretic point of view. Conditional expectation. Brownian motion, Gaussian processes, martingales. Wiener and Itô integrals with respect to Brownian motion. Itô formula. Stochastic differential equations. Applications to financial mathematics, the Black-Scholes formula.",
-      "component": "LecturePrerequisite: MAT 2371.",
-      "prereqText": "MAT 2371",
+      "component": "LecturePrerequisite: MAT 2371 and 12 university course units in mathematics (MAT) or statistics (STA) at the 3000 level or above (or permission of the instructor).",
+      "prereqText": "MAT 2371 and 12 university course units in mathematics (MAT) or statistics (STA) at the 3000 level or above (or permission of the instructor)",
       "prerequisites": {
-        "type": "course",
-        "code": "MAT 2371",
-        "text": "MAT 2371"
+        "type": "and_group",
+        "text": "MAT 2371 and 12 university course units in mathematics (MAT) or statistics (STA) at the 3000 level or above (or permission of the instructor)",
+        "children": [
+          {
+            "type": "course",
+            "code": "MAT 2371",
+            "text": "MAT 2371"
+          },
+          {
+            "type": "non_course",
+            "text": "12 university course units in mathematics (MAT) or statistics (STA) at the 3000 level or above (or permission of the instructor)",
+            "credits": 12,
+            "disciplines": [
+              "MAT",
+              "STA"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "MAT",
+                "levels": [
+                  3000
+                ]
+              },
+              {
+                "discipline": "STA",
+                "levels": [
+                  3000
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -95729,16 +96685,26 @@
       }
     },
     {
-      "code": "MAT 4348",
-      "title": "Graph Theory",
+      "code": "MAT 4347",
+      "title": "Combinatorial Enumeration",
       "credits": 3,
-      "description": "Paths and cycles, trees, connectivity, Euler tours and Hamilton cycles, edge colouring, independent sets and cliques, vertex colouring, planar graphs, directed graphs.",
-      "component": "LecturePrerequisites: (MAT 2348 or MAT 3348), (MAT 2141 or MAT 2143).",
-      "prereqText": "(MAT 2348 or MAT 3348), (MAT 2141 or MAT 2143)",
+      "description": "Ordinary and exponential generating functions; product formulas; permutations; partitions; rooted trees. Lagrange Inversions; singularity analysis of generating functions and asymptotics.",
+      "component": "LecturePrerequisites: MAT 2141, MAT 2143, (MAT 2348 or MAT 3348), 6 course units in mathematics (MAT) at the 3000 level or above, with MAT 3121 and MAT 3172 highly recommended, or permission of the instructor.",
+      "prereqText": "MAT 2141, MAT 2143, (MAT 2348 or MAT 3348), 6 course units in mathematics (MAT) at the 3000 level or above, with MAT 3121 and MAT 3172 highly recommended, or permission of the instructor",
       "prerequisites": {
         "type": "and_group",
-        "text": "(MAT 2348 or MAT 3348), (MAT 2141 or MAT 2143)",
+        "text": "MAT 2141, MAT 2143, (MAT 2348 or MAT 3348), 6 course units in mathematics (MAT) at the 3000 level or above, with MAT 3121 and MAT 3172 highly recommended, or permission of the instructor",
         "children": [
+          {
+            "type": "course",
+            "code": "MAT 2141",
+            "text": "MAT 2141"
+          },
+          {
+            "type": "course",
+            "code": "MAT 2143",
+            "text": "MAT 2143"
+          },
           {
             "type": "or_group",
             "text": "MAT 2348 or MAT 3348",
@@ -95756,20 +96722,117 @@
             ]
           },
           {
-            "type": "or_group",
-            "text": "MAT 2141 or MAT 2143",
+            "type": "non_course",
+            "text": "6 course units in mathematics (MAT) at the 3000 level or above",
+            "credits": 6,
+            "disciplines": [
+              "MAT"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "MAT",
+                "levels": [
+                  3000
+                ]
+              }
+            ]
+          },
+          {
+            "type": "and_group",
+            "text": "with MAT 3121 and MAT 3172 highly recommended",
             "children": [
               {
                 "type": "course",
-                "code": "MAT 2141",
-                "text": "MAT 2141"
+                "code": "MAT 3121",
+                "text": "with MAT 3121"
               },
               {
                 "type": "course",
-                "code": "MAT 2143",
-                "text": "MAT 2143"
+                "code": "MAT 3172",
+                "text": "MAT 3172 highly recommended"
               }
             ]
+          },
+          {
+            "type": "non_course",
+            "text": "or permission of the instructor",
+            "kind": "permission"
+          }
+        ]
+      }
+    },
+    {
+      "code": "MAT 4348",
+      "title": "Graph Theory",
+      "credits": 3,
+      "description": "Paths and cycles, trees, connectivity, Euler tours and Hamilton cycles, edge colouring, independent sets and cliques, vertex colouring, planar graphs, directed graphs.",
+      "component": "LecturePrerequisites: MAT 2141, MAT 2143, (MAT 2348 or MAT 3348), 6 course units from CSI 3105, MAT 3120, MAT 3121, MAT 3143, MAT 3341, or (clearly demonstrated skill with abstract proofs and permission of the instructor).",
+      "prereqText": "MAT 2141, MAT 2143, (MAT 2348 or MAT 3348), 6 course units from CSI 3105, MAT 3120, MAT 3121, MAT 3143, MAT 3341, or (clearly demonstrated skill with abstract proofs and permission of the instructor)",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "MAT 2141, MAT 2143, (MAT 2348 or MAT 3348), 6 course units from CSI 3105, MAT 3120, MAT 3121, MAT 3143, MAT 3341, or (clearly demonstrated skill with abstract proofs and permission of the instructor)",
+        "children": [
+          {
+            "type": "course",
+            "code": "MAT 2141",
+            "text": "MAT 2141"
+          },
+          {
+            "type": "course",
+            "code": "MAT 2143",
+            "text": "MAT 2143"
+          },
+          {
+            "type": "or_group",
+            "text": "MAT 2348 or MAT 3348",
+            "children": [
+              {
+                "type": "course",
+                "code": "MAT 2348",
+                "text": "MAT 2348"
+              },
+              {
+                "type": "course",
+                "code": "MAT 3348",
+                "text": "MAT 3348"
+              }
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "6 course units from CSI 3105",
+            "credits": 6,
+            "children": [
+              {
+                "type": "course",
+                "code": "CSI 3105"
+              }
+            ]
+          },
+          {
+            "type": "course",
+            "code": "MAT 3120",
+            "text": "MAT 3120"
+          },
+          {
+            "type": "course",
+            "code": "MAT 3121",
+            "text": "MAT 3121"
+          },
+          {
+            "type": "course",
+            "code": "MAT 3143",
+            "text": "MAT 3143"
+          },
+          {
+            "type": "course",
+            "code": "MAT 3341",
+            "text": "MAT 3341"
+          },
+          {
+            "type": "non_course",
+            "text": "or (clearly demonstrated skill with abstract proofs and permission of the instructor)",
+            "kind": "permission"
           }
         ]
       }
@@ -95885,7 +96948,7 @@
       "code": "MAT 4372",
       "title": "Financial Mathematics",
       "credits": 3,
-      "description": "Review of conditional expectation and an introduction to martingales, stopping times and the Snell envelope. Interest rate and present value, discrete time option pricing. Review of the multivariate normal with applications to Markovitz portfolio theory. An introduction to Brownian motion and the Black-Scholes formula for European options.",
+      "description": "Interest rates and present value. Arbitrage theory, Girsanov theorem, and risk-neutral pricing. Discrete-time binomial models for pricing European, American, and exotic options, including portfolio replication. Hedging strategies and Greeks. Applications of Itô calculus within classical stochastic models in finance.",
       "component": "LecturePrerequisites: MAT 2375, MAT 3172.",
       "prereqText": "MAT 2375, MAT 3172",
       "prerequisites": {
@@ -95908,27 +96971,54 @@
       "title": "Mathematical Machine Learning",
       "credits": 3,
       "description": "Discriminant analysis, principal component analysis, support vector machines; reproducing kernel Hilbert spaces and kernel methods; neural networks; VC Theory; PAC learning. Additional topics may include: Bayesian modelling, manifold learning, boosting.",
-      "component": "LecturePrerequisites: MAT 2122, MAT 2371, MAT 2375, MAT 3373.",
-      "prereqText": "MAT 2122, MAT 2371, MAT 2375, MAT 3373",
+      "component": "LecturePrerequisites: MAT 2122, MAT 2371, STA 2100), 3 course units in mathematics (MAT) at level 3000 or above or STA 3100 or permission of the instructor.",
+      "prereqText": "MAT 2122, MAT 2371, STA 2100), 3 course units in mathematics (MAT) at level 3000 or above or STA 3100 or permission of the instructor",
       "prerequisites": {
         "type": "and_group",
-        "text": "MAT 2122, MAT 2371, MAT 2375, MAT 3373",
+        "text": "MAT 2122, MAT 2371, STA 2100), 3 course units in mathematics (MAT) at level 3000 or above or STA 3100 or permission of the instructor",
         "children": [
           {
             "type": "course",
-            "code": "MAT 2122"
+            "code": "MAT 2122",
+            "text": "MAT 2122"
           },
           {
             "type": "course",
-            "code": "MAT 2371"
+            "code": "MAT 2371",
+            "text": "MAT 2371"
           },
           {
             "type": "course",
-            "code": "MAT 2375"
+            "code": "STA 2100",
+            "text": "STA 2100)"
           },
           {
-            "type": "course",
-            "code": "MAT 3373"
+            "type": "or_group",
+            "text": "3 course units in mathematics (MAT) at level 3000 or above or STA 3100 or permission of the instructor",
+            "children": [
+              {
+                "type": "non_course",
+                "text": "3 course units in mathematics (MAT) at level 3000",
+                "credits": 3,
+                "disciplines": [
+                  "MAT"
+                ]
+              },
+              {
+                "type": "non_course",
+                "text": "above"
+              },
+              {
+                "type": "course",
+                "code": "STA 3100",
+                "text": "STA 3100"
+              },
+              {
+                "type": "non_course",
+                "text": "permission of the instructor",
+                "kind": "permission"
+              }
+            ]
           }
         ]
       }
@@ -96472,6 +97562,48 @@
       }
     },
     {
+      "code": "MAT 4573",
+      "title": "Analyse Stochastique",
+      "credits": 3,
+      "description": "Introduction aux processus stochastiques sans l'utilisation de la théorique de la mesure. Espérance mathématique conditionnelle. Mouvement brownien, processus gaussiens, martingales. Intégrales de Wiener et Itô par rapport au mouvement brownien. Formule d'Itô. Équations différentielles stochastiques. Applications aux mathématiques financières, la formule de Black-Scholes. Volet : Cours magistral",
+      "component": "Cours magistralPréalables : MAT 2771 et 12 crédits de cours universitaires en mathématiques (MAT) ou en statistiques (STA) de niveau 3000 ou supérieur (ou la permission de l'instructeur).",
+      "prereqText": "MAT 2771 et 12 crédits de cours universitaires en mathématiques (MAT) ou en statistiques (STA) de niveau 3000 ou supérieur (ou la permission de l'instructeur)",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "MAT 2771 et 12 crédits de cours universitaires en mathématiques (MAT) ou en statistiques (STA) de niveau 3000 ou supérieur (ou la permission de l'instructeur)",
+        "children": [
+          {
+            "type": "course",
+            "code": "MAT 2771",
+            "text": "MAT 2771"
+          },
+          {
+            "type": "non_course",
+            "text": "12 crédits de cours universitaires en mathématiques (MAT) ou en statistiques (STA) de niveau 3000 ou supérieur (ou la permission de l'instructeur)",
+            "credits": 12,
+            "disciplines": [
+              "MAT",
+              "STA"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "MAT",
+                "levels": [
+                  3000
+                ]
+              },
+              {
+                "discipline": "STA",
+                "levels": [
+                  3000
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "code": "MAT 4583",
       "title": "Analyse tensorielle et applications",
       "credits": 3,
@@ -96611,16 +97743,26 @@
       }
     },
     {
-      "code": "MAT 4748",
-      "title": "Théorie des graphes",
+      "code": "MAT 4747",
+      "title": "Énumération combinatoire",
       "credits": 3,
-      "description": "Chaînes et cycles, arbres, connexité, parcours Eulériens et cycles Hamiltoniens, coloration des arêtes, ensembles stables et cliques, coloration des sommets, graphes planaires, graphes orientés.",
-      "component": "Cours magistralPréalables : (MAT 2748 ou MAT 3748), (MAT 2541 ou MAT 2543).",
-      "prereqText": "(MAT 2748 ou MAT 3748), (MAT 2541 ou MAT 2543)",
+      "description": "Fonctions génératrices ordinaires et exponentielles; formules de produit; permutations; partitions; arborescences. Inversion de Lagrange; analyse des singularités des fonctions génératrices et leur comportement asymptotique.",
+      "component": "Cours magistralPréalables : MAT 2541, MAT 2543, (MAT 2748 ou MAT 3748), 6 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur, MAT 3521 et MAT 3572 étant fortement recommandés, ou la permission de l'instructeur.",
+      "prereqText": "MAT 2541, MAT 2543, (MAT 2748 ou MAT 3748), 6 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur, MAT 3521 et MAT 3572 étant fortement recommandés, ou la permission de l'instructeur",
       "prerequisites": {
         "type": "and_group",
-        "text": "(MAT 2748 ou MAT 3748), (MAT 2541 ou MAT 2543)",
+        "text": "MAT 2541, MAT 2543, (MAT 2748 ou MAT 3748), 6 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur, MAT 3521 et MAT 3572 étant fortement recommandés, ou la permission de l'instructeur",
         "children": [
+          {
+            "type": "course",
+            "code": "MAT 2541",
+            "text": "MAT 2541"
+          },
+          {
+            "type": "course",
+            "code": "MAT 2543",
+            "text": "MAT 2543"
+          },
           {
             "type": "or_group",
             "text": "MAT 2748 ou MAT 3748",
@@ -96638,20 +97780,117 @@
             ]
           },
           {
-            "type": "or_group",
-            "text": "MAT 2541 ou MAT 2543",
+            "type": "non_course",
+            "text": "6 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur",
+            "credits": 6,
+            "disciplines": [
+              "MAT"
+            ],
+            "disciplineLevels": [
+              {
+                "discipline": "MAT",
+                "levels": [
+                  3000
+                ]
+              }
+            ]
+          },
+          {
+            "type": "and_group",
+            "text": "MAT 3521 et MAT 3572 étant fortement recommandés",
             "children": [
               {
                 "type": "course",
-                "code": "MAT 2541",
-                "text": "MAT 2541"
+                "code": "MAT 3521",
+                "text": "MAT 3521"
               },
               {
                 "type": "course",
-                "code": "MAT 2543",
-                "text": "MAT 2543"
+                "code": "MAT 3572",
+                "text": "MAT 3572 étant fortement recommandés"
               }
             ]
+          },
+          {
+            "type": "non_course",
+            "text": "ou la permission de l'instructeur",
+            "kind": "permission"
+          }
+        ]
+      }
+    },
+    {
+      "code": "MAT 4748",
+      "title": "Théorie des graphes",
+      "credits": 3,
+      "description": "Chaînes et cycles, arbres, connexité, parcours Eulériens et cycles Hamiltoniens, coloration des arêtes, ensembles stables et cliques, coloration des sommets, graphes planaires, graphes orientés.",
+      "component": "Cours magistralPréalables : MAT 2541, MAT 2543, (MAT 2748 ou MAT 3748), 6 crédits de cours parmi CSI 3505, MAT 3520, MAT 3521, MAT 3543, MAT 3741, ou (compétence clairement démontrée avec des preuves abstraites et la permission de l'instructeur).",
+      "prereqText": "MAT 2541, MAT 2543, (MAT 2748 ou MAT 3748), 6 crédits de cours parmi CSI 3505, MAT 3520, MAT 3521, MAT 3543, MAT 3741, ou (compétence clairement démontrée avec des preuves abstraites et la permission de l'instructeur)",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "MAT 2541, MAT 2543, (MAT 2748 ou MAT 3748), 6 crédits de cours parmi CSI 3505, MAT 3520, MAT 3521, MAT 3543, MAT 3741, ou (compétence clairement démontrée avec des preuves abstraites et la permission de l'instructeur)",
+        "children": [
+          {
+            "type": "course",
+            "code": "MAT 2541",
+            "text": "MAT 2541"
+          },
+          {
+            "type": "course",
+            "code": "MAT 2543",
+            "text": "MAT 2543"
+          },
+          {
+            "type": "or_group",
+            "text": "MAT 2748 ou MAT 3748",
+            "children": [
+              {
+                "type": "course",
+                "code": "MAT 2748",
+                "text": "MAT 2748"
+              },
+              {
+                "type": "course",
+                "code": "MAT 3748",
+                "text": "MAT 3748"
+              }
+            ]
+          },
+          {
+            "type": "non_course",
+            "text": "6 crédits de cours parmi CSI 3505",
+            "credits": 6,
+            "children": [
+              {
+                "type": "course",
+                "code": "CSI 3505"
+              }
+            ]
+          },
+          {
+            "type": "course",
+            "code": "MAT 3520",
+            "text": "MAT 3520"
+          },
+          {
+            "type": "course",
+            "code": "MAT 3521",
+            "text": "MAT 3521"
+          },
+          {
+            "type": "course",
+            "code": "MAT 3543",
+            "text": "MAT 3543"
+          },
+          {
+            "type": "course",
+            "code": "MAT 3741",
+            "text": "MAT 3741"
+          },
+          {
+            "type": "non_course",
+            "text": "ou (compétence clairement démontrée avec des preuves abstraites et la permission de l'instructeur)",
+            "kind": "permission"
           }
         ]
       }
@@ -96763,7 +98002,7 @@
       "code": "MAT 4772",
       "title": "Mathématiques financières",
       "credits": 3,
-      "description": "Révision de l'espérance conditionnelle et une introduction aux martingales, temps d'arrêts et l'enveloppe de Snell. Taux d'intérêt et valeur actuelle, évaluation d'option en temps discret. Révision de la loi normale multivariée avec des applications à la théorie du portefeuille de Markovitz. Une introduction au mouvement brownien et la formule Black-Scholes pour des options européennes.",
+      "description": "Taux d'intérêt et valeur actuelle. Théorie de l’arbitrage, théorème de Girsanov et évaluation neutre au risque. Modèles binomiaux en temps discret pour la tarification des options européennes, américaines et exotiques, y compris la réplication de portefeuille. Stratégies de couverture et grecques. Applications du calcul d’Itô dans des modèles stochastiques classiques en finance.",
       "component": "Cours magistralPréalables : MAT 2775, MAT 3572",
       "prereqText": "MAT 2775, MAT 3572",
       "prerequisites": {
@@ -96786,27 +98025,62 @@
       "title": "Mathématiques de l`apprentissage automatique",
       "credits": 3,
       "description": "Analyse discriminante, analyse en composantes principales, machines à vecteurs de support; espaces de Hilbert à noyau reproduisant et méthodes à noyaux; réseaux neuronaux; théorie VC, apprentissage PAC. Sujets supplémentaires comme par exemple: modélisation bayésienne, apprentissage de variétés, boosting.",
-      "component": "Cours magistralPrerequisite: MAT 2522, MAT 2771, MAT 2775, MAT 3773.",
-      "prereqText": "MAT 2522, MAT 2771, MAT 2775, MAT 3773",
+      "component": "Cours magistralPréalables : MAT 2522, MAT 2771, STA 2500, 3 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur ou STA 3500 ou la permission de l'instructeur.",
+      "prereqText": "MAT 2522, MAT 2771, STA 2500, 3 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur ou STA 3500 ou la permission de l'instructeur",
       "prerequisites": {
         "type": "and_group",
-        "text": "MAT 2522, MAT 2771, MAT 2775, MAT 3773",
+        "text": "MAT 2522, MAT 2771, STA 2500, 3 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur ou STA 3500 ou la permission de l'instructeur",
         "children": [
           {
             "type": "course",
-            "code": "MAT 2522"
+            "code": "MAT 2522",
+            "text": "MAT 2522"
           },
           {
             "type": "course",
-            "code": "MAT 2771"
+            "code": "MAT 2771",
+            "text": "MAT 2771"
           },
           {
             "type": "course",
-            "code": "MAT 2775"
+            "code": "STA 2500",
+            "text": "STA 2500"
           },
           {
-            "type": "course",
-            "code": "MAT 3773"
+            "type": "or_group",
+            "text": "3 crédits de cours en mathématiques (MAT) de niveau 3000 ou supérieur ou STA 3500 ou la permission de l'instructeur",
+            "children": [
+              {
+                "type": "non_course",
+                "text": "3 crédits de cours en mathématiques (MAT) de niveau 3000",
+                "credits": 3,
+                "disciplines": [
+                  "MAT"
+                ],
+                "disciplineLevels": [
+                  {
+                    "discipline": "MAT",
+                    "levels": [
+                      3000
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "non_course",
+                "text": "supérieur"
+              },
+              {
+                "type": "course",
+                "code": "STA 3500",
+                "text": "STA 3500"
+              },
+              {
+                "type": "non_course",
+                "text": "la permission de l'instructeur",
+                "kind": "permission"
+              }
+            ]
           }
         ]
       }
@@ -107311,7 +108585,7 @@
       "title": "Solfège et dictée musicale I : Général",
       "credits": 3,
       "description": "Exercices dynamiques destinés à améliorer la lecture, l'audition et la mémoire musicale.",
-      "component": "Laboratoire, TutorielMUS 2706 est concomitant à MUS 1591. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Ce cours est équivalent à MUS 1594."
+      "component": "Tutoriel, LaboratoireMUS 2706 est concomitant à MUS 1591. Réservé aux étudiants et étudiantes inscrits au Baccalauréat en musique, au spécialisé en musique ou à la majeure en études de la musique. Ce cours est équivalent à MUS 1594."
     },
     {
       "code": "MUS 15911",
@@ -112934,7 +114208,7 @@
       "title": "Stage clinique touchant les soins aux enfants, axés sur la famille - maladies aiguës et chroniques",
       "credits": 3,
       "description": "Soins axés sur la famille d'enfants en situation de maladie aiguë et chronique. Stage en milieux de soins et milieux simulés.",
-      "component": "Stage, LaboratoirePréalable : NSG2713. Le cours NSG3507 est concomitant à NSG 3707.",
+      "component": "Laboratoire, StagePréalable : NSG2713. Le cours NSG3507 est concomitant à NSG 3707.",
       "prereqText": "NSG2713",
       "prerequisites": {
         "type": "course",
@@ -124242,7 +125516,7 @@
       "title": "Special Topics",
       "credits": 3,
       "description": "Advanced topics in metaphysics, epistemology, philosophy of mind, logic, philosophy of science, or philosophy of language. This course has variable topics and may be taken several times if the themes are different.",
-      "component": "LecturePrerequisite: 21 course units in philosophy (PHI).",
+      "component": "SeminarPrerequisite: 21 course units in philosophy (PHI).",
       "prereqText": "21 course units in philosophy (PHI)",
       "prerequisites": {
         "type": "non_course",
@@ -124258,7 +125532,7 @@
       "title": "Texts in Metaphysics and Epistemology",
       "credits": 3,
       "description": "Advanced study of texts in metaphysics and epistemology or related areas. This course has variable topics and may be taken several times if the themes are different.",
-      "component": "LecturePrerequisite: 21 course units in philosophy (PHI).",
+      "component": "SeminarPrerequisite: 21 course units in philosophy (PHI).",
       "prereqText": "21 course units in philosophy (PHI)",
       "prerequisites": {
         "type": "non_course",
@@ -124346,7 +125620,7 @@
       "title": "Problems in Contemporary Ethics",
       "credits": 3,
       "description": "Advanced study of questions in contemporary ethics.",
-      "component": "LecturePrerequisites: 21 course units in Philosophy (PHI), including PHI 2174. PHI 4000-level course content varies from year to year.",
+      "component": "SeminarPrerequisites: 21 course units in Philosophy (PHI), including PHI 2174. PHI 4000-level course content varies from year to year.",
       "prereqText": "21 course units in Philosophy (PHI), including PHI 2174",
       "prerequisites": {
         "type": "and_group",
@@ -124370,7 +125644,7 @@
       "title": "Thèmes choisis",
       "credits": 3,
       "description": "Thèmes choisis en métaphysique, théorie de la connaissance, philosophie de l’esprit, logique, philosophie des sciences, ou philosophie du langage.",
-      "component": "Cours magistralPréalable: 21 crédits de cours en philosophie (PHI).",
+      "component": "SéminairePréalable: 21 crédits de cours en philosophie (PHI).",
       "prereqText": "21 crédits de cours en philosophie (PHI)",
       "prerequisites": {
         "type": "non_course",
@@ -124386,7 +125660,7 @@
       "title": "Textes en métaphysique et théorie de la connaissance",
       "credits": 3,
       "description": "Étude avancée de textes en métaphysique et théorie de la connaissance ou des champs connexes. Ce cours à thèmes variables peut être suivi plusieurs fois pourvu que les thèmes diffèrent.",
-      "component": "Cours magistralPréalable: 21 crédits de cours en philosophie (PHI). Ce cours à thèmes variables peut être suivi plusieurs fois pourvu que les thèmes diffèrent.",
+      "component": "SéminairePréalable: 21 crédits de cours en philosophie (PHI). Ce cours à thèmes variables peut être suivi plusieurs fois pourvu que les thèmes diffèrent.",
       "prereqText": "21 crédits de cours en philosophie (PHI)",
       "prerequisites": {
         "type": "non_course",
@@ -124458,7 +125732,7 @@
       "title": "Problèmes de philosophie politique contemporaine",
       "credits": 3,
       "description": "Analyse de débats contemporains tels que ceux du libéralisme dans un contexte de diversité culturelle, de la justice sociale et de la critique de la démocratie libérale. Lecture d'auteurs tels que Rawls, Habermas, Taylor.",
-      "component": "Cours magistralPréalables: 21 crédits de cours en philosophie (PHI), incluant PHI 2583. Le contenu des cours de niveau 4000 varie chaque année.",
+      "component": "SéminairePréalables: 21 crédits de cours en philosophie (PHI), incluant PHI 2583. Le contenu des cours de niveau 4000 varie chaque année.",
       "prereqText": "21 crédits de cours en philosophie (PHI), incluant PHI 2583",
       "prerequisites": {
         "type": "and_group",
@@ -124482,7 +125756,7 @@
       "title": "Problèmes d'éthique contemporaine",
       "credits": 3,
       "description": "Étude de questions importantes en éthique contemporaine.",
-      "component": "Cours magistralPréalables: 21 crédits de cours en philosophie (PHI), incluant PHI 2574. Le contenu des cours de niveau 4000 varie chaque année.",
+      "component": "SéminairePréalables: 21 crédits de cours en philosophie (PHI), incluant PHI 2574. Le contenu des cours de niveau 4000 varie chaque année.",
       "prereqText": "21 crédits de cours en philosophie (PHI), incluant PHI 2574",
       "prerequisites": {
         "type": "and_group",
@@ -154746,6 +156020,28 @@
         "type": "course",
         "code": "TMM 3009",
         "text": "TMM 3009"
+      }
+    },
+    {
+      "code": "TMM 4708",
+      "title": "Régulation hormonale du métabolisme",
+      "credits": 3,
+      "description": "Ce cours aborde l’exploration d’un vaste éventail de sujets reliés aux hormones et à leur rôle dans la régulation des voies de signalisation et du métabolisme énergétique. Les mécanismes cellulaires et les processus physiologiques de l’organisme dans son ensemble sont intégrés pour offrir une compréhension globale des systèmes de contrôle endocrinien. On accorde une attention particulière aux maladies causées par un dysfonctionnement des voies métaboliques régulées par les hormones, en prenant en compte à la fois les mécanismes pathologiques bien connus et ceux qui émergent.",
+      "component": "Cours magistralPréalables : TMM 3009, TMM 3503.",
+      "prereqText": "TMM 3009, TMM 3503",
+      "prerequisites": {
+        "type": "and_group",
+        "text": "TMM 3009, TMM 3503",
+        "children": [
+          {
+            "type": "course",
+            "code": "TMM 3009"
+          },
+          {
+            "type": "course",
+            "code": "TMM 3503"
+          }
+        ]
       }
     },
     {
@@ -271807,8 +273103,7 @@
             },
             {
               "type": "course",
-              "code": "EAS 4102",
-              "credits": 3
+              "code": "EAS 4102"
             },
             {
               "type": "course",
@@ -272781,8 +274076,7 @@
             },
             {
               "type": "course",
-              "code": "EAS 4102",
-              "credits": 3
+              "code": "EAS 4102"
             },
             {
               "type": "course",
@@ -273506,8 +274800,7 @@
             },
             {
               "type": "course",
-              "code": "EAS 4102",
-              "credits": 3
+              "code": "EAS 4102"
             },
             {
               "type": "course",
@@ -311829,8 +313122,7 @@
             },
             {
               "type": "course",
-              "code": "EAS 4102",
-              "credits": 3
+              "code": "EAS 4102"
             },
             {
               "type": "course",
