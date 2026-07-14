@@ -998,6 +998,12 @@ msgstr "Generate weekly schedules with no overlapping classes."
 msgid "compare.feature.conflict-free.name"
 msgstr "Conflict-free timetables"
 
+msgid "compare.feature.quick-schedule.desc"
+msgstr "Add course codes and generate a timetable without choosing a program."
+
+msgid "compare.feature.quick-schedule.name"
+msgstr "Quick course-first scheduling"
+
 msgid "compare.feature.course-evaluations.desc"
 msgstr "University survey results, not just third-party ratings."
 
@@ -1436,10 +1442,10 @@ msgid "constrainStep.virtualSectionsOnly"
 msgstr "Virtual meeting times only"
 
 msgid "cta.body"
-msgstr "Plan your uOttawa degree and generate a conflict-free timetable in seconds."
+msgstr "Add the courses you want and generate a conflict-free timetable—no program setup required."
 
 msgid "cta.plan"
-msgstr "Start planning"
+msgstr "Build a quick schedule"
 
 msgid "cta.title"
 msgstr "Ready to build your schedule?"
@@ -2093,13 +2099,13 @@ msgid "features.hero.ctaCompare"
 msgstr "Compare tools"
 
 msgid "features.hero.ctaPlan"
-msgstr "Start planning"
+msgstr "Build a quick schedule"
 
 msgid "features.hero.eyebrow"
 msgstr "features"
 
 msgid "features.hero.subtitle"
-msgstr "From requirement mapping to conflict-free timetables: {count} features that plan your degree, not just your week."
+msgstr "Add courses and generate right away, or map requirements across your whole degree: {count} features for planning your week and what comes next."
 
 msgid "features.hero.title"
 msgstr "One tool for your whole uOttawa degree"
@@ -2659,7 +2665,7 @@ msgid "landing.planner.description"
 msgstr "Map your whole degree as a term-by-term graph."
 
 msgid "landing.schedule.description"
-msgstr "Plan your degree and generate conflict-free timetables."
+msgstr "Add the courses you want and press Generate—no program setup required."
 
 msgid "landing.schedule.title"
 msgstr "Schedule generator"

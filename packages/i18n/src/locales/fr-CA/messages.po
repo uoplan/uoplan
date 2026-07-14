@@ -998,6 +998,12 @@ msgstr "Générez des horaires hebdomadaires sans chevauchement de cours."
 msgid "compare.feature.conflict-free.name"
 msgstr "Horaires sans conflit"
 
+msgid "compare.feature.quick-schedule.desc"
+msgstr "Ajoutez des codes de cours et générez un horaire sans choisir de programme."
+
+msgid "compare.feature.quick-schedule.name"
+msgstr "Création rapide d'horaire par cours"
+
 msgid "compare.feature.course-evaluations.desc"
 msgstr "Résultats des sondages de l'université, pas seulement des notes tierces."
 
@@ -1436,10 +1442,10 @@ msgid "constrainStep.virtualSectionsOnly"
 msgstr "Horaires virtuels seulement"
 
 msgid "cta.body"
-msgstr "Planifiez votre diplôme à l'Université d'Ottawa et générez un horaire sans conflit en quelques secondes."
+msgstr "Ajoutez les cours souhaités et générez un horaire sans conflit — aucune configuration de programme requise."
 
 msgid "cta.plan"
-msgstr "Commencer à planifier"
+msgstr "Créer un horaire rapidement"
 
 msgid "cta.title"
 msgstr "Prêt à créer votre horaire?"
@@ -2093,13 +2099,13 @@ msgid "features.hero.ctaCompare"
 msgstr "Comparer les outils"
 
 msgid "features.hero.ctaPlan"
-msgstr "Commencer à planifier"
+msgstr "Créer un horaire rapidement"
 
 msgid "features.hero.eyebrow"
 msgstr "fonctionnalités"
 
 msgid "features.hero.subtitle"
-msgstr "De la cartographie des exigences aux horaires sans conflit : {count} fonctionnalités qui planifient votre diplôme, pas seulement votre semaine."
+msgstr "Ajoutez des cours et générez un horaire immédiatement, ou cartographiez les exigences de tout votre diplôme : {count} fonctionnalités pour planifier votre semaine et la suite."
 
 msgid "features.hero.title"
 msgstr "Un seul outil pour tout votre diplôme à l'Université d'Ottawa"
@@ -2659,7 +2665,7 @@ msgid "landing.planner.description"
 msgstr "Visualisez tout votre parcours sous forme de graphe, trimestre par trimestre."
 
 msgid "landing.schedule.description"
-msgstr "Planifiez votre parcours et générez des horaires sans conflit."
+msgstr "Ajoutez les cours souhaités et appuyez sur Générer — aucune configuration de programme requise."
 
 msgid "landing.schedule.title"
 msgstr "Générateur d'horaires"

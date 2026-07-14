@@ -67,6 +67,7 @@ function feat(
 export const FEATURES: readonly Feature[] = [
   // Schedule generation & optimization
   feat("conflict-free", "scheduling", ["yes", "yes", "yes", "no"]),
+  feat("quick-schedule", "scheduling", ["yes", "yes", "yes", "no"]),
   feat("multiple-schedules", "scheduling", ["yes", "yes", "yes", "no"]),
   feat("priorities", "scheduling", ["yes", "no", "yes", "no"]),
   feat("time-day-limits", "scheduling", ["yes", "no", "yes", "no"]),

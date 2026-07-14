@@ -43,6 +43,21 @@ describe("comparison data integrity", () => {
     }
   });
 
+  it("models quick course-first scheduling across every product", () => {
+    const feature = FEATURES.find(({ id }) => id === "quick-schedule");
+
+    expect(feature).toMatchObject({
+      categoryId: "scheduling",
+      support: {
+        uoplan: { level: "yes" },
+        uenroll: { level: "yes" },
+        uschedule: { level: "yes" },
+        "uo-grades": { level: "no" },
+      },
+    });
+    expect(uoplanFeatures().some(({ id }) => id === "quick-schedule")).toBe(true);
+  });
+
   it("derives translation ids consistently", () => {
     for (const feature of FEATURES) {
       expect(feature.nameId).toBe(`compare.feature.${feature.id}.name`);

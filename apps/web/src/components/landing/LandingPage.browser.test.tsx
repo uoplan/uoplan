@@ -95,3 +95,15 @@ test("important dates link is subdued (dim text, not a prominent tile)", async (
   await expect.element(page.getByRole("link", { name: /schedule generator/i })).toBeInTheDocument();
   await expect.element(page.getByRole("link", { name: /course explorer/i })).toBeInTheDocument();
 });
+
+test("schedule generator exposes the no-setup flow directly", async () => {
+  await renderWithProviders(<RouterProvider router={buildRouter()} />);
+
+  const scheduleGeneratorLink = page.getByRole("link", { name: /schedule generator/i });
+  await expect.element(scheduleGeneratorLink).toHaveAttribute("href", "/schedule");
+  await expect
+    .element(
+      page.getByText("Add the courses you want and press Generate—no program setup required."),
+    )
+    .toBeInTheDocument();
+});
