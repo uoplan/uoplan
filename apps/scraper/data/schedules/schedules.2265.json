@@ -35620,7 +35620,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -43858,7 +43858,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Bernard Martin Pinet",
                 "meetingDates": [
                   "2026-05-04",
                   "2026-07-24"

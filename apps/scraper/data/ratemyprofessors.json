@@ -1,5 +1,5 @@
 {
-  "resultCount": 4571,
+  "resultCount": 4572,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -14303,6 +14303,13 @@
       "numRatings": 1
     },
     {
+      "id": "VGVhY2hlci01MDU0OTU2",
+      "legacyId": 5054956,
+      "name": "Joe Ghafari",
+      "rating": 0,
+      "numRatings": 0
+    },
+    {
       "id": "VGVhY2hlci0yOTUzNTU2",
       "legacyId": 2953556,
       "name": "Joe Inhaber",
@@ -14566,7 +14573,7 @@
       "legacyId": 1743406,
       "name": "John Palmer",
       "rating": 2.8,
-      "numRatings": 285
+      "numRatings": 287
     },
     {
       "id": "VGVhY2hlci03ODY3MQ==",
@@ -20117,7 +20124,7 @@
       "legacyId": 2004247,
       "name": "Massoud Khazabi",
       "rating": 4.8,
-      "numRatings": 83
+      "numRatings": 84
     },
     {
       "id": "VGVhY2hlci05ODA3OTU=",
@@ -22377,8 +22384,8 @@
       "id": "VGVhY2hlci0yMjgzMzcy",
       "legacyId": 2283372,
       "name": "Nabil Messabia",
-      "rating": 2.6,
-      "numRatings": 26
+      "rating": 2.7,
+      "numRatings": 27
     },
     {
       "id": "VGVhY2hlci0yMjc5NDQz",
@@ -29805,7 +29812,7 @@
       "legacyId": 2783896,
       "name": "Taoufik Ben Halima",
       "rating": 4.9,
-      "numRatings": 13
+      "numRatings": 15
     },
     {
       "id": "VGVhY2hlci0zMDUxMjM2",

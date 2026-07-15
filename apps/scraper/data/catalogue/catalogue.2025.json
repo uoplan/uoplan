@@ -229451,11 +229451,6 @@
             },
             {
               "type": "course",
-              "code": "EAS 3103",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "SRS 2114",
               "credits": 3
             },
@@ -271482,6 +271477,11 @@
             },
             {
               "type": "course",
+              "code": "MAT 2335",
+              "credits": 3
+            },
+            {
+              "type": "course",
               "code": "MAT 2371",
               "credits": 3
             },
@@ -271551,28 +271551,6 @@
                 {
                   "type": "course",
                   "code": "MAT 2342",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "title": "3 course units from:",
-              "credits": 3,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "MAT 2324",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "MAT 2335",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "MAT 2384",
                   "indented": true
                 }
               ]
@@ -275302,6 +275280,16 @@
                         {
                           "type": "course",
                           "code": "FSS 4210",
+                          "indented": true
+                        },
+                        {
+                          "type": "course",
+                          "code": "FSS 4950",
+                          "indented": true
+                        },
+                        {
+                          "type": "course",
+                          "code": "FSS 4951",
                           "indented": true
                         }
                       ]
@@ -288077,6 +288065,16 @@
                   "type": "course",
                   "code": "FSS 4210",
                   "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "FSS 4950",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "FSS 4951",
+                  "indented": true
                 }
               ]
             },
@@ -296999,12 +296997,17 @@
             },
             {
               "type": "course",
+              "code": "EAS 2106",
+              "credits": 3
+            },
+            {
+              "type": "course",
               "code": "EAS 3101",
               "credits": 3
             },
             {
               "type": "course",
-              "code": "EAS 4103",
+              "code": "EAS 4109",
               "credits": 3
             }
           ]
@@ -297014,127 +297017,94 @@
           "title": "Optional courses",
           "options": [
             {
-              "type": "group",
-              "title": "3 course units from:",
-              "credits": 3,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "EAS 2110",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "HIS 2307",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "elective",
-              "title": "3 course units",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 3102",
-              "indented": true
-            },
-            {
-              "type": "course",
-              "code": "SRS 2115",
-              "indented": true
-            },
-            {
-              "type": "group",
-              "title": "3 course units from:",
-              "credits": 3,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ILA 1901",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 1902",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 2901",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 2902",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 3901",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 3902",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 3920",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 4901",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 4902",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ILA 4920",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "LIN 2301",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "elective",
-              "title": "9 optional course units at the 3000 or 4000 level from the list of optional courses",
+              "type": "pick",
+              "title": "9 optional course units at the 3000 or 4000 level in Indigenous Studies (EAS) or in Indigenous Languages (ILA)",
               "credits": 9,
-              "levels": [
-                3000,
-                4000
+              "options": [
+                {
+                  "type": "discipline_elective",
+                  "title": "Any EAS at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "EAS",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any ILA at 3000 or 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "ILA",
+                      "levels": [
+                        3000,
+                        4000
+                      ]
+                    }
+                  ]
+                }
               ]
             },
             {
-              "type": "elective",
-              "title": "3 optional course units at the 4000 level from the list of optional courses",
+              "type": "pick",
+              "title": "3 optional course units at the 4000 level in Indigenous Studies (EAS) or in Indigenous Languages (ILA)",
               "credits": 3,
-              "levels": [
-                4000
+              "options": [
+                {
+                  "type": "discipline_elective",
+                  "title": "Any EAS at 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "EAS",
+                      "levels": [
+                        4000
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any ILA at 4000 level",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "ILA",
+                      "levels": [
+                        4000
+                      ]
+                    }
+                  ]
+                }
               ]
             },
             {
-              "type": "elective",
-              "title": "9 optional course units from the list of optional courses",
-              "credits": 9
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "List A: Indigenous Content Courses (minimum of 12 units)",
-          "options": [
+              "type": "pick",
+              "title": "15 optional course units in Indigenous Studies (EAS), in Indigenous Languages (ILA) or from the list of optional courses.",
+              "credits": 15,
+              "options": [
+                {
+                  "type": "discipline_elective",
+                  "title": "Any EAS",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "EAS"
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any ILA",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "ILA"
+                    }
+                  ]
+                }
+              ]
+            },
             {
               "type": "course",
               "code": "ANT 2126",
@@ -297162,46 +297132,6 @@
             },
             {
               "type": "course",
-              "code": "EAS 2110",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 3102",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 3103",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4101",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4102",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4110",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4115",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4364",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "ENG 3381",
               "credits": 3
             },
@@ -297212,67 +297142,12 @@
             },
             {
               "type": "course",
-              "code": "GEG 3309",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "HIS 2307",
               "credits": 3
             },
             {
               "type": "course",
               "code": "HIS 3109",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 1901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 1902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 2901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 2902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 3901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 3902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 3920",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 4901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 4902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 4920",
               "credits": 3
             },
             {
@@ -297298,11 +297173,6 @@
             {
               "type": "course",
               "code": "SRS 3139",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "TSO 3555",
               "credits": 3
             }
           ]
@@ -298860,173 +298730,6 @@
                   "levels": [
                     4000
                   ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Major in English as a Second Language (ESL)",
-      "url": "https://catalogue.uottawa.ca/en/undergrad/major-english-second-language-esl/",
-      "slug": "undergrad/major-english-second-language-esl",
-      "requirements": [
-        {
-          "type": "and",
-          "title": "Compulsory courses",
-          "options": [
-            {
-              "type": "course",
-              "code": "ESL 2100",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2121",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2122",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 3373",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 4100",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 4375",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 4391",
-              "credits": 3
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "Optional courses",
-          "options": [
-            {
-              "type": "group",
-              "title": "6 course units from:",
-              "credits": 6,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ESL 2181",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2332",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2341",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2351",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2361",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2371",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2372",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2391",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "title": "9 course units from:",
-              "credits": 9,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ESL 3181",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3351",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3361",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3363",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3371",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "title": "3 course units outside the program (Second Language Certification):",
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ESL 3100",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "discipline_elective",
-              "title": "3 optional course units in English (ENG) at the 2000 level",
-              "credits": 3,
-              "disciplineLevels": [
-                {
-                  "discipline": "ENG",
-                  "levels": [
-                    2000
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "discipline_elective",
-              "title": "3 optional course units in English (ENG)",
-              "credits": 3,
-              "disciplineLevels": [
-                {
-                  "discipline": "ENG"
                 }
               ]
             }
@@ -307637,11 +307340,6 @@
                 },
                 {
                   "type": "course",
-                  "code": "EAS 3103",
-                  "indented": true
-                },
-                {
-                  "type": "course",
                   "code": "ENG 2141",
                   "indented": true
                 },
@@ -308391,23 +308089,6 @@
               "type": "course",
               "title": "THO 4106 The Ethics of Medicine, Sickness and Health",
               "code": "THO 4106"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Microprogram English as a Second Language (ESL)",
-      "url": "https://catalogue.uottawa.ca/en/undergrad/microprogram-english-second-language/",
-      "slug": "undergrad/microprogram-english-second-language",
-      "requirements": [
-        {
-          "type": "discipline_elective",
-          "title": "12 course units in English as a Second Language (ESL)",
-          "credits": 12,
-          "disciplineLevels": [
-            {
-              "discipline": "ESL"
             }
           ]
         }
@@ -309222,11 +308903,6 @@
                 {
                   "type": "course",
                   "code": "AHL 3155",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "EAS 3103",
                   "indented": true
                 },
                 {
@@ -310241,39 +309917,88 @@
           "credits": 3
         },
         {
+          "type": "course",
+          "code": "EAS 3101",
+          "credits": 3
+        },
+        {
           "type": "and",
           "title": "Optional courses",
           "options": [
             {
-              "type": "group",
-              "title": "3 optional course units from:",
-              "credits": 3,
+              "type": "pick",
+              "title": "6 optional course units in Indigenous Studies (EAS) or in Indigenous Languages (ILA)",
+              "credits": 6,
               "options": [
                 {
-                  "type": "course",
-                  "code": "EAS 2110",
-                  "indented": true
+                  "type": "discipline_elective",
+                  "title": "Any EAS",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "EAS"
+                    }
+                  ]
                 },
                 {
-                  "type": "course",
-                  "code": "HIS 2307",
-                  "indented": true
+                  "type": "discipline_elective",
+                  "title": "Any ILA",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "ILA"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "type": "elective",
-              "title": "6 optional course units at the 3000 or 4000 level from the list of optional courses",
+              "type": "pick",
+              "title": "6 optional course units from the 3000-4000 level in Indigenous Studies (EAS) or in Indigenous Languages (ILA)",
               "credits": 6,
-              "levels": [
-                3000,
-                4000
+              "options": [
+                {
+                  "type": "discipline_elective",
+                  "title": "Any EAS",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "EAS"
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any ILA",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "ILA"
+                    }
+                  ]
+                }
               ]
             },
             {
-              "type": "elective",
-              "title": "15 optional course units from the list of optional courses",
-              "credits": 15
+              "type": "pick",
+              "title": "9 optional course units in Indigenous Studies (EAS), in Indigenous Languages (ILA) or from the list of optional courses",
+              "credits": 9,
+              "options": [
+                {
+                  "type": "discipline_elective",
+                  "title": "Any EAS",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "EAS"
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "Any ILA",
+                  "disciplineLevels": [
+                    {
+                      "discipline": "ILA"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "course",
@@ -310292,61 +310017,6 @@
             },
             {
               "type": "course",
-              "code": "CDN 3100",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 2110",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 3101",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 3102",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 3103",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4101",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4102",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4103",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4110",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4115",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EAS 4364",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "ENG 3381",
               "credits": 3
             },
@@ -310357,72 +310027,7 @@
             },
             {
               "type": "course",
-              "code": "GEG 2110",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "GEG 3107",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "GEG 3309",
-              "credits": 3
-            },
-            {
-              "type": "course",
               "code": "HIS 3109",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 1901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 1902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 2901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 2902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 3901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 3902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 3920",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 4901",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 4902",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ILA 4920",
               "credits": 3
             },
             {
@@ -310451,151 +310056,8 @@
               "credits": 3
             },
             {
-              "type": "course",
-              "code": "SRS 3191",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "SRS 3194",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "TSO 3555",
-              "credits": 3
-            },
-            {
               "type": "elective",
               "title": "Other courses may be selected in consultation with the Program Coordinator."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Advanced Minor in English as a Second Language (ESL)",
-      "url": "https://catalogue.uottawa.ca/en/undergrad/minor-advanced-english-second-language/",
-      "slug": "undergrad/minor-advanced-english-second-language",
-      "requirements": [
-        {
-          "type": "and",
-          "title": "Compulsory courses",
-          "options": [
-            {
-              "type": "course",
-              "code": "ESL 2100",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2121",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2122",
-              "credits": 3
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "Optional courses",
-          "options": [
-            {
-              "type": "group",
-              "title": "9 course units from:",
-              "credits": 9,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ESL 2181",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2332",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2341",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2351",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2361",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2371",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2372",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2391",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "title": "9 course units from:",
-              "credits": 9,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ESL 3181",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3351",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3361",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3363",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3371",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3373",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "discipline_elective",
-              "title": "3 optional course units in English (ENG)",
-              "credits": 3,
-              "disciplineLevels": [
-                {
-                  "discipline": "ENG"
-                }
-              ]
             }
           ]
         }
@@ -310801,7 +310263,7 @@
                 },
                 {
                   "type": "course",
-                  "code": "FSS 4150",
+                  "code": "FSS 4950",
                   "indented": true
                 },
                 {
@@ -310880,6 +310342,16 @@
               "type": "course",
               "code": "ECH 3370",
               "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "FSS 4950",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "FSS 4951",
+              "credits": 6
             },
             {
               "type": "course",
@@ -310993,11 +310465,6 @@
                 {
                   "type": "course",
                   "code": "CML 3145",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "EAS 3103",
                   "indented": true
                 },
                 {
@@ -313962,134 +313429,6 @@
                       ]
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Minor in English as a Second Language (ESL)",
-      "url": "https://catalogue.uottawa.ca/en/undergrad/minor-english-second-language-esl/",
-      "slug": "undergrad/minor-english-second-language-esl",
-      "requirements": [
-        {
-          "type": "and",
-          "title": "Compulsory courses",
-          "options": [
-            {
-              "type": "course",
-              "code": "ESL 2100",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2112",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2113",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2121",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "ESL 2122",
-              "credits": 3
-            }
-          ]
-        },
-        {
-          "type": "and",
-          "title": "Optional courses",
-          "options": [
-            {
-              "type": "group",
-              "title": "9 course units from:",
-              "credits": 9,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ESL 2181",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2332",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2341",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2351",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2361",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2371",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2372",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 2391",
-                  "indented": true
-                }
-              ]
-            },
-            {
-              "type": "group",
-              "title": "6 course units from:",
-              "credits": 6,
-              "options": [
-                {
-                  "type": "course",
-                  "code": "ESL 3181",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3351",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3361",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3363",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3371",
-                  "indented": true
-                },
-                {
-                  "type": "course",
-                  "code": "ESL 3373",
-                  "indented": true
                 }
               ]
             }
@@ -318660,11 +317999,6 @@
               "title": "6 course units from:",
               "credits": 6,
               "options": [
-                {
-                  "type": "course",
-                  "code": "EAS 3103",
-                  "indented": true
-                },
                 {
                   "type": "course",
                   "code": "SRS 2111",

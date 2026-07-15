@@ -12648,7 +12648,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Argiro Kliamenakis",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -14240,7 +14240,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Argiro Kliamenakis",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -16159,7 +16159,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sylvain Schryburt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -17905,7 +17905,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 405,
               "A": 361,
@@ -30755,7 +30755,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -31409,7 +31409,7 @@
                 "virtual": false,
                 "instructor": "Maxime Perron",
                 "meetingDates": [
-                  "2027-01-13",
+                  "2027-01-15",
                   "2027-03-12"
                 ]
               }
@@ -31440,8 +31440,8 @@
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-01-11",
-                  "2027-02-26"
+                  "2027-01-14",
+                  "2027-02-25"
                 ]
               }
             ],
@@ -31490,8 +31490,8 @@
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-03-01",
-                  "2027-04-14"
+                  "2027-03-04",
+                  "2027-04-15"
                 ]
               }
             ],
@@ -38312,7 +38312,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 490,
               "A": 615,
@@ -40126,7 +40126,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 490,
               "A": 615,
@@ -41261,7 +41261,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 197,
               "A": 153,
@@ -48772,7 +48772,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 96,
               "A": 55,
@@ -49354,7 +49354,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 91,
               "A": 88,
@@ -52190,7 +52190,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 774,
               "A": 605,
@@ -57797,7 +57797,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 31,
               "A": 94,
@@ -57888,7 +57888,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 19,
               "A": 138,
@@ -58426,7 +58426,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "E00-LEC Session F",
@@ -58649,7 +58649,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 96,
@@ -58822,7 +58822,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 30,
               "A": 129,
@@ -58984,7 +58984,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 30,
               "A": 129,
@@ -59214,7 +59214,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 44,
@@ -59296,7 +59296,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 44,
@@ -59387,7 +59387,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2,
               "A": 55,
@@ -59427,7 +59427,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2,
               "A": 55,
@@ -59951,7 +59951,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LEC Session H",
@@ -61315,7 +61315,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 35,
               "A": 204,
@@ -62483,7 +62483,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 35,
               "A": 113,
@@ -66292,7 +66292,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 15,
@@ -71812,7 +71812,7 @@
             "component": "SEM",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 13,
               "A": 145,
@@ -84399,7 +84399,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 40,
               "A": 47,
@@ -91661,7 +91661,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 349,
               "A": 305,
@@ -92454,7 +92454,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 314,
               "A": 173,
@@ -92487,7 +92487,7 @@
               {
                 "day": "We",
                 "startMinutes": 1140,
-                "endMinutes": 1220,
+                "endMinutes": 1250,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -92496,7 +92496,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 314,
               "A": 173,
@@ -94246,6 +94246,46 @@
               "P": 0,
               "S": 1
             }
+          },
+          {
+            "section": "D00-LEC FullSess.",
+            "sectionCode": "D00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 600,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Mohammad Reza Foruzanmehr",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 46,
+              "A": 34,
+              "A-": 41,
+              "B+": 40,
+              "B": 25,
+              "C+": 14,
+              "C": 11,
+              "D+": 1,
+              "D": 0,
+              "E": 0,
+              "F": 1,
+              "DR": 1,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 1
+            }
           }
         ]
       }
@@ -95232,6 +95272,46 @@
               "P": 0,
               "S": 0
             }
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 600,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Mohammad Reza Foruzanmehr",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 87,
+              "A": 89,
+              "A-": 85,
+              "B+": 43,
+              "B": 25,
+              "C+": 0,
+              "C": 1,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 3,
+              "DR": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
           }
         ]
       }
@@ -95709,7 +95789,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1095,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Karla Cristinne de Oliveira Matias",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -96156,7 +96236,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Abdou Thiaw",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -96207,7 +96287,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Geneviève Chabot",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -96309,7 +96389,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Nelson Arturo Ovalle Diaz",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -97004,7 +97084,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 11,
@@ -99787,7 +99867,7 @@
                 "startMinutes": 1080,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Daniella Ingabire",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -101528,7 +101608,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 34,
               "A": 95,
@@ -101721,7 +101801,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 42,
               "A": 109,
@@ -101892,7 +101972,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 83,
               "A": 104,
@@ -102063,7 +102143,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 6,
               "A": 3,
@@ -102234,7 +102314,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 9,
               "A": 22,
@@ -102438,7 +102518,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mireille Fournier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -103726,7 +103806,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sylvie Loubier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -104269,7 +104349,7 @@
                 "startMinutes": 1080,
                 "endMinutes": 1250,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Daniella Ingabire",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -104916,7 +104996,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Clara Laplante-Bédard",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -107423,7 +107503,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Adolphine Aggor-Boateng",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -111782,7 +111862,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mahamoud Houssein",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -112318,7 +112398,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Massoud Khazabi",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -112329,7 +112409,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Massoud Khazabi",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -113811,7 +113891,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nabil Afodjo",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -114094,7 +114174,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lanny Zrill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -114758,7 +114838,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 44,
               "A": 28,
@@ -121111,8 +121191,8 @@
             "times": [
               {
                 "day": "Mo",
-                "startMinutes": 780,
-                "endMinutes": 860,
+                "startMinutes": 1050,
+                "endMinutes": 1130,
                 "virtual": false,
                 "instructor": "Martin Bouchard",
                 "meetingDates": [
@@ -121122,8 +121202,8 @@
               },
               {
                 "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 770,
+                "startMinutes": 1050,
+                "endMinutes": 1130,
                 "virtual": false,
                 "instructor": "Martin Bouchard",
                 "meetingDates": [
@@ -121382,7 +121462,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 77,
               "A": 64,
@@ -121506,7 +121586,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 77,
               "A": 64,
@@ -131943,7 +132023,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lazar Ilic",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -131954,7 +132034,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lazar Ilic",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -137436,7 +137516,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Adolphine Aggor-Boateng",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -141601,6 +141681,28 @@
                 "instructor": "Ghassan Lutfi",
                 "meetingDates": [
                   "2027-02-23",
+                  "2027-03-07"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1230,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Ghassan Lutfi",
+                "meetingDates": [
+                  "2027-03-08",
+                  "2027-03-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1230,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Ghassan Lutfi",
+                "meetingDates": [
+                  "2027-03-09",
                   "2027-04-14"
                 ]
               }
@@ -141705,6 +141807,28 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-23",
+                  "2027-03-07"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-08",
+                  "2027-03-08"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-09",
                   "2027-04-14"
                 ]
               }
@@ -141978,6 +142102,28 @@
                 "instructor": "Monia Brahim",
                 "meetingDates": [
                   "2027-02-27",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Monia Brahim",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Monia Brahim",
+                "meetingDates": [
+                  "2027-03-13",
                   "2027-04-14"
                 ]
               }
@@ -142242,6 +142388,28 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-02-27",
+                  "2027-03-11"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-12",
+                  "2027-03-12"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 1050,
+                "endMinutes": 1130,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-03-13",
                   "2027-04-14"
                 ]
               }
@@ -143307,7 +143475,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sylvain Schryburt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -144322,7 +144490,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lazar Ilic",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -144333,7 +144501,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lazar Ilic",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -145780,7 +145948,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 38,
               "A": 4,
@@ -176407,7 +176575,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 8,
               "A": 0,
@@ -179800,6 +179968,17 @@
                   "2027-01-11",
                   "2027-04-14"
                 ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Hai Jun Cho",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
               }
             ],
             "status": "Closed",
@@ -179904,7 +180083,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 36,
               "A": 58,
@@ -179968,7 +180147,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 36,
               "A": 58,
@@ -180327,7 +180506,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 82,
               "A": 84,
@@ -180378,7 +180557,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 82,
               "A": 84,
@@ -180480,7 +180659,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 82,
               "A": 84,
@@ -194075,7 +194254,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Daniel Mroz",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -195886,7 +196065,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Craig Phillips",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -199908,7 +200087,47 @@
                 "day": "Tu",
                 "startMinutes": 690,
                 "endMinutes": 860,
-                "virtual": false,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 83,
+              "A": 55,
+              "A-": 42,
+              "B+": 31,
+              "B": 8,
+              "C+": 3,
+              "C": 1,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "DR": 1,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "B00-LEC FullSess.",
+            "sectionCode": "B00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -199948,6 +200167,46 @@
                 "day": "Tu",
                 "startMinutes": 690,
                 "endMinutes": 860,
+                "virtual": true,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 83,
+              "A": 55,
+              "A-": 42,
+              "B+": 31,
+              "B": 8,
+              "C+": 3,
+              "C": 1,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 0,
+              "DR": 1,
+              "EIN": 2,
+              "NS": 0,
+              "NC": 0,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          },
+          {
+            "section": "HD00-LEC FullSess.",
+            "sectionCode": "HD00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
                 "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -204922,7 +205181,30 @@
             "sectionCode": "A00",
             "component": "LEC",
             "session": null,
-            "times": [],
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 930,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-14",
+                  "2027-01-28"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-04-08",
+                  "2027-04-08"
+                ]
+              }
+            ],
             "status": "Open"
           }
         ]
@@ -205324,8 +205606,8 @@
                 "virtual": false,
                 "instructor": "Daniel L. Bérubé",
                 "meetingDates": [
-                  "2027-01-05",
-                  "2027-04-02"
+                  "2027-01-04",
+                  "2027-04-05"
                 ]
               }
             ],
@@ -205375,8 +205657,8 @@
                 "virtual": false,
                 "instructor": "Daniel L. Bérubé",
                 "meetingDates": [
-                  "2027-01-05",
-                  "2027-04-02"
+                  "2027-01-07",
+                  "2027-04-01"
                 ]
               }
             ],
@@ -205426,8 +205708,8 @@
                 "virtual": false,
                 "instructor": "Daniel L. Bérubé",
                 "meetingDates": [
-                  "2027-01-05",
-                  "2027-04-02"
+                  "2027-01-06",
+                  "2027-03-31"
                 ]
               }
             ],
@@ -205478,7 +205760,7 @@
                 "instructor": "Karine Gauvin",
                 "meetingDates": [
                   "2027-01-05",
-                  "2027-04-02"
+                  "2027-03-30"
                 ]
               }
             ],
@@ -205529,7 +205811,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-05",
-                  "2027-04-02"
+                  "2027-03-30"
                 ]
               }
             ],
@@ -207851,7 +208133,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Saba Alvi",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-03-25"
@@ -213146,7 +213428,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -213451,7 +213733,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -213743,7 +214025,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -231365,7 +231647,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -245290,7 +245572,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Darryl Leroux",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -245604,7 +245886,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Veldon Coburn",
+                "instructor": "Darryl Leroux",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -245835,7 +246117,7 @@
             "session": null,
             "times": [
               {
-                "day": "We",
+                "day": "Mo",
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
@@ -265930,7 +266212,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kristina Watt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -266043,7 +266325,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Miriam Cusson",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -266416,7 +266698,7 @@
                 "startMinutes": 600,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "André Perrier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -266638,7 +266920,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Sylvain Schryburt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -267106,7 +267388,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kristina Watt",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -267802,7 +268084,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Daniel Mroz",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -272080,7 +272362,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 16,
