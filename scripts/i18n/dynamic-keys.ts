@@ -14,6 +14,8 @@
  * key that has no resolvable usage.
  */
 
+import { SEO_TR_IDS } from "./seo-keys.ts";
+
 const family = (prefix: string, suffixes: readonly string[]): string[] =>
   suffixes.map((s) => `${prefix}${s}`);
 
@@ -52,12 +54,8 @@ export const DYNAMIC_TR_IDS: string[] = [
   ...family("explore.filter.feedback.", ["good", "great", "excellent"]),
   ...family("explore.sort.", ["relevance", "grade", "code", "rating", "feedback"]),
 
-  // apps/web/src/lib/seo.ts: tr(`seo.${pageId}.${field}`) — seo-pages.json x fields
-  ...cross(
-    "seo.",
-    ["home", "schedule", "explore", "graph", "trends"],
-    ["title", "description", "keywords"],
-  ),
+  // apps/web/src/lib/seo.ts: tr(`seo.${pageId}.${field}`) for every seo-pages.json page.
+  ...SEO_TR_IDS,
 
   // apps/web/src/lib/navigation/appDestinations.ts: dest.labelId / dest.descriptionId
   ...cross(

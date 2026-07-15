@@ -998,12 +998,6 @@ msgstr "Générez des horaires hebdomadaires sans chevauchement de cours."
 msgid "compare.feature.conflict-free.name"
 msgstr "Horaires sans conflit"
 
-msgid "compare.feature.quick-schedule.desc"
-msgstr "Ajoutez des codes de cours et générez un horaire sans choisir de programme."
-
-msgid "compare.feature.quick-schedule.name"
-msgstr "Création rapide d'horaire par cours"
-
 msgid "compare.feature.course-evaluations.desc"
 msgstr "Résultats des sondages de l'université, pas seulement des notes tierces."
 
@@ -1206,6 +1200,12 @@ msgstr "Voyez exactement quels cours il reste à votre diplôme."
 
 msgid "compare.feature.program-requirements.name"
 msgstr "Exigences de programme"
+
+msgid "compare.feature.quick-schedule.desc"
+msgstr "Ajoutez des codes de cours et générez un horaire sans choisir de programme."
+
+msgid "compare.feature.quick-schedule.name"
+msgstr "Création rapide d'horaire par cours"
 
 msgid "compare.feature.requirement-pools.desc"
 msgstr "Gère les cours au choix et les groupes d'options, pas seulement les cours fixes."
@@ -3676,14 +3676,46 @@ msgstr "Aucun résultat pour « {q} »"
 msgid "search.passingPercent"
 msgstr "{percent} % de réussite"
 
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.changelog.description"
+msgstr "Découvrez les nouveautés d'uoPlan, le planificateur gratuit de cours et d'horaires pour les étudiant·e·s de l'Université d'Ottawa : dernières fonctionnalités, améliorations et corrections."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.changelog.keywords"
+msgstr "journal des modifications uoplan, mises à jour uoplan, nouveautés uoplan, nouvelles fonctionnalités planificateur de cours uottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.compare.description"
+msgstr "Comparez uoPlan à uEnroll, uSchedule et UO Grades fonctionnalité par fonctionnalité : génération d'horaires, planification de programme, prérequis, notes, évaluations des professeur·e·s, inscription, partage et plateformes prises en charge."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.compare.keywords"
+msgstr "uoplan vs uenroll, uoplan vs uschedule, comparaison générateurs d'horaires uottawa, meilleur planificateur de cours uottawa, outils d'horaires université d'ottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.donate.description"
+msgstr "uoPlan est un planificateur de cours gratuit et sans publicité pour les étudiant·e·s de l'Université d'Ottawa. Faites un don pour couvrir les frais d'hébergement et le garder gratuit pour tout le monde."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.donate.keywords"
+msgstr "soutenir uoplan, don uoplan, planificateur de cours uottawa gratuit, horaire uottawa sans publicité"
+
 msgid "seo.explore.description"
-msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions de notes historiques et comparez les sections."
+msgstr "Recherchez des cours et des professeur·e·s de l'Université d'Ottawa. Consultez les distributions historiques des notes, les évaluations des professeur·e·s et des cours, comparez les sections et trouvez les offres les plus faciles ou difficiles."
 
 msgid "seo.explore.keywords"
-msgstr "notes de cours uottawa, distribution des notes uottawa, professeurs uottawa"
+msgstr "notes de cours uottawa, distribution des notes uottawa, évaluations des professeurs uottawa, recherche de cours université d'ottawa"
 
 msgid "seo.explore.title"
 msgstr "Explorer les cours et notes uOttawa | uoplan"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.features.description"
+msgstr "Tout ce qu'uoPlan offre aux étudiant·e·s de l'Université d'Ottawa : planification de programme et des exigences, horaires sans conflit, vérification des prérequis, distributions et tendances des notes, évaluations et réseau de co-enseignement des professeur·e·s, exportation de calendrier, horaires partageables et applications iOS, Android et CLI."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.features.keywords"
+msgstr "fonctionnalités planificateur de cours uottawa, générateur d'horaires uottawa, planificateur de diplôme uottawa, notes uottawa, évaluations des professeurs uottawa, horaire université d'ottawa"
 
 msgid "seo.graph.description"
 msgstr "Explorez comment les professeur·e·s de l'uOttawa sont relié·e·s par des cours communs. Graphe interactif des co-enseignements et des chevauchements de cours."
@@ -3695,22 +3727,62 @@ msgid "seo.graph.title"
 msgstr "Réseau de co-enseignement des professeur·e·s | uoplan"
 
 msgid "seo.home.description"
-msgstr "Outils gratuits pour les étudiant·e·s de l'Université d'Ottawa : planifiez votre parcours, explorez les notes de cours et parcourez le réseau de co-enseignement des professeurs."
+msgstr "Outils gratuits pour les étudiant·e·s de l'Université d'Ottawa : planifiez votre parcours, générez des horaires sans conflit, explorez les notes de cours et les évaluations des professeur·e·s, puis partagez votre horaire ou exportez-le vers votre calendrier."
 
 msgid "seo.home.keywords"
-msgstr "planificateur de cours uottawa, horaire uottawa, notes de cours uottawa, université d'ottawa"
+msgstr "planificateur de cours uottawa, générateur d'horaires uottawa, générateur d'emplois du temps uottawa, notes de cours uottawa, évaluations des professeurs uottawa, université d'ottawa"
 
 msgid "seo.home.title"
 msgstr "uoplan | Planificateur de cours uOttawa"
 
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.importantDates.description"
+msgstr "Dates universitaires importantes et échéances de l'Université d'Ottawa : périodes d'inscription, dates de paiement des droits de scolarité, périodes d'examens, jours fériés et dates de début et de fin de chaque session."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.importantDates.keywords"
+msgstr "dates importantes uottawa, échéances universitaires uottawa, dates d'inscription université d'ottawa, dates d'examens uottawa, échéances droits de scolarité uottawa, calendrier universitaire uottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.personalize.description"
+msgstr "Indiquez votre session, votre programme et vos cours terminés, ou importez votre relevé de notes, afin qu'uoPlan puisse établir les exigences restantes de votre diplôme à l'Université d'Ottawa et créer des horaires sans conflit adaptés."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.personalize.keywords"
+msgstr "planificateur de diplôme uottawa, exigences de programme uottawa, planificateur de cours université d'ottawa, cours terminés uottawa, planificateur avec relevé de notes uottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.planner.description"
+msgstr "Représentez tout votre diplôme de l'Université d'Ottawa sous forme de graphe session par session : voyez les cours terminés regroupés par session, les liens de prérequis et planifiez les prochaines sessions avec des choix de cours qui font progresser votre parcours."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.planner.keywords"
+msgstr "planificateur de diplôme uottawa, carte des prérequis uottawa, graphe de cours université d'ottawa, parcours de diplôme uottawa, plan d'études sur quatre ans uottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.privacy.description"
+msgstr "Découvrez comment uoPlan traite vos données. uoPlan est un planificateur de cours confidentiel et sans publicité pour les étudiant·e·s de l'Université d'Ottawa qui conserve votre planification sur votre appareil."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.privacy.keywords"
+msgstr "politique de confidentialité uoplan, confidentialité uoplan, confidentialité planificateur de cours uottawa"
+
 msgid "seo.schedule.description"
-msgstr "Planificateur de cours et générateur d'horaires gratuit pour les étudiant·e·s de l'Université d'Ottawa. Planifiez votre programme, vérifiez les prérequis et générez des horaires sans conflit en quelques secondes."
+msgstr "Planificateur de cours et générateur d'horaires gratuit pour les étudiant·e·s de l'Université d'Ottawa. Planifiez votre programme, vérifiez les prérequis et générez des horaires sans conflit en quelques secondes, puis partagez-les ou exportez-les vers votre calendrier."
 
 msgid "seo.schedule.keywords"
-msgstr "planificateur de cours uottawa, horaire uottawa, emploi du temps uottawa, planificateur de diplôme uottawa"
+msgstr "planificateur de cours uottawa, planificateur d'horaires uottawa, uschedule, emploi du temps uottawa, planificateur de diplôme uottawa, générateur d'horaires université d'ottawa"
 
 msgid "seo.schedule.title"
 msgstr "uoplan | Planificateur de cours et générateur d'horaires uOttawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.terms.description"
+msgstr "Les conditions d'utilisation d'uoPlan, le planificateur gratuit de cours et d'horaires pour les étudiant·e·s de l'Université d'Ottawa."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.terms.keywords"
+msgstr "conditions d'utilisation uoplan, modalités uoplan, conditions planificateur de cours uottawa"
 
 msgid "seo.trends.description"
 msgstr "L'évolution des notes de l'Université d'Ottawa : MPC moyenne, taux de A+ et taux de réussite par session, avec répartition par discipline, niveau et session ainsi qu'un classement de l'inflation des notes."
@@ -3720,6 +3792,62 @@ msgstr "tendances des notes uottawa, inflation des notes uottawa, mpc moyenne un
 
 msgid "seo.trends.title"
 msgstr "Tendances des notes de l'Université d'Ottawa | uoplan"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsCourses.description"
+msgstr "Voyez comment les notes de l'Université d'Ottawa varient selon la saison et le niveau des cours, ainsi que le rapport popularité-MPC et l'écart de notation entre professeur·e·s pour la portée choisie."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsCourses.keywords"
+msgstr "difficulté des cours uottawa, notes uottawa par saison, notes uottawa par niveau, notation des professeurs université d'ottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsDisciplines.description"
+msgstr "Comparez les disciplines de l'Université d'Ottawa selon la MPC moyenne, le taux de A+ et la popularité, grâce à une carte thermique par discipline et par année montrant l'évolution des notes."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsDisciplines.keywords"
+msgstr "notes uottawa par discipline, mpc par département uottawa, comparaison des notes université d'ottawa, disciplines les plus faciles uottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsFeedback.description"
+msgstr "Tendances des évaluations de cours à l'échelle de l'Université d'Ottawa : sentiment général des étudiant·e·s et taux de réponse aux sondages au fil du temps, ventilés par question."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsFeedback.keywords"
+msgstr "évaluations de cours uottawa, rétroaction étudiante uottawa, sondage de cours université d'ottawa, évaluations de l'enseignement uottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsLeaderboard.description"
+msgstr "Classement des tendances des notes à l'Université d'Ottawa : les plus fortes hausses ainsi que les disciplines et les cours les plus faciles et difficiles selon la MPC moyenne au fil du temps."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsLeaderboard.keywords"
+msgstr "inflation des notes uottawa, cours les plus faciles uottawa, cours les plus difficiles uottawa, classement mpc université d'ottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUenroll.description"
+msgstr "uoPlan comparé à uEnroll pour les étudiant·e·s de l'Université d'Ottawa. Les deux génèrent des horaires sans conflit et les exportent vers votre calendrier, mais uoPlan ajoute la planification de programme et des exigences, les données de notes, les évaluations des professeur·e·s et des applications natives."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUenroll.keywords"
+msgstr "uoplan vs uenroll, alternative à uenroll, générateur d'horaires uottawa, emploi du temps uottawa, planificateur de cours université d'ottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUoGrades.description"
+msgstr "uoPlan comparé à UO Grades (uo.grades.zone) pour les étudiant·e·s de l'Université d'Ottawa. Les deux présentent les distributions historiques des notes et les évaluations des professeur·e·s, mais uoPlan planifie aussi votre diplôme et crée des horaires sans conflit."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUoGrades.keywords"
+msgstr "uoplan vs uo grades, alternative à uo.grades.zone, notes uottawa, distribution des notes uottawa, évaluations des professeurs université d'ottawa"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUschedule.description"
+msgstr "uoPlan comparé à uSchedule pour les étudiant·e·s de l'Université d'Ottawa. Comparez la génération d'horaires, les filtres de professeur·e·s, les données de notes, la planification de diplôme ainsi que la confidentialité sans publicité et à code source ouvert."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUschedule.keywords"
+msgstr "uoplan vs uschedule, alternative à uschedule, générateur d'horaires uottawa, évaluations des professeurs uottawa, emploi du temps université d'ottawa"
 
 msgid "settings.ariaLabel"
 msgstr "Paramètres"

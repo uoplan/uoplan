@@ -998,12 +998,6 @@ msgstr "Generate weekly schedules with no overlapping classes."
 msgid "compare.feature.conflict-free.name"
 msgstr "Conflict-free timetables"
 
-msgid "compare.feature.quick-schedule.desc"
-msgstr "Add course codes and generate a timetable without choosing a program."
-
-msgid "compare.feature.quick-schedule.name"
-msgstr "Quick course-first scheduling"
-
 msgid "compare.feature.course-evaluations.desc"
 msgstr "University survey results, not just third-party ratings."
 
@@ -1206,6 +1200,12 @@ msgstr "See exactly which courses your degree still needs."
 
 msgid "compare.feature.program-requirements.name"
 msgstr "Program requirements"
+
+msgid "compare.feature.quick-schedule.desc"
+msgstr "Add course codes and generate a timetable without choosing a program."
+
+msgid "compare.feature.quick-schedule.name"
+msgstr "Quick course-first scheduling"
 
 msgid "compare.feature.requirement-pools.desc"
 msgstr "Handles electives and choose-from groups, not just fixed courses."
@@ -3676,14 +3676,46 @@ msgstr "No results for \"{q}\""
 msgid "search.passingPercent"
 msgstr "{percent}% passing"
 
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.changelog.description"
+msgstr "See what's new in uoPlan, the free course and schedule planner for University of Ottawa students: the latest features, improvements, and fixes."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.changelog.keywords"
+msgstr "uoplan changelog, uoplan updates, uoplan what's new, uottawa course planner new features"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.compare.description"
+msgstr "Compare uoPlan with uEnroll, uSchedule, and UO Grades feature by feature: schedule generation, degree planning, prerequisites, grades, professor ratings, enrolment, sharing, and platform support for University of Ottawa students."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.compare.keywords"
+msgstr "uoplan vs uenroll, uoplan vs uschedule, uottawa schedule generator comparison, best uottawa course planner, university of ottawa timetable tools"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.donate.description"
+msgstr "uoPlan is a free, ad-free course planner for University of Ottawa students. Donate to help cover hosting and keep it free for everyone."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.donate.keywords"
+msgstr "support uoplan, donate uoplan, free uottawa course planner, ad-free uottawa timetable"
+
 msgid "seo.explore.description"
-msgstr "Search University of Ottawa courses and professors. View historical grade distributions, compare sections, and find the easiest or hardest offerings."
+msgstr "Search University of Ottawa courses and professors. View historical grade distributions, professor ratings and course evaluations, compare sections, and find the easiest or hardest offerings."
 
 msgid "seo.explore.keywords"
 msgstr "uottawa course grades, uottawa grade distribution, uottawa professor ratings, university of ottawa course search"
 
 msgid "seo.explore.title"
 msgstr "Explore uOttawa Courses & Grades | uoplan"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.features.description"
+msgstr "Everything uoPlan does for University of Ottawa students: degree and requirement planning, conflict-free schedule generation, prerequisite checks, grade distributions and trends, professor ratings and the co-teaching network, calendar export, shareable timetables, and native iOS, Android, and CLI apps."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.features.keywords"
+msgstr "uottawa course planner features, uottawa schedule generator, uottawa degree planner, uottawa grades, uottawa professor ratings, university of ottawa timetable"
 
 msgid "seo.graph.description"
 msgstr "Explore how uOttawa professors connect through shared courses. Interactive network graph of co-teaching patterns and course overlap."
@@ -3695,22 +3727,62 @@ msgid "seo.graph.title"
 msgstr "Professor Co-Teaching Network | uoplan"
 
 msgid "seo.home.description"
-msgstr "Free tools for University of Ottawa students: plan your degree, explore course grades, and browse the professor co-teaching network."
+msgstr "Free tools for University of Ottawa students: plan your degree, generate conflict-free timetables, explore course grades and professor ratings, then share your schedule or export it to your calendar."
 
 msgid "seo.home.keywords"
-msgstr "uottawa course planner, uottawa schedule planner, uottawa course grades, university of ottawa"
+msgstr "uottawa course planner, uottawa schedule generator, uottawa timetable generator, uottawa course grades, uottawa professor ratings, university of ottawa"
 
 msgid "seo.home.title"
 msgstr "uoplan | uOttawa Course Planner"
 
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.importantDates.description"
+msgstr "University of Ottawa important academic dates and deadlines: enrolment windows, tuition payment dates, exam periods, holidays, and term start and end dates for every semester."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.importantDates.keywords"
+msgstr "uottawa important dates, uottawa academic deadlines, university of ottawa enrolment dates, uottawa exam dates, uottawa tuition deadlines, uottawa academic calendar"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.personalize.description"
+msgstr "Set your term, program, and completed courses, or import your transcript, so uoPlan can map your remaining University of Ottawa degree requirements and build conflict-free timetables around them."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.personalize.keywords"
+msgstr "uottawa degree planner, uottawa program requirements, university of ottawa course planner, uottawa completed courses, uottawa transcript planner"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.planner.description"
+msgstr "Map your whole University of Ottawa degree as a term-by-term graph: see completed courses grouped by term, prerequisite links, and plan future terms with generated course picks that advance your degree."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.planner.keywords"
+msgstr "uottawa degree planner, uottawa prerequisite map, university of ottawa course graph, uottawa degree map, uottawa four year plan"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.privacy.description"
+msgstr "How uoPlan handles your data. uoPlan is a privacy-first, ad-free course planner for University of Ottawa students that keeps your planning on your device."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.privacy.keywords"
+msgstr "uoplan privacy policy, uoplan privacy, uottawa course planner privacy"
+
 msgid "seo.schedule.description"
-msgstr "Free course planner and timetable generator for University of Ottawa (uOttawa) students. Map your degree, check prerequisites, and generate conflict-free timetables in seconds."
+msgstr "Free course planner and timetable generator for University of Ottawa (uOttawa) students. Map your degree, check prerequisites, and generate conflict-free timetables in seconds, then share them or export to your calendar."
 
 msgid "seo.schedule.keywords"
 msgstr "uottawa course planner, uottawa schedule planner, uschedule, uottawa timetable, uottawa degree planner, university of ottawa schedule generator"
 
 msgid "seo.schedule.title"
 msgstr "uoplan | uOttawa Course Planner & Schedule Generator"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.terms.description"
+msgstr "The terms of service for uoPlan, the free course and schedule planner for University of Ottawa students."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.terms.keywords"
+msgstr "uoplan terms of service, uoplan terms, uottawa course planner terms"
 
 msgid "seo.trends.description"
 msgstr "How uOttawa grades change over time: average GPA, A+ rate, and pass rate across terms, with discipline, level, and season breakdowns plus a grade-inflation leaderboard."
@@ -3720,6 +3792,62 @@ msgstr "uottawa grade trends, uottawa grade inflation, university of ottawa aver
 
 msgid "seo.trends.title"
 msgstr "uOttawa Grade Trends Over Time | uoplan"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsCourses.description"
+msgstr "See how University of Ottawa grades shift by season and course level, plus popularity-versus-GPA and per-professor grading spread for a chosen scope."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsCourses.keywords"
+msgstr "uottawa course difficulty, uottawa grades by season, uottawa grades by level, university of ottawa professor grading"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsDisciplines.description"
+msgstr "Compare University of Ottawa disciplines by average GPA, A+ rate, and popularity, with a discipline-by-year heatmap of grade drift over time."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsDisciplines.keywords"
+msgstr "uottawa grades by discipline, uottawa department gpa, university of ottawa grade comparison, uottawa easiest disciplines"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsFeedback.description"
+msgstr "University-wide course-evaluation trends at the University of Ottawa: overall student sentiment and survey response rate over time, broken down by question."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsFeedback.keywords"
+msgstr "uottawa course evaluations, uottawa student feedback, university of ottawa course survey, uottawa teaching evaluations"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsLeaderboard.description"
+msgstr "Ranked University of Ottawa grade trends: the biggest risers, the easiest, and the hardest disciplines and courses by average GPA over time."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.trendsLeaderboard.keywords"
+msgstr "uottawa grade inflation, uottawa easiest courses, uottawa hardest courses, university of ottawa gpa ranking"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUenroll.description"
+msgstr "uoPlan vs uEnroll for University of Ottawa students. Both generate conflict-free timetables and export to your calendar, but uoPlan adds degree and requirement planning, grade data, professor ratings, and native apps."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUenroll.keywords"
+msgstr "uoplan vs uenroll, uenroll alternative, uottawa schedule generator, uottawa timetable, university of ottawa course planner"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUoGrades.description"
+msgstr "uoPlan vs UO Grades (uo.grades.zone) for University of Ottawa students. Both surface historical grade distributions and professor ratings, but uoPlan also plans your degree and builds conflict-free schedules."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUoGrades.keywords"
+msgstr "uoplan vs uo grades, uo.grades.zone alternative, uottawa grades, uottawa grade distribution, university of ottawa professor ratings"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUschedule.description"
+msgstr "uoPlan vs uSchedule for University of Ottawa students. Compare schedule generation, professor filters, grade data, degree planning, and ad-free, open-source privacy."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "seo.vsUschedule.keywords"
+msgstr "uoplan vs uschedule, uschedule alternative, uottawa schedule generator, uottawa professor ratings, university of ottawa timetable"
 
 msgid "settings.ariaLabel"
 msgstr "Settings"
