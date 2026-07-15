@@ -1086,7 +1086,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 235,
               "A": 649,
@@ -1634,7 +1634,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 486,
               "A": 312,
@@ -2251,7 +2251,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 336,
               "A": 441,
@@ -2455,7 +2455,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 241,
               "A": 445,
@@ -2537,7 +2537,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 241,
               "A": 445,
@@ -2977,7 +2977,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 241,
               "A": 445,
@@ -4097,7 +4097,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 361,
               "A": 529,
@@ -22925,7 +22925,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ],
         "LAB": [
@@ -30170,7 +30170,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 2,
@@ -33981,7 +33981,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-14",
-                  "2026-10-05"
+                  "2026-09-21"
                 ]
               },
               {
@@ -34022,7 +34022,7 @@
                 "virtual": false,
                 "instructor": "Elizabeth Fitzpatrick",
                 "meetingDates": [
-                  "2026-11-24",
+                  "2026-11-25",
                   "2026-12-11"
                 ]
               },
@@ -34033,7 +34033,7 @@
                 "virtual": false,
                 "instructor": "Elizabeth Fitzpatrick",
                 "meetingDates": [
-                  "2026-11-24",
+                  "2026-11-25",
                   "2026-12-11"
                 ]
               }
@@ -34117,8 +34117,8 @@
                 "virtual": false,
                 "instructor": "Nisrine Zamjaoui",
                 "meetingDates": [
-                  "2026-09-28",
-                  "2026-12-01"
+                  "2026-09-29",
+                  "2026-12-04"
                 ]
               }
             ],
@@ -34406,7 +34406,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 277,
               "A": 279,
@@ -37816,7 +37816,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 60,
               "A": 113,
@@ -39857,7 +39857,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 72,
               "A": 46,
@@ -39908,7 +39908,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 5,
               "A": 7,
@@ -41750,7 +41750,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 63,
               "A": 29,
@@ -42078,7 +42078,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "D00-SEM FullSess.",
@@ -43776,7 +43776,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 98,
               "A": 117,
@@ -43818,7 +43818,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 98,
               "A": 117,
@@ -43900,7 +43900,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 98,
               "A": 117,
@@ -48341,7 +48341,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 46,
               "A": 30,
@@ -48436,7 +48436,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 46,
               "A": 30,
@@ -50913,7 +50913,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2180,
               "A": 1732,
@@ -51198,7 +51198,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2180,
               "A": 1732,
@@ -52696,7 +52696,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1137,
               "A": 777,
@@ -52798,7 +52798,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1137,
               "A": 777,
@@ -53421,7 +53421,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1137,
               "A": 777,
@@ -53516,7 +53516,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1137,
               "A": 777,
@@ -53623,6 +53623,46 @@
                 "endMinutes": 590,
                 "virtual": false,
                 "instructor": "Derek Pratt",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 792,
+              "A": 601,
+              "A-": 730,
+              "B+": 763,
+              "B": 797,
+              "C+": 742,
+              "C": 691,
+              "D+": 580,
+              "D": 517,
+              "E": 512,
+              "F": 365,
+              "DR": 161,
+              "EIN": 149,
+              "NS": 35,
+              "NC": 0,
+              "ABS": 31,
+              "P": 0,
+              "S": 122
+            }
+          },
+          {
+            "section": "C00-LEC FullSess.",
+            "sectionCode": "C00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -53776,6 +53816,46 @@
           {
             "section": "B02-DGD FullSess.",
             "sectionCode": "B02",
+            "component": "DGD",
+            "session": null,
+            "times": [
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 792,
+              "A": 601,
+              "A-": 730,
+              "B+": 763,
+              "B": 797,
+              "C+": 742,
+              "C": 691,
+              "D+": 580,
+              "D": 517,
+              "E": 512,
+              "F": 365,
+              "DR": 161,
+              "EIN": 149,
+              "NS": 35,
+              "NC": 0,
+              "ABS": 31,
+              "P": 0,
+              "S": 122
+            }
+          },
+          {
+            "section": "C01-DGD FullSess.",
+            "sectionCode": "C01",
             "component": "DGD",
             "session": null,
             "times": [
@@ -59571,7 +59651,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "A400-LEC FullSess.",
@@ -59633,7 +59713,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LEC FullSess.",
@@ -59737,7 +59817,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B01-TUT FullSess.",
@@ -59921,7 +60001,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LEC FullSess.",
@@ -60047,7 +60127,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LEC FullSess.",
@@ -60221,7 +60301,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ],
         "TUT": [
@@ -60263,7 +60343,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -61505,7 +61585,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 35,
               "A": 204,
@@ -62089,7 +62169,7 @@
                 "instructor": "Aaron King",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-09"
+                  "2026-11-03"
                 ]
               },
               {
@@ -62101,6 +62181,17 @@
                 "meetingDates": [
                   "2026-11-10",
                   "2026-11-10"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Aaron King",
+                "meetingDates": [
+                  "2026-11-17",
+                  "2026-12-09"
                 ]
               }
             ],
@@ -63299,7 +63390,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 11,
@@ -64555,7 +64646,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3,
               "A": 4,
@@ -64914,7 +65005,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 15,
               "A": 37,
@@ -66102,7 +66193,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 5,
               "A": 65,
@@ -66297,7 +66388,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 6,
               "A": 34,
@@ -70670,7 +70761,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 235,
               "A": 152,
@@ -76709,7 +76800,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 753,
               "A": 1072,
@@ -77076,7 +77167,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 34,
               "A": 94,
@@ -79836,7 +79927,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 6,
               "A": 6,
@@ -83888,7 +83979,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3,
               "A": 12,
@@ -84176,7 +84267,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 32,
@@ -86279,7 +86370,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 64,
               "A": 71,
@@ -91516,7 +91607,7 @@
                 "startMinutes": 540,
                 "endMinutes": 950,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Karla Cristinne de Oliveira Matias",
                 "meetingDates": [
                   "2026-08-25",
                   "2026-08-25"
@@ -91527,7 +91618,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1095,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Karla Cristinne de Oliveira Matias",
                 "meetingDates": [
                   "2026-09-11",
                   "2026-09-11"
@@ -91538,7 +91629,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1095,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Karla Cristinne de Oliveira Matias",
                 "meetingDates": [
                   "2026-10-09",
                   "2026-10-09"
@@ -91549,7 +91640,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1095,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Karla Cristinne de Oliveira Matias",
                 "meetingDates": [
                   "2026-11-06",
                   "2026-11-06"
@@ -91560,7 +91651,7 @@
                 "startMinutes": 1020,
                 "endMinutes": 1095,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Karla Cristinne de Oliveira Matias",
                 "meetingDates": [
                   "2026-12-04",
                   "2026-12-04"
@@ -91931,7 +92022,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 133,
               "A": 70,
@@ -92077,7 +92168,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Simon Pelletier",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -92403,7 +92494,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-SEM FullSess.",
@@ -94232,7 +94323,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2,
               "A": 2,
@@ -94560,7 +94651,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Camille Martini",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -94580,7 +94671,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nahima Chikoc Barreda",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -96889,7 +96980,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 41,
               "A": 96,
@@ -96973,7 +97064,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mireille Fournier",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -97013,7 +97104,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mireille Fournier",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -97060,7 +97151,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 145,
               "A": 170,
@@ -97224,7 +97315,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Warren Newman",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -97402,7 +97493,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 82,
               "A": 152,
@@ -98323,7 +98414,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Camille Martini",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -98363,7 +98454,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nahima Chikoc Barreda",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -100229,7 +100320,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mireille Fournier",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -100269,7 +100360,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mireille Fournier",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -100661,7 +100752,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Camille Martini",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -100701,7 +100792,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nahima Chikoc Barreda",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -100932,14 +101023,14 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 27,
               "A": 34,
@@ -101236,7 +101327,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Shaun K.S. Illingworth",
                 "meetingDates": [
                   "2026-09-01",
                   "2026-10-09"
@@ -101287,7 +101378,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Shaun K.S. Illingworth",
                 "meetingDates": [
                   "2026-10-12",
                   "2026-12-09"
@@ -101440,7 +101531,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Oday Aswad",
                 "meetingDates": [
                   "2026-10-19",
                   "2026-11-27"
@@ -101491,7 +101582,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ziad Ghazi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -101622,7 +101713,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mohammad Al Ridhawi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -101803,7 +101894,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Maria Nieto-Taborda",
                 "meetingDates": [
                   "2026-09-01",
                   "2026-10-09"
@@ -101905,7 +101996,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Chantal Rodier",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -102064,7 +102155,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Channarong Intahchomphoo",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -102104,7 +102195,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Caitlin Heppner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -102155,7 +102246,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Masoud Dorrikhteh",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -102206,7 +102297,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Chantal Rodier",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -105027,7 +105118,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 50,
               "A": 32,
@@ -105235,7 +105326,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Patti Lenard",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -105246,7 +105337,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Patti Lenard",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -105785,9 +105876,9 @@
             "session": null,
             "times": [
               {
-                "day": "Mo",
-                "startMinutes": 870,
-                "endMinutes": 1040,
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
                 "virtual": false,
                 "instructor": "Patti Lenard",
                 "meetingDates": [
@@ -105880,7 +105971,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Patti Lenard",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -109364,7 +109455,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nabil Afodjo",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -111374,7 +111465,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 53,
               "A": 165,
@@ -114393,7 +114484,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Oday Aswad",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -116669,6 +116760,26 @@
               }
             ],
             "status": "Open"
+          },
+          {
+            "section": "D00-LEC FullSess.",
+            "sectionCode": "D00",
+            "component": "LEC",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Emad Gad",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -118396,7 +118507,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2,
               "A": 1,
@@ -119388,7 +119499,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Gudbranson",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -119541,7 +119652,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Anis Hanna",
                 "meetingDates": [
                   "2026-09-01",
                   "2026-10-09"
@@ -119694,7 +119805,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joseph Audi",
                 "meetingDates": [
                   "2026-09-01",
                   "2026-10-09"
@@ -119745,7 +119856,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Bruce Millar",
                 "meetingDates": [
                   "2026-10-19",
                   "2026-11-27"
@@ -119796,7 +119907,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Faulkner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -120732,7 +120843,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -121140,7 +121251,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -121639,7 +121750,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -124244,7 +124355,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -125216,7 +125327,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -125618,7 +125729,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -128704,7 +128815,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lazar Ilic",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -133011,7 +133122,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -140054,6 +140165,28 @@
                 "instructor": "Monia Brahim",
                 "meetingDates": [
                   "2026-10-21",
+                  "2026-11-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1230,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Monia Brahim",
+                "meetingDates": [
+                  "2026-11-10",
+                  "2026-11-10"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1230,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Monia Brahim",
+                "meetingDates": [
+                  "2026-11-11",
                   "2026-12-09"
                 ]
               }
@@ -140398,6 +140531,28 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-10-21",
+                  "2026-11-09"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-11-10",
+                  "2026-11-10"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-11-11",
                   "2026-12-09"
                 ]
               }
@@ -140591,6 +140746,28 @@
                 "instructor": "Monia Brahim",
                 "meetingDates": [
                   "2026-11-03",
+                  "2026-11-15"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1230,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Monia Brahim",
+                "meetingDates": [
+                  "2026-11-16",
+                  "2026-11-16"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1230,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Monia Brahim",
+                "meetingDates": [
+                  "2026-11-17",
                   "2026-12-09"
                 ]
               }
@@ -140695,6 +140872,28 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-11-03",
+                  "2026-11-15"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-11-16",
+                  "2026-11-16"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1140,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-11-17",
                   "2026-12-09"
                 ]
               }
@@ -142962,7 +143161,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Lazar Ilic",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147396,7 +147595,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Patrick Dumond",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147407,7 +147606,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Patrick Dumond",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147498,7 +147697,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Muslim Majeed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147509,7 +147708,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Muslim Majeed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147551,7 +147750,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Patrick Dumond",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147591,7 +147790,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Patrick Dumond",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147631,7 +147830,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Patrick Dumond",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147671,7 +147870,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Patrick Dumond",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147711,7 +147910,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Patrick Dumond",
+                "instructor": "Ahsan Faraz Ahmed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147838,7 +148037,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 433,
               "A": 784,
@@ -147951,7 +148150,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Muslim Majeed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -147991,7 +148190,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Muslim Majeed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -148031,7 +148230,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Muslim Majeed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -148071,7 +148270,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Muslim Majeed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -148111,7 +148310,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Muslim Majeed",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -148786,7 +148985,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 842,
               "A": 588,
@@ -149707,7 +149906,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 111,
               "A": 210,
@@ -149827,7 +150026,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 111,
               "A": 210,
@@ -150541,7 +150740,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Hanan Anis",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150552,7 +150751,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Hanan Anis",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150592,7 +150791,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rubina Lakhani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150603,7 +150802,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rubina Lakhani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150747,7 +150946,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Hanan Anis",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150787,7 +150986,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Hanan Anis",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150827,7 +151026,7 @@
                 "startMinutes": 780,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Hanan Anis",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150867,7 +151066,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Hanan Anis",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150907,7 +151106,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Hanan Anis",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150947,7 +151146,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rubina Lakhani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -150987,7 +151186,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rubina Lakhani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -151027,7 +151226,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rubina Lakhani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -151067,7 +151266,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rubina Lakhani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -151107,7 +151306,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rubina Lakhani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -151956,7 +152155,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Oday Aswad",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152046,7 +152245,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Christian Gudbranson",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152097,7 +152296,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Oday Aswad",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152148,7 +152347,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Genevieve Dumond",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152290,7 +152489,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mohammad Alnabhan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152510,7 +152709,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 135,
               "A": 513,
@@ -152645,7 +152844,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Shamim Razaghi Kashani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152656,7 +152855,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Shamim Razaghi Kashani",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152707,7 +152906,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Lorie Hazel Laroche",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152718,7 +152917,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Lorie Hazel Laroche",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152831,7 +153030,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Donald Bouchard",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -152842,7 +153041,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Donald Bouchard",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -157377,6 +157576,28 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-10-15"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 600,
+                "endMinutes": 650,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-10-16",
+                  "2026-10-16"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 600,
+                "endMinutes": 650,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-10-17",
                   "2026-12-09"
                 ]
               }
@@ -157512,7 +157733,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 542,
               "A": 663,
@@ -157693,7 +157914,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 332,
               "A": 405,
@@ -159789,7 +160010,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stefanie Haustein",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -160726,7 +160947,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1270,
               "A": 722,
@@ -161030,7 +161251,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1270,
               "A": 722,
@@ -168138,7 +168359,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1878,
               "A": 839,
@@ -168293,7 +168514,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 35,
               "A": 19,
@@ -168670,7 +168891,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1328,
               "A": 564,
@@ -168854,7 +169075,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1328,
               "A": 564,
@@ -169822,7 +170043,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -170099,7 +170320,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Wagner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170110,7 +170331,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Wagner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170559,7 +170780,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -170632,7 +170853,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Wagner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170672,7 +170893,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Wagner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170712,7 +170933,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Wagner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -170752,7 +170973,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Andrew Wagner",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -172473,7 +172694,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 440,
               "A": 185,
@@ -172921,7 +173142,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -177418,7 +177639,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 21,
               "A": 23,
@@ -183172,7 +183393,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 157,
               "A": 217,
@@ -185542,7 +185763,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Christian Gudbranson",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -185644,7 +185865,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Geoff Pond",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -185837,7 +186058,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Amir Hossein Khataie",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -185990,7 +186211,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Benjamin Eze",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -188611,7 +188832,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Yiwei Lu",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -195605,7 +195826,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 118,
               "A": 198,
@@ -201886,7 +202107,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1,
               "A": 17,
@@ -202159,7 +202380,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 15,
               "A": 3,
@@ -205240,7 +205461,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 5,
               "A": 25,
@@ -206183,6 +206404,17 @@
                   "2026-09-09",
                   "2026-12-04"
                 ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Carol Léonard",
+                "meetingDates": [
+                  "2026-09-14",
+                  "2026-09-14"
+                ]
               }
             ],
             "status": "Open",
@@ -206232,7 +206464,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-14",
-                  "2026-10-05"
+                  "2026-09-21"
                 ]
               },
               {
@@ -206584,14 +206816,14 @@
             "session": null,
             "times": [
               {
-                "day": "We",
-                "startMinutes": 690,
-                "endMinutes": 860,
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-10-15"
+                  "2026-10-20"
                 ]
               },
               {
@@ -206602,7 +206834,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-10-15"
+                  "2026-10-20"
                 ]
               }
             ],
@@ -206653,18 +206885,18 @@
                 "instructor": "Carol Léonard",
                 "meetingDates": [
                   "2026-09-14",
-                  "2026-11-02"
+                  "2026-10-19"
                 ]
               },
               {
-                "day": "Tu",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 860,
                 "virtual": false,
                 "instructor": "Carol Léonard",
                 "meetingDates": [
                   "2026-09-14",
-                  "2026-11-02"
+                  "2026-10-19"
                 ]
               }
             ],
@@ -206715,7 +206947,7 @@
                 "instructor": "Daniel L. Bérubé",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-04"
+                  "2026-12-02"
                 ]
               },
               {
@@ -206777,7 +207009,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-10",
-                  "2026-10-22"
+                  "2026-10-20"
                 ]
               },
               {
@@ -206788,7 +207020,7 @@
                 "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-10",
-                  "2026-10-22"
+                  "2026-10-20"
                 ]
               }
             ],
@@ -216285,7 +216517,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -225283,7 +225515,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2191,
               "A": 1688,
@@ -234520,7 +234752,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 95,
               "A": 38,
@@ -237239,7 +237471,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -237323,7 +237555,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -237659,7 +237891,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -237911,7 +238143,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -238724,7 +238956,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -242639,7 +242871,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 108,
               "A": 47,
@@ -248922,7 +249154,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 5,
               "A": 54,
@@ -249833,7 +250065,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Miguel Francisco de Larrinaga",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -251692,7 +251924,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2311,
               "A": 2618,
@@ -254915,7 +255147,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1042,
               "A": 729,
@@ -256364,7 +256596,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 88,
               "A": 105,
@@ -256406,7 +256638,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 88,
               "A": 105,
@@ -261680,7 +261912,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelkrim Hamou-Lhadj",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -261691,7 +261923,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelkrim Hamou-Lhadj",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -261733,7 +261965,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Abdelkrim Hamou-Lhadj",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -261888,7 +262120,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Bushra Khan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -261899,7 +262131,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Bushra Khan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -262054,7 +262286,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Genevieve Dumond",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -262065,7 +262297,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Genevieve Dumond",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -262355,7 +262587,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kuntal Ghosh",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -262377,7 +262609,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Kuntal Ghosh",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -262958,7 +263190,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 952,
               "A": 679,
@@ -264964,7 +265196,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2394,
               "A": 1922,
@@ -265015,7 +265247,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2394,
               "A": 1922,
@@ -267463,7 +267695,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -268935,7 +269167,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LEC FullSess.",
@@ -268997,7 +269229,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -269081,7 +269313,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "B00-LEC FullSess.",
@@ -269657,7 +269889,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Xinhou Hua",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -277247,7 +277479,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Laurent Ngoumou",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -277400,7 +277632,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Luvunu Armand Kayolo",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -277480,7 +277712,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Nichelle Bradley-Laforge",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -277570,7 +277802,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Noelle Buzohera",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -277621,7 +277853,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Beatriz Delgado Rodriguez",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -277981,7 +278213,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Cyndy Wylde",
+                "instructor": "Hélène Pourcelot",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
