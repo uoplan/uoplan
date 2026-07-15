@@ -78,7 +78,7 @@ export default function ScheduleScreen() {
   const { count } = basket;
   const completed = useCompletedCourses();
   const { bundle, schedulesByTerm, feedback } = useAppData();
-  const { options, setOptions } = useScheduleOptions();
+  const { options, setOptions, personalization } = useScheduleOptions();
   const {
     status,
     variants,
@@ -354,6 +354,7 @@ export default function ScheduleScreen() {
         addingToCalendar={addingToCalendar}
         onExport={() => void handleExport()}
         exporting={exporting}
+        hasProgram={Boolean(personalization.programUrl)}
       />
 
       <CalendarEventDrawer

@@ -31,6 +31,11 @@ maps the engine's response back into UI/store shapes.
    [share-og-image.md](share-og-image.md). (`packages/core/src/scheduleFromStateEngine.ts` /
    `reconstruct.ts` are retained for in-app reconstruction but are no longer used by the worker.)
 
+   **Basic-mode target derivation:** when no program is selected, clients hide the program-target
+   control and set `courses_this_semester` to that request's cart count (`basketCourses.length` on
+   web; filtered schedulable basket on native). The persisted program target stays reserved for
+   program mode and is left untouched, and additional electives are requested separately on top.
+
 4. **Generation (Rust/WASM)** — the engine decodes the request, builds requirement pools, and
    **selects** a requirement-satisfying, conflict-free course set that it timetables through the
    constraint pipeline + section-combo / subset enumerators. Selection is **feasibility-aware**

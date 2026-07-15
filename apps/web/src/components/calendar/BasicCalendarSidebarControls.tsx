@@ -114,6 +114,7 @@ export function BasicCalendarSidebarControls() {
     <>
       <GenerationOptionsFields
         coursesSlot={<BasketContents variant="embedded" />}
+        showCoursesThisSemester={false}
         coursesThisSemesterValue={coursesThisSemester}
         onCoursesThisSemesterChange={(count) => {
           const next = Math.max(coursesThisSemesterMin, Math.min(coursesThisSemesterMax, count));

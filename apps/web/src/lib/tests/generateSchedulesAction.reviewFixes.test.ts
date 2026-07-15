@@ -136,6 +136,24 @@ describe("generateSchedulesAction review fixes", () => {
     expect(engine.requests[0]?.additionalElectivesCount).toBe(SCHEDULE_COURSE_COUNT_MAX - 2);
   });
 
+  it.each([0, SCHEDULE_COURSE_COUNT_MAX])(
+    "derives basic coursesThisSemester from basket size even when stored as %s",
+    async (storedCoursesThisSemester) => {
+      const engine = new RecordingEngine();
+      const input = baseInput({
+        mode: "basic",
+        basketCourses: ["CSI 2110", "CSI 2120"],
+        additionalElectivesCount: 0,
+        coursesThisSemester: storedCoursesThisSemester,
+      });
+
+      await generateSchedulesAction(input, cache, engine);
+
+      expect(engine.requests[0]?.coursesThisSemester).toBe(2);
+      expect(input.coursesThisSemester).toBe(storedCoursesThisSemester);
+    },
+  );
+
   it("forwards the professor-rating map to the basic engine request when enabled", async () => {
     const engine = new RecordingEngine();
 

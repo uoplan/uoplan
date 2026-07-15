@@ -430,11 +430,12 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
                 forced_courses.push(code.clone());
             }
         }
-        // `courses_this_semester` (N) is the cart cap + requirement-overflow
-        // target; the M additional electives below are reserved on a separate
-        // budget and are NOT folded in. N is always set explicitly by callers
-        // (default 5) and is honoured verbatim — N < cart caps the cart in
-        // `advanced.rs`, and N == 0 schedules no cart courses.
+        // `courses_this_semester` (N) is the program-mode target/cap. Program
+        // callers can choose N independently of cart size; basic clients hide
+        // the persisted program target and derive N from that request's cart
+        // count (web: raw basket; native: filtered schedulable basket) before
+        // building this request. The M additional electives below stay on a
+        // separate budget and are NOT folded in.
         if req.additional_electives_count > 0 {
             let pool = electives::expand_elective_pool(&electives::ElectivePoolParams {
                 data,

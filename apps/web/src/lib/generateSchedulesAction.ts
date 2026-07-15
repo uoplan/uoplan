@@ -442,7 +442,6 @@ async function handleBasicGeneration(
   const {
     basketCourses,
     additionalElectivesCount,
-    coursesThisSemester,
     basicExcludedCategories,
     levelBuckets,
     languageBuckets,
@@ -468,6 +467,7 @@ async function handleBasicGeneration(
     additionalElectivesCount,
     basketCourses.length,
   );
+  const basicCoursesThisSemester = basketCourses.length;
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
@@ -483,7 +483,7 @@ async function handleBasicGeneration(
     constraints,
     basketCourses,
     additionalElectivesCount: effectiveAdditionalElectivesCount,
-    coursesThisSemester,
+    coursesThisSemester: basicCoursesThisSemester,
     basicExcludedCategories,
     completedCourses,
     studentPrograms,
@@ -505,12 +505,11 @@ async function handleBasicGeneration(
   const swapPool = [...new Set([...basketCourses, ...optionalPool])];
 
   if (!schedule) {
-    // `coursesThisSemester` (N) caps how many cart courses are scheduled.
-    const scheduledCartTarget = Math.min(coursesThisSemester, basketCourses.length);
+    const timetableTarget = basicCoursesThisSemester + effectiveAdditionalElectivesCount;
     const timetableFailure = diagnoseTimetableFailure({
       pinnedCourseCodes: basketCourses,
       optionalCourseCodes: optionalPool,
-      targetCount: scheduledCartTarget + effectiveAdditionalElectivesCount,
+      targetCount: timetableTarget,
       cache: cacheWithPerCourseVirtualFilter(
         cache,
         includeClosedComponents,
@@ -532,7 +531,7 @@ async function handleBasicGeneration(
         details: {
           emptyPools: [],
           totalAvailable: basketCourses.length + optionalPool.length,
-          totalNeeded: scheduledCartTarget + effectiveAdditionalElectivesCount,
+          totalNeeded: timetableTarget,
           timetableFailure,
         },
       },

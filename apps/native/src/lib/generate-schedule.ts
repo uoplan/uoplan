@@ -395,7 +395,7 @@ function buildSeedRequest(prep: GenerationPrep, seed: number) {
   return buildBasicRequest(
     {
       basketCourses: prep.schedulableBasket,
-      coursesThisSemester: o.coursesThisSemester,
+      coursesThisSemester: prep.schedulableBasket.length,
       additionalElectivesCount: o.additionalElectivesCount,
       basicExcludedCategories: o.basicExcludedCategories,
       studentPrograms: [],

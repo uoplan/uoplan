@@ -56,7 +56,7 @@ test("clamps a stale basic additional-elective count when the basket already use
   await expect.poll(() => store.getState().additionalElectivesCount).toBe(additionalMax);
 });
 
-test("binds courses-this-semester independently and allows zero", async () => {
+test("hides courses-this-semester in basic mode and preserves persisted state", async () => {
   const { store } = await renderWithProviders(<BasicCalendarSidebarControls />, {
     initialState: {
       coursesThisSemester: 4,
@@ -64,10 +64,9 @@ test("binds courses-this-semester independently and allows zero", async () => {
     },
   });
 
-  const courses = page.getByLabelText("Courses this semester");
-  await expect.element(courses).toHaveValue("4");
-
-  await courses.fill("0");
-  expect(store.getState().coursesThisSemester).toBe(0);
-  expect(store.getState().additionalElectivesCount).toBe(2);
+  await expect.element(page.getByLabelText("Courses this semester")).not.toBeInTheDocument();
+  await expect
+    .element(page.getByLabelText("Electives this semester (additional)"))
+    .toHaveValue("2");
+  expect(store.getState().coursesThisSemester).toBe(4);
 });

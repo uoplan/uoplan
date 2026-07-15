@@ -4,6 +4,14 @@ Status: **APPROVED — implementing**
 Date: 2026-06-28
 Owner: @matteopolak
 
+> **Revision note (2026-07-14):** This document's historical "basic mode shows both counts" and
+> "basic N is an independent cap" decisions are superseded. Current product behavior is: when no
+> program is selected, web/native hide the program-target control and basic requests derive
+> `coursesThisSemester` from that request's cart count (raw basket on web; filtered schedulable
+> basket on native); the persisted program target remains for
+> program mode only; additional electives stay on top; and there is **no** Rust/proto/store/schema
+> or encoding migration.
+
 ## Approved decisions (2026-06-28)
 
 - **Engine approach: A** (cart as a highest-priority capped pool + separate elective budget).

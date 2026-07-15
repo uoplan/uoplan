@@ -133,14 +133,19 @@ interface ScheduleSettingsSheetProps {
   /** Export the visible schedule to an .ics file / share sheet. */
   onExport: () => void;
   exporting: boolean;
+  /** Whether a program/requirement-based generation is active. When false, the
+   *  persisted program-target stepper is hidden and only the always-visible
+   *  additional-electives stepper remains. */
+  hasProgram: boolean;
 }
 
 /**
  * Native schedule-settings bottom sheet — the native analogue of the web
  * generation-options panel (`GenerationOptionsFields`, basic mode). Surfaces the
  * SAME options the web exposes and drives generation through them. Mirrors the
- * web sidebar layout: an always-visible course-count control + first-year
- * warning, a collapsible "Smart options" card (compressed, prefer-easier,
+ * web sidebar layout: a conditional program-target course-count control + a
+ * first-year warning, an always-visible additional-electives control, a
+ * collapsible "Smart options" card (compressed, prefer-easier,
  * prefer-better-feedback, prefer-higher-professor-rating, first-year limit), and
  * a collapsible "Advanced options" card (time window, avoided days, level /
  * language buckets, elective levels, section filters, exclude subjects / courses,
@@ -157,6 +162,7 @@ export function ScheduleSettingsSheet({
   addingToCalendar = false,
   onExport,
   exporting,
+  hasProgram,
 }: ScheduleSettingsSheetProps) {
   const { options, setOptions, reset } = useScheduleOptions();
   const { bundle, schedulesByTerm } = useAppData();
@@ -377,17 +383,19 @@ export function ScheduleSettingsSheet({
               </Pressable>
             </View>
 
-            {/* Course count — always visible. */}
+            {/* Program target is conditional; additional electives stay visible. */}
             <Section title="Courses this term">
-              <Stepper
-                label="Courses this semester"
-                value={options.coursesThisSemester}
-                min={coursesThisSemesterMin}
-                max={coursesThisSemesterMax}
-                step={1}
-                format={(v) => `${v}`}
-                onChange={(v) => set("coursesThisSemester", v)}
-              />
+              {hasProgram ? (
+                <Stepper
+                  label="Courses this semester"
+                  value={options.coursesThisSemester}
+                  min={coursesThisSemesterMin}
+                  max={coursesThisSemesterMax}
+                  step={1}
+                  format={(v) => `${v}`}
+                  onChange={(v) => set("coursesThisSemester", v)}
+                />
+              ) : null}
               <Stepper
                 label="Electives this semester (additional)"
                 value={options.additionalElectivesCount}

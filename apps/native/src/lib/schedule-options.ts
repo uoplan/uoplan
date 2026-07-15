@@ -35,9 +35,8 @@ export interface ScheduleOptions {
   /** Course-level buckets allowed for elective requirement pools. */
   electiveLevelBuckets: number[];
   /**
-   * Cap on how many of the user's cart (basket) courses are scheduled. When this
-   * exceeds the cart size the remainder is filled from the student's program
-   * requirements (advanced mode). Cart-only cap; settable to 0.
+   * Program-based target/cap. Basic generation ignores the persisted value and
+   * derives the request target from the schedulable basket.
    */
   coursesThisSemester: number;
   /**
@@ -70,7 +69,7 @@ export const DEFAULT_GENERATION_MAX_END_MINUTES = 22 * 60; // 22:00
 export const DEFAULT_BASIC_ELECTIVE_LEVEL_BUCKETS = [1000, 2000];
 export const DEFAULT_BASIC_LEVEL_BUCKETS: CourseLevelBucket[] = ["undergrad"];
 export const DEFAULT_BASIC_LANGUAGE_BUCKETS: CourseLanguageBucket[] = ["en", "other"];
-/** Default cart-cap "Courses this semester" (web parity — packages/store/src/generationDefaults.ts). */
+/** Default persisted program target for "Courses this semester" (web parity — packages/store/src/generationDefaults.ts). */
 export const DEFAULT_COURSES_THIS_SEMESTER = 5;
 /** A day is "avoided" when a blocked window covers this full span. */
 const AVOID_DAY_START_MINUTES = 8 * 60 + 30; // 8:30

@@ -8,7 +8,7 @@ import {
   generateScheduleVariants,
   type GenerateScheduleInput,
 } from "@/lib/generate-schedule";
-import { DEFAULT_SCHEDULE_OPTIONS } from "@/lib/schedule-options";
+import { DEFAULT_SCHEDULE_OPTIONS, SCHEDULE_COURSE_COUNT_MAX } from "@/lib/schedule-options";
 
 const CODE = "TST 1000";
 const norm = normalizeCourseCode(CODE);
@@ -217,6 +217,7 @@ describe("generateScheduleVariants", () => {
       (engine.generate as jest.Mock).mock.calls[0]![0] as Uint8Array,
     );
     expect(req.basicPinnedCourses).toEqual([CODE]);
+    expect(req.coursesThisSemester).toBe(1);
   });
 
   it("returns no variants but reports skips when every basket course is unschedulable", async () => {
@@ -482,6 +483,7 @@ describe("generateScheduleVariants", () => {
         variantCount: 1,
         options: {
           ...DEFAULT_SCHEDULE_OPTIONS,
+          coursesThisSemester: SCHEDULE_COURSE_COUNT_MAX,
           minStartMinutes: 9 * 60,
           maxEndMinutes: 17 * 60,
           avoidedDays: ["Fr"],
@@ -510,6 +512,8 @@ describe("generateScheduleVariants", () => {
     const req = GenerationRequest.decode(sent);
     expect(req.constraints?.minStartMinutes).toBe(9 * 60);
     expect(req.constraints?.maxEndMinutes).toBe(17 * 60);
+    expect(req.coursesThisSemester).toBe(1);
+    expect(req.additionalElectivesCount).toBe(2);
     // The ordered optimization priorities are forwarded verbatim (index 0 =
     // highest), and individual enabled flags are preserved.
     expect(req.optimizationPriorities.map((p) => p.kind)).toEqual([

@@ -54,7 +54,13 @@ export interface GenerationOptionsFieldsProps {
    */
   coursesSlot?: ReactNode;
 
-  /** "Courses this semester" (N) — the cart cap that overflows into program requirements. */
+  /** When false, hides the optional program-target "Courses this semester" field (default: true). */
+  showCoursesThisSemester?: boolean;
+
+  /**
+   * Optional program target/cap. In basic mode the request target is derived from the cart
+   * instead; additional electives remain separate and visible.
+   */
   coursesThisSemesterValue: number;
   onCoursesThisSemesterChange: (n: number) => void;
   coursesThisSemesterMin: number;
@@ -111,11 +117,12 @@ export interface GenerationOptionsFieldsProps {
 }
 
 /**
- * The unified generation-option field set shared by both calendar sidebars. Always-visible controls
- * (the basket-hosted "courses you want" field and the course count) sit on top; every lower-priority
- * control — class times, days to avoid, smart options, course filters, French immersion, and the
- * optional transcript-only "pick specific courses" step — lives inside one collapsible "Advanced
- * options" disclosure whose collapsed state lists what it contains.
+ * The unified generation-option field set shared by both calendar sidebars. The basket-hosted
+ * "courses you want" field sits on top; the optional program-target course count appears only when
+ * the selected mode exposes it, and the additional electives count remains visible. Every
+ * lower-priority control — class times, days to avoid, smart options, course filters, French
+ * immersion, and the optional transcript-only "pick specific courses" step — lives inside one
+ * collapsible "Advanced options" disclosure whose collapsed state lists what it contains.
  */
 export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   const analytics = useAnalytics();
@@ -262,19 +269,21 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     <Stack gap="md" data-testid="generation-options-fields">
       {props.coursesSlot}
 
-      <NumberInput
-        label={tr("generationOptions.coursesThisSemester.label")}
-        value={props.coursesThisSemesterValue}
-        onChange={(v) => {
-          if (typeof v !== "number" || Number.isNaN(v)) return;
-          capturePreference("courses_this_semester");
-          props.onCoursesThisSemesterChange(Math.trunc(v));
-        }}
-        min={props.coursesThisSemesterMin}
-        max={props.coursesThisSemesterMax}
-        radius="md"
-        data-testid="courses-this-semester-input"
-      />
+      {props.showCoursesThisSemester !== false ? (
+        <NumberInput
+          label={tr("generationOptions.coursesThisSemester.label")}
+          value={props.coursesThisSemesterValue}
+          onChange={(v) => {
+            if (typeof v !== "number" || Number.isNaN(v)) return;
+            capturePreference("courses_this_semester");
+            props.onCoursesThisSemesterChange(Math.trunc(v));
+          }}
+          min={props.coursesThisSemesterMin}
+          max={props.coursesThisSemesterMax}
+          radius="md"
+          data-testid="courses-this-semester-input"
+        />
+      ) : null}
 
       <NumberInput
         label={tr("generationOptions.count.label")}
