@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11141,
-  "totalWithSchedules": 3231,
+  "totalWithSchedules": 3233,
   "schedules": [
     {
       "subject": "ADM",
@@ -1086,7 +1086,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 235,
               "A": 649,
@@ -10147,7 +10147,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 256,
               "A": 480,
@@ -27085,7 +27085,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 23,
               "A": 22,
@@ -30170,7 +30170,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 2,
@@ -34115,7 +34115,7 @@
                 "startMinutes": 780,
                 "endMinutes": 1010,
                 "virtual": false,
-                "instructor": "Nisrine Zamjaoui",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-09-29",
                   "2026-12-04"
@@ -36142,7 +36142,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LAB FullSess.",
@@ -50913,7 +50913,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2180,
               "A": 1732,
@@ -51198,7 +51198,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2180,
               "A": 1732,
@@ -53516,7 +53516,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1137,
               "A": 777,
@@ -53962,7 +53962,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 230,
               "A": 384,
@@ -54002,7 +54002,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 230,
               "A": 384,
@@ -59671,7 +59671,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -59764,7 +59764,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "D00-LEC FullSess.",
@@ -59857,7 +59857,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "D01-TUT FullSess.",
@@ -61585,7 +61585,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 35,
               "A": 204,
@@ -63390,7 +63390,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 11,
@@ -64646,7 +64646,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 3,
               "A": 4,
@@ -64810,7 +64810,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 28,
@@ -66193,7 +66193,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 5,
               "A": 65,
@@ -66244,7 +66244,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3,
               "A": 27,
@@ -66388,7 +66388,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 6,
               "A": 34,
@@ -68556,7 +68556,7 @@
       "subject": "CML",
       "catalogNumber": "4118",
       "courseCode": "CML 4118",
-      "title": "Advanced Trademarks (+1 combined)",
+      "title": "Advanced Trademarks",
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
@@ -72315,7 +72315,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 29,
               "A": 14,
@@ -74562,7 +74562,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 51,
               "A": 65,
@@ -76800,7 +76800,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 753,
               "A": 1072,
@@ -76851,7 +76851,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 753,
               "A": 1072,
@@ -77167,7 +77167,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 94,
@@ -78696,7 +78696,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 203,
               "A": 193,
@@ -83888,7 +83888,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 12,
               "A": 25,
@@ -84267,7 +84267,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 12,
               "A": 32,
@@ -92568,46 +92568,6 @@
             }
           },
           {
-            "section": "B00-SEM FullSess.",
-            "sectionCode": "B00",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 960,
-                "endMinutes": 1130,
-                "virtual": false,
-                "instructor": "Mitchell Bruce Charness",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Closed",
-            "distribution": {
-              "A+": 0,
-              "A": 11,
-              "A-": 22,
-              "B+": 8,
-              "B": 0,
-              "C+": 0,
-              "C": 0,
-              "D+": 0,
-              "D": 0,
-              "E": 0,
-              "F": 0,
-              "DR": 2,
-              "EIN": 0,
-              "NS": 0,
-              "NC": 0,
-              "ABS": 0,
-              "P": 0,
-              "S": 0
-            }
-          },
-          {
             "section": "C00-SEM FullSess.",
             "sectionCode": "C00",
             "component": "SEM",
@@ -96980,7 +96940,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 41,
               "A": 96,
@@ -97071,7 +97031,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 145,
               "A": 170,
@@ -97151,7 +97111,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 145,
               "A": 170,
@@ -97202,7 +97162,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 80,
               "A": 117,
@@ -97242,7 +97202,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 80,
               "A": 117,
@@ -97493,7 +97453,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 82,
               "A": 152,
@@ -111437,7 +111397,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 53,
               "A": 165,
@@ -112175,7 +112135,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 17,
@@ -113364,7 +113324,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 191,
               "A": 72,
@@ -114877,7 +114837,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Emad Gad",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -123165,7 +123125,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -123715,7 +123675,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -125327,7 +125287,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -125729,7 +125689,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -133362,7 +133322,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -139947,7 +139907,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 679,
               "A": 1103,
@@ -140313,7 +140273,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 679,
               "A": 1103,
@@ -145192,6 +145152,88 @@
     },
     {
       "subject": "GEG",
+      "catalogNumber": "5105",
+      "courseCode": "GEG 5105",
+      "title": "Selected Topics in Human Geography",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM FullSess.",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Tu",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open",
+            "distribution": {
+              "A+": 7,
+              "A": 11,
+              "A-": 1,
+              "B+": 1,
+              "B": 0,
+              "C+": 1,
+              "C": 0,
+              "D+": 0,
+              "D": 0,
+              "E": 0,
+              "F": 1,
+              "DR": 0,
+              "EIN": 0,
+              "NS": 0,
+              "NC": 1,
+              "ABS": 0,
+              "P": 0,
+              "S": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "subject": "GEG",
+      "catalogNumber": "5505",
+      "courseCode": "GEG 5505",
+      "title": "Thèmes choisis en géographie humaine",
+      "timeZone": "America/Toronto",
+      "components": {
+        "SEM": [
+          {
+            "section": "A00-SEM FullSess.",
+            "sectionCode": "A00",
+            "component": "SEM",
+            "session": null,
+            "times": [
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2026-09-09",
+                  "2026-12-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "GEG",
       "catalogNumber": "60001",
       "courseCode": "GEG 60001",
       "title": "Phipps-Langlois Seminars (1/2)",
@@ -147613,7 +147655,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 433,
               "A": 784,
@@ -147797,7 +147839,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 433,
               "A": 784,
@@ -149946,7 +149988,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 111,
               "A": 210,
@@ -153471,7 +153513,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 110,
               "A": 155,
@@ -161611,7 +161653,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1270,
               "A": 722,
@@ -167124,7 +167166,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1878,
               "A": 839,
@@ -167359,7 +167401,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1878,
               "A": 839,
@@ -167719,7 +167761,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1878,
               "A": 839,
@@ -170660,7 +170702,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -172694,7 +172736,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 440,
               "A": 185,
@@ -172854,7 +172896,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 440,
               "A": 185,
@@ -175423,7 +175465,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 451,
               "A": 164,
@@ -183457,7 +183499,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 157,
               "A": 217,
@@ -186247,7 +186289,7 @@
             "session": null,
             "times": [
               {
-                "day": "We",
+                "day": "Fr",
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
@@ -188870,7 +188912,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 49,
               "A": 10,
@@ -194363,7 +194405,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "AK00-LAB FullSess.",
@@ -194516,7 +194558,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "AB00-LAB FullSess.",
@@ -201378,7 +201420,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -203156,7 +203198,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahmed Gomaa",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -203402,7 +203444,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Dixi Modi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -203872,7 +203914,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Jean-François Mauger",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -203976,7 +204018,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Walid Abd El-Fattah El-Sayed Mottawea",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -204018,7 +204060,7 @@
                 "startMinutes": 720,
                 "endMinutes": 890,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Walid Abd El-Fattah El-Sayed Mottawea",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -204160,7 +204202,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ahmed Gomaa",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -204313,7 +204355,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mylene Rosa",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -204355,7 +204397,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mylene Rosa",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -204395,7 +204437,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Mylene Rosa",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -204710,7 +204752,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Chockry Barbana",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -205129,7 +205171,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Alexandra Pépin",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -205199,7 +205241,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "William Yan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -205403,7 +205445,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Catherine Pouliot",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -207487,7 +207529,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 53,
               "A": 101,
@@ -207695,7 +207737,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stéphanie Viola-Plante",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -207706,7 +207748,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Stéphanie Viola-Plante",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -208023,7 +208065,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Christina Bouchard",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -208074,14 +208116,14 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Robert Johnson",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 53,
               "A": 102,
@@ -208176,7 +208218,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Tida Goudiaby",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -208187,14 +208229,14 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Tida Goudiaby",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 15,
               "A": 42,
@@ -208570,7 +208612,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1,
               "A": 1,
@@ -212096,7 +212138,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -213418,7 +213460,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "J02-DGD Term",
@@ -217009,8 +217051,8 @@
             "times": [
               {
                 "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1250,
+                "startMinutes": 870,
+                "endMinutes": 1040,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -217020,8 +217062,8 @@
               },
               {
                 "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1250,
+                "startMinutes": 870,
+                "endMinutes": 1040,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -217040,8 +217082,8 @@
             "times": [
               {
                 "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1250,
+                "startMinutes": 870,
+                "endMinutes": 1040,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -217051,8 +217093,8 @@
               },
               {
                 "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1250,
+                "startMinutes": 870,
+                "endMinutes": 1040,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -224494,7 +224536,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 48,
@@ -224536,7 +224578,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 12,
               "A": 48,
@@ -225515,7 +225557,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2191,
               "A": 1688,
@@ -230033,7 +230075,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-09-15",
                   "2026-09-15"
@@ -230044,7 +230086,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-09-22",
                   "2026-09-22"
@@ -230055,7 +230097,7 @@
                 "startMinutes": 720,
                 "endMinutes": 830,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-09-22",
                   "2026-09-22"
@@ -230066,7 +230108,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-09-29",
                   "2026-09-29"
@@ -230077,7 +230119,7 @@
                 "startMinutes": 720,
                 "endMinutes": 830,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-09-29",
                   "2026-09-29"
@@ -230088,7 +230130,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-10-01",
                   "2026-10-01"
@@ -230099,7 +230141,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-10-06",
                   "2026-10-06"
@@ -230110,7 +230152,7 @@
                 "startMinutes": 720,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-10-06",
                   "2026-10-06"
@@ -230121,7 +230163,7 @@
                 "startMinutes": 720,
                 "endMinutes": 890,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-10-15",
                   "2026-10-15"
@@ -230132,7 +230174,7 @@
                 "startMinutes": 510,
                 "endMinutes": 620,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-10-15",
                   "2026-10-15"
@@ -230143,7 +230185,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-09-17",
                   "2026-09-17"
@@ -230154,7 +230196,7 @@
                 "startMinutes": 840,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-09-22",
                   "2026-09-22"
@@ -230165,7 +230207,7 @@
                 "startMinutes": 840,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Joanne Leclair",
                 "meetingDates": [
                   "2026-10-06",
                   "2026-10-06"
@@ -230699,7 +230741,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Joanne Leclair",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2026-11-26",
                   "2026-11-26"
@@ -243643,7 +243685,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 40,
               "A": 36,
@@ -245802,7 +245844,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 608,
               "A": 991,
@@ -246287,7 +246329,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Piers Eaton",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -246298,7 +246340,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Piers Eaton",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248141,7 +248183,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Éléonore Paré",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248152,7 +248194,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Éléonore Paré",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248356,7 +248398,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Modeste Paulin Mba Talla",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248367,7 +248409,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Modeste Paulin Mba Talla",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248418,7 +248460,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Mohammad-Ali Shirdel",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248673,7 +248715,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 44,
               "A": 71,
@@ -248819,7 +248861,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Charles-Étienne Beaudry",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248921,7 +248963,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Charles-Étienne Beaudry",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -248932,7 +248974,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Charles-Étienne Beaudry",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -249482,7 +249524,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Klavdiia Tatar",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -249533,7 +249575,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Alex Payette",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -255147,7 +255189,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1042,
               "A": 729,
@@ -269313,7 +269355,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "B00-LEC FullSess.",

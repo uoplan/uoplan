@@ -5154,7 +5154,18 @@
                 "instructor": "Leigh Walsh",
                 "meetingDates": [
                   "2026-07-02",
-                  "2026-07-24"
+                  "2026-07-16"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Leigh Walsh",
+                "meetingDates": [
+                  "2026-07-23",
+                  "2026-07-23"
                 ]
               }
             ],
