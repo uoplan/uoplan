@@ -1,0 +1,263 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-17T00:00:00.000Z",
+  "title": "Design System: uoplan",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Violet Charcoal",
+        "canonical": "oklch(0.2216 0.0117 293.07)",
+        "tonalRamp": [
+          "oklch(0.16 0.012 293)",
+          "oklch(0.20 0.012 293)",
+          "oklch(0.24 0.014 293)",
+          "oklch(0.30 0.018 293)",
+          "oklch(0.40 0.02 293)",
+          "oklch(0.55 0.02 293)",
+          "oklch(0.72 0.018 293)",
+          "oklch(0.90 0.01 293)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Raised Slate",
+        "canonical": "oklch(0.2668 0.0186 294.27)",
+        "tonalRamp": [
+          "oklch(0.18 0.014 294)",
+          "oklch(0.22 0.016 294)",
+          "oklch(0.27 0.019 294)",
+          "oklch(0.32 0.021 294)",
+          "oklch(0.42 0.022 294)",
+          "oklch(0.56 0.02 294)",
+          "oklch(0.73 0.018 294)",
+          "oklch(0.90 0.01 294)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Porcelain",
+        "canonical": "oklch(0.9496 0.0096 273.35)",
+        "tonalRamp": [
+          "oklch(0.30 0.012 274)",
+          "oklch(0.42 0.014 274)",
+          "oklch(0.55 0.02 274)",
+          "oklch(0.65 0.026 274)",
+          "oklch(0.77 0.023 274)",
+          "oklch(0.86 0.014 274)",
+          "oklch(0.92 0.011 274)",
+          "oklch(0.97 0.008 274)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Pastel Sky Blue",
+        "canonical": "oklch(0.809 0.105 251.813)",
+        "tonalRamp": [
+          "oklch(0.385 0.125 265)",
+          "oklch(0.44 0.14 262)",
+          "oklch(0.50 0.155 262)",
+          "oklch(0.56 0.16 260)",
+          "oklch(0.64 0.155 256)",
+          "oklch(0.71 0.135 254)",
+          "oklch(0.81 0.105 252)",
+          "oklch(0.93 0.045 254)"
+        ]
+      },
+      "garnet": {
+        "role": "secondary",
+        "displayName": "uOttawa Garnet",
+        "canonical": "oklch(0.5529 0.2103 20.26)",
+        "tonalRamp": [
+          "oklch(0.30 0.10 18)",
+          "oklch(0.38 0.14 19)",
+          "oklch(0.46 0.18 20)",
+          "oklch(0.55 0.21 20)",
+          "oklch(0.64 0.19 16)",
+          "oklch(0.74 0.14 12)",
+          "oklch(0.84 0.09 10)",
+          "oklch(0.94 0.04 10)"
+        ]
+      },
+      "info": { "role": "status", "displayName": "Info Blue", "canonical": "oklch(0.755 0.1 234)" },
+      "warning": {
+        "role": "status",
+        "displayName": "Warning Amber",
+        "canonical": "oklch(0.775 0.115 64)"
+      },
+      "success": {
+        "role": "status",
+        "displayName": "Success Green",
+        "canonical": "oklch(0.755 0.11 155)"
+      },
+      "danger": {
+        "role": "status",
+        "displayName": "Danger Red",
+        "canonical": "oklch(0.725 0.115 22)"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "DM Serif Display, page and hero titles only."
+      },
+      "headline": { "displayName": "Headline", "purpose": "DM Serif Display, section headings." },
+      "title": {
+        "displayName": "Title",
+        "purpose": "DM Mono 600, card titles and control labels."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "DM Mono 400, paragraphs and dense content, 65-75ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "DM Mono 600, uppercase meta and table headers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "soft-sm",
+        "value": "0 1px 2px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.22)",
+        "purpose": "Hover lift on cards, banners, and buttons."
+      },
+      {
+        "name": "soft-md",
+        "value": "0 2px 8px rgba(0,0,0,0.34), 0 10px 28px rgba(0,0,0,0.3)",
+        "purpose": "Raised interactive elements and active button context."
+      },
+      {
+        "name": "soft-lg",
+        "value": "0 10px 30px rgba(0,0,0,0.42), 0 20px 56px rgba(0,0,0,0.36)",
+        "purpose": "Modals and drawers, the only truly-lifted surfaces."
+      }
+    ],
+    "motion": [
+      {
+        "name": "app-transition",
+        "value": "150ms ease",
+        "purpose": "Default duration/easing for state transitions."
+      },
+      {
+        "name": "lift-hover",
+        "value": "translateY(-2px)",
+        "purpose": "Soft hover lift on interactive surfaces; settles to translateY(0) on press. Disabled under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "48em" },
+      { "name": "md", "value": "62em" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Neutral graphite primary action with a soft hover lift. Deliberately not accent-coloured.",
+      "html": "<button class=\"ds-btn-primary\">Generate schedules</button>",
+      "css": ".ds-btn-primary { background: var(--app-text, oklch(0.9496 0.0096 273.35)); color: var(--app-text-inverse, oklch(0.2242 0.0137 278.83)); font-family: 'DM Mono', ui-monospace, Menlo, monospace; font-weight: 600; letter-spacing: 0.01em; font-size: 0.9375rem; border: none; border-radius: 12px; padding: 8px 18px; cursor: pointer; transition: transform 150ms ease, box-shadow 150ms ease; } .ds-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 2px 8px rgba(0,0,0,0.34), 0 10px 28px rgba(0,0,0,0.3); } .ds-btn-primary:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.22); } .ds-btn-primary:focus-visible { outline: 2px solid var(--app-accent, oklch(0.809 0.105 251.813)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Default panel surface, one tonal step above the page, hairline border, flat at rest with an optional soft lift.",
+      "html": "<div class=\"ds-card ds-soft-lift\"><div class=\"ds-card-title\">MAT 1320</div><div class=\"ds-card-body\">Calculus I. Three hours of lecture, one hour of tutorial.</div></div>",
+      "css": ".ds-card { background: var(--app-surface, oklch(0.2668 0.0186 294.27)); color: var(--app-text, oklch(0.9496 0.0096 273.35)); border: 1px solid var(--app-border, oklch(0.2837 0.0201 293.41)); border-radius: 12px; padding: 16px; } .ds-card-title { font-family: 'DM Mono', ui-monospace, monospace; font-weight: 600; letter-spacing: 0.01em; margin-bottom: 6px; } .ds-card-body { font-family: 'DM Mono', ui-monospace, monospace; font-size: 0.9375rem; line-height: 1.55; color: var(--app-text-muted, oklch(0.7654 0.0232 274.64)); } .ds-soft-lift { transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease; will-change: transform; } .ds-soft-lift:hover { transform: translateY(-2px); box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px rgba(0,0,0,0.22); } @media (prefers-reduced-motion: reduce) { .ds-soft-lift:hover { transform: none; } }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Sunken field with a strong hairline that shifts to the accent focus ring on focus.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search a course or professor\" />",
+      "css": ".ds-input { background: var(--app-surface, oklch(0.2668 0.0186 294.27)); color: var(--app-text, oklch(0.9496 0.0096 273.35)); font-family: 'DM Mono', ui-monospace, monospace; font-size: 0.9375rem; border: 1px solid var(--app-border-strong, oklch(0.3604 0.0258 291.16)); border-radius: 12px; padding: 8px 12px; outline: none; transition: border-color 150ms ease; } .ds-input::placeholder { color: var(--app-text-dim, oklch(0.6454 0.0375 278.13)); } .ds-input:focus { border-color: var(--app-accent, oklch(0.809 0.105 251.813)); }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Pill-shaped meta chip on the overlay surface. Mono, weight 600, no uppercase transform.",
+      "html": "<span class=\"ds-badge\">Prerequisite met</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; background: var(--app-surface-overlay, oklch(0.3003 0.0216 292.69)); color: var(--app-text, oklch(0.9496 0.0096 273.35)); font-family: 'DM Mono', ui-monospace, monospace; font-weight: 600; letter-spacing: 0.01em; font-size: 0.75rem; border-radius: 999px; padding: 2px 10px; }"
+    },
+    {
+      "name": "Accent Checkbox",
+      "kind": "custom",
+      "refersTo": "accent",
+      "description": "One of the few controls that carries the theme accent: checked state fills with the accent while buttons stay neutral.",
+      "html": "<label class=\"ds-check-row\"><input class=\"ds-check\" type=\"checkbox\" checked /> Avoid mornings before 10am</label>",
+      "css": ".ds-check-row { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 0.9375rem; color: var(--app-text, oklch(0.9496 0.0096 273.35)); } .ds-check { appearance: none; width: 18px; height: 18px; border: 1px solid var(--app-border-strong, oklch(0.3604 0.0258 291.16)); border-radius: 6px; background: var(--app-surface-overlay, oklch(0.3003 0.0216 292.69)); display: inline-grid; place-content: center; cursor: pointer; transition: background 150ms ease, border-color 150ms ease; } .ds-check:checked { background: var(--app-accent, oklch(0.809 0.105 251.813)); border-color: var(--app-accent, oklch(0.809 0.105 251.813)); } .ds-check:checked::after { content: ''; width: 10px; height: 10px; clip-path: polygon(14% 44%, 0 65%, 40% 100%, 100% 16%, 82% 0, 38% 68%); background: var(--app-on-accent, oklch(0.2217 0.0412 259.27)); }"
+    },
+    {
+      "name": "Calendar Event",
+      "kind": "custom",
+      "refersTo": "surface",
+      "description": "Signature WeekCalendar block: course hue mixed with the surface, with legible on-event text.",
+      "html": "<div class=\"ds-event\"><div class=\"ds-event-code\">CSI 2110</div><div class=\"ds-event-meta\">MWF 10:00-11:20</div></div>",
+      "css": ".ds-event { --course: oklch(0.74 0.1 252); background: color-mix(in oklab, var(--course) 38%, var(--app-bg, oklch(0.2216 0.0117 293.07))); color: var(--app-on-event, oklch(0.9588 0.0045 78.3)); border-radius: 8px; padding: 6px 8px; font-family: 'DM Mono', ui-monospace, monospace; } .ds-event-code { font-weight: 600; font-size: 0.8125rem; } .ds-event-meta { font-size: 0.6875rem; opacity: 0.85; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Focused Night Desk",
+    "overview": "uoplan is the calm, competent tool a uOttawa student reaches for at 11pm the week registration opens. The whole system is built around one physical scene: a focused student at a dark desk, reading a schedule, wanting the timetable to appear and the anxiety to leave. The canvas is a warm violet-charcoal, the content is light, and nothing on screen competes for attention it hasn't earned. The signature move is typographic contrast: DM Serif Display for headings gives every screen an editorial confidence, while DM Mono carries all body and UI text with the quiet precision of a terminal. Colour is deliberately scarce, one pastel accent shows up only where interaction lives, and depth comes from soft diffuse shadows and a two-pixel lift, never hard outlines or stacked cards. It is not uoCampus or Brightspace, and it is not a generic SaaS dashboard.",
+    "keyCharacteristics": [
+      "Dark-first, warm-neutral canvas; light content on a violet-charcoal surface.",
+      "Editorial serif headings over a monospace body; structural contrast without extra colour.",
+      "One accent, used sparingly, applied to interactive controls rather than sprayed across the page.",
+      "Soft diffuse elevation and a subtle hover lift; flat and quiet at rest.",
+      "Dense information, low visual noise. Every element earns its place."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Each theme has exactly one interactive accent (sky blue on dark, a darker blue on light, garnet on Gee-Gees). It marks where interaction lives and appears on a small fraction of any screen. Never introduce a second decorative accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral-Button Rule",
+        "body": "Buttons deliberately do not use the accent. Mantine's primaryColor is a near-neutral constructBlack; the accent is wired per-control via CSS variables. Primary actions read as confident graphite, not coloured chrome.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tinted-Neutral Rule",
+        "body": "No pure black or white. Every neutral is tinted toward the active theme's hue at low chroma.",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif-Headline Rule",
+        "body": "Headings are serif (DM Serif Display) and body is monospace (DM Mono), always. The face contrast is the hierarchy.",
+        "section": "typography"
+      },
+      {
+        "name": "The Single-Weight Display Rule",
+        "body": "DM Serif Display ships at weight 400 only. Scale, not weight, differentiates serif headings.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces are flat at rest and gain shadow only as a response to state. Interactive cards use .soft-lift, translating translateY(-2px) with a soft shadow on hover, disabled under prefers-reduced-motion.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do author every colour in OKLCH and reference it through an --app-* token. Never hardcode a hex value.",
+      "Do keep DM Serif Display for headings and DM Mono for body/UI text; let face contrast carry hierarchy.",
+      "Do keep the accent rare, on interactive controls and focus states, on a small fraction of any screen.",
+      "Do separate surfaces with tonal layering plus 1px hairlines first; reach for shadow only on state change.",
+      "Do cap body measure at 65-75ch and respect prefers-reduced-motion on every lift and transition.",
+      "Do keep primary buttons neutral graphite; wire the accent per-control via CSS variables."
+    ],
+    "donts": [
+      "Don't make it look like uoCampus or Brightspace: boxy, dated, institutional, hard outlines everywhere.",
+      "Don't ship generic SaaS dashboard patterns: hero-metric templates, gradient cards, confetti illustrations.",
+      "Don't use #000 or #fff, or any untinted neutral.",
+      "Don't use gradient text (background-clip: text) or border-left/border-right colour stripes as accents.",
+      "Don't nest cards inside cards, or wrap content in a container that doesn't need one.",
+      "Don't add a second decorative accent colour or restyle a heading to the mono face.",
+      "Don't use hard offset stamp shadows; the system moved to soft diffuse elevation on purpose.",
+      "Don't add confirmation dialogs for non-destructive actions; speed over ceremony."
+    ]
+  }
+}
