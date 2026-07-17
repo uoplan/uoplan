@@ -1,5 +1,56 @@
 # Changelog
 
+## [1.0.0-beta.41](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.40...uoplan-monorepo-v1.0.0-beta.41) (2026-07-15)
+
+
+### Features
+
+* add catalogue prereq-history proto + data-asset size report ([9b68af3](https://github.com/uoplan/uoplan/commit/9b68af33c5e27ad425a973c7b66ed5af98f4f3ab))
+* add compact description keyword search index (dictionary + BM25) ([d4ae366](https://github.com/uoplan/uoplan/commit/d4ae3668dd3726873f2d378c418e26b66c2f5884))
+* add important dates and deadlines ([7f7059c](https://github.com/uoplan/uoplan/commit/7f7059c87bb18d0e9abaeace0c138a73513d9b47))
+* **basket:** relabel empty CTA to Open Explore ([d91b41f](https://github.com/uoplan/uoplan/commit/d91b41f07aa2368e80b9449d8dcdae699b5c2e23))
+* bundle union catalogue in native app, drop per-year catalogues ([8f557cc](https://github.com/uoplan/uoplan/commit/8f557cc0b2821e3edad90bf8321360f30cbf3037))
+* **core:** add combined multi-term iCalendar builder ([29dc268](https://github.com/uoplan/uoplan/commit/29dc2683d8fa22b7c8cf339ba15c621022129849))
+* **explore:** add course descriptions and prerequisite graphs ([851e20e](https://github.com/uoplan/uoplan/commit/851e20e9d81b12027182b7283933644f605998b2))
+* **native:** integrate the shared planner store ([5896183](https://github.com/uoplan/uoplan/commit/5896183232662bc2ef80773494047b5ca670c3d3))
+* **planner:** tabbed per-term sidebar with variant nav and downloads ([2786327](https://github.com/uoplan/uoplan/commit/27863278006ac8c90911d311d9b72c89de614826))
+* ship union catalogue + prereq-history overlay for web data layer ([2ad6b69](https://github.com/uoplan/uoplan/commit/2ad6b6919787e2b365e2bae373dd8489bb5e8dbf))
+* surface description keyword matches in native explore search ([16a77a4](https://github.com/uoplan/uoplan/commit/16a77a43acc7c0de359c18928432da6a662816fc))
+* surface description keyword matches in web explore search ([5d3fcaa](https://github.com/uoplan/uoplan/commit/5d3fcaae827f8aad819f1ba1ba31556ca51e1d69))
+* **web:** add explore delivery filtering ([8329745](https://github.com/uoplan/uoplan/commit/83297452df3eba4602febe9b607dec5532b3597f))
+* **web:** animate graph term calendar when its schedule changes ([1cf7e0c](https://github.com/uoplan/uoplan/commit/1cf7e0cce0f349907f666f20144963700bc8b444))
+* **web:** expand a graph term into an in-page calendar overlay instead of navigating ([3229468](https://github.com/uoplan/uoplan/commit/32294685c6e679c3b5af08b0418583d7670a9b35))
+* **web:** expand or switch the graph calendar overlay from term tabs ([012eaf3](https://github.com/uoplan/uoplan/commit/012eaf31535982ea7fec4b776fea2ddfa80ad014))
+* **web:** float open-in-calendar as two cards over the graph ([a6a527b](https://github.com/uoplan/uoplan/commit/a6a527b0e0ddd8c6884d02abf18ceb2c33ca062f))
+* **web:** forward graph term schedule into calendar without touching the basket ([9aa6c2c](https://github.com/uoplan/uoplan/commit/9aa6c2cc455768e2074d4e09888a83d758fbe559))
+* **web:** highlight quick schedule flow ([4461bca](https://github.com/uoplan/uoplan/commit/4461bcae8eaa16928d8f34bada7629aa35269269))
+* **web:** make the graph planner floating panel resizable ([06d9095](https://github.com/uoplan/uoplan/commit/06d9095272ed017605ab1f0a7d30b93380c8326e))
+* **web:** make the graph planner sidebar a floating movable collapsible panel ([9a887a9](https://github.com/uoplan/uoplan/commit/9a887a907253f3ce908c39952b9087dcb9e97446))
+* **web:** minimize calendar to overview and move missing-course banner into planner tab ([b971ff0](https://github.com/uoplan/uoplan/commit/b971ff05f441400253f291d4920ad789bcb9c222))
+* **web:** open graph planner options as a drag-to-dismiss bottom sheet on mobile ([7b49adb](https://github.com/uoplan/uoplan/commit/7b49adb24b7fa0d07728be93eac63d7546a9f0c5))
+* **web:** remove floating cart button on the schedule calendar and graph ([c10caf6](https://github.com/uoplan/uoplan/commit/c10caf6cf361b4a90a49ed6a94b9fb685c4ab1aa))
+* **web:** render graph term nodes as resizable calendars with course popovers ([a1803ac](https://github.com/uoplan/uoplan/commit/a1803ac5eb76e727df99e632ff98037c20e50580))
+
+
+### Bug Fixes
+
+* blend description keyword hits into explore search ranking ([f149424](https://github.com/uoplan/uoplan/commit/f149424fb296074cbbfa1c5a3d3e555c4f1685df))
+* **explore:** include catalogue-only courses ([84fc764](https://github.com/uoplan/uoplan/commit/84fc7646357a8ec2693f66d26232af213d603544))
+* **i18n:** enforce SEO translation coverage ([b561f63](https://github.com/uoplan/uoplan/commit/b561f6358834c8d82c58719d7813bddc9997dfcf))
+* **schedule:** derive basic course count from cart ([310bcc8](https://github.com/uoplan/uoplan/commit/310bcc81f924c8c9d0f5e508541cfa65caa8b5aa))
+* treat earlier planned terms as completed when opening a graph term in the calendar ([8472d1e](https://github.com/uoplan/uoplan/commit/8472d1ee9ef3ea943d401fdedc1848d7bec810a0))
+* **web:** name degree planner in back buttons and default-zoom graph to recent+future terms ([ec70458](https://github.com/uoplan/uoplan/commit/ec70458e98b6c8e075b6f4f30ac59785c2f39fff))
+* **web:** vary graph term seed so regenerating produces a new schedule ([7c28140](https://github.com/uoplan/uoplan/commit/7c28140926fea08f0aa2a7001e381ebf49d28acf))
+
+
+### Performance Improvements
+
+* **build:** cache rendered changelog HTML to cut build wall-time ([12f6f4b](https://github.com/uoplan/uoplan/commit/12f6f4b2a40135203c148f998692dc49cb563b14))
+* **data:** add deduplicated program-history overlay to replace per-year program assets ([0900502](https://github.com/uoplan/uoplan/commit/090050273e447aed60dbe351c15c06084692c447))
+* **web:** defer WASM engine and schedule worker off initial route bundle ([eb532fa](https://github.com/uoplan/uoplan/commit/eb532fa8b0f5f67e1335584132a574a4a4bfe476))
+* **web:** drop unused dm-mono 300 weight from initial load ([af559c7](https://github.com/uoplan/uoplan/commit/af559c7a5fe3e7d6ee8219052a6e4e71f5e21649))
+* **web:** reconstruct cohort programs from history overlay, drop per-year program assets ([9006b75](https://github.com/uoplan/uoplan/commit/9006b756a5e8550e5d34dbf71c4d60eee61e3159))
+
 ## [1.0.0-beta.40](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.39...uoplan-monorepo-v1.0.0-beta.40) (2026-07-04)
 
 
