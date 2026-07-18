@@ -58030,6 +58030,14 @@
             "session": null,
             "times": [],
             "status": "Open"
+          },
+          {
+            "section": "B00-REC Term",
+            "sectionCode": "B00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
           }
         ]
       }

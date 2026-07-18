@@ -14212,7 +14212,11 @@
     "graduate/microprogram-strategic-business-management-online",
     "graduate/microprogram-strategic-data-management-online",
     "graduate/diploma-nurse-practitioners",
-    "graduate/master-science-nursing-diploma-nurse-practitioners"
+    "graduate/master-science-nursing-diploma-nurse-practitioners",
+    "undergrad/major-english-language-studies",
+    "undergrad/microprogram-english-language-studies",
+    "undergrad/minor-advanced-english-language-studies",
+    "undergrad/minor-english-language-studies"
   ],
   "disciplines": [
     "ACP",

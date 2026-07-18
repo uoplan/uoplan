@@ -19968,7 +19968,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 169,
               "A": 145,
@@ -21422,7 +21422,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 31,
               "A": 73,
@@ -21832,7 +21832,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 13,
               "A": 10,
@@ -22920,19 +22920,7 @@
             "sectionCode": "M10",
             "component": "LAB",
             "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 960,
-                "endMinutes": 1070,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
+            "times": [],
             "status": "Open",
             "distribution": {
               "A+": 343,
@@ -23283,7 +23271,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 102,
               "A": 112,
@@ -23809,19 +23797,7 @@
             "sectionCode": "M03",
             "component": "LAB",
             "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 960,
-                "endMinutes": 1070,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
+            "times": [],
             "status": "Open",
             "distribution": {
               "A+": 151,
@@ -23902,7 +23878,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 151,
               "A": 91,
@@ -31652,7 +31628,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 631,
               "A": 740,
@@ -38460,7 +38436,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-19",
                   "2027-01-19"
@@ -38482,7 +38458,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-23",
                   "2027-02-23"
@@ -38504,7 +38480,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-23",
                   "2027-03-23"
@@ -38555,7 +38531,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-20",
                   "2027-01-20"
@@ -38577,7 +38553,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-24",
                   "2027-02-24"
@@ -38599,7 +38575,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-31",
                   "2027-03-31"
@@ -38650,7 +38626,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-21",
                   "2027-01-21"
@@ -38672,7 +38648,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-25",
                   "2027-02-25"
@@ -38694,7 +38670,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-25",
                   "2027-03-25"
@@ -38745,7 +38721,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -38767,7 +38743,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-26",
                   "2027-02-26"
@@ -38789,7 +38765,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-26",
                   "2027-03-26"
@@ -38840,7 +38816,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-19",
                   "2027-01-19"
@@ -38862,7 +38838,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-23",
                   "2027-02-23"
@@ -38884,7 +38860,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-23",
                   "2027-03-23"
@@ -38935,7 +38911,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-20",
                   "2027-01-20"
@@ -38957,7 +38933,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-24",
                   "2027-02-24"
@@ -38979,7 +38955,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-24",
                   "2027-03-24"
@@ -39030,7 +39006,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-21",
                   "2027-01-21"
@@ -39052,7 +39028,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-25",
                   "2027-02-25"
@@ -39074,7 +39050,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-25",
                   "2027-03-25"
@@ -39125,7 +39101,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -39147,7 +39123,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-26",
                   "2027-02-26"
@@ -39169,7 +39145,7 @@
                 "startMinutes": 510,
                 "endMinutes": 570,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-26",
                   "2027-03-26"
@@ -39220,7 +39196,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-19",
                   "2027-01-19"
@@ -39242,7 +39218,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-23",
                   "2027-02-23"
@@ -39264,7 +39240,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-23",
                   "2027-03-23"
@@ -39315,7 +39291,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-20",
                   "2027-01-20"
@@ -39337,7 +39313,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-24",
                   "2027-02-24"
@@ -39359,7 +39335,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-24",
                   "2027-03-24"
@@ -39410,7 +39386,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-21",
                   "2027-01-21"
@@ -39432,7 +39408,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-25",
                   "2027-02-25"
@@ -39454,7 +39430,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-25",
                   "2027-03-25"
@@ -39505,7 +39481,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -39527,7 +39503,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-26",
                   "2027-02-26"
@@ -39549,7 +39525,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Matthieu Delcourt",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-26",
                   "2027-03-26"
@@ -39589,7 +39565,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-12",
                   "2027-01-12"
@@ -39600,7 +39576,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-26",
                   "2027-01-26"
@@ -39611,7 +39587,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-09",
                   "2027-02-09"
@@ -39622,7 +39598,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-02",
                   "2027-03-02"
@@ -39633,7 +39609,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-16",
                   "2027-03-16"
@@ -39644,7 +39620,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-30",
                   "2027-03-30"
@@ -39684,7 +39660,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-13",
                   "2027-01-13"
@@ -39695,7 +39671,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-27",
                   "2027-01-27"
@@ -39706,7 +39682,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-10",
                   "2027-02-10"
@@ -39717,7 +39693,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-03",
                   "2027-03-03"
@@ -39728,7 +39704,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-17",
                   "2027-03-17"
@@ -39739,7 +39715,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-31",
                   "2027-03-31"
@@ -39779,7 +39755,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-14",
                   "2027-01-14"
@@ -39790,7 +39766,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-28",
                   "2027-01-28"
@@ -39801,7 +39777,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-11",
                   "2027-02-11"
@@ -39812,7 +39788,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-04",
                   "2027-03-04"
@@ -39823,7 +39799,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-18",
                   "2027-03-18"
@@ -39834,7 +39810,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-01",
                   "2027-04-01"
@@ -39874,7 +39850,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -39885,7 +39861,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-29",
                   "2027-01-29"
@@ -39896,7 +39872,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-12",
                   "2027-02-12"
@@ -39907,7 +39883,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-05",
                   "2027-03-05"
@@ -39918,7 +39894,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-19",
                   "2027-03-19"
@@ -39929,7 +39905,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-09",
                   "2027-04-09"
@@ -39969,7 +39945,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-12",
                   "2027-01-12"
@@ -39980,7 +39956,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-26",
                   "2027-01-26"
@@ -39991,7 +39967,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-09",
                   "2027-02-09"
@@ -40002,7 +39978,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-02",
                   "2027-03-02"
@@ -40013,7 +39989,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-16",
                   "2027-03-16"
@@ -40024,7 +40000,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-30",
                   "2027-03-30"
@@ -40064,7 +40040,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-13",
                   "2027-01-13"
@@ -40075,7 +40051,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-27",
                   "2027-01-27"
@@ -40086,7 +40062,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-10",
                   "2027-02-10"
@@ -40097,7 +40073,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-03",
                   "2027-03-03"
@@ -40108,7 +40084,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-17",
                   "2027-03-17"
@@ -40119,7 +40095,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-31",
                   "2027-03-31"
@@ -40159,7 +40135,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-14",
                   "2027-01-14"
@@ -40170,7 +40146,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-28",
                   "2027-01-28"
@@ -40181,7 +40157,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-11",
                   "2027-02-11"
@@ -40192,7 +40168,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-04",
                   "2027-03-04"
@@ -40203,7 +40179,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-18",
                   "2027-03-18"
@@ -40214,7 +40190,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-01",
                   "2027-04-01"
@@ -40254,7 +40230,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -40265,7 +40241,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-29",
                   "2027-01-29"
@@ -40276,7 +40252,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-12",
                   "2027-02-12"
@@ -40287,7 +40263,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-05",
                   "2027-03-05"
@@ -40298,7 +40274,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-19",
                   "2027-03-19"
@@ -40309,7 +40285,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-09",
                   "2027-04-09"
@@ -40349,7 +40325,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-12",
                   "2027-01-12"
@@ -40360,7 +40336,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-26",
                   "2027-01-26"
@@ -40371,7 +40347,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-09",
                   "2027-02-09"
@@ -40382,7 +40358,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-02",
                   "2027-03-02"
@@ -40393,7 +40369,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-16",
                   "2027-03-16"
@@ -40404,7 +40380,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-30",
                   "2027-03-30"
@@ -40444,7 +40420,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-13",
                   "2027-01-13"
@@ -40455,7 +40431,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-27",
                   "2027-01-27"
@@ -40466,7 +40442,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-10",
                   "2027-02-10"
@@ -40477,7 +40453,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-03",
                   "2027-03-03"
@@ -40488,7 +40464,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-17",
                   "2027-03-17"
@@ -40499,7 +40475,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-31",
                   "2027-03-31"
@@ -40539,7 +40515,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-14",
                   "2027-01-14"
@@ -40550,7 +40526,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-28",
                   "2027-01-28"
@@ -40561,7 +40537,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-11",
                   "2027-02-11"
@@ -40572,7 +40548,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-04",
                   "2027-03-04"
@@ -40583,7 +40559,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-18",
                   "2027-03-18"
@@ -40594,7 +40570,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-01",
                   "2027-04-01"
@@ -40634,7 +40610,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -40645,7 +40621,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-29",
                   "2027-01-29"
@@ -40656,7 +40632,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-12",
                   "2027-02-12"
@@ -40667,7 +40643,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-05",
                   "2027-03-05"
@@ -40678,7 +40654,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-19",
                   "2027-03-19"
@@ -40689,7 +40665,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-09",
                   "2027-04-09"
@@ -40793,7 +40769,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -40833,7 +40809,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -40873,7 +40849,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -40913,7 +40889,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -40953,7 +40929,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -40993,7 +40969,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -41033,7 +41009,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -41210,7 +41186,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Gabriel Guillet",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-19",
                   "2027-01-19"
@@ -41232,7 +41208,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Gabriel Guillet",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-23",
                   "2027-02-23"
@@ -41254,7 +41230,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Gabriel Guillet",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-23",
                   "2027-03-23"
@@ -41294,7 +41270,7 @@
                 "startMinutes": 510,
                 "endMinutes": 585,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-13",
                   "2027-01-13"
@@ -41305,7 +41281,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-20",
                   "2027-01-20"
@@ -41316,7 +41292,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-03",
                   "2027-02-03"
@@ -41327,7 +41303,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-24",
                   "2027-02-24"
@@ -41338,7 +41314,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-10",
                   "2027-03-10"
@@ -41349,14 +41325,14 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-24",
                   "2027-03-24"
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 197,
               "A": 153,
@@ -41389,7 +41365,7 @@
                 "startMinutes": 510,
                 "endMinutes": 585,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-14",
                   "2027-01-14"
@@ -41400,7 +41376,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-21",
                   "2027-01-21"
@@ -41411,7 +41387,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-04",
                   "2027-02-04"
@@ -41422,7 +41398,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-25",
                   "2027-02-25"
@@ -41433,7 +41409,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-11",
                   "2027-03-11"
@@ -41444,7 +41420,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-25",
                   "2027-03-25"
@@ -41484,7 +41460,7 @@
                 "startMinutes": 510,
                 "endMinutes": 585,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -41495,7 +41471,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-22",
                   "2027-01-22"
@@ -41506,7 +41482,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-05",
                   "2027-02-05"
@@ -41517,7 +41493,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-26",
                   "2027-02-26"
@@ -41528,7 +41504,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-12",
                   "2027-03-12"
@@ -41539,7 +41515,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-26",
                   "2027-03-26"
@@ -41579,7 +41555,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-12",
                   "2027-01-12"
@@ -41590,7 +41566,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-26",
                   "2027-01-26"
@@ -41601,7 +41577,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-09",
                   "2027-02-09"
@@ -41612,7 +41588,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-02",
                   "2027-03-02"
@@ -41623,7 +41599,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-16",
                   "2027-03-16"
@@ -41634,7 +41610,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-30",
                   "2027-03-30"
@@ -41674,7 +41650,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-13",
                   "2027-01-13"
@@ -41685,7 +41661,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-27",
                   "2027-01-27"
@@ -41696,7 +41672,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-10",
                   "2027-02-10"
@@ -41707,7 +41683,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-03",
                   "2027-03-03"
@@ -41718,7 +41694,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-17",
                   "2027-03-17"
@@ -41729,7 +41705,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-31",
                   "2027-03-31"
@@ -41769,7 +41745,7 @@
                 "startMinutes": 600,
                 "endMinutes": 660,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-14",
                   "2027-01-14"
@@ -41780,7 +41756,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-28",
                   "2027-01-28"
@@ -41791,7 +41767,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-11",
                   "2027-02-11"
@@ -41802,7 +41778,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-04",
                   "2027-03-04"
@@ -41813,7 +41789,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-18",
                   "2027-03-18"
@@ -41824,7 +41800,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-01",
                   "2027-04-01"
@@ -41864,7 +41840,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-15",
                   "2027-01-15"
@@ -41875,7 +41851,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-29",
                   "2027-01-29"
@@ -41886,7 +41862,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-12",
                   "2027-02-12"
@@ -41897,7 +41873,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-02-12",
                   "2027-02-12"
@@ -41908,7 +41884,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-03-05",
                   "2027-03-05"
@@ -41919,7 +41895,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-04-09",
                   "2027-04-09"
@@ -42023,7 +41999,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -42063,7 +42039,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -42103,7 +42079,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Sofia Lucille Perin",
+                "instructor": "Rory O'Neill",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -42329,7 +42305,7 @@
                 "startMinutes": 780,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Stephanie Mathieu",
+                "instructor": "Charles Benoît",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -42369,7 +42345,7 @@
                 "startMinutes": 780,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Stephanie Mathieu",
+                "instructor": "Charles Benoît",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -42409,14 +42385,14 @@
                 "startMinutes": 780,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Stephanie Mathieu",
+                "instructor": "Charles Benoît",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 270,
               "A": 211,
@@ -42449,7 +42425,7 @@
                 "startMinutes": 780,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Stephanie Mathieu",
+                "instructor": "Charles Benoît",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -42507,7 +42483,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 8,
               "A": 28,
@@ -42952,7 +42928,7 @@
                 "startMinutes": 780,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Stephanie Mathieu",
+                "instructor": "Charles Benoît",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -43397,7 +43373,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Julian Starr",
+                "instructor": "Cindy Lesage-Pelletier",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -44370,7 +44346,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 7,
               "A": 0,
@@ -52190,7 +52166,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 774,
               "A": 605,
@@ -52657,7 +52633,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 259,
               "A": 248,
@@ -54291,7 +54267,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 141,
               "A": 48,
@@ -58362,7 +58338,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "D00-LEC Session F",
@@ -59769,7 +59745,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 9,
               "A": 56,
@@ -59809,7 +59785,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 9,
               "A": 56,
@@ -59849,7 +59825,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 9,
               "A": 56,
@@ -61315,7 +61291,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 35,
               "A": 204,
@@ -61918,7 +61894,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 56,
               "A": 84,
@@ -66292,7 +66268,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 15,
@@ -67066,7 +67042,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1,
               "A": 19,
@@ -73589,20 +73565,8 @@
             "sectionCode": "A00",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 780,
-                "endMinutes": 950,
-                "virtual": false,
-                "instructor": "Gergely Silasi",
-                "meetingDates": [
-                  "2027-01-11",
-                  "2027-04-14"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 26,
               "A": 8,
@@ -82519,7 +82483,7 @@
                 "day": "Fr",
                 "startMinutes": 870,
                 "endMinutes": 1040,
-                "virtual": false,
+                "virtual": true,
                 "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
@@ -82613,7 +82577,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Alexis Hieu Truong",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -82624,7 +82588,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Alexis Hieu Truong",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -91568,7 +91532,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 349,
               "A": 305,
@@ -93322,7 +93286,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 296,
               "A": 122,
@@ -95312,25 +95276,6 @@
               "P": 0,
               "S": 0
             }
-          }
-        ]
-      }
-    },
-    {
-      "subject": "CVG",
-      "catalogNumber": "7100",
-      "courseCode": "CVG 7100",
-      "title": "Geotechnical Case Studies",
-      "timeZone": "America/Toronto",
-      "components": {
-        "LEC": [
-          {
-            "section": "IW00-LEC FullSess.",
-            "sectionCode": "IW00",
-            "component": "LEC",
-            "session": null,
-            "times": [],
-            "status": "Open"
           }
         ]
       }
@@ -99081,7 +99026,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 2,
               "A": 2,
@@ -100158,7 +100103,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -102063,7 +102008,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 6,
               "A": 3,
@@ -102565,7 +102510,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 12,
               "A": 20,
@@ -102991,7 +102936,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 269,
               "A": 351,
@@ -103518,7 +103463,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 198,
               "A": 112,
@@ -103671,7 +103616,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 159,
               "A": 140,
@@ -118105,7 +118050,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 15,
               "A": 116,
@@ -119600,7 +119545,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 279,
               "A": 208,
@@ -119642,7 +119587,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 279,
               "A": 208,
@@ -121462,7 +121407,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 77,
               "A": 64,
@@ -121586,7 +121531,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 77,
               "A": 64,
@@ -123781,8 +123726,19 @@
             "times": [
               {
                 "day": "Th",
-                "startMinutes": 510,
+                "startMinutes": 600,
                 "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 770,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -123822,9 +123778,9 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
-                "startMinutes": 690,
-                "endMinutes": 770,
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 590,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -127799,7 +127755,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1194,
               "A": 1808,
@@ -130516,7 +130472,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 14,
               "A": 44,
@@ -135458,7 +135414,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 467,
               "A": 277,
@@ -145276,7 +145232,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Denis Lacelle",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -145287,7 +145243,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Denis Lacelle",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -148034,7 +147990,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 433,
               "A": 784,
@@ -148837,7 +148793,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 111,
               "A": 210,
@@ -149553,7 +149509,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 137,
               "A": 305,
@@ -150173,8 +150129,19 @@
             "times": [
               {
                 "day": "Th",
-                "startMinutes": 510,
+                "startMinutes": 600,
                 "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Staff",
+                "meetingDates": [
+                  "2027-01-11",
+                  "2027-04-14"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 690,
+                "endMinutes": 770,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -150214,9 +150181,9 @@
             "session": null,
             "times": [
               {
-                "day": "Fr",
-                "startMinutes": 690,
-                "endMinutes": 770,
+                "day": "Th",
+                "startMinutes": 510,
+                "endMinutes": 590,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -158700,8 +158667,8 @@
             "times": [
               {
                 "day": "Th",
-                "startMinutes": 510,
-                "endMinutes": 680,
+                "startMinutes": 1140,
+                "endMinutes": 1310,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -158802,8 +158769,8 @@
             "times": [
               {
                 "day": "Th",
-                "startMinutes": 1140,
-                "endMinutes": 1310,
+                "startMinutes": 510,
+                "endMinutes": 680,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -160344,7 +160311,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1270,
               "A": 722,
@@ -167117,7 +167084,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1268,
               "A": 708,
@@ -167797,7 +167764,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1268,
               "A": 708,
@@ -168363,7 +168330,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 639,
               "A": 427,
@@ -172548,7 +172515,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 441,
               "A": 171,
@@ -172628,7 +172595,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 441,
               "A": 171,
@@ -181700,7 +181667,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 62,
               "A": 234,
@@ -183964,7 +183931,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Patrick François Richer",
+                "instructor": "Eric Lanteigne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184006,7 +183973,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Patrick François Richer",
+                "instructor": "Eric Lanteigne",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184017,7 +183984,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Patrick François Richer",
+                "instructor": "Mihaita Matei",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -184431,7 +184398,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 135,
               "A": 564,
@@ -206107,7 +206074,7 @@
                 "startMinutes": 690,
                 "endMinutes": 870,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ivan Katchanovski",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -206158,7 +206125,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ishara Mahat",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -206169,7 +206136,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Ishara Mahat",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -209938,7 +209905,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Melanie Beth Fried",
                 "meetingDates": [
                   "2027-02-08",
                   "2027-04-23"
@@ -227984,14 +227951,14 @@
                 ]
               },
               {
-                "day": "Fr",
-                "startMinutes": 720,
-                "endMinutes": 890,
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 690,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
-                  "2027-01-29",
-                  "2027-01-29"
+                  "2027-02-01",
+                  "2027-02-01"
                 ]
               },
               {
@@ -230703,7 +230670,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -233159,7 +233126,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -233411,7 +233378,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -233663,7 +233630,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -233747,7 +233714,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 370,
               "A": 308,
@@ -235324,7 +235291,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 126,
               "A": 132,
@@ -237327,7 +237294,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 219,
               "A": 130,
@@ -237579,7 +237546,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 219,
               "A": 130,
@@ -242923,7 +242890,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Sascha Maicher",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -242934,7 +242901,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": true,
-                "instructor": "Staff",
+                "instructor": "Sascha Maicher",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -243116,7 +243083,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 142,
               "A": 201,
@@ -243639,7 +243606,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 138,
               "A": 137,
@@ -243683,7 +243650,7 @@
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Justine Perron",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -244477,7 +244444,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 60,
               "A": 54,
@@ -245173,7 +245140,7 @@
                 "startMinutes": 870,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Rafael Jacob",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"
@@ -248451,7 +248418,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 470,
               "A": 491,
@@ -248623,7 +248590,7 @@
             "component": "LAB",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 470,
               "A": 491,
@@ -249237,7 +249204,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 213,
               "A": 175,
@@ -249707,7 +249674,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 168,
               "A": 208,
@@ -257272,7 +257239,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 394,
               "A": 216,
@@ -264086,7 +264053,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -265509,7 +265476,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 22,
               "A": 35,
@@ -270349,13 +270316,32 @@
             "sectionCode": "A00",
             "component": "LEC",
             "session": null,
+            "times": [],
+            "status": "Closed"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "TMM",
+      "catalogNumber": "4708",
+      "courseCode": "TMM 4708",
+      "title": "Régulation hormonale du métabolisme",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
             "times": [
               {
                 "day": "Mo",
                 "startMinutes": 510,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Ilham Mekkioui",
+                "instructor": "Staff",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-14"

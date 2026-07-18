@@ -174496,46 +174496,61 @@
                   "type": "course",
                   "code": "EDU 7397",
                   "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "EDU 5105",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "EDU 5129",
+                  "indented": true
                 }
               ]
             },
             {
               "type": "group",
-              "title": "9 course units from:",
-              "credits": 9,
+              "title": "6 course units from:",
+              "credits": 6,
               "options": [
                 {
-                  "type": "pick",
-                  "title": "6 of the 9 course units must be specific to Health Professions Education and must be chosen from the following: EDU 5105, EDU 5202, EDU 5261, EDU 5286, EDU 5298 and EDU 6101",
-                  "credits": 9,
-                  "indented": true,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "EDU 5105"
-                    },
-                    {
-                      "type": "course",
-                      "code": "EDU 5202"
-                    },
-                    {
-                      "type": "course",
-                      "code": "EDU 5261"
-                    },
-                    {
-                      "type": "course",
-                      "code": "EDU 5286"
-                    },
-                    {
-                      "type": "course",
-                      "code": "EDU 5298"
-                    },
-                    {
-                      "type": "course",
-                      "code": "EDU 6101"
-                    }
-                  ]
+                  "type": "course",
+                  "code": "EDU 5105",
+                  "indented": true
                 },
+                {
+                  "type": "course",
+                  "code": "EDU 5202",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "EDU 5261",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "EDU 5286",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "EDU 5298",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "EDU 6101",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units from:",
+              "credits": 3,
+              "options": [
                 {
                   "type": "course",
                   "code": "EDU 5105",
@@ -174627,7 +174642,13 @@
                   "indented": true
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Electives",
+          "options": [
             {
               "type": "discipline_elective",
               "title": "3 elective course units in education (EDU) at the graduate level",
@@ -298738,6 +298759,173 @@
       ]
     },
     {
+      "title": "Major in English Language Studies",
+      "url": "https://catalogue.uottawa.ca/en/undergrad/major-english-language-studies/",
+      "slug": "undergrad/major-english-language-studies",
+      "requirements": [
+        {
+          "type": "and",
+          "title": "Compulsory courses",
+          "options": [
+            {
+              "type": "course",
+              "code": "ESL 2100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2121",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2122",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 3373",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 4100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 4375",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 4391",
+              "credits": 3
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Optional courses",
+          "options": [
+            {
+              "type": "group",
+              "title": "6 course units from:",
+              "credits": 6,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ESL 2181",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2332",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2341",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2351",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2361",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2371",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2372",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2391",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "9 course units from:",
+              "credits": 9,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ESL 3181",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3351",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3361",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3363",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3371",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "3 course units outside the program (Second Language Certification):",
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ESL 3100",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "3 optional course units in English (ENG) at the 2000 level",
+              "credits": 3,
+              "disciplineLevels": [
+                {
+                  "discipline": "ENG",
+                  "levels": [
+                    2000
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "3 optional course units in English (ENG)",
+              "credits": 3,
+              "disciplineLevels": [
+                {
+                  "discipline": "ENG"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "Major in English",
       "url": "https://catalogue.uottawa.ca/en/undergrad/major-english/",
       "slug": "undergrad/major-english",
@@ -308095,6 +308283,23 @@
       ]
     },
     {
+      "title": "Microprogram English Language Studies",
+      "url": "https://catalogue.uottawa.ca/en/undergrad/microprogram-english-language-studies/",
+      "slug": "undergrad/microprogram-english-language-studies",
+      "requirements": [
+        {
+          "type": "discipline_elective",
+          "title": "12 course units in English as a Second Language (ESL)",
+          "credits": 12,
+          "disciplineLevels": [
+            {
+              "discipline": "ESL"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "Microprogram Entrepreneurship, Creativity, and Social Innovation",
       "url": "https://catalogue.uottawa.ca/en/undergrad/microprogram-entrepreneurship-creativity-social-innovation/",
       "slug": "undergrad/microprogram-entrepreneurship-creativity-social-innovation",
@@ -310058,6 +310263,132 @@
             {
               "type": "elective",
               "title": "Other courses may be selected in consultation with the Program Coordinator."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Advanced Minor in English Language Studies",
+      "url": "https://catalogue.uottawa.ca/en/undergrad/minor-advanced-english-language-studies/",
+      "slug": "undergrad/minor-advanced-english-language-studies",
+      "requirements": [
+        {
+          "type": "and",
+          "title": "Compulsory courses",
+          "options": [
+            {
+              "type": "course",
+              "code": "ESL 2100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2121",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2122",
+              "credits": 3
+            },
+            {
+              "type": "elective",
+              "title": "Optional courses"
+            },
+            {
+              "type": "group",
+              "title": "9 course units from:",
+              "credits": 9,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ESL 2181",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2332",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2341",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2351",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2361",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2371",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2372",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2391",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "9 course units from:",
+              "credits": 9,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ESL 3181",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3351",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3361",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3363",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3371",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3373",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "discipline_elective",
+              "title": "3 optional course units in English (ENG)",
+              "credits": 3,
+              "disciplineLevels": [
+                {
+                  "discipline": "ENG"
+                }
+              ]
             }
           ]
         }
@@ -313429,6 +313760,134 @@
                       ]
                     }
                   ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Minor in English Language Studies",
+      "url": "https://catalogue.uottawa.ca/en/undergrad/minor-english-language-studies/",
+      "slug": "undergrad/minor-english-language-studies",
+      "requirements": [
+        {
+          "type": "and",
+          "title": "Compulsory courses",
+          "options": [
+            {
+              "type": "course",
+              "code": "ESL 2100",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2112",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2113",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2121",
+              "credits": 3
+            },
+            {
+              "type": "course",
+              "code": "ESL 2122",
+              "credits": 3
+            }
+          ]
+        },
+        {
+          "type": "and",
+          "title": "Optional courses",
+          "options": [
+            {
+              "type": "group",
+              "title": "9 course units from:",
+              "credits": 9,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ESL 2181",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2332",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2341",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2351",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2361",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2371",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2372",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 2391",
+                  "indented": true
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "title": "6 course units from:",
+              "credits": 6,
+              "options": [
+                {
+                  "type": "course",
+                  "code": "ESL 3181",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3351",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3361",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3363",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3371",
+                  "indented": true
+                },
+                {
+                  "type": "course",
+                  "code": "ESL 3373",
+                  "indented": true
                 }
               ]
             }
