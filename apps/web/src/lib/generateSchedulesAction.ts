@@ -1,10 +1,3 @@
-import type {
-  BlockedTime,
-  FilterHintDescriptor,
-  GenerationErrorDetails,
-  GenerationErrorState,
-  GenerationMessageDescriptor,
-} from "@uoplan/store/types";
 import {
   buildEffectiveRemainingRequirements,
   cacheWithClosedFilter,
@@ -22,26 +15,20 @@ import type {
   DataCache,
   GeneratedSchedule,
   GenerationConstraints,
-  MappedGenerationResult,
   RequirementWithStatus,
   ScheduleEngine,
   TimetableFailureDiagnostics,
 } from "@uoplan/core";
+import type { GenerationErrorState } from "@uoplan/store/types";
 import { buildColorMap } from "./colorMap";
-import { avoidedDaysFromBlocks } from "@uoplan/store/blockedTimes";
+import { buildActiveFilterHints } from "./generationFilterHints";
+import { buildTimetableFailureDiagnostics, generationErrorState } from "./generationDiagnostics";
 import type { GenerateSchedulesInput } from "@uoplan/store/generationInput";
 import { SCHEDULE_COURSE_COUNT_MAX } from "@uoplan/store/generationDefaults";
 
 // Re-export helpers used by tests and other modules
 export { expandConstrainedPerRequirement, buildPendingGroupPickCounts } from "@uoplan/core";
 export { type GenerateSchedulesInput } from "@uoplan/store/generationInput";
-
-/** Pool diagnostics shape carried by a mapped engine response. */
-type PoolDiagnostics = NonNullable<MappedGenerationResult["poolDiagnostics"]>;
-
-const DEFAULT_MIN_START_MINUTES = 8 * 60 + 30;
-const DEFAULT_MAX_END_MINUTES = 22 * 60;
-const DEFAULT_LANGUAGE_BUCKETS = ["en", "other"];
 
 function sumCompletedFirstYearCredits(
   completedCourses: readonly string[],
@@ -58,92 +45,6 @@ function sumCompletedFirstYearCredits(
 function clampAdditionalElectiveCount(count: number, selectedCount: number): number {
   const max = Math.max(0, SCHEDULE_COURSE_COUNT_MAX - selectedCount);
   return Math.max(0, Math.min(max, count));
-}
-
-function buildActiveFilterHints(opts: {
-  generationMinStartMinutes: number;
-  generationMaxEndMinutes: number;
-  blockedTimes: readonly BlockedTime[];
-  virtualSectionsOnly: boolean;
-  includeClosedComponents: boolean;
-  languageBuckets: string[];
-}): FilterHintDescriptor[] {
-  const hints: FilterHintDescriptor[] = [];
-  const {
-    generationMinStartMinutes,
-    generationMaxEndMinutes,
-    blockedTimes,
-    virtualSectionsOnly,
-    includeClosedComponents,
-    languageBuckets,
-  } = opts;
-
-  if (generationMinStartMinutes > DEFAULT_MIN_START_MINUTES) {
-    const h = Math.floor(generationMinStartMinutes / 60);
-    const m = generationMinStartMinutes % 60;
-    hints.push({ code: "start-after", time: `${h}:${m.toString().padStart(2, "0")}` });
-  }
-
-  if (generationMaxEndMinutes < DEFAULT_MAX_END_MINUTES) {
-    const h = Math.floor(generationMaxEndMinutes / 60);
-    const m = generationMaxEndMinutes % 60;
-    hints.push({ code: "end-before", time: `${h}:${m.toString().padStart(2, "0")}` });
-  }
-
-  const avoidedDays = avoidedDaysFromBlocks(blockedTimes);
-  if (avoidedDays.length > 0) {
-    hints.push({ code: "days-excluded", days: avoidedDays });
-  }
-
-  if (virtualSectionsOnly) {
-    hints.push({ code: "virtual-only" });
-  }
-
-  if (!includeClosedComponents) {
-    hints.push({ code: "closed-excluded" });
-  }
-
-  const isSameAsDefaultLang =
-    languageBuckets.length === DEFAULT_LANGUAGE_BUCKETS.length &&
-    DEFAULT_LANGUAGE_BUCKETS.every((b) => languageBuckets.includes(b));
-  if (!isSameAsDefaultLang) {
-    hints.push({ code: "language-filter", langs: languageBuckets });
-  }
-
-  return hints;
-}
-
-function buildTimetableFailureDiagnostics(
-  poolDiagnostics: PoolDiagnostics | null,
-  pinned: string[],
-  filteredOptionalPool: string[],
-  coursesThisSemester: number,
-  cache: ReturnType<typeof cacheWithClosedFilter>,
-  constraints: GenerationConstraints,
-  activeFilterHints?: FilterHintDescriptor[],
-): { details: GenerationErrorDetails; timetableFailure: TimetableFailureDiagnostics } {
-  const timetableFailure = diagnoseTimetableFailure({
-    pinnedCourseCodes: pinned,
-    optionalCourseCodes: filteredOptionalPool,
-    targetCount: coursesThisSemester,
-    cache,
-    constraints,
-  });
-  const details: GenerationErrorDetails = {
-    emptyPools: poolDiagnostics?.emptyPools ?? [],
-    totalAvailable: poolDiagnostics?.totalAvailable ?? pinned.length + filteredOptionalPool.length,
-    totalNeeded: poolDiagnostics?.totalNeeded ?? coursesThisSemester,
-    timetableFailure,
-    activeFilterHints,
-  };
-  return { details, timetableFailure };
-}
-
-function generationErrorState(
-  message: GenerationMessageDescriptor,
-  details: GenerationErrorDetails | null = null,
-): GenerationErrorState {
-  return { message, details };
 }
 
 interface GenerateSchedulesResult {
