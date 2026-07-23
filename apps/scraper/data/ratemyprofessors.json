@@ -1,5 +1,5 @@
 {
-  "resultCount": 4572,
+  "resultCount": 4573,
   "professors": [
     {
       "id": "VGVhY2hlci04Nzk2OTM=",
@@ -3113,8 +3113,8 @@
       "id": "VGVhY2hlci0yNTIzNzA2",
       "legacyId": 2523706,
       "name": "Arya Rahgozar",
-      "rating": 4.4,
-      "numRatings": 52
+      "rating": 4.5,
+      "numRatings": 55
     },
     {
       "id": "VGVhY2hlci0yOTMxODMx",
@@ -4675,7 +4675,7 @@
       "legacyId": 900648,
       "name": "Carolyn Gordon",
       "rating": 4.3,
-      "numRatings": 267
+      "numRatings": 269
     },
     {
       "id": "VGVhY2hlci0xNzQ5MDcw",
@@ -7587,7 +7587,7 @@
       "legacyId": 1809210,
       "name": "Dennis Sakalauskas",
       "rating": 4.7,
-      "numRatings": 102
+      "numRatings": 103
     },
     {
       "id": "VGVhY2hlci0xNzMzMjAx",
@@ -9862,7 +9862,7 @@
       "legacyId": 1964789,
       "name": "Francois Lalonde",
       "rating": 4.6,
-      "numRatings": 132
+      "numRatings": 133
     },
     {
       "id": "VGVhY2hlci04NjEzODI=",
@@ -11500,7 +11500,7 @@
       "legacyId": 2719302,
       "name": "Hebah Mejbel",
       "rating": 5,
-      "numRatings": 13
+      "numRatings": 14
     },
     {
       "id": "VGVhY2hlci0xNjg5NTg5",
@@ -17940,7 +17940,7 @@
       "legacyId": 1188258,
       "name": "Louise Edmonds",
       "rating": 2.6,
-      "numRatings": 109
+      "numRatings": 110
     },
     {
       "id": "VGVhY2hlci0xNzQwMDM2",
@@ -22857,6 +22857,13 @@
       "numRatings": 3
     },
     {
+      "id": "VGVhY2hlci01MDU1OTk0",
+      "legacyId": 5055994,
+      "name": "Nathan Springer",
+      "rating": 0,
+      "numRatings": 0
+    },
+    {
       "id": "VGVhY2hlci04OTIyMDQ=",
       "legacyId": 892204,
       "name": "Nathan Young",
@@ -24275,7 +24282,7 @@
       "legacyId": 2602830,
       "name": "Patrick Williams",
       "rating": 5,
-      "numRatings": 10
+      "numRatings": 11
     },
     {
       "id": "VGVhY2hlci0yNTU4ODQ=",
@@ -30512,7 +30519,7 @@
       "legacyId": 681236,
       "name": "Tyler Attwood",
       "rating": 4.4,
-      "numRatings": 203
+      "numRatings": 205
     },
     {
       "id": "VGVhY2hlci0xOTQyMjE5",
