@@ -221,6 +221,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: data
           fetch-depth: 0
 
       - name: Backup existing JSON data
@@ -365,9 +366,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # main may advance while scraper runs — rebase our working changes onto latest main
+          # data may advance while scraper runs — rebase our working changes onto latest data
           git stash push -u -m "daily-scrape pre-sync" -- apps/scraper/data/
-          if ! git pull --rebase origin main; then
+          if ! git pull --rebase origin data; then
             git stash pop
             exit 1
           fi
@@ -381,9 +382,9 @@ jobs:
           if [ "$LAST_AUTHOR_EMAIL" = "$BOT_EMAIL" ]; then
             # Previous commit was from the bot — amend it in place
             git commit --amend --no-edit
-            git push --force-with-lease origin HEAD:main
+            git push --force-with-lease origin HEAD:data
           else
             # Previous commit was from a human — make a new commit
             git commit -m "chore: update daily scrape data"
-            git push origin HEAD:main
+            git push origin HEAD:data
           fi

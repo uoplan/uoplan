@@ -38,3 +38,6 @@ coverage-runtime/
 apps/scraper/data/raw/
 # local data-asset size snapshots
 scripts/.size-snapshots/
+
+# Scraper JSON datasets live on the `data` branch (hydrated via `pnpm data:fetch`).
+apps/scraper/data/
