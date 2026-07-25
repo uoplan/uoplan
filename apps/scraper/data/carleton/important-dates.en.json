@@ -1,0 +1,2178 @@
+{
+  "locale": "en",
+  "sourceUrl": "https://calendar.carleton.ca/academicyear/",
+  "terms": [
+    {
+      "sourceId": "carleton-spring-summer-2026",
+      "termId": "202620",
+      "label": "Summer 2026",
+      "season": "spring-summer",
+      "year": 2026,
+      "sourcePublished": "true",
+      "termInterval": {
+        "startDate": "2026-05-01",
+        "endDate": "2026-08-31"
+      },
+      "courseInterval": {
+        "startDate": "2026-05-06",
+        "endDate": "2026-08-14"
+      },
+      "sections": [
+        {
+          "id": "carleton-spring-summer-2026:overview",
+          "label": "Overview",
+          "category": "overview",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2026:overview:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2026:overview:g0:r0",
+                  "topic": "Term dates",
+                  "dateText": "2026-05-01 to 2026-08-31",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2026-05-01",
+                    "endDate": "2026-08-31"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:overview:g0:r1",
+                  "topic": "Course dates",
+                  "dateText": "2026-05-06 to 2026-08-14",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2026-05-06",
+                    "endDate": "2026-08-14"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2026:enrolment",
+          "label": "Registration, enrolment and withdrawal",
+          "category": "enrolment",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2026:enrolment:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2026:enrolment:g0:r0",
+                  "topic": "Last day for receipt of applications for admission to an undergraduate degree program for the summer term.",
+                  "dateText": "March 1, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-03-01",
+                    "endDate": "2026-03-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:enrolment:g0:r1",
+                  "topic": "Last day for receipt of applications for undergraduate degree program transfers for the summer term.",
+                  "dateText": "May 1, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-05-01",
+                    "endDate": "2026-05-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:enrolment:g0:r2",
+                  "topic": "Last day for registration and course changes (including auditing) in early summer courses.",
+                  "dateText": "May 12, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-05-12",
+                    "endDate": "2026-05-12"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:enrolment:g0:r3",
+                  "topic": "Last day for registration and course changes (including auditing) in full summer courses.",
+                  "dateText": "May 20, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-05-20",
+                    "endDate": "2026-05-20"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:enrolment:g0:r4",
+                  "topic": "Last day for registration and course changes (including auditing) in late summer courses.",
+                  "dateText": "July 8, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-07-08",
+                    "endDate": "2026-07-08"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2026:other",
+          "label": "Other academic dates",
+          "category": "other",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2026:other:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r0",
+                  "topic": "Deadline for course outlines to be made available to students registered in early summer and full summer courses.",
+                  "dateText": "April 29, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-04-29",
+                    "endDate": "2026-04-29"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r1",
+                  "topic": "Summer term begins. Early summer and full summer classes begin.",
+                  "dateText": "May 6, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-05-06",
+                    "endDate": "2026-05-06"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r2",
+                  "topic": "Graduate students who have not electronically submitted their final thesis copy to Graduate Studies will not be eligible to graduate in spring 2026 and must register for the summer 2026 term.",
+                  "dateText": "May 12, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-05-12",
+                    "endDate": "2026-05-12"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r3",
+                  "topic": "Last day for academic withdrawal from early summer courses.",
+                  "dateText": "June 1, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-06-01",
+                    "endDate": "2026-06-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r4",
+                  "topic": "Last day of early summer classes. (NOTE: full summer classes resume July 2.)",
+                  "dateText": "June 18, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-06-18",
+                    "endDate": "2026-06-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r5",
+                  "topic": "Last day that can be specified by a course instructor as a due date for term work for early summer courses.",
+                  "dateText": "June 18, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-06-18",
+                    "endDate": "2026-06-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r6",
+                  "topic": "Deadline for course outlines to be made available to students registered in late summer courses.",
+                  "dateText": "June 25, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-06-25",
+                    "endDate": "2026-06-25"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r7",
+                  "topic": "Late summer classes begin and full summer classes resume.",
+                  "dateText": "July 2, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-07-02",
+                    "endDate": "2026-07-02"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r8",
+                  "topic": "Last day for graduate students to submit their supervisor-approved thesis, in examinable form to the department.",
+                  "dateText": "July 19, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-07-19",
+                    "endDate": "2026-07-19"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r9",
+                  "topic": "Last day for academic withdrawal from full and late summer courses.",
+                  "dateText": "August 1, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-08-01",
+                    "endDate": "2026-08-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r10",
+                  "topic": "Last day of late summer and full summer classes.",
+                  "dateText": "August 14, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-08-14",
+                    "endDate": "2026-08-14"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r11",
+                  "topic": "Last day that can be specified by a course instructor as a due date for term work for late summer and full summer courses.",
+                  "dateText": "August 14, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-08-14",
+                    "endDate": "2026-08-14"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:other:g0:r12",
+                  "topic": "Activity",
+                  "dateText": "Date",
+                  "effect": "informational"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2026:grades_exams",
+          "label": "Grades and examinations",
+          "category": "grades_exams",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2026:grades_exams:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r0",
+                  "topic": "Full winter, late winter, and fall/winter term deferred final examinations will be held.",
+                  "dateText": "May 15-27, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-05-15",
+                    "endDate": "2026-05-27"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r1",
+                  "topic": "Last day to request Formal Examination Accommodations for June examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specific deadlines.",
+                  "dateText": "June 1, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-06-01",
+                    "endDate": "2026-06-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r2",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade in early summer term undergraduate courses before the official examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "June 11, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-06-11",
+                    "endDate": "2026-06-11"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r3",
+                  "topic": "Last day for take-home examinations to be assigned, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "June 18, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-06-18",
+                    "endDate": "2026-06-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r4",
+                  "topic": "Final examinations in early summer courses and mid-term examinations in full summer courses will be held. Examinations are normally held all seven days of the week.",
+                  "dateText": "June 21-27, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-06-21",
+                    "endDate": "2026-06-27"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r5",
+                  "topic": "All final take-home examinations are due on this day, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "June 27, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-06-27",
+                    "endDate": "2026-06-27"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r6",
+                  "topic": "Early summer term deferred final examinations will be held.",
+                  "dateText": "July 17-19, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-07-17",
+                    "endDate": "2026-07-19"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r7",
+                  "topic": "Last day to request Formal Examination Accommodations for August final examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specified deadlines.",
+                  "dateText": "August 1, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-08-01",
+                    "endDate": "2026-08-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r8",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade in late summer and full summer term undergraduate courses, before the official examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "August 7, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-08-07",
+                    "endDate": "2026-08-07"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r9",
+                  "topic": "Last day for final take-home examinations to be assigned, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "August 14, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-08-14",
+                    "endDate": "2026-08-14"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r10",
+                  "topic": "Final examinations in late summer and full summer courses will be held. Examinations are normally held all seven days of the week.",
+                  "dateText": "August 17-23, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-08-17",
+                    "endDate": "2026-08-23"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r11",
+                  "topic": "All final take-home examinations are due on this day, with the exception of those conforming to the examinations regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "August 23, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-08-23",
+                    "endDate": "2026-08-23"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:grades_exams:g0:r12",
+                  "topic": "Full summer and late summer term deferred final examinations will be held.",
+                  "dateText": "September 18-20, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-09-18",
+                    "endDate": "2026-09-20"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2026:breaks",
+          "label": "Statutory holidays, breaks and special events",
+          "category": "breaks",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2026:breaks:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2026:breaks:g0:r0",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "May 18, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-05-18",
+                    "endDate": "2026-05-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:breaks:g0:r1",
+                  "topic": "No classes or examinations take place.",
+                  "dateText": "June 19-20, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-06-19",
+                    "endDate": "2026-06-20"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:breaks:g0:r2",
+                  "topic": "Statutory holiday. University Closed.",
+                  "dateText": "July 1, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-07-01",
+                    "endDate": "2026-07-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:breaks:g0:r3",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "August 3, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-08-03",
+                    "endDate": "2026-08-03"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:breaks:g0:r4",
+                  "topic": "No classes or examinations take place.",
+                  "dateText": "August 15-16, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-08-15",
+                    "endDate": "2026-08-16"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2026:tuition",
+          "label": "Tuition and fees",
+          "category": "tuition",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2026:tuition:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2026:tuition:g0:r0",
+                  "topic": "Last day to withdraw from early summer courses with a full fee adjustment.",
+                  "dateText": "May 20, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-05-20",
+                    "endDate": "2026-05-20"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:tuition:g0:r1",
+                  "topic": "Last day to withdraw from full summer courses with a full fee adjustment.",
+                  "dateText": "May 31, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-05-31",
+                    "endDate": "2026-05-31"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:tuition:g0:r2",
+                  "topic": "Last day to withdraw from late summer courses with a full fee adjustment.",
+                  "dateText": "July 15, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-07-15",
+                    "endDate": "2026-07-15"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2026:schedule_changes",
+          "label": "Schedule changes",
+          "category": "schedule_changes",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2026:schedule_changes:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2026:schedule_changes:g0:r0",
+                  "topic": "Classes follow a Monday schedule.",
+                  "dateText": "June 18, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-06-18",
+                    "endDate": "2026-06-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2026:schedule_changes:g0:r1",
+                  "topic": "Classes follow a Monday schedule.",
+                  "dateText": "August 14, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-08-14",
+                    "endDate": "2026-08-14"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "sessions": []
+    },
+    {
+      "sourceId": "carleton-fall-2026",
+      "termId": "202630",
+      "label": "Fall 2026",
+      "season": "fall",
+      "year": 2026,
+      "sourcePublished": "true",
+      "termInterval": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-31"
+      },
+      "courseInterval": {
+        "startDate": "2026-09-09",
+        "endDate": "2026-12-11"
+      },
+      "sections": [
+        {
+          "id": "carleton-fall-2026:overview",
+          "label": "Overview",
+          "category": "overview",
+          "groups": [
+            {
+              "id": "carleton-fall-2026:overview:g0",
+              "items": [
+                {
+                  "id": "carleton-fall-2026:overview:g0:r0",
+                  "topic": "Term dates",
+                  "dateText": "2026-09-01 to 2026-12-31",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2026-09-01",
+                    "endDate": "2026-12-31"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:overview:g0:r1",
+                  "topic": "Course dates",
+                  "dateText": "2026-09-09 to 2026-12-11",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2026-09-09",
+                    "endDate": "2026-12-11"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-fall-2026:enrolment",
+          "label": "Registration, enrolment and withdrawal",
+          "category": "enrolment",
+          "groups": [
+            {
+              "id": "carleton-fall-2026:enrolment:g0",
+              "items": [
+                {
+                  "id": "carleton-fall-2026:enrolment:g0:r0",
+                  "topic": "Last day for receipt of applications from potential fall (November) graduates.",
+                  "dateText": "August 31, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-08-31",
+                    "endDate": "2026-08-31"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:enrolment:g0:r1",
+                  "topic": "Last day for registration and course changes (including auditing) in early fall courses.",
+                  "dateText": "September 15, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-09-15",
+                    "endDate": "2026-09-15"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:enrolment:g0:r2",
+                  "topic": "Last day for registration and course changes (including auditing) in full fall, late fall, and fall/winter courses.",
+                  "dateText": "September 22, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-09-22",
+                    "endDate": "2026-09-22"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:enrolment:g0:r3",
+                  "topic": "Last day for receipt of applications for admission to an undergraduate degree program for the winter term from applicants whose documents originate from outside Canada or the United States.",
+                  "dateText": "October 15, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-10-15",
+                    "endDate": "2026-10-15"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:enrolment:g0:r4",
+                  "topic": "Last day for receipt of applications for admission to an undergraduate degree program for the winter term.",
+                  "dateText": "November 15, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-11-15",
+                    "endDate": "2026-11-15"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:enrolment:g0:r5",
+                  "topic": "Last day for receipt of applications from potential winter (February) graduates.",
+                  "dateText": "November 30, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-11-30",
+                    "endDate": "2026-11-30"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:enrolment:g0:r6",
+                  "topic": "Last day for receipt of applications for undergraduate degree program transfers for winter term.",
+                  "dateText": "December 11, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-12-11",
+                    "endDate": "2026-12-11"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-fall-2026:other",
+          "label": "Other academic dates",
+          "category": "other",
+          "groups": [
+            {
+              "id": "carleton-fall-2026:other:g0",
+              "items": [
+                {
+                  "id": "carleton-fall-2026:other:g0:r0",
+                  "topic": "Deadline for course outlines to be made available to students registered in full fall, early fall, and fall/winter courses.",
+                  "dateText": "September 2, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-09-02",
+                    "endDate": "2026-09-02"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r1",
+                  "topic": "Academic orientation (undergraduate and graduate students).",
+                  "dateText": "September 8, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-09-08",
+                    "endDate": "2026-09-08"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r2",
+                  "topic": "Orientation for new Teaching Assistants.",
+                  "dateText": "September 8, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-09-08",
+                    "endDate": "2026-09-08"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r3",
+                  "topic": "All new students are expected to be on campus. Class and laboratory preparations, departmental introductions for students, and other academic preparation activities will be held.",
+                  "dateText": "September 8, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-09-08",
+                    "endDate": "2026-09-08"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r4",
+                  "topic": "Fall term begins. Full fall, early fall, and fall/winter classes begin.",
+                  "dateText": "September 9, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-09-09",
+                    "endDate": "2026-09-09"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r5",
+                  "topic": "Graduate students who have not electronically submitted their final thesis copy to Graduate Studies will not be eligible to graduate in fall 2026 and must register for the fall 2026 term.",
+                  "dateText": "September 22, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-09-22",
+                    "endDate": "2026-09-22"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r6",
+                  "topic": "Last day for academic withdrawal from early fall courses.",
+                  "dateText": "October 1, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-10-01",
+                    "endDate": "2026-10-01"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r7",
+                  "topic": "Last day of early fall classes.",
+                  "dateText": "October 23, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-10-23",
+                    "endDate": "2026-10-23"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r8",
+                  "topic": "Last day that can be specified by a course instructor as a due date for term work for early fall courses.",
+                  "dateText": "October 23, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-10-23",
+                    "endDate": "2026-10-23"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r9",
+                  "topic": "Deadline for course outlines to be made available to students registered in late fall courses.",
+                  "dateText": "October 26, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-10-26",
+                    "endDate": "2026-10-26"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r10",
+                  "topic": "Late fall classes begin.",
+                  "dateText": "November 2, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-11-02",
+                    "endDate": "2026-11-02"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r11",
+                  "topic": "Last day for academic withdrawal from full fall and late fall courses.",
+                  "dateText": "November 15, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-11-15",
+                    "endDate": "2026-11-15"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r12",
+                  "topic": "Last day for graduate students to submit their supervisor-approved thesis, in examinable form to the department.",
+                  "dateText": "December 4, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-12-04",
+                    "endDate": "2026-12-04"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r13",
+                  "topic": "Fall term ends.",
+                  "dateText": "December 11, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-12-11",
+                    "endDate": "2026-12-11"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r14",
+                  "topic": "Last day of full fall and late fall classes.",
+                  "dateText": "December 11, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-12-11",
+                    "endDate": "2026-12-11"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r15",
+                  "topic": "Last day that can be specified by an instructor as a due date for term work for full and late fall courses.",
+                  "dateText": "December 11, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-12-11",
+                    "endDate": "2026-12-11"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:other:g0:r16",
+                  "topic": "Activity",
+                  "dateText": "Date",
+                  "effect": "informational"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-fall-2026:breaks",
+          "label": "Statutory holidays, breaks and special events",
+          "category": "breaks",
+          "groups": [
+            {
+              "id": "carleton-fall-2026:breaks:g0",
+              "items": [
+                {
+                  "id": "carleton-fall-2026:breaks:g0:r0",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "September 7, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-09-07",
+                    "endDate": "2026-09-07"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:breaks:g0:r1",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "October 12, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-10-12",
+                    "endDate": "2026-10-12"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:breaks:g0:r2",
+                  "topic": "Fall break, no classes.",
+                  "dateText": "October 26-30, 2026",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2026-10-26",
+                    "endDate": "2026-10-30"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:breaks:g0:r3",
+                  "topic": "University closed.",
+                  "dateText": "December 24, 2026 at noon through January 1, 2027 inclusive",
+                  "effect": "no_classes"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-fall-2026:grades_exams",
+          "label": "Grades and examinations",
+          "category": "grades_exams",
+          "groups": [
+            {
+              "id": "carleton-fall-2026:grades_exams:g0",
+              "items": [
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r0",
+                  "topic": "Full summer and late summer term deferred final examinations will be held.",
+                  "dateText": "September 18-20, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-09-18",
+                    "endDate": "2026-09-20"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r1",
+                  "topic": "Last day to request Formal Examination Accommodations for Oct/Nov final examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specified deadlines.",
+                  "dateText": "October 1, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-10-01",
+                    "endDate": "2026-10-01"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r2",
+                  "topic": "December examination schedule (fall term final and fall/winter mid-terms) available online.",
+                  "dateText": "October 9, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-10-09",
+                    "endDate": "2026-10-09"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r3",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade, in early fall term undergraduate courses, before the official Oct/Nov final examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "October 16, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-10-16",
+                    "endDate": "2026-10-16"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r4",
+                  "topic": "Last day for final take-home examinations to be assigned in early fall courses, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "October 23, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-10-23",
+                    "endDate": "2026-10-23"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r5",
+                  "topic": "Final examinations in early fall undergraduate courses will be held.",
+                  "dateText": "October 31-November 1, November 7-8, 2026",
+                  "effect": "deadline"
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r6",
+                  "topic": "Last day to request Formal Examination Accommodations for December full fall and late fall examinations and fall/winter midterm examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specified deadlines.",
+                  "dateText": "November 15, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-11-15",
+                    "endDate": "2026-11-15"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r7",
+                  "topic": "Early fall undergraduate deferred final examinations will be held.",
+                  "dateText": "November 20-22, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-11-20",
+                    "endDate": "2026-11-22"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r8",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade, in full fall term or fall/winter undergraduate courses, before the official December final examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "November 27, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-11-27",
+                    "endDate": "2026-11-27"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r9",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade, in late fall term undergraduate courses, before the official final examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "December 4, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-12-04",
+                    "endDate": "2026-12-04"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r10",
+                  "topic": "Last day for final take-home examinations to be assigned, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "December 11, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-12-11",
+                    "endDate": "2026-12-11"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r11",
+                  "topic": "Final examinations in full fall and late fall courses and mid-term examinations in fall/winter courses will be held. Examinations are normally held all seven days of the week.",
+                  "dateText": "December 12-23, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-12-12",
+                    "endDate": "2026-12-23"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:grades_exams:g0:r12",
+                  "topic": "All final take-home examinations are due on this day, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "December 23, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-12-23",
+                    "endDate": "2026-12-23"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-fall-2026:tuition",
+          "label": "Tuition and fees",
+          "category": "tuition",
+          "groups": [
+            {
+              "id": "carleton-fall-2026:tuition:g0",
+              "items": [
+                {
+                  "id": "carleton-fall-2026:tuition:g0:r0",
+                  "topic": "Last day to withdraw from early fall courses with a full fee adjustment.",
+                  "dateText": "September 22, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-09-22",
+                    "endDate": "2026-09-22"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:tuition:g0:r1",
+                  "topic": "Last day to withdraw from full fall and fall/winter courses with a full fee adjustment.",
+                  "dateText": "September 30, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-09-30",
+                    "endDate": "2026-09-30"
+                  }
+                },
+                {
+                  "id": "carleton-fall-2026:tuition:g0:r2",
+                  "topic": "Last day to withdraw from late fall term courses with a full fee adjustment.",
+                  "dateText": "November 13, 2026",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2026-11-13",
+                    "endDate": "2026-11-13"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-fall-2026:schedule_changes",
+          "label": "Schedule changes",
+          "category": "schedule_changes",
+          "groups": [
+            {
+              "id": "carleton-fall-2026:schedule_changes:g0",
+              "items": [
+                {
+                  "id": "carleton-fall-2026:schedule_changes:g0:r0",
+                  "topic": "Classes follow a Monday schedule.",
+                  "dateText": "December 11, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-12-11",
+                    "endDate": "2026-12-11"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "sessions": []
+    },
+    {
+      "sourceId": "carleton-winter-2027",
+      "termId": "202710",
+      "label": "Winter 2027",
+      "season": "winter",
+      "year": 2027,
+      "sourcePublished": "true",
+      "termInterval": {
+        "startDate": "2027-01-01",
+        "endDate": "2027-04-30"
+      },
+      "courseInterval": {
+        "startDate": "2027-01-06",
+        "endDate": "2027-04-09"
+      },
+      "sections": [
+        {
+          "id": "carleton-winter-2027:overview",
+          "label": "Overview",
+          "category": "overview",
+          "groups": [
+            {
+              "id": "carleton-winter-2027:overview:g0",
+              "items": [
+                {
+                  "id": "carleton-winter-2027:overview:g0:r0",
+                  "topic": "Term dates",
+                  "dateText": "2027-01-01 to 2027-04-30",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2027-01-01",
+                    "endDate": "2027-04-30"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:overview:g0:r1",
+                  "topic": "Course dates",
+                  "dateText": "2027-01-06 to 2027-04-09",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2027-01-06",
+                    "endDate": "2027-04-09"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-winter-2027:other",
+          "label": "Other academic dates",
+          "category": "other",
+          "groups": [
+            {
+              "id": "carleton-winter-2027:other:g0",
+              "items": [
+                {
+                  "id": "carleton-winter-2027:other:g0:r0",
+                  "topic": "Deadline for course outlines to be made available to students registered in full winter and early winter term courses.",
+                  "dateText": "December 30, 2026",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2026-12-30",
+                    "endDate": "2026-12-30"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r1",
+                  "topic": "University reopens.",
+                  "dateText": "January 4, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-01-04",
+                    "endDate": "2027-01-04"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r2",
+                  "topic": "Winter term begins. Full winter and early winter classes begin.",
+                  "dateText": "January 6, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-01-06",
+                    "endDate": "2027-01-06"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r3",
+                  "topic": "Graduate students who have not electronically submitted their final thesis copy to Graduate Studies will not be eligible to graduate in winter 2027 and must register for the winter 2027 term.",
+                  "dateText": "January 19, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-01-19",
+                    "endDate": "2027-01-19"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r4",
+                  "topic": "Last day for academic withdrawal from early winter courses.",
+                  "dateText": "February 1, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-02-01",
+                    "endDate": "2027-02-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r5",
+                  "topic": "Deadline for course outlines to be made available to students registered in late winter courses.",
+                  "dateText": "February 18, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-02-18",
+                    "endDate": "2027-02-18"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r6",
+                  "topic": "Last day of early winter classes.",
+                  "dateText": "February 24, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-02-24",
+                    "endDate": "2027-02-24"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r7",
+                  "topic": "Last day that can be specified by an instructor as a due date for term work for early winter courses.",
+                  "dateText": "February 24, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-02-24",
+                    "endDate": "2027-02-24"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r8",
+                  "topic": "Late winter classes begin.",
+                  "dateText": "February 25, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-02-25",
+                    "endDate": "2027-02-25"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r9",
+                  "topic": "Last day for academic withdrawal from full winter, late winter, and fall/winter courses.",
+                  "dateText": "March 15, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-03-15",
+                    "endDate": "2027-03-15"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r10",
+                  "topic": "Last day for graduate students to submit their supervisor-approved thesis, in examinable form to the department.",
+                  "dateText": "April 1, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-04-01",
+                    "endDate": "2027-04-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r11",
+                  "topic": "Winter term ends.",
+                  "dateText": "April 9, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-04-09",
+                    "endDate": "2027-04-09"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r12",
+                  "topic": "Last day of full winter, late winter, and fall/winter classes.",
+                  "dateText": "April 9, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-04-09",
+                    "endDate": "2027-04-09"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r13",
+                  "topic": "Last day that can be specified by an instructor as a due date for term work for full winter and late winter courses.",
+                  "dateText": "April 9, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-04-09",
+                    "endDate": "2027-04-09"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:other:g0:r14",
+                  "topic": "Activity",
+                  "dateText": "Date",
+                  "effect": "informational"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-winter-2027:enrolment",
+          "label": "Registration, enrolment and withdrawal",
+          "category": "enrolment",
+          "groups": [
+            {
+              "id": "carleton-winter-2027:enrolment:g0",
+              "items": [
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r0",
+                  "topic": "Last day for registration and course changes (including auditing) in early winter courses.",
+                  "dateText": "January 12, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-01-12",
+                    "endDate": "2027-01-12"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r1",
+                  "topic": "Last day for registration and course changes (including auditing) in full winter courses.",
+                  "dateText": "January 19, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-01-19",
+                    "endDate": "2027-01-19"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r2",
+                  "topic": "Last day for receipt of applications for admission to an undergraduate degree program for the fall/winter session from applicants whose documents originate outside Canada or the United States.",
+                  "dateText": "March 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-01",
+                    "endDate": "2027-03-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r3",
+                  "topic": "Last day for receipt of applications to Bachelor of Architecture, Bachelor of Industrial Design, Bachelor of Information Technology (Interactive Multimedia and Design), Bachelor of Music, Bachelor of Science in Nursing with RN Prescribing and Bachelor of Social Work degree programs for the fall/winter session.",
+                  "dateText": "March 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-01",
+                    "endDate": "2027-03-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r4",
+                  "topic": "Last day for receipt of applications for admission from candidates who wish to be guaranteed consideration for financial assistance (including Carleton fellowships, scholarships and teaching assistantships) administered by Carleton University. Candidates whose applications are received after the March 1 deadline may be considered for the award of a fellowship, scholarship or teaching assistantship (Graduate students only).",
+                  "dateText": "March 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-01",
+                    "endDate": "2027-03-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r5",
+                  "topic": "Last day for receipt of applications for admission to an undergraduate program for the summer term.",
+                  "dateText": "March 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-01",
+                    "endDate": "2027-03-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r6",
+                  "topic": "Last day for registration and course changes (including auditing) in late winter courses.",
+                  "dateText": "March 3, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-03",
+                    "endDate": "2027-03-03"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r7",
+                  "topic": "Last day for receipt of applications from potential spring (June) graduates.",
+                  "dateText": "April 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-04-01",
+                    "endDate": "2027-04-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r8",
+                  "topic": "Last day for receipt of applications for undergraduate internal degree transfers to allow for registration for the summer session.",
+                  "dateText": "May 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-01",
+                    "endDate": "2027-05-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r9",
+                  "topic": "Last day for receipt of applications for admission to an undergraduate program for the fall/winter session except for applications due March 1.",
+                  "dateText": "June 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-01",
+                    "endDate": "2027-06-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:enrolment:g0:r10",
+                  "topic": "Last day for receipt of applications for undergraduate degree program transfers for the fall term.",
+                  "dateText": "June 15, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-15",
+                    "endDate": "2027-06-15"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-winter-2027:tuition",
+          "label": "Tuition and fees",
+          "category": "tuition",
+          "groups": [
+            {
+              "id": "carleton-winter-2027:tuition:g0",
+              "items": [
+                {
+                  "id": "carleton-winter-2027:tuition:g0:r0",
+                  "topic": "Last day to withdraw from early winter courses with a full fee adjustment.",
+                  "dateText": "January 19, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-01-19",
+                    "endDate": "2027-01-19"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:tuition:g0:r1",
+                  "topic": "Last day to withdraw from full winter courses and the winter portion of fall/winter courses with a full fee adjustment.",
+                  "dateText": "January 31, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-01-31",
+                    "endDate": "2027-01-31"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:tuition:g0:r2",
+                  "topic": "Last day to withdraw from late winter term courses with a full fee adjustment.",
+                  "dateText": "March 10, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-10",
+                    "endDate": "2027-03-10"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-winter-2027:grades_exams",
+          "label": "Grades and examinations",
+          "category": "grades_exams",
+          "groups": [
+            {
+              "id": "carleton-winter-2027:grades_exams:g0",
+              "items": [
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r0",
+                  "topic": "Full fall and late fall term deferred final examinations will be held.",
+                  "dateText": "January 22-24, January 29-31, 2027",
+                  "effect": "deadline"
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r1",
+                  "topic": "Last day to request Formal Examination Accommodations for Feb/Mar final examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specified deadlines.",
+                  "dateText": "February 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-02-01",
+                    "endDate": "2027-02-01"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r2",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade, in early winter undergraduate courses, before the official Feb/Mar final examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "February 12, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-02-12",
+                    "endDate": "2027-02-12"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r3",
+                  "topic": "April examination schedule available online.",
+                  "dateText": "February 12, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-02-12",
+                    "endDate": "2027-02-12"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r4",
+                  "topic": "Last day for final take-home examinations to be assigned in early winter courses, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "February 24, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-02-24",
+                    "endDate": "2027-02-24"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r5",
+                  "topic": "Final examinations in early winter undergraduate courses will be held.",
+                  "dateText": "February 27-28, March 6-7, 2027",
+                  "effect": "deadline"
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r6",
+                  "topic": "Last day to request Formal Examination Accommodations for April full winter, late winter, and fall/winter final examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specified deadlines.",
+                  "dateText": "March 15, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-15",
+                    "endDate": "2027-03-15"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r7",
+                  "topic": "Early winter term deferred final examinations will be held.",
+                  "dateText": "March 19-21, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-19",
+                    "endDate": "2027-03-21"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r8",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade, in full winter term or fall/winter undergraduate courses, before the official April final examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "March 25, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-25",
+                    "endDate": "2027-03-25"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r9",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade, in late winter term undergraduate courses, before the official final examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "April 2, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-04-02",
+                    "endDate": "2027-04-02"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r10",
+                  "topic": "Last day for final take-home examinations to be assigned, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "April 9, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-04-09",
+                    "endDate": "2027-04-09"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r11",
+                  "topic": "Final examinations in full winter, late winter, and fall/winter courses will be held. Examinations are normally held all seven days of the week.",
+                  "dateText": "April 11-23, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-04-11",
+                    "endDate": "2027-04-23"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r12",
+                  "topic": "All final take-home examinations are due on this day, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "April 23, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-04-23",
+                    "endDate": "2027-04-23"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:grades_exams:g0:r13",
+                  "topic": "Full winter, late winter, and fall/winter deferred final examinations will be held.",
+                  "dateText": "May 14-26, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-14",
+                    "endDate": "2027-05-26"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-winter-2027:breaks",
+          "label": "Statutory holidays, breaks and special events",
+          "category": "breaks",
+          "groups": [
+            {
+              "id": "carleton-winter-2027:breaks:g0",
+              "items": [
+                {
+                  "id": "carleton-winter-2027:breaks:g0:r0",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "February 15, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-02-15",
+                    "endDate": "2027-02-15"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:breaks:g0:r1",
+                  "topic": "Winter break, no classes.",
+                  "dateText": "February 15-19, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-02-15",
+                    "endDate": "2027-02-19"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:breaks:g0:r2",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "March 26, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-03-26",
+                    "endDate": "2027-03-26"
+                  }
+                },
+                {
+                  "id": "carleton-winter-2027:breaks:g0:r3",
+                  "topic": "No classes or examinations take place.",
+                  "dateText": "April 10, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-04-10",
+                    "endDate": "2027-04-10"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "sessions": []
+    },
+    {
+      "sourceId": "carleton-spring-summer-2027",
+      "termId": "202720",
+      "label": "Summer 2027",
+      "season": "spring-summer",
+      "year": 2027,
+      "sourcePublished": "true",
+      "termInterval": {
+        "startDate": "2027-05-01",
+        "endDate": "2027-08-31"
+      },
+      "courseInterval": {
+        "startDate": "2027-05-06",
+        "endDate": "2027-08-16"
+      },
+      "sections": [
+        {
+          "id": "carleton-spring-summer-2027:overview",
+          "label": "Overview",
+          "category": "overview",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2027:overview:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2027:overview:g0:r0",
+                  "topic": "Term dates",
+                  "dateText": "2027-05-01 to 2027-08-31",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2027-05-01",
+                    "endDate": "2027-08-31"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:overview:g0:r1",
+                  "topic": "Course dates",
+                  "dateText": "2027-05-06 to 2027-08-16",
+                  "effect": "structural",
+                  "interval": {
+                    "startDate": "2027-05-06",
+                    "endDate": "2027-08-16"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2027:enrolment",
+          "label": "Registration, enrolment and withdrawal",
+          "category": "enrolment",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2027:enrolment:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2027:enrolment:g0:r0",
+                  "topic": "Last day for receipt of applications for admission to an undergraduate degree program for the summer term.",
+                  "dateText": "March 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-03-01",
+                    "endDate": "2027-03-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:enrolment:g0:r1",
+                  "topic": "Last day for receipt of applications for undergraduate degree program transfers for the summer term.",
+                  "dateText": "May 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-01",
+                    "endDate": "2027-05-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:enrolment:g0:r2",
+                  "topic": "Last day for registration and course changes (including auditing) in early summer courses.",
+                  "dateText": "May 12, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-12",
+                    "endDate": "2027-05-12"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:enrolment:g0:r3",
+                  "topic": "Last day for registration and course changes (including auditing) in full summer courses.",
+                  "dateText": "May 19, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-19",
+                    "endDate": "2027-05-19"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:enrolment:g0:r4",
+                  "topic": "Last day for registration and course changes (including auditing) in late summer courses.",
+                  "dateText": "July 8, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-07-08",
+                    "endDate": "2027-07-08"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2027:other",
+          "label": "Other academic dates",
+          "category": "other",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2027:other:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r0",
+                  "topic": "Deadline for course outlines to be made available to students registered in early summer and full summer courses.",
+                  "dateText": "April 29, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-04-29",
+                    "endDate": "2027-04-29"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r1",
+                  "topic": "Summer term begins. Early summer and full summer classes begin.",
+                  "dateText": "May 6, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-05-06",
+                    "endDate": "2027-05-06"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r2",
+                  "topic": "Graduate students who have not electronically submitted their final thesis copy to Graduate Studies will not be eligible to graduate in spring 2027 and must register for the summer 2027 term.",
+                  "dateText": "May 19, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-05-19",
+                    "endDate": "2027-05-19"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r3",
+                  "topic": "Last day for academic withdrawal from early summer courses.",
+                  "dateText": "June 1, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-06-01",
+                    "endDate": "2027-06-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r4",
+                  "topic": "Last day of early summer classes. (NOTE: full summer classes resume July 2.)",
+                  "dateText": "June 18, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-06-18",
+                    "endDate": "2027-06-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r5",
+                  "topic": "Last day that can be specified by a course instructor as a due date for term work for early summer courses.",
+                  "dateText": "June 18, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-06-18",
+                    "endDate": "2027-06-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r6",
+                  "topic": "Deadline for course outlines to be made available to students registered in late summer courses.",
+                  "dateText": "June 25, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-06-25",
+                    "endDate": "2027-06-25"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r7",
+                  "topic": "Late summer classes begin and full summer classes resume.",
+                  "dateText": "July 2, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-07-02",
+                    "endDate": "2027-07-02"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r8",
+                  "topic": "Last day for graduate students to submit their supervisor-approved thesis, in examinable form to the department.",
+                  "dateText": "July 18, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-07-18",
+                    "endDate": "2027-07-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r9",
+                  "topic": "Last day for academic withdrawal from full and late summer courses.",
+                  "dateText": "August 1, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-08-01",
+                    "endDate": "2027-08-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r10",
+                  "topic": "Last day of late summer and full summer classes.",
+                  "dateText": "August 16, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-08-16",
+                    "endDate": "2027-08-16"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:other:g0:r11",
+                  "topic": "Last day that can be specified by a course instructor as a due date for term work for late summer and full summer courses.",
+                  "dateText": "August 16, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-08-16",
+                    "endDate": "2027-08-16"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2027:grades_exams",
+          "label": "Grades and examinations",
+          "category": "grades_exams",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2027:grades_exams:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r0",
+                  "topic": "Full winter, late winter, and fall/winter term deferred final examinations will be held.",
+                  "dateText": "May 14-26, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-14",
+                    "endDate": "2027-05-26"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r1",
+                  "topic": "Last day to request Formal Examination Accommodations for June examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specific deadlines.",
+                  "dateText": "June 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-01",
+                    "endDate": "2027-06-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r2",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade in early summer term undergraduate courses before the official examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "June 11, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-11",
+                    "endDate": "2027-06-11"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r3",
+                  "topic": "Last day for take-home examinations to be assigned, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "June 18, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-18",
+                    "endDate": "2027-06-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r4",
+                  "topic": "No examinations take place.",
+                  "dateText": "June 19-20, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-19",
+                    "endDate": "2027-06-20"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r5",
+                  "topic": "Final examinations in early summer term courses and mid-term examinations in full summer courses will be held. Examinations are normally held all seven days of the week.",
+                  "dateText": "June 21-27, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-21",
+                    "endDate": "2027-06-27"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r6",
+                  "topic": "All final take-home examinations are due on this day, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "June 27, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-06-27",
+                    "endDate": "2027-06-27"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r7",
+                  "topic": "Early summer term deferred final examinations will be held.",
+                  "dateText": "July 16-18, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-07-16",
+                    "endDate": "2027-07-18"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r8",
+                  "topic": "Last day to request Formal Examination Accommodations for August final examinations from the Paul Menton Centre for Students with Disabilities. Note that it may not be possible to fulfil accommodation requests received after the specified deadlines.",
+                  "dateText": "August 1, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-08-01",
+                    "endDate": "2027-08-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r9",
+                  "topic": "Last day for summative tests or examinations, or formative tests or examinations totaling more than 15% of the final grade in late summer and full summer term undergraduate courses, before the official examination period (see examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar).",
+                  "dateText": "August 9, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-08-09",
+                    "endDate": "2027-08-09"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r10",
+                  "topic": "Last day for final take-home examinations to be assigned, with the exception of those conforming to the examination regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "August 16, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-08-16",
+                    "endDate": "2027-08-16"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r11",
+                  "topic": "Final examinations in late summer and full summer courses will be held. Examinations are normally held all seven days of the week.",
+                  "dateText": "August 19-25, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-08-19",
+                    "endDate": "2027-08-25"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r12",
+                  "topic": "All final take-home examinations are due on this day, with the exception of those conforming to the examinations regulations in the Academic Regulations of the University section of the Undergraduate Calendar/General Regulations of the Graduate Calendar.",
+                  "dateText": "August 25, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-08-25",
+                    "endDate": "2027-08-25"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:grades_exams:g0:r13",
+                  "topic": "Full summer and late summer deferred final examinations will be held.",
+                  "dateText": "September 17-19, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-09-17",
+                    "endDate": "2027-09-19"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2027:tuition",
+          "label": "Tuition and fees",
+          "category": "tuition",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2027:tuition:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2027:tuition:g0:r0",
+                  "topic": "Last day to withdraw from early summer courses with a full fee adjustment.",
+                  "dateText": "May 19, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-19",
+                    "endDate": "2027-05-19"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:tuition:g0:r1",
+                  "topic": "Last day to withdraw from full summer courses with a full fee adjustment.",
+                  "dateText": "May 31, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-05-31",
+                    "endDate": "2027-05-31"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:tuition:g0:r2",
+                  "topic": "Last day to withdraw from late summer courses with a full fee adjustment.",
+                  "dateText": "July 15, 2027",
+                  "effect": "deadline",
+                  "interval": {
+                    "startDate": "2027-07-15",
+                    "endDate": "2027-07-15"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2027:breaks",
+          "label": "Statutory holidays, breaks and special events",
+          "category": "breaks",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2027:breaks:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2027:breaks:g0:r0",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "May 24, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-05-24",
+                    "endDate": "2027-05-24"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:breaks:g0:r1",
+                  "topic": "Statutory holiday. University Closed.",
+                  "dateText": "July 1, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-07-01",
+                    "endDate": "2027-07-01"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:breaks:g0:r2",
+                  "topic": "Statutory holiday. University closed.",
+                  "dateText": "August 2, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-08-02",
+                    "endDate": "2027-08-02"
+                  }
+                },
+                {
+                  "id": "carleton-spring-summer-2027:breaks:g0:r3",
+                  "topic": "No classes or examinations take place.",
+                  "dateText": "August 17-18, 2027",
+                  "effect": "no_classes",
+                  "interval": {
+                    "startDate": "2027-08-17",
+                    "endDate": "2027-08-18"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "carleton-spring-summer-2027:schedule_changes",
+          "label": "Schedule changes",
+          "category": "schedule_changes",
+          "groups": [
+            {
+              "id": "carleton-spring-summer-2027:schedule_changes:g0",
+              "items": [
+                {
+                  "id": "carleton-spring-summer-2027:schedule_changes:g0:r0",
+                  "topic": "Classes follow a Monday schedule.",
+                  "dateText": "June 18, 2027",
+                  "effect": "informational",
+                  "interval": {
+                    "startDate": "2027-06-18",
+                    "endDate": "2027-06-18"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "sessions": []
+    }
+  ]
+}

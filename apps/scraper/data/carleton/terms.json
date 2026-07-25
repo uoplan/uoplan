@@ -1,0 +1,16 @@
+{
+  "terms": [
+    {
+      "termId": "202620",
+      "name": "Summer 2026"
+    },
+    {
+      "termId": "202630",
+      "name": "Fall 2026"
+    },
+    {
+      "termId": "202710",
+      "name": "Winter 2027"
+    }
+  ]
+}

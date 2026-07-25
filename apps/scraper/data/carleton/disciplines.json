@@ -1,0 +1,599 @@
+{
+  "sources": [
+    "https://calendar.carleton.ca/undergrad/courses/"
+  ],
+  "count": 114,
+  "faculties": [
+    {
+      "id": "arts-social-sciences",
+      "name": "Faculty of Arts and Social Sciences"
+    },
+    {
+      "id": "engineering-and-design",
+      "name": "Faculty of Engineering and Design"
+    },
+    {
+      "id": "public-global-affairs",
+      "name": "Faculty of Public and Global Affairs"
+    },
+    {
+      "id": "science",
+      "name": "Faculty of Science"
+    },
+    {
+      "id": "sprott-school-of-business",
+      "name": "Sprott School of Business"
+    }
+  ],
+  "disciplines": [
+    {
+      "code": "ACSE",
+      "name": "Architectural Conservation and Sustainability Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "AERO",
+      "name": "Aerospace Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "AFRI",
+      "name": "African Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ALDS",
+      "name": "Applied Linguistics and Discourse Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ANTH",
+      "name": "Anthropology",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ARAB",
+      "name": "Arabic",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ARCC",
+      "name": "Architecture",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ARCH",
+      "name": "Architecture",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ARCN",
+      "name": "Architecture",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ARCS",
+      "name": "Architecture",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ARCU",
+      "name": "Architecture",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ARCY",
+      "name": "Archaeology",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ARTH",
+      "name": "Art and Architectural History",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ASLA",
+      "name": "American Sign Language",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "BIOC",
+      "name": "Biochemistry",
+      "faculty": "science"
+    },
+    {
+      "code": "BIOL",
+      "name": "Biology",
+      "faculty": "science"
+    },
+    {
+      "code": "BIT",
+      "name": "Information Technology",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "BTEC",
+      "name": "Biotechnology",
+      "faculty": "science"
+    },
+    {
+      "code": "BUSI",
+      "name": "Business",
+      "faculty": "sprott-school-of-business"
+    },
+    {
+      "code": "CCDP",
+      "name": "Communication Courses for Disciplines and Professions",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "CDNS",
+      "name": "Canadian Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "CGSC",
+      "name": "Cognitive Science"
+    },
+    {
+      "code": "CHEM",
+      "name": "Chemistry",
+      "faculty": "science"
+    },
+    {
+      "code": "CHIN",
+      "name": "Chinese",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "CHST",
+      "name": "Childhood and Youth Studies",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "CIED",
+      "name": "Centre for Initiatives in Education",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "CIVE",
+      "name": "Civil Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "CLCV",
+      "name": "Classical Civilization",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "COMP",
+      "name": "Computer Science",
+      "faculty": "science"
+    },
+    {
+      "code": "COMS",
+      "name": "Communication and Media Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "COOP",
+      "name": "Co-operative Education",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "CRCJ",
+      "name": "Criminology and Criminal Justice",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "CRST",
+      "name": "Critical Race Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "CSEC",
+      "name": "Cybersecurity",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "DATA",
+      "name": "Data Science",
+      "faculty": "science"
+    },
+    {
+      "code": "DBST",
+      "name": "Disability Studies",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "DIGH",
+      "name": "Digital Humanities",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "DIST",
+      "name": "Interdisciplinary Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "EACH",
+      "name": "Environmental and Climate Humanities",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ECON",
+      "name": "Economics",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "ECOR",
+      "name": "Engineering Common Core Courses",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ELEC",
+      "name": "Electronics",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ENGL",
+      "name": "English",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ENSC",
+      "name": "Environmental Science",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "ENST",
+      "name": "Environmental Studies",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "ENVE",
+      "name": "Environmental Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ERTH",
+      "name": "Earth Sciences",
+      "faculty": "science"
+    },
+    {
+      "code": "ESLA",
+      "name": "English as a Second Language",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "EURR",
+      "name": "European, Russian and Eurasian Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "FILM",
+      "name": "Film Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "FINS",
+      "name": "French Interdisciplinary Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "FOOD",
+      "name": "Food Science",
+      "faculty": "science"
+    },
+    {
+      "code": "FREN",
+      "name": "French",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "FYSM",
+      "name": "First-Year Seminars",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "GEOG",
+      "name": "Geography",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "GEOM",
+      "name": "Geomatics",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "GERM",
+      "name": "German",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "GINS",
+      "name": "Global and International Studies",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "GREK",
+      "name": "Greek",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "HIST",
+      "name": "History",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "HLTH",
+      "name": "Health Sciences",
+      "faculty": "science"
+    },
+    {
+      "code": "HRSJ",
+      "name": "Human Rights and Social Justice",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "HUMS",
+      "name": "Humanities",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "IDES",
+      "name": "Industrial Design",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "IMD",
+      "name": "Interactive Multimedia and Design",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "INAF",
+      "name": "International Affairs",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "INDG",
+      "name": "Indigenous Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "INSC",
+      "name": "Integrated Science",
+      "faculty": "science"
+    },
+    {
+      "code": "IPAF",
+      "name": "Interdisciplinary Public Affairs",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "IRM",
+      "name": "Information Resource Management",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "ISAP",
+      "name": "Interdisciplinary Science and Practice",
+      "faculty": "science"
+    },
+    {
+      "code": "ISCI",
+      "name": "Interdisciplinary Science",
+      "faculty": "science"
+    },
+    {
+      "code": "ITAL",
+      "name": "Italian",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "ITEC",
+      "name": "Information Technology",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "JAPA",
+      "name": "Japanese",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "JOUR",
+      "name": "Journalism and Communication",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "KORE",
+      "name": "Korean",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "LACS",
+      "name": "Latin American and Caribbean Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "LANG",
+      "name": "Language Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "LATN",
+      "name": "Latin",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "LAWS",
+      "name": "Law",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "LING",
+      "name": "Linguistics",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "MAAE",
+      "name": "Mechanical and Aerospace Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "MATH",
+      "name": "Mathematics",
+      "faculty": "science"
+    },
+    {
+      "code": "MECH",
+      "name": "Mechanical Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "MECT",
+      "name": "Mechatronics Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "MEMS",
+      "name": "Medieval and Early Modern Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "MGDS",
+      "name": "Migration and Diaspora Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "MPAD",
+      "name": "Media Production and Design",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "MUSI",
+      "name": "Music",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "NET",
+      "name": "Network Technology",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "NEUR",
+      "name": "Neuroscience",
+      "faculty": "science"
+    },
+    {
+      "code": "NSCI",
+      "name": "Natural Sciences",
+      "faculty": "science"
+    },
+    {
+      "code": "NURS",
+      "name": "Nursing",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "OSS",
+      "name": "Optical Systems and Sensors",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "PADM",
+      "name": "Public Policy and Administration",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "PAPM",
+      "name": "Public Affairs and Policy Management",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "PHIL",
+      "name": "Philosophy",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "PHYS",
+      "name": "Physics",
+      "faculty": "science"
+    },
+    {
+      "code": "POLM",
+      "name": "Political Management",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "PORT",
+      "name": "Portuguese",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "PSCI",
+      "name": "Political Science",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "PSYC",
+      "name": "Psychology",
+      "faculty": "science"
+    },
+    {
+      "code": "RELI",
+      "name": "Religion",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "RUSS",
+      "name": "Russian",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "SOCI",
+      "name": "Sociology",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "SOWK",
+      "name": "Social Work",
+      "faculty": "public-global-affairs"
+    },
+    {
+      "code": "SPAN",
+      "name": "Spanish",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "SREE",
+      "name": "Sustainable and Renewable Energy Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "STAT",
+      "name": "Statistics",
+      "faculty": "science"
+    },
+    {
+      "code": "SXST",
+      "name": "Sexuality Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "SYSC",
+      "name": "Systems and Computer Engineering",
+      "faculty": "engineering-and-design"
+    },
+    {
+      "code": "TSES",
+      "name": "Technology, Society, Environment Studies",
+      "faculty": "arts-social-sciences"
+    },
+    {
+      "code": "WGST",
+      "name": "Women's and Gender Studies",
+      "faculty": "arts-social-sciences"
+    }
+  ]
+}
