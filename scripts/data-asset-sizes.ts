@@ -131,59 +131,96 @@ function printDiff(current: AssetSize[], base: AssetSize[]): void {
 }
 
 /**
- * Check that exactly 13 `catalogue.descriptions.*.pb` assets exist and that
- * their sizes are within inclusive limits. Returns a list of error strings;
- * an empty list means all checks passed.
+ * Check that each school's `catalogue.descriptions.*.pb` shards stay within
+ * their size budgets. Returns a list of error strings; an empty list means all
+ * checks passed.
  *
- * Limits:
- *   - Exactly 13 shard files
+ * Budgets are applied **per school**, not across the whole build, because a
+ * visitor only ever downloads one school's shards — summing every school's
+ * assets would shrink each school's real allowance every time a school is
+ * added, which is the opposite of what these limits are protecting.
+ *
+ * Limits, per school:
  *   - Total Brotli  ≤ 1,000,000 bytes
  *   - Each  Brotli  ≤   200,000 bytes
  *   - Total raw     ≤ 5,000,000 bytes
  *   - Each  raw     ≤ 1,000,000 bytes
+ *   - Shard count exactly as pinned below, else at most {@link MAX_SHARDS}
  */
+const TOTAL_BROTLI_LIMIT = 1_000_000;
+const PER_SHARD_BROTLI_LIMIT = 200_000;
+const TOTAL_RAW_LIMIT = 5_000_000;
+const PER_SHARD_RAW_LIMIT = 1_000_000;
+
+/**
+ * Schools whose shard count is known and should not drift. Sharding is derived
+ * from a school's faculties, so a change here means the faculty mapping moved —
+ * worth failing on rather than silently reshaping every client's download plan.
+ * A school with no pin is only bounded by {@link MAX_SHARDS}.
+ */
+const PINNED_SHARD_COUNTS: Record<string, number> = { uottawa: 13, carleton: 6 };
+const MAX_SHARDS = 20;
+
+/** `uottawa/catalogue.descriptions.arts.pb` → `uottawa`; unprefixed → `""`. */
+function schoolOf(id: string): string {
+  const slash = id.indexOf("/");
+  return slash === -1 ? "" : id.slice(0, slash);
+}
+
 export function checkDescriptionBudgets(sizes: AssetSize[]): string[] {
   const shards = sizes.filter((s) => /(^|\/)catalogue\.descriptions\..+\.pb$/.test(s.id));
   const errors: string[] = [];
 
-  const EXPECTED_COUNT = 13;
-  if (shards.length !== EXPECTED_COUNT) {
-    errors.push(
-      `Expected ${EXPECTED_COUNT} catalogue.descriptions.*.pb assets, found ${shards.length.toLocaleString("en-US")}`,
-    );
+  const bySchool = new Map<string, AssetSize[]>();
+  for (const shard of shards) {
+    const school = schoolOf(shard.id);
+    const list = bySchool.get(school);
+    if (list) list.push(shard);
+    else bySchool.set(school, [shard]);
   }
 
-  const TOTAL_BROTLI_LIMIT = 1_000_000;
-  const totalBrotli = shards.reduce((a, s) => a + s.brotli, 0);
-  if (totalBrotli > TOTAL_BROTLI_LIMIT) {
-    errors.push(
-      `Total Brotli ${totalBrotli.toLocaleString("en-US")} bytes exceeds limit of ${TOTAL_BROTLI_LIMIT.toLocaleString("en-US")} bytes`,
-    );
-  }
+  for (const [school, group] of [...bySchool].sort(([a], [b]) => a.localeCompare(b))) {
+    const label = school === "" ? "" : `${school}: `;
 
-  const PER_SHARD_BROTLI_LIMIT = 200_000;
-  for (const s of shards) {
-    if (s.brotli > PER_SHARD_BROTLI_LIMIT) {
+    const expected = PINNED_SHARD_COUNTS[school];
+    if (expected !== undefined && group.length !== expected) {
       errors.push(
-        `${s.id}: Brotli ${s.brotli.toLocaleString("en-US")} bytes exceeds limit of ${PER_SHARD_BROTLI_LIMIT.toLocaleString("en-US")} bytes`,
+        `${label}expected ${expected} catalogue.descriptions.*.pb assets, found ${group.length.toLocaleString("en-US")}`,
+      );
+    } else if (expected === undefined && group.length > MAX_SHARDS) {
+      errors.push(
+        `${label}${group.length.toLocaleString("en-US")} catalogue.descriptions.*.pb assets exceeds the maximum of ${MAX_SHARDS.toLocaleString("en-US")}`,
       );
     }
-  }
 
-  const TOTAL_RAW_LIMIT = 5_000_000;
-  const totalRaw = shards.reduce((a, s) => a + s.raw, 0);
-  if (totalRaw > TOTAL_RAW_LIMIT) {
-    errors.push(
-      `Total raw ${totalRaw.toLocaleString("en-US")} bytes exceeds limit of ${TOTAL_RAW_LIMIT.toLocaleString("en-US")} bytes`,
-    );
-  }
-
-  const PER_SHARD_RAW_LIMIT = 1_000_000;
-  for (const s of shards) {
-    if (s.raw > PER_SHARD_RAW_LIMIT) {
+    const totalBrotli = group.reduce((a, s) => a + s.brotli, 0);
+    if (totalBrotli > TOTAL_BROTLI_LIMIT) {
       errors.push(
-        `${s.id}: raw ${s.raw.toLocaleString("en-US")} bytes exceeds limit of ${PER_SHARD_RAW_LIMIT.toLocaleString("en-US")} bytes`,
+        `${label}total Brotli ${totalBrotli.toLocaleString("en-US")} bytes exceeds limit of ${TOTAL_BROTLI_LIMIT.toLocaleString("en-US")} bytes`,
       );
+    }
+
+    for (const s of group) {
+      if (s.brotli > PER_SHARD_BROTLI_LIMIT) {
+        errors.push(
+          `${s.id}: Brotli ${s.brotli.toLocaleString("en-US")} bytes exceeds limit of ${PER_SHARD_BROTLI_LIMIT.toLocaleString("en-US")} bytes`,
+        );
+      }
+    }
+
+    const totalRaw = group.reduce((a, s) => a + s.raw, 0);
+    if (totalRaw > TOTAL_RAW_LIMIT) {
+      errors.push(
+        `${label}total raw ${totalRaw.toLocaleString("en-US")} bytes exceeds limit of ${TOTAL_RAW_LIMIT.toLocaleString("en-US")} bytes`,
+      );
+    }
+
+    for (const s of group) {
+      if (s.raw > PER_SHARD_RAW_LIMIT) {
+        errors.push(
+          `${s.id}: raw ${s.raw.toLocaleString("en-US")} bytes exceeds limit of ${PER_SHARD_RAW_LIMIT.toLocaleString("en-US")} bytes`,
+        );
+      }
     }
   }
 
@@ -202,13 +239,22 @@ function main(): void {
       }
       process.exit(1);
     }
-    const shards = sizes.filter((s) => /^catalogue\.descriptions\..+\.pb$/.test(s.id));
-    const totalRaw = shards.reduce((a, s) => a + s.raw, 0);
-    const totalBrotli = shards.reduce((a, s) => a + s.brotli, 0);
-    const maxBrotli = shards.reduce((a, s) => Math.max(a, s.brotli), 0);
-    console.log(
-      `✓ 13 description shards: total raw ${fmt(totalRaw)} B, total Brotli ${fmt(totalBrotli)} B, max shard Brotli ${fmt(maxBrotli)} B`,
-    );
+    const shards = sizes.filter((s) => /(^|\/)catalogue\.descriptions\..+\.pb$/.test(s.id));
+    const bySchool = new Map<string, AssetSize[]>();
+    for (const shard of shards) {
+      const school = schoolOf(shard.id);
+      const list = bySchool.get(school);
+      if (list) list.push(shard);
+      else bySchool.set(school, [shard]);
+    }
+    for (const [school, group] of [...bySchool].sort(([a], [b]) => a.localeCompare(b))) {
+      const totalRaw = group.reduce((a, s) => a + s.raw, 0);
+      const totalBrotli = group.reduce((a, s) => a + s.brotli, 0);
+      const maxBrotli = group.reduce((a, s) => Math.max(a, s.brotli), 0);
+      console.log(
+        `✓ ${school || "(unprefixed)"}: ${group.length} description shards, total raw ${fmt(totalRaw)} B, total Brotli ${fmt(totalBrotli)} B, max shard Brotli ${fmt(maxBrotli)} B`,
+      );
+    }
     return;
   }
 
