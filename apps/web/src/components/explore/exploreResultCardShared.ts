@@ -22,3 +22,14 @@ export const EXPLORE_RESULT_CARD_STYLE: CSSProperties = {
   transition:
     "background-color var(--app-transition), border-color var(--app-transition), transform var(--app-transition), box-shadow var(--app-transition)",
 };
+
+/**
+ * Same card, stretched to its container. Search lays cards out in horizontally
+ * scrolling rows (fixed width); the Explore landing browses them in a responsive
+ * grid, where a fixed width would leave ragged gaps in every cell.
+ */
+export const EXPLORE_RESULT_CARD_FILL_STYLE: CSSProperties = {
+  ...EXPLORE_RESULT_CARD_STYLE,
+  width: "100%",
+  minWidth: 0,
+};

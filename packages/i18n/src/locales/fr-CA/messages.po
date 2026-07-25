@@ -117,7 +117,7 @@ msgstr "graphe"
 
 #: apps/web/src/components/shared/AppFooter.tsx:232
 msgid "app.footer.notAffiliated"
-msgstr "Nous sommes un projet indépendant géré par des étudiants et ne sommes ni affiliés à l'Université d'Ottawa, ni approuvés ou commandités par celle-ci."
+msgstr "Nous sommes un projet indépendant géré par des étudiants et ne sommes ni affiliés à {school}, ni approuvés ou commandités par celle-ci."
 
 #: apps/web/src/components/shared/AppFooter.tsx:207
 msgid "app.footer.privacy"
@@ -133,7 +133,7 @@ msgstr "Projet"
 
 #: apps/web/src/components/shared/AppFooter.tsx:75
 msgid "app.footer.tagline"
-msgstr "Un planificateur de cours axé sur les exigences pour les étudiants de l'uOttawa."
+msgstr "Un planificateur de cours axé sur les exigences pour les étudiants de {school}."
 
 #: apps/web/src/components/shared/AppFooter.tsx:218
 msgid "app.footer.terms"
@@ -2525,7 +2525,7 @@ msgid "importantDates.currentTerms"
 msgstr "{count, plural, one {# trimestre actuel} other {# trimestres actuels}}"
 
 msgid "importantDates.disclaimer"
-msgstr "Les dates et les échéances proviennent du site Web de l'Université d'Ottawa. Vérifiez auprès de votre faculté ou du registraire pour l'information la plus récente."
+msgstr "Les dates et les échéances proviennent du site Web de {school}. Vérifiez auprès de votre faculté ou du registraire pour l'information la plus récente."
 
 msgid "importantDates.download"
 msgstr "Télécharger le calendrier"
@@ -2672,6 +2672,9 @@ msgstr "Générateur d'horaires"
 
 msgid "landing.trends.description"
 msgstr "Suivez l'évolution des notes au fil du temps par discipline."
+
+msgid "schoolSwitcher.ariaLabel"
+msgstr "Choisir l'université"
 
 msgid "languageSwitcher.ariaLabel"
 msgstr "Choisir la langue de l'application"
@@ -4465,3 +4468,9 @@ msgstr "À égalité avec {name}"
 
 msgid "vs.wins.title"
 msgstr "Là où uoPlan en fait plus"
+
+msgid "explore.browseByDiscipline"
+msgstr "Parcourir par discipline"
+
+msgid "explore.browseByFaculty"
+msgstr "Parcourir par faculté"

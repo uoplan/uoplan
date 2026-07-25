@@ -117,7 +117,7 @@ msgstr "graph"
 
 #: apps/web/src/components/shared/AppFooter.tsx:232
 msgid "app.footer.notAffiliated"
-msgstr "We are an independent, student-run project and are not affiliated with, endorsed by, or sponsored by the University of Ottawa."
+msgstr "We are an independent, student-run project and are not affiliated with, endorsed by, or sponsored by {school}."
 
 #: apps/web/src/components/shared/AppFooter.tsx:207
 msgid "app.footer.privacy"
@@ -133,7 +133,7 @@ msgstr "Project"
 
 #: apps/web/src/components/shared/AppFooter.tsx:75
 msgid "app.footer.tagline"
-msgstr "A requirement-first course planner for uOttawa students."
+msgstr "A requirement-first course planner for {school} students."
 
 #: apps/web/src/components/shared/AppFooter.tsx:218
 msgid "app.footer.terms"
@@ -2525,7 +2525,7 @@ msgid "importantDates.currentTerms"
 msgstr "{count, plural, one {# current term} other {# current terms}}"
 
 msgid "importantDates.disclaimer"
-msgstr "Dates and deadlines are sourced from the University of Ottawa website. Verify directly with your faculty or the registrar for the most current information."
+msgstr "Dates and deadlines are sourced from the {school} website. Verify directly with your faculty or the registrar for the most current information."
 
 msgid "importantDates.download"
 msgstr "Download calendar"
@@ -2672,6 +2672,9 @@ msgstr "Schedule generator"
 
 msgid "landing.trends.description"
 msgstr "Track how grades shift over time across disciplines."
+
+msgid "schoolSwitcher.ariaLabel"
+msgstr "Select university"
 
 msgid "languageSwitcher.ariaLabel"
 msgstr "Select application language"
@@ -4465,3 +4468,9 @@ msgstr "Evenly matched with {name}"
 
 msgid "vs.wins.title"
 msgstr "Where uoPlan does more"
+
+msgid "explore.browseByDiscipline"
+msgstr "Browse by discipline"
+
+msgid "explore.browseByFaculty"
+msgstr "Browse by faculty"

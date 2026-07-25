@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import { unsafeBrand } from "@uoplan/core";
 import type { Discipline, Faculty, FacultyId } from "@uoplan/core";
 import {
+  buildFacultyIndexRows,
   disciplinesForFaculty,
   facultyForDisciplineCode,
+  facultyIndexRowFor,
   filterFaculties,
   localizeFacultyName,
 } from "./faculty";
@@ -79,6 +81,63 @@ describe("disciplinesForFaculty", () => {
   it("only includes disciplines owned by the faculty", () => {
     const result = disciplinesForFaculty(DISCIPLINES, "engineering", counts);
     expect(result.map((e) => e.discipline.code)).toEqual(["CEG"]);
+  });
+});
+
+const COUNTS = new Map<string, number>([
+  ["HSS", 12],
+  ["NSG", 8],
+  ["APA", 5],
+  ["CEG", 20],
+  ["ZZZ", 0],
+]);
+
+describe("facultyIndexRowFor", () => {
+  it("aggregates prefixes and counts, skipping 0-course disciplines", () => {
+    const row = facultyIndexRowFor(FACULTIES[0]!, DISCIPLINES, COUNTS);
+    expect([...row.prefixes].sort()).toEqual(["APA", "HSS", "NSG"]);
+    expect(row.disciplineCount).toBe(3);
+    expect(row.courseCount).toBe(25);
+  });
+
+  it("returns an empty row when disciplines are absent", () => {
+    const row = facultyIndexRowFor(FACULTIES[0]!, null, COUNTS);
+    expect(row.prefixes.size).toBe(0);
+    expect(row.disciplineCount).toBe(0);
+    expect(row.courseCount).toBe(0);
+  });
+});
+
+describe("buildFacultyIndexRows", () => {
+  it("returns [] when the registry is absent", () => {
+    expect(buildFacultyIndexRows(null, DISCIPLINES, COUNTS, "en")).toEqual([]);
+  });
+
+  it("drops faculties with no course-bearing disciplines and sorts by English name", () => {
+    const rows = buildFacultyIndexRows(FACULTIES, DISCIPLINES, COUNTS, "en");
+    expect(rows.map((r) => r.faculty.id)).toEqual([fid("engineering"), fid("health-sciences")]);
+    expect(rows.map((r) => r.courseCount)).toEqual([20, 25]);
+  });
+
+  it("sorts by the localized name, so fr-CA can order differently than en", () => {
+    const arts: Faculty = { id: fid("arts"), name: "Faculty of Arts", nameFr: "Faculté des arts" };
+    const engineering = FACULTIES[1]!; // Faculty of Engineering / Faculté de génie
+    const disciplines: Discipline[] = [
+      { code: "ART", name: "Arts", facultyId: fid("arts") },
+      ...DISCIPLINES,
+    ];
+    const counts = new Map(COUNTS).set("ART", 4);
+
+    expect(
+      buildFacultyIndexRows([engineering, arts], disciplines, counts, "en").map(
+        (r) => r.faculty.id,
+      ),
+    ).toEqual([fid("arts"), fid("engineering")]);
+    expect(
+      buildFacultyIndexRows([arts, engineering], disciplines, counts, "fr-CA").map(
+        (r) => r.faculty.id,
+      ),
+    ).toEqual([fid("engineering"), fid("arts")]);
   });
 });
 

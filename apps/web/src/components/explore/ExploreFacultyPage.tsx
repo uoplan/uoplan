@@ -9,7 +9,11 @@ import type {
   GradeVizData,
   ProfessorRatingsMap,
 } from "@uoplan/core";
-import { disciplinesForFaculty, localizeFacultyName } from "../../lib/explore/faculty";
+import {
+  buildDisciplineCourseCount,
+  disciplinesForFaculty,
+  localizeFacultyName,
+} from "../../lib/explore/faculty";
 import type { FacultyDisciplineEntry } from "../../lib/explore/faculty";
 import { aggregateGradeVizForCourseNorms } from "../../lib/explore/gradesSearch";
 import { tr } from "../../i18n";
@@ -31,16 +35,6 @@ import {
 
 /** Width of the merged grade histogram in the discipline header (matches course rows). */
 const DISCIPLINE_HISTOGRAM_WIDTH_PX = 288;
-
-function buildDisciplineCourseCount(catalogue: Catalogue | null): Map<string, number> {
-  const counts = new Map<string, number>();
-  if (!catalogue) return counts;
-  for (const course of catalogue.courses) {
-    const prefix = course.code.split(/\s+/)[0]?.toUpperCase();
-    if (prefix) counts.set(prefix, (counts.get(prefix) ?? 0) + 1);
-  }
-  return counts;
-}
 
 const FacultyDisciplineControl = memo(function FacultyDisciplineControl({
   entry,

@@ -4,7 +4,10 @@ import type { Faculty, GradeVizData } from "@uoplan/core";
 import { tr } from "../../i18n";
 import { localizeFacultyName } from "../../lib/explore/faculty";
 import type { ExploreSearchParams } from "../../lib/explore/exploreFilters";
-import { EXPLORE_RESULT_CARD_STYLE } from "./exploreResultCardShared";
+import {
+  EXPLORE_RESULT_CARD_FILL_STYLE,
+  EXPLORE_RESULT_CARD_STYLE,
+} from "./exploreResultCardShared";
 import { SearchResultCardBody } from "./SearchResultCardBody";
 
 type Props = {
@@ -14,6 +17,8 @@ type Props = {
   gradeViz?: GradeVizData | null;
   sentiment?: number | null;
   searchParams: ExploreSearchParams;
+  /** Stretch the card to its container (grid cell) instead of the fixed row width. */
+  fillWidth?: boolean;
 };
 
 export function SearchResultFacultyCard({
@@ -23,6 +28,7 @@ export function SearchResultFacultyCard({
   gradeViz,
   sentiment,
   searchParams,
+  fillWidth = false,
 }: Props) {
   const { i18n } = useLingui();
   const displayName = localizeFacultyName(faculty, i18n.locale);
@@ -33,7 +39,7 @@ export function SearchResultFacultyCard({
       params={{ faculty: faculty.id }}
       search={searchParams}
       className="soft-lift"
-      style={EXPLORE_RESULT_CARD_STYLE}
+      style={fillWidth ? EXPLORE_RESULT_CARD_FILL_STYLE : EXPLORE_RESULT_CARD_STYLE}
     >
       <SearchResultCardBody
         title={displayName}

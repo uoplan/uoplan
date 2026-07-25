@@ -21,6 +21,8 @@ import type {
   ExploreProfessorSearchEntry,
 } from "../../lib/explore/gradesSearch";
 import { aggregateGradeVizForCourseNorms } from "../../lib/explore/gradesSearch";
+import { facultyIndexRowFor } from "../../lib/explore/faculty";
+import type { FacultyIndexRow } from "../../lib/explore/faculty";
 import type { ExploreProgramSearchEntry } from "../../lib/explore/programSearch";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { useExploreOfferings } from "./exploreOfferingsContext";
@@ -239,26 +241,9 @@ export function ExploreSearchResults({
 
   // Per-faculty: the set of discipline prefixes it owns, plus discipline/course counts.
   const facultyMeta = useMemo(() => {
-    const meta = new Map<
-      string,
-      { prefixes: Set<string>; disciplineCount: number; courseCount: number }
-    >();
+    const meta = new Map<string, FacultyIndexRow>();
     for (const f of facultyResults) {
-      const prefixes = new Set<string>();
-      let disciplineCount = 0;
-      let courseCount = 0;
-      if (disciplines) {
-        for (const d of disciplines) {
-          if (d.facultyId !== f.id) continue;
-          const prefix = d.code.toUpperCase();
-          const count = disciplineCourseCount.get(prefix) ?? 0;
-          if (count === 0) continue;
-          prefixes.add(prefix);
-          disciplineCount += 1;
-          courseCount += count;
-        }
-      }
-      meta.set(f.id, { prefixes, disciplineCount, courseCount });
+      meta.set(f.id, facultyIndexRowFor(f, disciplines, disciplineCourseCount));
     }
     return meta;
   }, [facultyResults, disciplines, disciplineCourseCount]);

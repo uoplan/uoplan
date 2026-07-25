@@ -28,7 +28,7 @@ import {
   createExploreProgramFuse,
   searchExplorePrograms,
 } from "../../lib/explore/programSearch";
-import { filterFaculties } from "../../lib/explore/faculty";
+import { buildDisciplineCourseCount, filterFaculties } from "../../lib/explore/faculty";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import { useDescriptionSearchIndex } from "../../hooks/useDescriptionSearchIndex";
 import { useExploreOfferings } from "./exploreOfferingsContext";
@@ -37,16 +37,6 @@ const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
 const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];
 const DISCIPLINE_MAX_RESULTS = 8;
 const FACULTY_MAX_RESULTS = 6;
-
-function buildDisciplineCourseCount(catalogue: Catalogue | null): Map<string, number> {
-  const m = new Map<string, number>();
-  if (!catalogue) return m;
-  for (const c of catalogue.courses) {
-    const disc = c.code.split(/\s+/)[0]?.toUpperCase();
-    if (disc) m.set(disc, (m.get(disc) ?? 0) + 1);
-  }
-  return m;
-}
 
 type UseExploreResultsArgs = {
   query: string;
