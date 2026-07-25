@@ -1,0 +1,53 @@
+name: Keepalive
+
+# GitHub disables scheduled workflows after 60 days with no commit on the
+# default branch. The daily scrape now commits to the `data` branch, so `main`
+# no longer receives automated activity — without this, daily-scrape.yml and
+# check-new-terms.yml would silently stop running after 60 idle days.
+#
+# This job pushes an empty, bot-attributed commit to `main` only once it goes
+# stale (default 45 days), resetting the timer with a comfortable margin. Empty
+# commits change no lines and are attributed to github-actions[bot], so they add
+# nothing to human contributor stats. Pushes made with GITHUB_TOKEN don't trigger
+# other workflows, so this never kicks off a CI or deploy run.
+
+on:
+  schedule:
+    - cron: "23 6 * * *" # daily at an odd minute (avoids dropped on-the-hour runs)
+  workflow_dispatch:
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push an empty keepalive commit when the default branch is going stale
+        env:
+          THRESHOLD_DAYS: "45"
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          last=$(git log -1 --format=%ct)
+          now=$(date +%s)
+          age_days=$(( (now - last) / 86400 ))
+          echo "Default branch last commit was ${age_days} day(s) ago (threshold ${THRESHOLD_DAYS})."
+          if [ "$age_days" -lt "$THRESHOLD_DAYS" ]; then
+            echo "Fresh enough — nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "chore: keepalive to keep scheduled workflows enabled"
+          git push origin "HEAD:${DEFAULT_BRANCH}"
