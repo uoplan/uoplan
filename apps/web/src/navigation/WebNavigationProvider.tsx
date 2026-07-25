@@ -4,6 +4,7 @@ import { useCanGoBack, useLocation, useRouter } from "@tanstack/react-router";
 
 import { NavigationProvider, routePath } from "@uoplan/navigation";
 import type { NavigationAdapter } from "@uoplan/navigation";
+import { withBasepath } from "./basepath";
 
 /**
  * Web shell adapter: implements the shared {@link NavigationAdapter} contract on
@@ -20,7 +21,10 @@ export function WebNavigationProvider({ children }: { children: ReactNode }) {
   const adapter = useMemo<NavigationAdapter>(
     () => ({
       navigate: (route, options) => {
-        const path = routePath(route);
+        // `routePath` is basepath-relative, matching what `useLocation()` reports.
+        // `router.history` is the raw browser history, so unlike `router.navigate`
+        // it does not prepend the school basepath — do it here.
+        const path = withBasepath(router.basepath, routePath(route));
         if (options?.replace) router.history.replace(path);
         else router.history.push(path);
       },

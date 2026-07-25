@@ -5,13 +5,14 @@ import { AnimatePresence, m } from "framer-motion";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { tr, useTr } from "../../i18n";
 import { useAnalytics } from "../../lib/analytics";
-import { EXPLORE_FILTER_KEYS } from "../../lib/explore/filterLabels";
+import { exploreFilterKeysFor } from "../../lib/explore/filterLabels";
 import type { FilterKey } from "../../lib/explore/filterLabels";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
 import { ExploreFilterPopoverContent } from "./ExploreFilterPopoverContent";
 import type { DisciplineOption, TermOption } from "./ExploreFilterPopoverContent";
 import { ExploreFilterDrawer } from "./ExploreFilterDrawer";
+import { useSchool } from "../../hooks/useSchool";
 
 export const FILTER_PILL_RADIUS = "var(--app-radius-pill)";
 export const FILTER_POPOVER_RADIUS = "var(--app-radius)";
@@ -221,7 +222,8 @@ export function ExploreFilterBar({
   const [openedPopover, setOpenedPopover] = useState<FilterKey | null>(null);
   const [popoverPos, setPopoverPos] = useState<{ top: number; left: number } | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerSection, setDrawerSection] = useState<FilterKey>(EXPLORE_FILTER_KEYS[0]);
+  const filterKeys = exploreFilterKeysFor(useSchool().features);
+  const [drawerSection, setDrawerSection] = useState<FilterKey>(filterKeys[0] ?? "level");
 
   const pillBarRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -291,7 +293,7 @@ export function ExploreFilterBar({
               onChange({ contributesToRequirements: !filters.contributesToRequirements });
             }}
           />
-          {EXPLORE_FILTER_KEYS.map((key) => {
+          {filterKeys.map((key) => {
             const active = pillIsActive(key, filters);
             const { bg, border } = pillColors(key, filters);
             return (

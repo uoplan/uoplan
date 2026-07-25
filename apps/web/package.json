@@ -47,6 +47,7 @@
     "@uoplan/calendar": "workspace:^",
     "@uoplan/core": "workspace:^",
     "@uoplan/data": "workspace:^",
+    "@uoplan/domain": "workspace:^",
     "@uoplan/engine": "workspace:^",
     "@uoplan/i18n": "workspace:^",
     "@uoplan/navigation": "workspace:^",

@@ -1,10 +1,12 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { SCHOOLS } from "@uoplan/domain/school";
+import type { SchoolId } from "@uoplan/domain/school";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export const SCRAPER_DATA_DIR = path.resolve(__dirname, "../../data");
-export const WEB_ASSETS_DATA_DIR = path.resolve(__dirname, "../../../web/src/assets/data");
+const SCRAPER_DATA_ROOT = path.resolve(__dirname, "../../data");
+export const WEB_ASSETS_DATA_ROOT = path.resolve(__dirname, "../../../web/src/assets/data");
 
 /** Generated data-asset manifest consumed by the Cloudflare worker (gitignored). */
 export const DATA_MANIFEST_FILE = path.resolve(
@@ -12,15 +14,47 @@ export const DATA_MANIFEST_FILE = path.resolve(
   "../../../../packages/data/src/generated/dataManifest.ts",
 );
 
-export const CATALOGUE_DATA_DIR = path.join(SCRAPER_DATA_DIR, "catalogue");
-export const FEEDBACK_DATA_DIR = path.join(SCRAPER_DATA_DIR, "feedback");
-export const SCHEDULES_DATA_DIR = path.join(SCRAPER_DATA_DIR, "schedules");
+function schoolDataNamespace(school: SchoolId): string {
+  return SCHOOLS[school].assetNamespace;
+}
 
-/** Raw grade-distribution CSVs (gitignored; generated from the xlsx via the
- * grades converter, then read by the grades scraper). */
-export const RAW_DATA_DIR = path.join(SCRAPER_DATA_DIR, "raw");
+/** Root directory for one school's committed scraper source JSON. */
+export function scraperDataDir(school: SchoolId): string {
+  return path.join(SCRAPER_DATA_ROOT, schoolDataNamespace(school));
+}
+
+/** Root directory for one school's generated runtime protobuf assets. */
+export function webAssetsDataDir(school: SchoolId): string {
+  return path.join(WEB_ASSETS_DATA_ROOT, schoolDataNamespace(school));
+}
+
+export function catalogueDataDir(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "catalogue");
+}
+
+export function feedbackDataDir(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "feedback");
+}
+
+export function schedulesDataDir(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "schedules");
+}
+
+/** Raw grade-distribution CSVs generated from the registrar xlsx exports. */
+export function rawDataDir(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "raw");
+}
+
 /** Registrar Excel grade exports (gitignored); source for the grades converter. */
-export const RAW_XLSX_DIR = path.join(RAW_DATA_DIR, "xlsx");
-/** Committed professor-annotated grade dataset (written by the grades scraper). */
-export const GRADES_FILE = path.join(SCRAPER_DATA_DIR, "grades.json");
-export const RATEMYPROFESSORS_FILE = path.join(SCRAPER_DATA_DIR, "ratemyprofessors.json");
+export function rawXlsxDir(school: SchoolId): string {
+  return path.join(rawDataDir(school), "xlsx");
+}
+
+/** Committed professor-annotated grade dataset written by the grades scraper. */
+export function gradesFile(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "grades.json");
+}
+
+export function rateMyProfessorsFile(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "ratemyprofessors.json");
+}

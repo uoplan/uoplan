@@ -11,7 +11,9 @@
  */
 
 import fs from "node:fs/promises";
-import { GRADES_FILE, RAW_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { assertSchoolFeature } from "../shared/schoolFeatures.ts";
+import { gradesFile, rawDataDir } from "../shared/paths.ts";
 import { readCatalogueCodes } from "./catalogue.ts";
 import { readGradeRows } from "./csv.ts";
 import type { GradeRow } from "./csv.ts";
@@ -133,21 +135,27 @@ export function assembleGrades(
   };
 }
 
-async function buildGrades(): Promise<BuildResult> {
-  const rows = await readGradeRows(RAW_DATA_DIR);
+async function buildGrades(school: SchoolId): Promise<BuildResult> {
+  const rows = await readGradeRows(rawDataDir(school));
   const termIds = rows.map((r) => r.termId);
   const [feedbackIndex, resolveProfessor, catalogueCodes] = await Promise.all([
-    buildFeedbackProfIndex(termIds),
-    buildProfessorResolver(),
-    readCatalogueCodes(),
+    buildFeedbackProfIndex(termIds, school),
+    buildProfessorResolver(school),
+    readCatalogueCodes(school),
   ]);
   return assembleGrades(rows, feedbackIndex, resolveProfessor, catalogueCodes);
 }
 
-export async function runBuild(): Promise<void> {
-  const { output, stats } = await buildGrades();
-  await fs.writeFile(GRADES_FILE, `${JSON.stringify(output, null, 2)}\n`, "utf-8");
-  console.log(`Wrote ${GRADES_FILE}`);
+export async function runBuild(school: SchoolId): Promise<void> {
+  assertSchoolFeature(
+    school,
+    "grades",
+    "Carleton has no public grade data; grades are uOttawa-only.",
+  );
+  const { output, stats } = await buildGrades(school);
+  const outputFile = gradesFile(school);
+  await fs.writeFile(outputFile, `${JSON.stringify(output, null, 2)}\n`, "utf-8");
+  console.log(`Wrote ${outputFile}`);
   console.log(`  codes: ${stats.codes} (${stats.codesWithProfessors} with professors)`);
   console.log(`  section entries: ${stats.sectionEntries}`);
   console.log(`  rows without a feedback professor match: ${stats.rowsWithoutFeedbackMatch}`);

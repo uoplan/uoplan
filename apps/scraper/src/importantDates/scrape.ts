@@ -1,16 +1,15 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { ImportantDatesData } from "@uoplan/core/dataTypes";
+import type { SchoolId } from "@uoplan/domain/school";
 import { fetchHtml } from "../shared/http.ts";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { scraperDataDir } from "../shared/paths.ts";
+import { writeCarletonImportantDates } from "../schools/carleton/importantDates.ts";
 import { parseImportantDatesPages } from "./parse.ts";
 
 const IMPORTANT_DATES_EN_URL = "https://www.uottawa.ca/study/important-academic-dates-deadlines";
 const IMPORTANT_DATES_FR_URL =
   "https://www.uottawa.ca/etudes/dates-importantes-echeances-scolaires";
-
-const IMPORTANT_DATES_EN_FILE = path.join(SCRAPER_DATA_DIR, "important-dates.en.json");
-const IMPORTANT_DATES_FR_FILE = path.join(SCRAPER_DATA_DIR, "important-dates.fr.json");
 
 export type ImportantDatesScrapeResult = {
   en: ImportantDatesData;
@@ -19,7 +18,17 @@ export type ImportantDatesScrapeResult = {
   itemCount: number;
 };
 
-export async function scrapeImportantDates(): Promise<ImportantDatesScrapeResult> {
+export async function scrapeImportantDates(school: SchoolId): Promise<ImportantDatesScrapeResult> {
+  if (school === "carleton") {
+    const parsed = await writeCarletonImportantDates();
+    return {
+      en: parsed.en,
+      fr: parsed.fr,
+      termCount: parsed.en.terms.length,
+      itemCount: countItems(parsed.en),
+    };
+  }
+
   const [enHtml, frHtml] = await Promise.all([
     fetchHtml(IMPORTANT_DATES_EN_URL),
     fetchHtml(IMPORTANT_DATES_FR_URL),
@@ -32,10 +41,11 @@ export async function scrapeImportantDates(): Promise<ImportantDatesScrapeResult
     frSourceUrl: IMPORTANT_DATES_FR_URL,
   });
 
-  await fs.mkdir(SCRAPER_DATA_DIR, { recursive: true });
+  const dataDir = scraperDataDir(school);
+  await fs.mkdir(dataDir, { recursive: true });
   await Promise.all([
-    writeJsonAtomically(IMPORTANT_DATES_EN_FILE, parsed.en),
-    writeJsonAtomically(IMPORTANT_DATES_FR_FILE, parsed.fr),
+    writeJsonAtomically(path.join(dataDir, "important-dates.en.json"), parsed.en),
+    writeJsonAtomically(path.join(dataDir, "important-dates.fr.json"), parsed.fr),
   ]);
 
   return {

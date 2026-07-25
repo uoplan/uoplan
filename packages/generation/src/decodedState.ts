@@ -1,5 +1,6 @@
 import type { Program } from "@uoplan/domain/dataTypes";
 import type { CourseLanguageBucket, CourseLevelBucket } from "@uoplan/domain/courseFilters";
+import type { SchoolId } from "@uoplan/domain/school";
 
 import type { BlockedTimeWindow } from "./generation/types";
 import type { OptimizationPriority } from "./optimizationPriorities";
@@ -10,6 +11,7 @@ import type { OptimizationPriority } from "./optimizationPriorities";
  * on the state codec package.
  */
 export interface DecodedState {
+  school?: SchoolId;
   wizardMode: "basic" | "advanced" | null;
   basketCourses: string[];
   additionalElectivesCount: number;

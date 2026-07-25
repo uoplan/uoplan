@@ -49,8 +49,8 @@ describe("bundled data assets", () => {
   });
 
   it("exposes bundled assets through a FetchBytes transport", async () => {
-    expect(hasBundledDataAsset("terms.pb")).toBe(true);
-    await expect(createBundledDataTransport()("terms.pb")).resolves.toEqual(
+    expect(hasBundledDataAsset("uottawa/terms.pb")).toBe(true);
+    await expect(createBundledDataTransport()("uottawa/terms.pb")).resolves.toEqual(
       new Uint8Array([4, 5, 6, 255]),
     );
   });

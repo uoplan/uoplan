@@ -4,9 +4,7 @@ import { completedCoursesIncludeFls3500, frenchImmersionOverallVolumePercent } f
 import { tr } from "../../i18n";
 import { AppCard } from "./AppCard";
 import { useFrenchImmersionProgressState } from "./useFrenchImmersionProgressState";
-
-const DIPLOMA_REQUIREMENTS_URL =
-  "https://www.uottawa.ca/study/immersion/french/about/diploma-requirements";
+import { useSchool } from "../../hooks/useSchool";
 
 type FrenchImmersionProgramOverviewVariant = "default" | "calendarSidebar" | "compact";
 
@@ -54,6 +52,7 @@ export function FrenchImmersionProgramOverview({
 }) {
   const dark = variant === "calendarSidebar";
   const compact = variant === "compact";
+  const school = useSchool();
 
   const { frenchImmersionStream, completedCourses, progress } = useFrenchImmersionProgressState();
 
@@ -147,7 +146,7 @@ export function FrenchImmersionProgramOverview({
         </Stack>
 
         <Anchor
-          href={DIPLOMA_REQUIREMENTS_URL}
+          href={school.frenchImmersionDiplomaUrl ?? undefined}
           target="_blank"
           rel="noreferrer"
           size="xs"

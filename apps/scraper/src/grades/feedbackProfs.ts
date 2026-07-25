@@ -3,14 +3,15 @@
  * professors to grade rows.
  *
  * Source of truth is the committed feedback dataset
- * `apps/scraper/data/feedback/feedback.<STRM>.json`, whose section titles carry
+ * `apps/scraper/data/<school>/feedback/feedback.<STRM>.json`, whose section titles carry
  * the first-party prof <-> section <-> course join. Files are large (~40 MB), so
  * they are loaded one term at a time and released before moving on.
  */
 
 import path from "node:path";
+import type { SchoolId } from "@uoplan/domain/school";
 import { readJson } from "../shared/json.ts";
-import { FEEDBACK_DATA_DIR } from "../shared/paths.ts";
+import { feedbackDataDir } from "../shared/paths.ts";
 import { normalizeCode } from "./distribution.ts";
 
 interface FeedbackSection {
@@ -41,12 +42,14 @@ export function feedbackKey(termId: number, code: string, section: string): stri
  */
 export async function buildFeedbackProfIndex(
   termIds: Iterable<number>,
+  school: SchoolId,
 ): Promise<Map<string, string[]>> {
+  const feedbackDir = feedbackDataDir(school);
   const index = new Map<string, string[]>();
   const unique = [...new Set(termIds)].sort((a, b) => a - b);
 
   for (const termId of unique) {
-    const file = path.join(FEEDBACK_DATA_DIR, `feedback.${termId}.json`);
+    const file = path.join(feedbackDir, `feedback.${termId}.json`);
     let data: FeedbackFile;
     try {
       data = await readJson<FeedbackFile>(file);

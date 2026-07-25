@@ -2,7 +2,7 @@
 
 This document explains how course prerequisites are represented in the scraped catalogue data, and how they can be integrated into the requirements / eligibility engine.
 
-The catalogue scraper entrypoint is `apps/scraper/src/cli/catalogue.ts`, with scrape logic in `apps/scraper/src/catalogue/`. It writes source JSON per-year files (`apps/scraper/data/catalogue/catalogue.2024.json`, etc.) and a manifest at `apps/scraper/data/catalogue/catalogue.json`; `pnpm build:data-proto` converts them to runtime protobuf files in `apps/web/public/data/` — see `docs/multi-year-catalogue.md` for details.
+The catalogue scraper entrypoint is `apps/scraper/src/cli/catalogue.ts`, with scrape logic in `apps/scraper/src/catalogue/`. It writes source JSON per-year files (`apps/scraper/data/uottawa/catalogue/catalogue.2024.json`, etc.) and a manifest at `apps/scraper/data/uottawa/catalogue/catalogue.json`; `pnpm build:data-proto` converts them to runtime protobuf files in `apps/web/src/assets/data/uottawa/` — see `docs/multi-year-catalogue.md` for details.
 
 ---
 
@@ -268,7 +268,7 @@ How you handle `non_course` nodes will depend on what the engine currently knows
 
 ### Examples from the live data
 
-These are representative patterns currently seen in the source catalogue data (`apps/scraper/data/catalogue/catalogue.*.json`, encoded as `.pb` for runtime):
+These are representative patterns currently seen in the source catalogue data (`apps/scraper/data/uottawa/catalogue/catalogue.*.json`, encoded as `.pb` for runtime):
 
 - **Simple single-course prerequisite**
 

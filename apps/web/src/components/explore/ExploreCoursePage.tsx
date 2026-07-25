@@ -40,6 +40,7 @@ import {
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 import { useCourseAliasResolution } from "../../hooks/useCourseAliasResolution";
 import { useScheduleSentiment } from "../../hooks/useScheduleSentiment";
+import { useSchool } from "../../hooks/useSchool";
 import { useAnalytics } from "../../lib/analytics";
 import { usePublishBasketTarget } from "./exploreBasketTargetContext";
 import {
@@ -274,11 +275,11 @@ export function ExploreCoursePage({
   const { views: feedbackViews, loading: feedbackLoading } = useCourseFeedbackViews(urlCourseParam);
   const showFeedback = feedbackLoading || feedbackViews.length > 0;
 
+  const school = useSchool();
   const catalogueUrl = useMemo(() => {
     if (!selectedCourseMeta) return null;
-    const params = new URLSearchParams({ P: selectedCourseMeta.courseCode });
-    return `https://catalogue.uottawa.ca/search/?${params.toString()}`;
-  }, [selectedCourseMeta]);
+    return school.courseCatalogueUrl(selectedCourseMeta.courseCode);
+  }, [selectedCourseMeta, school]);
 
   const faculty = useMemo(() => {
     if (!selectedCourseMeta) return null;

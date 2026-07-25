@@ -41,7 +41,7 @@ https://catalogue.uottawa.ca/archive/2024-2025/en/undergrad/bsc-cs/ → undergra
 
 The helper `urlToSlug(url)` in `packages/core/src/stateEncode.ts` performs this conversion. Programmes scraped via `apps/scraper/` have a `slug` field pre-computed; for old catalogue files without the field, the slug is derived on the fly.
 
-`apps/scraper/data/indices.json` stores slugs (not full URLs) in its `programs` array, the full course-code strings in `courses`, and the derived list of distinct 3-letter subject prefixes in `disciplines` (the discipline index space used by `encodeDiscipline`/`decodeDiscipline`). The runtime app loads the protobuf form from `apps/web/public/data/indices.pb`.
+`apps/scraper/data/uottawa/indices.json` stores slugs (not full URLs) in its `programs` array, the full course-code strings in `courses`, and the derived list of distinct 3-letter subject prefixes in `disciplines` (the discipline index space used by `encodeDiscipline`/`decodeDiscipline`). The runtime app loads the protobuf form from `apps/web/src/assets/data/uottawa/indices.pb`.
 
 ### `indices.pb` columnar encoding
 
@@ -53,6 +53,25 @@ The runtime `indices.pb` does **not** store course/program strings verbatim. `to
 
 The decoded `Indices.courses`/`programs` order (the state-encoding index space) is preserved exactly, so `?s=` links are unaffected. This is a build-time-only re-encoding; `indices.json` stays human-readable.
 
+## Multi-school (`school` field)
+
+`ShareableState` carries a `school` field. uOttawa's wire id is **`0`**, and
+proto3 omits zero-valued scalars, so encoding `school: "uottawa"` produces bytes
+**identical** to omitting the field. `STATE_MAGIC` was therefore deliberately
+**not** bumped: every pre-existing uOttawa `?s=` link still decodes exactly as
+before, and `stateStorageKey("uottawa")` returns the original unsuffixed
+`"uoplan-state"` so saved state survives.
+
+Each school has its **own `indices.pb`**, so uOttawa's index space never shifts
+when another school's catalogue grows. A blob is only meaningful against the
+school it was encoded for — which is why `switchSchool()` drops `?s=` rather than
+carrying it across.
+
+`peekSchoolFromBase64(s)` reads just the school without needing any catalogue;
+the Worker's share route uses it to redirect to the correctly-prefixed path.
+**Never renumber `SCHOOL_WIRE_IDS`** — that would silently reinterpret existing
+links. See [multi-school.md](./multi-school.md).
+
 ## Peeking term & year early
 
 `peekTermAndYear(bytes)` decodes the `ShareableState` protobuf and reads only `selectedTermId` and `firstYear` without needing the catalogue or indices. `loadData` in `src/store/slices/data.ts` calls this before fetching schedules and the year catalogue so the right data files are loaded upfront.
@@ -61,7 +80,7 @@ The decoded `Indices.courses`/`programs` order (the state-encoding index space) 
 
 - **Add a new field**: add it to `packages/proto/proto/state.proto`, regenerate `@uoplan/proto`, add to `EncodeInput` and `DecodedState`, encode/decode it in `encodeState`/`decodeState`, and update `getEncodedStateBase64` + `getShareUrl` in `src/store/slices/url.ts`. If the field is needed before catalogue load, also update `peekTermAndYear`.
 - **Change the program index format**: update `encodeState` (uses `programSlug()`), `decodeState` (uses slug lookup), and regenerate `indices.json` via `pnpm --filter scraper scrape:catalogue`.
-- **Regenerate indices.json**: run `pnpm --filter scraper scrape:catalogue` — [`apps/scraper/src/catalogue/scrape.ts`](../apps/scraper/src/catalogue/scrape.ts) calls `generateIndices()` after the scrape. It **merges** with any existing `indices.json`: existing entries keep their order and indices; for each `catalogue.YYYY.json` present under `apps/scraper/data` (academic years ascending), course codes and program slugs not already seen are **appended** in file order within each year (so encoded URLs and localStorage stay stable as catalogues grow). Years without a file are skipped.
+- **Regenerate indices.json**: run `pnpm --filter scraper scrape:catalogue` — [`apps/scraper/src/catalogue/scrape.ts`](../apps/scraper/src/catalogue/scrape.ts) calls `generateIndices()` after the scrape. It **merges** with any existing `indices.json`: existing entries keep their order and indices; for each `catalogue.YYYY.json` present under `apps/scraper/data/uottawa` (academic years ascending), course codes and program slugs not already seen are **appended** in file order within each year (so encoded URLs and localStorage stay stable as catalogues grow). Years without a file are skipped.
 
 ## Dependencies
 

@@ -8,9 +8,7 @@ import {
 import { useCompletedCourses } from "@uoplan/store/hooks";
 import { tr } from "../../i18n";
 import { useFrenchImmersionProgressState } from "../shared/useFrenchImmersionProgressState";
-
-const DIPLOMA_REQUIREMENTS_URL =
-  "https://www.uottawa.ca/study/immersion/french/about/diploma-requirements";
+import { useSchool } from "../../hooks/useSchool";
 
 function formatCodeList(codes: string[]): string {
   if (codes.length === 0) return "—";
@@ -18,6 +16,7 @@ function formatCodeList(codes: string[]): string {
 }
 
 export function FrenchImmersionRequirementsReadout() {
+  const school = useSchool();
   const { frenchImmersionStream, completedCourses, progress } = useFrenchImmersionProgressState();
   const { unassignedCompletedCourses } = useCompletedCourses();
 
@@ -110,7 +109,12 @@ export function FrenchImmersionRequirementsReadout() {
           </Text>
         )}
 
-        <Anchor href={DIPLOMA_REQUIREMENTS_URL} target="_blank" rel="noreferrer" size="xs">
+        <Anchor
+          href={school.frenchImmersionDiplomaUrl ?? undefined}
+          target="_blank"
+          rel="noreferrer"
+          size="xs"
+        >
           {tr("frenchImmersion.progress.officialLink")}
         </Anchor>
 

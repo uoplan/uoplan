@@ -6,7 +6,8 @@ import { navigateToCalendar, navigateToWizardStep } from "../lib/appNavigation";
 import { buildShareUrl } from "../lib/buildShareUrl";
 import { flushPersistedAppState } from "../lib/persistAppState";
 import { fetchProtoBytes, optionalProtoBytes } from "../lib/protoFetch";
-import { LOCAL_STORAGE_KEY } from "./constants";
+import { getActiveSchool } from "../lib/activeSchool";
+import { stateStorageKey } from "./constants";
 import { getEffectiveCatalogue } from "@uoplan/store/slices/catalogueUtils";
 import type { WizardStep } from "../lib/wizardSteps";
 
@@ -14,16 +15,20 @@ function currentWindow(): Window | null {
   return typeof window === "undefined" ? null : window;
 }
 
+function storageKey(): string {
+  return stateStorageKey(getActiveSchool());
+}
+
 function readEncodedState(): string | null {
-  return currentWindow()?.localStorage.getItem(LOCAL_STORAGE_KEY) ?? null;
+  return currentWindow()?.localStorage.getItem(storageKey()) ?? null;
 }
 
 function writeEncodedState(base64: string): void {
-  currentWindow()?.localStorage.setItem(LOCAL_STORAGE_KEY, base64);
+  currentWindow()?.localStorage.setItem(storageKey(), base64);
 }
 
 function removeEncodedState(): void {
-  currentWindow()?.localStorage.removeItem(LOCAL_STORAGE_KEY);
+  currentWindow()?.localStorage.removeItem(storageKey());
 }
 
 function clearSearch(): void {
@@ -61,6 +66,7 @@ async function retimetableFixedSet(input: RetimetableFixedSetInput) {
       applyBlacklist: input.applyBlacklist,
       blacklistedCourses: [...(input.blacklistedCourses ?? [])],
       optimizationPriorities: input.optimizationPriorities,
+      school: input.school,
     },
     input.cache,
   );

@@ -11,7 +11,7 @@ import {
   buildUnionCatalogueInput,
   programsOnlyInput,
 } from "./catalogue-merged.ts";
-import { CATALOGUE_DATA_DIR } from "../shared/paths.ts";
+import { catalogueDataDir } from "../shared/paths.ts";
 
 interface YearInput {
   year: number;
@@ -135,9 +135,11 @@ describe("buildProgramHistory / reconstructProgramsForYear (synthetic)", () => {
   });
 });
 
-const yearFiles = fs.existsSync(CATALOGUE_DATA_DIR)
+const catalogueDir = catalogueDataDir("uottawa");
+
+const yearFiles = fs.existsSync(catalogueDir)
   ? fs
-      .readdirSync(CATALOGUE_DATA_DIR)
+      .readdirSync(catalogueDir)
       .map((f) => /^catalogue\.(\d{4})\.json$/.exec(f))
       .filter((m): m is RegExpExecArray => m !== null)
       .map((m) => ({ year: Number(m[1]), file: m[0] }))
@@ -150,7 +152,7 @@ describe.skipIf(yearFiles.length === 0)(
     const yearInputs: YearInput[] = yearFiles.map(({ year, file }) => ({
       year,
       data: JSON.parse(
-        fs.readFileSync(path.join(CATALOGUE_DATA_DIR, file), "utf8"),
+        fs.readFileSync(path.join(catalogueDir, file), "utf8"),
       ) as CatalogueJsonInput,
     }));
     const unionInput = buildUnionCatalogueInput(yearInputs);

@@ -22,7 +22,7 @@ function listFiles(dir: string, acc: string[] = []): string[] {
     ) {
       continue;
     }
-    if (name === "raw" && dir.replaceAll("\\", "/").endsWith("apps/scraper/data")) continue;
+    if (/apps\/scraper\/data\/[^/]+$/.test(dir.replaceAll("\\", "/")) && name === "raw") continue;
     listFiles(join(dir, name), acc);
   }
   return acc;

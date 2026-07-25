@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { resolveDesiredCourses } from "@uoplan/core";
+import { buildDataCache, resolveDesiredCourses } from "@uoplan/core";
 import { buildCache, req } from "../../test/generationFixtures";
+import { testScheduledCourse } from "../../test/courseScheduleFixtures";
 
 describe("resolveDesiredCourses", () => {
   it("assigns a prereq-eligible desired course to a matching requirement", () => {
@@ -142,6 +143,28 @@ describe("resolveDesiredCourses", () => {
     expect(assignedCodes).toHaveLength(1);
     expect(result.overflow).toHaveLength(1);
     expect([...assignedCodes, ...result.overflow].sort()).toEqual(["CSI 2110", "CSI 2120"]);
+  });
+
+  it("uses the school default credits for offered courses missing catalogue credits", () => {
+    const cache = buildDataCache(
+      { courses: [], programs: [] },
+      { termId: "0000", schedules: ["CAR 1001", "CAR 1002"].map(testScheduledCourse) },
+    );
+    const requirements = [req("req-car", "group", ["CAR 1001", "CAR 1002"], 0.5)];
+
+    const result = resolveDesiredCourses(
+      requirements,
+      ["CAR 1001", "CAR 1002"],
+      [],
+      {},
+      {},
+      ["CAR 1001", "CAR 1002"],
+      cache,
+      0.5,
+    );
+
+    expect(result.assigned).toEqual({ "req-car": ["CAR 1001"] });
+    expect(result.overflow).toEqual(["CAR 1002"]);
   });
 
   it("treats selectedPerRequirement capacity as consumed (overflows when slot already taken)", () => {

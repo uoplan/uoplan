@@ -31,11 +31,11 @@ use uoplan_engine::Engine;
 
 const CATALOGUE_PB: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
-    "/../../apps/web/src/assets/data/catalogue.2026.pb"
+    "/../../apps/web/src/assets/data/uottawa/catalogue.2026.pb"
 );
 const SCHEDULES_PB: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
-    "/../../apps/web/src/assets/data/schedules.2269.pb"
+    "/../../apps/web/src/assets/data/uottawa/schedules.2269.pb"
 );
 
 /// Native ceiling for a SINGLE best-of-K generation that has a shape objective

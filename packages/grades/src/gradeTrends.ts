@@ -38,15 +38,61 @@ const SEASON_RANK: Record<TermSeason, number> = {
 };
 
 /**
- * Decode a PeopleSoft-style uOttawa term id (e.g. `2179` → Fall 2017).
- * Format: `2` + `YY` (last two digits of year) + session digit.
+ * Carleton Banner season suffixes: a 6-digit id is `YYYY` + a two-digit term
+ * code (`202710` → Winter 2027). Mapped onto the same {@link TermSeason} values
+ * as uOttawa's session digits so everything downstream stays school-agnostic.
+ */
+const SEASON_BY_BANNER_CODE: Record<number, TermSeason> = {
+  10: "winter",
+  20: "springSummer",
+  30: "fall",
+};
+
+/** The session digit a Banner term code corresponds to, for {@link TermMeta}. */
+const SEASON_DIGIT_BY_SEASON: Record<TermSeason, number> = {
+  winter: 1,
+  springSummer: 5,
+  fall: 9,
+};
+
+function emptyMeta(termId: number): TermMeta {
+  return { termId, year: 0, seasonDigit: 0, season: null, sortKey: 0 };
+}
+
+function metaFor(termId: number, year: number, season: TermSeason | null): TermMeta {
+  return {
+    termId,
+    year,
+    seasonDigit: season ? SEASON_DIGIT_BY_SEASON[season] : 0,
+    season,
+    sortKey: season ? year * 10 + SEASON_RANK[season] : year * 10,
+  };
+}
+
+/**
+ * Decode a term id in either supported school format:
+ *
+ * - **uOttawa (PeopleSoft), 4 digits** — `2` + `YY` + session digit, e.g.
+ *   `2179` → Fall 2017.
+ * - **Carleton (Banner), 6 digits** — `YYYY` + term code, e.g. `202710` →
+ *   Winter 2027.
+ *
+ * The two are unambiguous by length, so one decoder serves both and callers
+ * (labels, sorting, analytics) need no school context.
  */
 export function decodeTermMeta(termId: number): TermMeta {
   const n = Math.abs(Math.floor(Number(termId)));
   const s = String(n);
-  if (s.length !== 4 || s[0] !== "2") {
-    return { termId: n, year: 0, seasonDigit: 0, season: null, sortKey: 0 };
+
+  if (s.length === 6) {
+    const year = Number.parseInt(s.slice(0, 4), 10);
+    const code = Number.parseInt(s.slice(4), 10);
+    if (!Number.isFinite(year) || !Number.isFinite(code)) return emptyMeta(n);
+    return metaFor(n, year, SEASON_BY_BANNER_CODE[code] ?? null);
   }
+
+  if (s.length !== 4 || s[0] !== "2") return emptyMeta(n);
+
   const yy = Number.parseInt(s.slice(1, 3), 10);
   const seasonDigit = Number.parseInt(s[3], 10);
   const year = Number.isFinite(yy) ? 2000 + yy : 0;

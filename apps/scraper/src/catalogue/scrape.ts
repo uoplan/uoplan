@@ -1,7 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import pLimit from "p-limit";
-import { CATALOGUE_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { SCHOOLS } from "@uoplan/domain/school";
+import { parseSchoolArg } from "../shared/cliSchool.ts";
+import { catalogueDataDir } from "../shared/paths.ts";
+import { scrapeCarletonCatalogueCli } from "../schools/carleton/catalogue.ts";
 import { getErrorMessage, NotFoundError } from "../shared/errors.ts";
 import { generateIndices, parseCatalogueYears, parseMissingByYear } from "./indices.ts";
 import {
@@ -17,8 +21,6 @@ import { scrapeProgram } from "./programs.ts";
 import { processRequirements } from "./requirements.ts";
 import { CatalogueSchema } from "./schema.ts";
 import type { Catalogue, Course, Program } from "./schema.ts";
-
-const OLDEST_YEAR = 2017;
 
 async function scrapeCatalogueItem<T>(
   url: string,
@@ -147,9 +149,14 @@ async function scrapeYear(
   return missingUrls;
 }
 
-export async function main() {
-  const dataDir = CATALOGUE_DATA_DIR;
+export async function main(school: SchoolId): Promise<void> {
   const force = process.argv.includes("--force");
+  if (school === "carleton") {
+    await scrapeCarletonCatalogueCli(force);
+    return;
+  }
+
+  const dataDir = catalogueDataDir(school);
   const academicYear = getCurrentAcademicYear();
   const calendarYear = new Date().getFullYear();
   await fs.mkdir(dataDir, { recursive: true });
@@ -167,7 +174,7 @@ export async function main() {
   // Probe archive years from OLDEST_YEAR upward, stopping at the first 404.
   // Archive HTML is immutable, so we skip years already on disk unless --force
   // is passed (e.g. to re-apply an improved parser to every year).
-  for (let year = OLDEST_YEAR; year < academicYear; year++) {
+  for (let year = SCHOOLS[school].oldestCatalogueYear; year < academicYear; year++) {
     const missing = await scrapeYear(year, dataDir, force);
     if (missing === null) {
       console.warn(`Stopping archive scrape at ${year} (404)`);
@@ -221,13 +228,13 @@ export async function main() {
   );
   console.log(`\nWrote catalogue.json manifest: years ${years[0]}–${years[years.length - 1]}`);
 
-  await generateIndices();
+  await generateIndices(school);
 }
 
 if (process.argv[1] && import.meta.url === `file://${process.argv[1]}`) {
   void (async () => {
     try {
-      await main();
+      await main(parseSchoolArg(process.argv));
     } catch (e) {
       console.error("\nScrape failed!");
       console.error(e);

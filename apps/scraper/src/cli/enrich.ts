@@ -1,5 +1,5 @@
 /**
- * Re-enrich apps/scraper/data/schedules/schedules.*.json with grade distributions from grades.json.
+ * Re-enrich apps/scraper/data/<school>/schedules/schedules.*.json with grade distributions from grades.json.
  * Use when grades.json changes without re-running the schedule scraper.
  *
  * Usage:
@@ -9,7 +9,9 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { SCHEDULES_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { parseSchoolArg } from "../shared/cliSchool.ts";
+import { assertSchoolFeature } from "../shared/schoolFeatures.ts";
+import { schedulesDataDir, scraperDataDir } from "../shared/paths.ts";
 import {
   buildGradeLookups,
   enrichSchedulesPayload,
@@ -22,17 +24,24 @@ function parseArgs(argv: string[]): { dryRun: boolean } {
 }
 
 export async function main(): Promise<void> {
+  const school = parseSchoolArg(process.argv);
+  assertSchoolFeature(
+    school,
+    "grades",
+    "Carleton has no public grade data; schedule grade enrichment is uOttawa-only.",
+  );
   const { dryRun } = parseArgs(process.argv);
 
-  const gradesPath = path.join(SCRAPER_DATA_DIR, "grades.json");
+  const gradesPath = path.join(scraperDataDir(school), "grades.json");
   const gradesRaw = JSON.parse(await fs.readFile(gradesPath, "utf-8")) as unknown;
   const lookups = buildGradeLookups(gradesRaw);
 
-  const entries = await fs.readdir(SCHEDULES_DATA_DIR);
+  const scheduleDir = schedulesDataDir(school);
+  const entries = await fs.readdir(scheduleDir);
   const scheduleFiles = entries.filter((f) => /^schedules\.\d+\.json$/i.test(f)).sort();
 
   if (scheduleFiles.length === 0) {
-    console.warn(`No schedules.*.json files under ${SCHEDULES_DATA_DIR}`);
+    console.warn(`No schedules.*.json files under ${scheduleDir}`);
     return;
   }
 
@@ -45,7 +54,7 @@ export async function main(): Promise<void> {
   };
 
   for (const file of scheduleFiles) {
-    const filePath = path.join(SCHEDULES_DATA_DIR, file);
+    const filePath = path.join(scheduleDir, file);
     const stats: GradeEnrichmentStats = { sectionsTotal: 0, matched: 0, fallback: 0, none: 0 };
     const raw = await fs.readFile(filePath, "utf-8");
     const data = JSON.parse(raw) as SchedulesFilePayload;

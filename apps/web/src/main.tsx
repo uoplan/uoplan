@@ -16,14 +16,24 @@ import { i18n, I18nProvider, initializeI18n } from "./i18n";
 import { registerServiceWorker } from "./workers/serviceWorkerClient";
 import { printConsoleGreeting } from "./lib/easterEggs/consoleGreeting";
 import { AppStoreProvider } from "@uoplan/store/AppStoreProvider";
+import { SCHOOLS } from "@uoplan/domain/school";
+import { initializeActiveSchool } from "./lib/activeSchool";
 import { defaultAppStore } from "./store/appStore";
 
 await initializeI18n();
 
 printConsoleGreeting();
 
+// Must run before `createRouter` — the basepath, the `.pb` asset namespace and
+// the localStorage key all derive from it, and the router needs it up front.
+const activeSchool = initializeActiveSchool();
+
 const router = createRouter({
   routeTree,
+  // uOttawa's slug is "", so its basepath stays "/" and every existing URL is
+  // byte-identical; Carleton gets "/carleton" and every <Link> inherits it.
+  basepath:
+    SCHOOLS[activeSchool].pathSlug === "" ? undefined : `/${SCHOOLS[activeSchool].pathSlug}`,
   defaultPreload: shouldEnablePreload(),
   defaultPreloadDelay: 50,
 });

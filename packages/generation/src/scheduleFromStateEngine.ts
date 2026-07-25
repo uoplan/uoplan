@@ -76,6 +76,7 @@ function buildBasicInput(
   constraints: GenerationConstraints,
 ): BasicRequestInput {
   return {
+    school: decoded.school,
     constraints,
     basketCourses: decoded.basketCourses,
     additionalElectivesCount: decoded.additionalElectivesCount,
@@ -190,6 +191,7 @@ function buildAdvancedInput(
   const requirementPriorities = buildRequirementPriorities(decoded, reqIndexToId);
 
   return {
+    school: decoded.school,
     constraints,
     completedCourses: decoded.completedCourseCodes,
     prereqEligibleCourses: buildPrereqEligibleCourses(firstPass, decoded, cache),

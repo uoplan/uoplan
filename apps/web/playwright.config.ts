@@ -17,7 +17,7 @@ const WEB_SERVER_COMMAND = USE_PREVIEW
 /**
  * Playwright end-to-end config for the web app.
  *
- * Runs against the Vite dev server (committed `.pb` assets in `src/assets/data`
+ * Runs against the Vite dev server (generated `.pb` assets in `src/assets/data/<school>`
  * make the app deterministic without a network). Phase 5 adds fixture-based
  * data seams for fully hermetic flows; this scaffold covers smoke coverage.
  */

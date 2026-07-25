@@ -5,6 +5,7 @@ import type {
   NormalizedCourseCode,
   RequirementWithStatus,
 } from "@uoplan/core";
+import { SCHOOLS } from "@uoplan/domain/school";
 import {
   buildPrereqContext,
   courseMatchesFilters,
@@ -58,6 +59,7 @@ export function getSwapCandidates(
     generationLimitFirstYearCredits,
     requirementTreeWithStatus,
     selectedOptionsPerRequirement,
+    school,
   } = get();
   if (!cache || !currentSchedule) {
     return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
@@ -217,17 +219,24 @@ export function getSwapCandidates(
   const completedFirstYearCredits = generationLimitFirstYearCredits
     ? completedCourses.reduce((sum, code) => {
         if (!isFirstYear(code)) return sum;
-        return sum + (cache.getCourse(code)?.credits ?? 3);
+        return (
+          sum + (cache.getCourse(code)?.credits ?? SCHOOLS[school].credits.defaultCourseCredits)
+        );
       }, 0)
     : 0;
   const othersFirstYearCredits = generationLimitFirstYearCredits
     ? others.reduce((sum, e) => {
         if (!isFirstYear(e.courseCode)) return sum;
-        return sum + (cache.getCourse(e.courseCode)?.credits ?? 3);
+        return (
+          sum +
+          (cache.getCourse(e.courseCode)?.credits ?? SCHOOLS[school].credits.defaultCourseCredits)
+        );
       }, 0)
     : 0;
   const remainingFirstYearBudget = generationLimitFirstYearCredits
-    ? 48 - completedFirstYearCredits - othersFirstYearCredits
+    ? SCHOOLS[school].credits.firstYearCreditCap -
+      completedFirstYearCredits -
+      othersFirstYearCredits
     : Infinity;
 
   const prereqEligibleSet = new Set(prereqEligibleCourses);
@@ -268,7 +277,11 @@ export function getSwapCandidates(
     if (alreadyInSchedule.has(code)) continue;
     if (isHonoursProject(code, cache)) continue;
     if (!courseMatchesFilters(code, filters)) continue;
-    if (isFirstYear(code) && (cache.getCourse(code)?.credits ?? 3) > remainingFirstYearBudget)
+    if (
+      isFirstYear(code) &&
+      (cache.getCourse(code)?.credits ?? SCHOOLS[school].credits.defaultCourseCredits) >
+        remainingFirstYearBudget
+    )
       continue;
 
     const isElectiveType = isElectiveRequirementType(poolRequirementType);

@@ -1,6 +1,6 @@
 /**
  * Stage 1 of the grades scraper: read and aggregate the raw grade-distribution
- * CSVs in `apps/scraper/data/raw`.
+ * CSVs in `apps/scraper/data/<school>/raw`.
  *
  * Those CSVs are not authored by hand — they are generated from the registrar
  * Excel exports in `raw/xlsx/` by the converter (`pnpm --filter scraper
@@ -19,7 +19,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { parse } from "csv-parse/sync";
-import { RAW_DATA_DIR } from "../shared/paths.ts";
 import {
   addDistribution,
   emptyDistribution,
@@ -119,8 +118,8 @@ function aggregate(rows: GradeRow[]): GradeRow[] {
   return [...merged.values()];
 }
 
-/** Read, parse and aggregate every `*.csv` under `apps/scraper/data/raw`. */
-export async function readGradeRows(dir: string = RAW_DATA_DIR): Promise<GradeRow[]> {
+/** Read, parse and aggregate every `*.csv` under `apps/scraper/data/<school>/raw`. */
+export async function readGradeRows(dir: string): Promise<GradeRow[]> {
   let entries: string[];
   try {
     entries = await fs.readdir(dir);

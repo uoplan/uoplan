@@ -26,6 +26,7 @@ import type {
   Term,
   TimetableFailureDiagnostics,
 } from "@uoplan/core";
+import type { SchoolId } from "@uoplan/domain/school";
 
 /** A user-blocked recurring weekday window on the calendar. `id` is local-only (React keys). */
 export interface BlockedTime {
@@ -78,6 +79,7 @@ export type GenerationErrorState = {
 export type CalendarVariant = "basic" | "advanced";
 
 export interface AppState {
+  school: SchoolId;
   pendingSharedState: DecodedState | null;
   basketCourses: string[];
   /**

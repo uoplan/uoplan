@@ -6,20 +6,20 @@ import {
 
 describe("planDataAssets", () => {
   const keys = [
-    "terms.pb",
-    "disciplines.pb",
-    "grades.pb",
-    "professors.pb",
-    "ratemyprofessors.pb",
-    "indices.pb",
-    "feedback.pb",
-    "catalogue.pb",
-    "catalogue.2024.pb",
-    "catalogue.2026.pb",
-    "catalogue.2025.pb",
-    "schedules.2265.pb",
-    "schedules.2261.pb",
-    "schedules.2269.pb",
+    "uottawa/terms.pb",
+    "uottawa/disciplines.pb",
+    "uottawa/grades.pb",
+    "uottawa/professors.pb",
+    "uottawa/ratemyprofessors.pb",
+    "uottawa/indices.pb",
+    "uottawa/feedback.pb",
+    "uottawa/catalogue.pb",
+    "uottawa/catalogue.2024.pb",
+    "uottawa/catalogue.2026.pb",
+    "uottawa/catalogue.2025.pb",
+    "uottawa/schedules.2265.pb",
+    "uottawa/schedules.2261.pb",
+    "uottawa/schedules.2269.pb",
   ];
 
   it("extracts and sorts schedule term ids", () => {
@@ -34,7 +34,7 @@ describe("planDataAssets", () => {
   });
 
   it("ignores the merged catalogue manifest and non-data keys", () => {
-    const plan = planDataAssets(["catalogue.pb", "terms.pb"]);
+    const plan = planDataAssets(["uottawa/catalogue.pb", "uottawa/terms.pb"]);
     expect(plan.catalogueYears).toEqual([]);
     expect(plan.scheduleTermIds).toEqual([]);
     expect(plan.latestCatalogueYear).toBeNull();
@@ -65,31 +65,31 @@ describe("isCourseDescriptionAsset", () => {
 
 describe("backgroundPrefetchAssetIds", () => {
   const manifestIds = [
-    "catalogue.union.pb",
-    "catalogue.descriptions.science.pb",
-    "catalogue.descriptions.other.pb",
-    "schedules.2265.pb",
-    "feedback.pb",
-    "catalogue.2024.pb",
+    "uottawa/catalogue.union.pb",
+    "uottawa/catalogue.descriptions.science.pb",
+    "uottawa/catalogue.descriptions.other.pb",
+    "uottawa/schedules.2265.pb",
+    "uottawa/feedback.pb",
+    "uottawa/catalogue.2024.pb",
   ];
-  const eagerIds = new Set(["catalogue.union.pb", "schedules.2265.pb"]);
+  const eagerIds = new Set(["uottawa/catalogue.union.pb", "uottawa/schedules.2265.pb"]);
 
   it("excludes description shard IDs from background prefetch", () => {
     const ids = backgroundPrefetchAssetIds(manifestIds, eagerIds);
-    expect(ids).not.toContain("catalogue.descriptions.science.pb");
-    expect(ids).not.toContain("catalogue.descriptions.other.pb");
+    expect(ids).not.toContain("uottawa/catalogue.descriptions.science.pb");
+    expect(ids).not.toContain("uottawa/catalogue.descriptions.other.pb");
   });
 
   it("excludes eager IDs from background prefetch", () => {
     const ids = backgroundPrefetchAssetIds(manifestIds, eagerIds);
-    expect(ids).not.toContain("catalogue.union.pb");
-    expect(ids).not.toContain("schedules.2265.pb");
+    expect(ids).not.toContain("uottawa/catalogue.union.pb");
+    expect(ids).not.toContain("uottawa/schedules.2265.pb");
   });
 
   it("includes non-eager, non-description IDs", () => {
     const ids = backgroundPrefetchAssetIds(manifestIds, eagerIds);
-    expect(ids).toContain("feedback.pb");
-    expect(ids).toContain("catalogue.2024.pb");
+    expect(ids).toContain("uottawa/feedback.pb");
+    expect(ids).toContain("uottawa/catalogue.2024.pb");
   });
 
   it("does not exclude near-matches that are not description assets", () => {

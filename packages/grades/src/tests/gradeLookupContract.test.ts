@@ -19,8 +19,32 @@ import { buildGradeLookups, lookupSectionDistribution } from "../gradeLookup";
  */
 
 const here = dirname(fileURLToPath(import.meta.url));
-const dataDir = join(here, "..", "..", "..", "..", "apps", "web", "src", "assets", "data");
-const sourceDir = join(here, "..", "..", "..", "..", "apps", "scraper", "data", "schedules");
+// Runtime assets are namespaced by school; grades are a uOttawa-only dataset.
+const dataDir = join(
+  here,
+  "..",
+  "..",
+  "..",
+  "..",
+  "apps",
+  "web",
+  "src",
+  "assets",
+  "data",
+  "uottawa",
+);
+const sourceDir = join(
+  here,
+  "..",
+  "..",
+  "..",
+  "..",
+  "apps",
+  "scraper",
+  "data",
+  "uottawa",
+  "schedules",
+);
 
 interface SourceSection {
   times?: Array<{ instructor?: string | null }>;

@@ -4,7 +4,9 @@ import got from "got";
 import * as cheerio from "cheerio";
 import pLimit from "p-limit";
 import { extractFacultyFromHeading, facultyIdFromName } from "@uoplan/core/facultyIdentity";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { scraperDataDir } from "../shared/paths.ts";
+import { writeCarletonDisciplines } from "../schools/carleton/disciplines.ts";
 
 const ROOT_URL = "https://catalogue.uottawa.ca";
 const DISCIPLINES_URL_EN = `${ROOT_URL}/en/courses/`;
@@ -158,13 +160,19 @@ async function scrapeDisciplines(): Promise<{
   return { faculties, disciplines };
 }
 
-export async function main(): Promise<void> {
+export async function main(school: SchoolId): Promise<void> {
+  if (school === "carleton") {
+    await writeCarletonDisciplines();
+    return;
+  }
+
   const { faculties, disciplines } = await scrapeDisciplines();
   if (disciplines.length === 0) {
     throw new Error("No disciplines were parsed from the uOttawa courses page");
   }
 
-  const disciplinesPath = path.join(SCRAPER_DATA_DIR, "disciplines.json");
+  const dataDir = scraperDataDir(school);
+  const disciplinesPath = path.join(dataDir, "disciplines.json");
   await fs.writeFile(
     disciplinesPath,
     JSON.stringify(
@@ -184,7 +192,7 @@ export async function main(): Promise<void> {
     `Wrote ${disciplines.length} disciplines (${withFaculty} with faculty) and ${faculties.length} faculties to ${disciplinesPath}`,
   );
 
-  const indicesPath = path.join(SCRAPER_DATA_DIR, "indices.json");
+  const indicesPath = path.join(dataDir, "indices.json");
   let indices: Record<string, unknown> = {};
   try {
     indices = JSON.parse(await fs.readFile(indicesPath, "utf-8")) as Record<string, unknown>;

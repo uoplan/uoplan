@@ -141,6 +141,11 @@ describe("poolCourseCap / buildPoolCaps", () => {
     expect(poolCourseCap(pool({ creditsNeeded: 3, minCourses: 2 }))).toBe(2); // minCourses dominates
   });
 
+  it("caps with Carleton half-credit course units when provided", () => {
+    expect(poolCourseCap(pool({ creditsNeeded: 3, minCourses: 0 }), 0.5)).toBe(6);
+    expect(poolCourseCap(pool({ creditsNeeded: 0.5, minCourses: 0 }), 0.5)).toBe(1);
+  });
+
   it("caps discipline_elective pools at 1 course", () => {
     expect(poolCourseCap(pool({ type: "discipline_elective", creditsNeeded: 9 }))).toBe(1);
   });
@@ -151,6 +156,18 @@ describe("poolCourseCap / buildPoolCaps", () => {
       pool({ requirementId: "b", creditsNeeded: 3 }),
     ]);
     expect(caps.get("a")).toBe(2);
+    expect(caps.get("b")).toBe(1);
+  });
+
+  it("builds caps with Carleton half-credit course units when provided", () => {
+    const caps = buildPoolCaps(
+      [
+        pool({ requirementId: "a", creditsNeeded: 3 }),
+        pool({ requirementId: "b", creditsNeeded: 0.5 }),
+      ],
+      0.5,
+    );
+    expect(caps.get("a")).toBe(6);
     expect(caps.get("b")).toBe(1);
   });
 });
@@ -172,6 +189,12 @@ describe("computeCoursesPerPool", () => {
     const result = computeCoursesPerPool([structured, broad], 1, dummyCache);
     expect(result.get("s")).toBe(1);
     expect(result.get("e")).toBe(0);
+  });
+
+  it("allocates against Carleton half-credit pool caps when provided", () => {
+    const broad = pool({ requirementId: "e", type: "elective", creditsNeeded: 3 });
+    const result = computeCoursesPerPool([broad], 7, dummyCache, 0.5);
+    expect(result.get("e")).toBe(6);
   });
 
   it("never exceeds the total available slots and respects caps", () => {

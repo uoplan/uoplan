@@ -61,11 +61,15 @@ export function isWorkTermCourse(course: Course): boolean {
 }
 
 /**
- * Get the credits for a course, defaulting to 3 if not found.
+ * Get the credits for a course, defaulting to the provided school fallback if not found.
  */
-export function getCourseCredits(code: string, cache: DataCache | null): number {
-  if (!cache) return 3;
-  return cache.getCourse(code)?.credits ?? 3;
+export function getCourseCredits(
+  code: string,
+  cache: DataCache | null,
+  defaultCredits = 3,
+): number {
+  if (!cache) return defaultCredits;
+  return cache.getCourse(code)?.credits ?? defaultCredits;
 }
 
 /**

@@ -1164,7 +1164,7 @@ View the run. Confirm step "Exit early if no new terms" ran and subsequent steps
 
 - [ ] **Step 3: Simulate a new term (optional)**
 
-To test the full notification path without waiting for a real new term, temporarily modify `apps/web/public/data/terms.json` locally (don't commit) to remove a real term from the list. Run `pnpm check:terms` — it should now output a non-empty JSON array. Restore the file.
+To test the full notification path without waiting for a real new term, temporarily modify `apps/web/src/assets/data/uottawa/terms.pb` locally (don't commit) to remove a real term from the list. Run `pnpm check:terms` — it should now output a non-empty JSON array. Restore the file.
 
 The GitHub Action's real-world trigger will fire the first time uOttawa adds a new term to their search page that isn't in `terms.json`.
 

@@ -135,6 +135,13 @@ message ShareableState {
   // Ordered optimization objectives (index 0 = highest priority). Single source
   // of truth for the soft generation objectives; replaces the removed booleans.
   repeated OptimizationPriority optimization_priorities = 43;
+  // Which school this state belongs to. Deliberately NOT `optional`: proto3
+  // scalars default to 0, and 0 is uOttawa (`SCHOOL_WIRE_IDS` in
+  // `@uoplan/domain/school`), so every pre-existing `?s=` payload — which has no
+  // field 44 at all — decodes to uOttawa without a STATE_MAGIC bump. Every
+  // course/program index in this message is relative to that school's own
+  // `indices.pb`, so this field must be read before any index is resolved.
+  uint32 school = 44;
 }
 
 // --- OG-image share preview -------------------------------------------------

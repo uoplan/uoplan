@@ -9,6 +9,15 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# NOTE: /data/*.pb and /fonts/* use stable (non-hashed) filenames whose content
-# can change on redeploy, so they intentionally keep Cloudflare's default
-# revalidating cache (ETag/If-None-Match → 304, no re-download when unchanged).
+# NOTE: the per-school protobuf datasets are imported through Vite, so they are
+# content-hashed into /assets/* and pick up the immutable cache above. The lookup
+# table that maps a logical, school-namespaced asset id
+# (e.g. "carleton/catalogue.union.pb") to its hashed URL is /data/manifest.json —
+# a stable filename whose contents change on every redeploy. It is deliberately
+# NOT under /assets/*, so it keeps Cloudflare's default revalidating cache. Do not
+# add an immutable rule for /data/* : a stale manifest would point every client at
+# the previous deploy's asset URLs.
+#
+# /fonts/* likewise use stable (non-hashed) filenames whose content can change on
+# redeploy, so they also keep the default revalidating cache
+# (ETag/If-None-Match → 304, no re-download when unchanged).

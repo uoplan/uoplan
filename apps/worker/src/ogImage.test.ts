@@ -32,6 +32,8 @@ vi.mock("@uoplan/data", () => ({
   optional: optionalMock,
   loadSchedules: loadSchedulesMock,
   loadGrades: loadGradesMock,
+  // Pass-through: the tests assert on the transport identity the mock returns.
+  withAssetNamespace: (transport: unknown) => transport,
 }));
 vi.mock("@uoplan/data/worker", () => ({
   createAssetsTransport: createAssetsTransportMock,
@@ -39,6 +41,11 @@ vi.mock("@uoplan/data/worker", () => ({
 vi.mock("@uoplan/core", () => ({
   enrichSchedulesDataWithGrades: enrichMock,
   getGradeLookups: getGradeLookupsMock,
+  getSchool: () => ({
+    assetNamespace: "uottawa",
+    features: { grades: true },
+  }),
+  peekSchoolFromBase64: () => "uottawa",
   reconstructScheduleFromPreview: reconstructMock,
 }));
 vi.mock("@uoplan/calendar", () => ({

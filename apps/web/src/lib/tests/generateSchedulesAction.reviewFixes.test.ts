@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { DEFAULT_SCHOOL_ID } from "@uoplan/domain/school";
 import { GenerationRequest, GenerationResponse } from "@uoplan/proto/engine";
 import type { Catalogue, ScheduleEngine, SchedulesData } from "@uoplan/core";
 import { buildDataCache, defaultOptimizationPriorities } from "@uoplan/core";
@@ -89,6 +90,7 @@ function baseInput(overrides: Partial<GenerateSchedulesInput> = {}): GenerateSch
     blacklistedCourses: [],
     blockedTimes: [],
     ...overrides,
+    school: overrides.school ?? DEFAULT_SCHOOL_ID,
   };
 }
 

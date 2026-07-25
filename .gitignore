@@ -33,11 +33,18 @@ coverage-runtime/
 .lighthouseci/
 
 # Raw grade-distribution data consumed by the grades scraper: the registrar
-# Excel exports under raw/xlsx/ plus the per-term CSVs generated from them by
-# `pnpm --filter scraper grades:convert`.
-apps/scraper/data/raw/
+# Excel exports under <school>/raw/xlsx/ plus the per-term CSVs generated from
+# them by `pnpm --filter scraper grades:convert`.
+apps/scraper/data/*/raw/
 # local data-asset size snapshots
 scripts/.size-snapshots/
 
 # Scraper JSON datasets live on the `data` branch (hydrated via `pnpm data:fetch`).
-apps/scraper/data/
+apps/scraper/data/*
+
+# Per-school OG cards are generated into `public/<slug>/` by
+# `apps/web/scripts/generate-og-image.ts` on every build. uOttawa's lives at
+# `public/og-image.png` and stays committed because its bytes are a published
+# contract (social cards in the wild reference it); the prefixed ones are pure
+# build output.
+apps/web/public/*/og-image.png

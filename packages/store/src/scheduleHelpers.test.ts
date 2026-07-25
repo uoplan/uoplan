@@ -63,6 +63,12 @@ describe("computeCoursesPerPool", () => {
     expect(m.get("c")).toBe(3);
   });
 
+  it("allocates with Carleton half-credit course units when provided", () => {
+    const pools = [pool("b", 3, { type: "free_elective" })];
+    const m = computeCoursesPerPool(pools, 7, cache, 0.5);
+    expect(m.get("b")).toBe(6);
+  });
+
   it("uses only structured pools when they cover the semester", () => {
     const pools = [
       pool("a", 3, { type: "course" }),
@@ -86,6 +92,11 @@ describe("poolCourseCap and buildPoolCaps", () => {
     expect(poolCourseCap(p2)).toBe(1);
   });
 
+  it("caps by Carleton half-credit course units when provided", () => {
+    const p = pool("x", 3, { type: "course", minCourses: 0 });
+    expect(poolCourseCap(p, 0.5)).toBe(6);
+  });
+
   it("caps discipline_elective at one course per generated term", () => {
     const p = pool("z", 12, { type: "discipline_elective" });
     expect(poolCourseCap(p)).toBe(1);
@@ -96,6 +107,13 @@ describe("poolCourseCap and buildPoolCaps", () => {
     const caps = buildPoolCaps(pools);
     expect(caps.get("a")).toBe(1);
     expect(caps.get("b")).toBe(3);
+  });
+
+  it("buildPoolCaps maps requirement ids with Carleton half-credit course units", () => {
+    const pools = [pool("a", 0.5), pool("b", 3)];
+    const caps = buildPoolCaps(pools, 0.5);
+    expect(caps.get("a")).toBe(1);
+    expect(caps.get("b")).toBe(6);
   });
 });
 

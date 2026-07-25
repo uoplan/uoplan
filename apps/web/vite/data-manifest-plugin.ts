@@ -43,10 +43,14 @@ function generatedManifestPath(): string {
 
 function assetIdsFromSource(originalNames: readonly string[]): string[] {
   const ids: string[] = [];
+  const root = "/assets/data/";
   for (const name of originalNames) {
     const normalized = name.replaceAll("\\", "/");
-    if (normalized.includes("/assets/data/") && normalized.endsWith(".pb")) {
-      ids.push(path.posix.basename(normalized));
+    const index = normalized.indexOf(root);
+    // The id is the path *below* `assets/data`, so the per-school directory
+    // (`uottawa/`, `carleton/`) is part of it.
+    if (index !== -1 && normalized.endsWith(".pb")) {
+      ids.push(normalized.slice(index + root.length));
     }
   }
   return ids;

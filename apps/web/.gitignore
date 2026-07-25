@@ -1,2 +1,2 @@
-src/assets/data
+src/assets/data/**/*.pb
 .tanstack

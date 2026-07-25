@@ -1,3 +1,5 @@
+import { peekSchoolFromBase64, SCHOOLS } from "@uoplan/core";
+
 /**
  * Share-link landing page: a tiny HTML document that carries Open Graph / Twitter
  * card metadata (so the schedule preview unfurls in chats) and then immediately
@@ -6,7 +8,12 @@
 export function buildShareHtml(stateBase64url: string, schedulePayload?: string | null): string {
   const base64 = stateBase64url.replaceAll("-", "+").replaceAll("_", "/");
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-  const appUrl = `/schedule/?s=${encodeURIComponent(padded)}`;
+  // The state blob names its own school, so the redirect lands on that school's
+  // path prefix. uOttawa's slug is empty, keeping every pre-existing share link
+  // pointing at exactly the same `/schedule/` URL as before.
+  const school = SCHOOLS[peekSchoolFromBase64(stateBase64url)];
+  const prefix = school.pathSlug === "" ? "" : `/${school.pathSlug}`;
+  const appUrl = `${prefix}/schedule/?s=${encodeURIComponent(padded)}`;
   // The `p` payload (courses + sections of the already-generated schedule) lets
   // the OG-image worker render without re-running schedule generation. It is
   // only forwarded to the OG image; the redirect above uses the primary state.

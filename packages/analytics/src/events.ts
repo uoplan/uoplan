@@ -146,6 +146,7 @@ export interface AnalyticsEventMap {
   home_banner_cta_clicked: { banner: string };
   home_banner_dismissed: { banner: string };
   locale_changed: { locale: AnalyticsLocale };
+  school_changed: { school: string };
   onboarding_completed: Record<string, never>;
   analytics_opted_out: Record<string, never>;
   analytics_opted_in: Record<string, never>;

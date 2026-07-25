@@ -5,6 +5,7 @@ export * from "./generationDiagnostics";
 export * from "./optimizationPriorities";
 export * from "./compareSelection";
 export * from "./dataTypes";
+export * from "./school";
 export * from "./scheduleFilters";
 export * from "./courseFilters";
 export * from "./professorIdentity";

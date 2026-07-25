@@ -135,6 +135,31 @@ describe("buildBasicRequest", () => {
     expect(req.professorRatings).toEqual({ "Jane Doe": 4.5 });
   });
 
+  it("forwards the selected school's credit config to the engine", () => {
+    const req = buildBasicRequest(
+      basicInput({ school: "carleton" } as Partial<BasicRequestInput>),
+      fakeCache([]),
+    );
+    expect(
+      (req as { creditConfig?: { typicalCourseCredits?: number; defaultCourseCredits?: number } })
+        .creditConfig,
+    ).toEqual({
+      typicalCourseCredits: 0.5,
+      defaultCourseCredits: 0.5,
+    });
+  });
+
+  it("defaults the engine credit config to uOttawa when no school is supplied", () => {
+    const req = buildBasicRequest(basicInput(), fakeCache([]));
+    expect(
+      (req as { creditConfig?: { typicalCourseCredits?: number; defaultCourseCredits?: number } })
+        .creditConfig,
+    ).toEqual({
+      typicalCourseCredits: 3,
+      defaultCourseCredits: 3,
+    });
+  });
+
   it("omits professor ratings when the prefer-higher-rating preference is off", () => {
     const req = buildBasicRequest(
       basicInput({

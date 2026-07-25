@@ -1,6 +1,6 @@
 ## uoplan.party
 
-[![Latest term in data](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fuoplan%2Fuoplan%2Fmain%2Fapps%2Fscraper%2Fdata%2Fterms.json&query=%24.terms%5B-1%3A%5D.name&label=data&color=2ea44f)](apps/scraper/data/terms.json)
+[![Latest term in data](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fuoplan%2Fuoplan%2Fmain%2Fapps%2Fscraper%2Fdata%2Fuottawa%2Fterms.json&query=%24.terms%5B-1%3A%5D.name&label=data&color=2ea44f)](apps/scraper/data/uottawa/terms.json)
 
 `uoplan.party` is a fast, no-nonsense course planner for uOttawa that turns degree requirements into a real weekly timetable.
 
@@ -33,4 +33,4 @@ The Cloudflare Worker does not need the key at runtime: the web key is baked int
 
 ### Grade data
 
-Historical grade data in this repository (for example `apps/scraper/data/grades.json` and data derived from it) was obtained through an access to information request under Ontario's _Freedom of Information and Protection of Privacy Act_.
+Historical grade data in this repository (for example `apps/scraper/data/uottawa/grades.json` and data derived from it) was obtained through an access to information request under Ontario's _Freedom of Information and Protection of Privacy Act_.

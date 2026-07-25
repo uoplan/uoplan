@@ -12,14 +12,16 @@
  *   parse    Stage 2: parse the cache into data/feedback/feedback.<termId>.json.
  *   scrape   fetch then parse (default).
  *
- * Flags: --term <id> | --terms <a,b,c> (default: all), --force, --stats,
- *        --max-reports <n>.
+ * Flags: --school <id>, --term <id> | --terms <a,b,c> (default: all), --force,
+ *        --stats, --max-reports <n>.
  */
 
 import { loginInteractive, sessionIsValid } from "../feedback/auth.ts";
 import { runFetch } from "../feedback/fetch.ts";
 import { deleteSession, loadSession } from "../feedback/keychain.ts";
 import { runParse } from "../feedback/parse.ts";
+import { parseSchoolArg, stripSchoolArgs } from "../shared/cliSchool.ts";
+import { assertSchoolFeature } from "../shared/schoolFeatures.ts";
 
 interface CliArgs {
   terms?: string[];
@@ -97,8 +99,16 @@ async function cmdLogout(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const cmd = process.argv[2];
-  const args = parseArgs(process.argv.slice(3));
+  const rawArgs = process.argv.slice(2);
+  const school = parseSchoolArg(rawArgs);
+  assertSchoolFeature(
+    school,
+    "feedback",
+    "Carleton has no uOttawa S-Report feedback source; feedback scraping is uOttawa-only.",
+  );
+  const cliArgs = stripSchoolArgs(rawArgs);
+  const cmd = cliArgs[0];
+  const args = parseArgs(cliArgs.slice(1));
 
   switch (cmd) {
     case "login":
@@ -114,18 +124,18 @@ async function main(): Promise<void> {
       await runFetch(args);
       break;
     case "parse":
-      await runParse(args);
+      await runParse(args, school);
       break;
     case undefined:
     case "scrape":
       await runFetch(args);
-      await runParse(args);
+      await runParse(args, school);
       break;
     default:
       console.error(`Unknown command: ${cmd}`);
       console.error(
         "Usage: scrape:feedback <login|whoami|logout|fetch|parse|scrape> " +
-          "[--term <id> | --terms <a,b>] [--force] [--stats] [--max-reports <n>] " +
+          "[--school <id>] [--term <id> | --terms <a,b>] [--force] [--stats] [--max-reports <n>] " +
           "[--concurrency <n>] [--report-concurrency <n>]",
       );
       process.exitCode = 1;

@@ -1,8 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import type { SchoolId } from "@uoplan/domain/school";
 import type * as FeedbackProto from "@uoplan/proto/feedback";
 import { optionsPath } from "../feedback/cache.ts";
-import { FEEDBACK_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import { feedbackDataDir, scraperDataDir } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
 import type { ProfessorResolver } from "../professors/buildRegistry.ts";
 
@@ -114,22 +115,24 @@ function feedbackJsonFiles(entries: string[]): string[] {
  * Returns `null` when no feedback datasets are present (so callers can skip).
  */
 export async function buildFeedbackData(
+  school: SchoolId,
   resolver?: ProfessorResolver,
 ): Promise<FeedbackProto.FeedbackData | null> {
-  const entries = await fs.readdir(FEEDBACK_DATA_DIR).catch(() => [] as string[]);
+  const feedbackDir = feedbackDataDir(school);
+  const entries = await fs.readdir(feedbackDir).catch(() => [] as string[]);
   const files = feedbackJsonFiles(entries);
   if (files.length === 0) return null;
 
   const terms: Array<{ termId: number; courses: JsonCourse[] }> = [];
   for (const file of files) {
     const termId = Number.parseInt(file.match(/\d+/)![0], 10);
-    const courses = await readJson<JsonCourse[]>(path.join(FEEDBACK_DATA_DIR, file));
+    const courses = await readJson<JsonCourse[]>(path.join(feedbackDir, file));
     terms.push({ termId, courses });
   }
 
   // Per-question ordinal option labels (best-first), produced by the parse stage
   // (HTML tables / OCR'd charts) and stored once per question in this sidecar.
-  const optionLabelsByText = await readJson<Record<string, string[]>>(optionsPath()).catch(
+  const optionLabelsByText = await readJson<Record<string, string[]>>(optionsPath(school)).catch(
     (): Record<string, string[]> => ({}),
   );
 
@@ -177,7 +180,7 @@ export async function buildFeedbackData(
   // and are addressed by `indicesCourseCount + extraIndex`.
   const normalizeCode = (value: string): string => value.trim().replaceAll(/\s+/g, " ");
   const indices = await readJson<{ courses?: string[] }>(
-    path.join(SCRAPER_DATA_DIR, "indices.json"),
+    path.join(scraperDataDir(school), "indices.json"),
   );
   const indicesCourses = indices.courses ?? [];
   const indicesCourseCount = indicesCourses.length;

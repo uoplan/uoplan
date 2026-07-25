@@ -6,11 +6,13 @@ import {
   encodeStateToBase64,
   peekHasPersonalized,
   peekHasPersonalizedFromBase64,
+  peekSchool,
+  peekSchoolFromBase64,
   peekTermAndYear,
   peekTermAndYearFromBase64,
   urlToSlug,
 } from "./stateEncode";
-import type { CatalogueLike, EncodeInput } from "./stateEncode";
+import type { CatalogueLike, DecodedState, EncodeInput } from "./stateEncode";
 import type { Indices, Program } from "@uoplan/domain/dataTypes";
 import {
   defaultOptimizationPriorities,
@@ -508,5 +510,44 @@ describe("encodeStateToBase64 / decodeStateFromBase64", () => {
   it("returns error for invalid base64 string", () => {
     const result = decodeStateFromBase64("not-valid-base64!!!", catalogue, indices);
     expect("error" in result).toBe(true);
+  });
+});
+
+// ── School ───────────────────────────────────────────────────────────────────
+
+describe("school", () => {
+  it("defaults to uOttawa when the input omits a school", () => {
+    const bytes = encodeState(makeInput(), catalogue, indices)!;
+    expect(peekSchool(bytes)).toBe("uottawa");
+  });
+
+  it("adds zero bytes for uOttawa, so pre-multi-school payloads are unchanged", () => {
+    // uOttawa's wire id is 0 and proto3 skips zero-valued scalars, so the
+    // encoded bytes must be byte-identical with and without an explicit school.
+    const implicit = encodeState(makeInput(), catalogue, indices)!;
+    const explicit = encodeState(makeInput({ school: "uottawa" }), catalogue, indices)!;
+    expect(Array.from(explicit)).toEqual(Array.from(implicit));
+  });
+
+  it("round-trips Carleton", () => {
+    const bytes = encodeState(makeInput({ school: "carleton" }), catalogue, indices)!;
+    expect(peekSchool(bytes)).toBe("carleton");
+    expect(
+      peekSchoolFromBase64(
+        encodeStateToBase64(makeInput({ school: "carleton" }), catalogue, indices)!,
+      ),
+    ).toBe("carleton");
+  });
+
+  it("still decodes every other field when a school is set", () => {
+    const bytes = encodeState(makeInput({ school: "carleton" }), catalogue, indices)!;
+    const decoded = decodeState(bytes, catalogue, indices);
+    expect("error" in decoded).toBe(false);
+    expect((decoded as DecodedState).selectedTermId).toBe("202509");
+  });
+
+  it("falls back to uOttawa for garbage and for unknown wire ids", () => {
+    expect(peekSchool(new Uint8Array([1, 2, 3, 4, 5]))).toBe("uottawa");
+    expect(peekSchoolFromBase64("not-base64!!")).toBe("uottawa");
   });
 });

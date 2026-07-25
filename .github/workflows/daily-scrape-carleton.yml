@@ -1,0 +1,160 @@
+name: Daily Carleton scrape
+
+# Carleton's sources are much cheaper to scrape than uOttawa's: the CourseLeaf
+# calendar is static and CDN-backed (every archived year in ~2 minutes with the
+# built-in request pool) and Banner exposes all live terms in ~40 seconds. So
+# unlike `daily-scrape.yml`, which fans out one runner per term, this runs as a
+# single job. Splitting it would cost more in runner startup than it saves.
+
+on:
+  schedule:
+    # 05:30 UTC ≈ 00:30 America/Toronto (standard) / 01:30 (DST). Offset from
+    # the uOttawa scrape at 05:00 so the two don't contend for the `data`
+    # branch, which both push to.
+    - cron: "30 5 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Re-scrape every archived calendar year, not just the current one."
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  # Shared with the uOttawa scrape: both jobs push to the `data` branch, and
+  # serialising them avoids a push race. Queue rather than cancel so a run is
+  # never silently dropped.
+  group: data-branch-scrape
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Clear scraper caches (no cache mode)
+        run: rm -rf .cache
+
+      - name: Sync terms from Carleton Banner
+        run: pnpm --filter scraper check:terms -- --school=carleton
+
+      # Archived calendar years are immutable, so the scraper skips any year
+      # whose JSON already exists; only the live year is re-scraped. `--force`
+      # re-walks all ~23 years, which a manual dispatch can request.
+      - name: Scrape catalogue
+        run: pnpm --filter scraper scrape:catalogue -- --school=carleton ${{ inputs.force && '--force' || '' }}
+
+      - name: Scrape schedules
+        run: pnpm --filter scraper scrape:schedules -- --school=carleton
+
+      - name: Scrape disciplines
+        run: pnpm --filter scraper scrape:disciplines -- --school=carleton
+
+      - name: Scrape important dates
+        run: pnpm --filter scraper scrape:important-dates -- --school=carleton
+
+      - name: Scrape RateMyProfessors
+        run: pnpm --filter scraper scrape:ratemyprofessors -- --school=carleton
+
+      - name: Build professor registry
+        run: pnpm --filter scraper build:professors -- --school=carleton
+
+      - name: Sanity-check the scraped data
+        run: node scripts/check-scraped-data.ts --school=carleton
+
+      - name: Upload scraped data
+        uses: actions/upload-artifact@v4
+        with:
+          name: carleton-data
+          path: apps/scraper/data/carleton
+          if-no-files-found: error
+
+  push:
+    needs: scrape
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout data branch
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          fetch-depth: 0
+
+      - name: Download scraped data
+        uses: actions/download-artifact@v4
+        with:
+          name: carleton-data
+          path: apps/scraper/data/carleton
+
+      - name: Show data diff
+        run: |
+          echo "::group::Carleton data diff"
+          git --no-pager diff --stat -- apps/scraper/data/carleton || true
+          git status --porcelain -- apps/scraper/data/carleton || true
+          echo "::endgroup::"
+
+      - name: Check for data changes
+        id: check_changes
+        run: |
+          CHANGED=$(git status --porcelain -- apps/scraper/data/carleton | wc -l)
+          if [ "$CHANGED" -gt 0 ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push updated data
+        if: steps.check_changes.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # `data` may advance while the scrape runs — rebase onto the latest.
+          git stash push -u -m "carleton-scrape pre-sync" -- apps/scraper/data/carleton/
+          if ! git pull --rebase origin data; then
+            git stash pop
+            exit 1
+          fi
+          git stash pop
+
+          git add apps/scraper/data/carleton
+
+          BOT_EMAIL="github-actions[bot]@users.noreply.github.com"
+          LAST_AUTHOR_EMAIL=$(git log -1 --format='%ae')
+          LAST_SUBJECT=$(git log -1 --format='%s')
+
+          # Amend only our own previous Carleton commit, so we never rewrite the
+          # uOttawa scrape's commit (both bots push to this branch).
+          if [ "$LAST_AUTHOR_EMAIL" = "$BOT_EMAIL" ] && [ "$LAST_SUBJECT" = "chore: update Carleton scrape data" ]; then
+            git commit --amend --no-edit
+            git push --force-with-lease origin HEAD:data
+          else
+            git commit -m "chore: update Carleton scrape data"
+            git push origin HEAD:data
+          fi

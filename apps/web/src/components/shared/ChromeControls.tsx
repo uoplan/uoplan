@@ -7,6 +7,7 @@ import { AnimatePresence, m } from "framer-motion";
 import { tr, useTr } from "../../i18n";
 import type { AppLocale } from "../../i18n";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { SchoolSwitcher } from "./SchoolSwitcher";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { applyPillHover, pillButtonStyle, pillIconStyle, resetPillHover } from "./pillButtonStyle";
 
@@ -46,6 +47,7 @@ export function ChromeControls({ onLangSwitch }: ChromeControlsProps) {
             <IconUserCircle size={16} style={pillIconStyle} />
           </Link>
         </Tooltip>
+        <SchoolSwitcher />
         <ThemeSwitcher />
         <LanguageSwitcher onSwitch={onLangSwitch} />
       </Group>
@@ -94,6 +96,7 @@ export function ChromeControls({ onLangSwitch }: ChromeControlsProps) {
                 gap: 8,
               }}
             >
+              <SchoolSwitcher />
               <ThemeSwitcher />
               <LanguageSwitcher onSwitch={onLangSwitch} />
             </m.div>

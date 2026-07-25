@@ -1,6 +1,6 @@
 /**
  * Enumerate every course code present in the committed catalogue datasets
- * (`apps/scraper/data/catalogue/catalogue.<year>.json`), unioned across all
+ * (`apps/scraper/data/<school>/catalogue/catalogue.<year>.json`), unioned across all
  * years. The grades scraper emits an entry for every catalogue code, mirroring
  * the existing `grades.json` (codes with no grade data get an empty
  * `professors` array).
@@ -8,15 +8,17 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import type { SchoolId } from "@uoplan/domain/school";
 import { readJson } from "../shared/json.ts";
-import { CATALOGUE_DATA_DIR } from "../shared/paths.ts";
+import { catalogueDataDir } from "../shared/paths.ts";
 import { normalizeCode } from "./distribution.ts";
 
 interface CatalogueFile {
   courses?: { code?: string }[];
 }
 
-export async function readCatalogueCodes(dir: string = CATALOGUE_DATA_DIR): Promise<Set<string>> {
+export async function readCatalogueCodes(school: SchoolId): Promise<Set<string>> {
+  const dir = catalogueDataDir(school);
   const codes = new Set<string>();
   let entries: string[];
   try {

@@ -1,0 +1,3367 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" dir="ltr" lang="en-US"><!--<![endif]-->
+<!-- the "no-js" class is for Modernizr. -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Course Search - Carleton University</title>
+<link rel="stylesheet" href="/css/ro/ro_course_search.css" type="text/css" media="screen"/>
+<!--[if lt IE 9]>
+<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+<body>
+<header class="centered">
+<div class="culogo">
+<h2>Registrar's Office</h2>
+</div> <!-- end culogo -->
+<div class="clear"></div>
+</header>
+<div class="banner">
+<h1>Search Results</h1>
+<div class="buttonsarea">
+<ul>
+<li class="redbutton"><a href="https://carleton.ca/registration/" target="_blank">How-To Video</a></li>
+<li class="redbutton"><a href="https://carleton.ca/registration/registration-steps/" target="_blank">User Guide</a></li>
+<li class="redbutton"><a href="http://calendar.carleton.ca/undergrad/" target="_blank">Undergrad Calendar</a></li>
+<li class="redbutton"><a href="http://calendar.carleton.ca/grad/" target="_blank">Graduate Calendar</a></li>
+</ul>
+</div>
+<div class="clear"></div>
+</div>
+<div class="bannerwrap">
+</div>
+<section class="containerfull centered">
+<section class="contentareafull">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/blitzer/jquery-ui.css">
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!-- Hide JavaScript from older browsers
+$(document).ready(function() {
+$("#display_date").change(function () {
+$.ajax({type: "POST",
+                       cache: false,
+                       url: "bwysched.p_time_table_generate",
+                       data: "pidm="+""+"&term_code="+$("#term_code").val()+"&session_id="+$("#session_id").val()+"&schd_start_date="+$("#display_date").val()+"&schd_num_weeks="+$("#num_weeks").val()+"&schd_block="+$("#show_block").val(),
+                       success: function(data){$("#timetable").empty().append(data);}});
+});
+$("#num_weeks").change(function () {
+$.ajax({type: "POST",
+                       cache: false,
+                       url: "bwysched.p_time_table_generate",
+                       data: "pidm="+""+"&term_code="+$("#term_code").val()+"&session_id="+$("#session_id").val()+"&schd_start_date="+$("#display_date").val()+"&schd_num_weeks="+$("#num_weeks").val()+"&schd_block="+$("#show_block").val(),
+                       success: function(data){$("#timetable").empty().append(data);}});
+});
+$("#show_block").change(function () {
+$.ajax({type: "POST",
+                       cache: false,
+                       url: "bwysched.p_time_table_generate",
+                       data: "pidm="+""+"&term_code="+$("#term_code").val()+"&session_id="+$("#session_id").val()+"&schd_start_date="+$("#display_date").val()+"&schd_num_weeks="+$("#num_weeks").val()+"&schd_block="+$("#show_block").val(),
+                       success: function(data){$("#timetable").empty().append(data);}});
+});
+});
+//  End script hiding -->
+</SCRIPT>
+<form action="bwysched.p_list_sections_chk" method="post">
+</td>
+</tr>
+</table>
+<table cellspacing="0" cellpadding="0" border="0" width="900" style="font-size:12px;">
+<tr>
+<td><b>Registration Term:&nbsp</b>Fall 2026 (September-December)<br><br></td>
+</tr>
+<tr>
+<td>
+<ul> <li> Add a course to your <b> draft </b> worksheet by selecting the checkbox next to the course you want, then scroll to the bottom of the page and select <b> “Proceed to Worksheet”. </b> </li> <li> Additional course information (i.e. course description, restrictions and prerequisites) can be viewed by clicking on the <span style="color:blue"> blue </span> CRN, Subject or Course Title. </li> <li>Class locations are subject to change.</li>
+<br><br></td>
+</tr>
+<tr>
+<td>
+<table cellspacing="0" cellpadding="4" border="0" width="883" style="font-size:12px;">
+<tr>
+<td align="center" width="5%"><b>Select</b></td>
+<td align="left" width="10%"><b>Status</b></td>
+<td align="left" width="5%"><b>CRN</b></td>
+<td align="left" width="10%"><b>Subject</b></td>
+<td align="left" width="8%"><b>Section</b></td>
+<td align="left" width="15%"><b>Title</b></td>
+<td align="left" width="6%"><b>Credits</b></td>
+<td align="left" width="9%"><b>Schedule</b></td>
+<td align="left" width="12%"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Restricts?</font></a></b></td>
+<td align="left" width="10%"><b><a href="https://carleton.ca/registration/terminology/" target=_blank><font color="blue">Prereqs?</font></a></b></td>
+<td align="left" width="10%"><b>Instructor</b></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<div width="915" style="height:450px; overflow:auto;">
+<table cellspacing="0" cellpadding="4" border="0" width="883" style="font-size:12px;">
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30830" ID="select_id1" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30830" target="_blank"><font color="blue">30830</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30830" target="_blank"><font color="blue">CHEM 0999</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30830" target="_blank"><font color="blue">CHEM4U</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Non-Term Credit</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="10"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="10"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> Online Scheduled Section (Campus presence is not required) Does not count for university credit. For more info, visit https://sssc.carleton.ca/chem4u A CHEM4U fee of $375 will be applied to your student account. August 24th – August 28th</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="11">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30831" ID="select_id2" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30831" target="_blank"><font color="blue">30831</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30831" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30831" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30831" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Robert Burk</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="11"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 16:35 - 17:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="11"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A1 or A2 or A3 or A4 or A5 or A6 or A7 or G1 <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="11"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for CHEM 1005 (no longer offered), CHEM 1101 and CHEM 1011. Students must also register in a lab and tutorial. Conflicts permitted for tutorial only. Registration initially restricted to students in the Faculty of Science until July 31st. Registration will open to non-Science students on July 31st at 9am.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="12">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30832" ID="select_id3" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30832" target="_blank"><font color="blue">30832</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30832" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30832" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="12"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 18:05 - 20:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="12"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="12"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="13">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="34916" ID="select_id4" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34916" target="_blank"><font color="blue">34916</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34916" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A2</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34916" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="13"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 18:05 - 20:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="13"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="13"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="14">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30833" ID="select_id5" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30833" target="_blank"><font color="blue">30833</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30833" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A3</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30833" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="14"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="14"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="14"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="15">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30834" ID="select_id6" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30834" target="_blank"><font color="blue">30834</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30834" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A4</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30834" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="15"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="15"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="15"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="16">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30835" ID="select_id7" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30835" target="_blank"><font color="blue">30835</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30835" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A5</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30835" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="16"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="16"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="16"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="17">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30836" ID="select_id8" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30836" target="_blank"><font color="blue">30836</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30836" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A6</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30836" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="17"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="17"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="17"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="18">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30837" ID="select_id9" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30837" target="_blank"><font color="blue">30837</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30837" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">A7</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30837" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="18"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="18"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="18"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="19">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30838" ID="select_id10" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30838" target="_blank"><font color="blue">30838</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30838" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">ATU</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30838" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Tutorial</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Robert Burk</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="19"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 15:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="19"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A1 or A2 or A3 or A4 or A5 or A6 or A7 or G1 <b>and</b> CHEM 1001 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="19"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON Time conflicts permitted for tutorial only.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="20">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30839" ID="select_id11" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30839" target="_blank"><font color="blue">30839</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30839" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30839" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30839" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Katherine Marczenko</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="20"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 11:35 - 12:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="20"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 BTU <b>and</b> CHEM 1001 B1 or B2 or B3 or B4 or B5 or B6 or B7 or G2</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="20"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for CHEM 1005 (no longer offered), CHEM 1101 and CHEM 1011. Students must also register in a lab and tutorial. Conflicts permitted for tutorial only. Registration initially restricted to students in the Faculty of Science until July 31st. Registration will open to non-Science students on July 31st at 9am.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="21">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30840" ID="select_id12" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30840" target="_blank"><font color="blue">30840</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30840" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30840" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="21"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 18:05 - 20:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="21"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="21"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="22">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="34917" ID="select_id13" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34917" target="_blank"><font color="blue">34917</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34917" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B2</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34917" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="22"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 18:05 - 20:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="22"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="22"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="23">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30841" ID="select_id14" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30841" target="_blank"><font color="blue">30841</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30841" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B3</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30841" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="23"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="23"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="23"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="24">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30842" ID="select_id15" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30842" target="_blank"><font color="blue">30842</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30842" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B4</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30842" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="24"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="24"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="24"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="25">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30843" ID="select_id16" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30843" target="_blank"><font color="blue">30843</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30843" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B5</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30843" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="25"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="25"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="25"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="26">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30844" ID="select_id17" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30844" target="_blank"><font color="blue">30844</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30844" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B6</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30844" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="26"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="26"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="26"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="27">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30845" ID="select_id18" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30845" target="_blank"><font color="blue">30845</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30845" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">B7</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30845" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="27"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="27"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="27"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="28">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30846" ID="select_id19" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30846" target="_blank"><font color="blue">30846</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30846" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">BTU</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30846" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Tutorial</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Katherine Marczenko</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="28"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 14:35 - 15:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="28"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 B1 or B2 or B3 or B4 or B5 or B6 or B7 or G2</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="28"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON Tutorial for students in Lecture B. Time conflicts permitted for tutorial only.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="29">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30847" ID="select_id20" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30847" target="_blank"><font color="blue">30847</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30847" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">G1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30847" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="29"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="29"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 A <b>and</b> CHEM 1001 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="29"><b>Section Information:</b>&nbsp;Special section for lab exemptions. Please send an override with the date you last took the lab. Exemptions only available for labs taken within one year.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="30">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30848" ID="select_id21" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30848" target="_blank"><font color="blue">30848</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30848" target="_blank"><font color="blue">CHEM 1001</font></a>
+</td>
+<td align="left" width="8%">G2</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30848" target="_blank"><font color="blue">General Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="30"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="30"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1001 B <b>and</b> CHEM 1001 BTU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="30"><b>Section Information:</b>&nbsp;Special section for lab exemptions. Please send an override with the date you last took the lab. Exemptions only available for labs taken within one year.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="31">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30849" ID="select_id22" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30849" target="_blank"><font color="blue">30849</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30849" target="_blank"><font color="blue">CHEM 1003</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30849" target="_blank"><font color="blue">Chem of Food, Health & Drugs</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Farah Hosseinian</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="31"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 11:35 - 14:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="31"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="32">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30850" ID="select_id23" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30850" target="_blank"><font color="blue">30850</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30850" target="_blank"><font color="blue">CHEM 1011</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30850" target="_blank"><font color="blue">Enriched General Chemistry 1</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30850" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Katherine Marczenko</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="32"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="32"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1011 ATU <b>and</b> CHEM 1011 A1 or A6 or A7 or G1</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="32"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. For Chemistry Students or students with a chemistry minor. Precludes additional credit for CHEM 1001, CHEM 1005 (no longer offered), and CHEM 1101. Students must also register in a lab.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="33">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30851" ID="select_id24" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30851" target="_blank"><font color="blue">30851</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30851" target="_blank"><font color="blue">CHEM 1011</font></a>
+</td>
+<td align="left" width="8%">A1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30851" target="_blank"><font color="blue">Enriched General Chemistry 1</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="33"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 18:05 - 20:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="33"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1011 ATU <b>and</b> CHEM 1011 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="33"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="34">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30852" ID="select_id25" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30852" target="_blank"><font color="blue">30852</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30852" target="_blank"><font color="blue">CHEM 1011</font></a>
+</td>
+<td align="left" width="8%">A6</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30852" target="_blank"><font color="blue">Enriched General Chemistry 1</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="34"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="34"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1011 ATU <b>and</b> CHEM 1011 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="34"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="35">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30853" ID="select_id26" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30853" target="_blank"><font color="blue">30853</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30853" target="_blank"><font color="blue">CHEM 1011</font></a>
+</td>
+<td align="left" width="8%">A7</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30853" target="_blank"><font color="blue">Enriched General Chemistry 1</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="35"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="35"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1011 ATU <b>and</b> CHEM 1011 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="35"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="36">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30854" ID="select_id27" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30854" target="_blank"><font color="blue">30854</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30854" target="_blank"><font color="blue">CHEM 1011</font></a>
+</td>
+<td align="left" width="8%">ATU</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30854" target="_blank"><font color="blue">Enriched General Chemistry 1</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Tutorial</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Katherine Marczenko</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="36"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 14:35 - 15:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="36"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1011 A1 or A6 or A7 or G1 <b>and</b> CHEM 1011 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="36"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON Course conflicts permitted for tutorial only.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="37">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30855" ID="select_id28" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30855" target="_blank"><font color="blue">30855</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30855" target="_blank"><font color="blue">CHEM 1011</font></a>
+</td>
+<td align="left" width="8%">G1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30855" target="_blank"><font color="blue">Enriched General Chemistry 1</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Mastaneh Azad</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="37"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="37"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1011 ATU <b>and</b> CHEM 1011 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="37"><b>Section Information:</b>&nbsp;Special section for lab exemptions. Please send an override with the date you last took the lab. Exemptions only available for labs taken within one year.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="38">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30856" ID="select_id29" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30856" target="_blank"><font color="blue">30856</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30856" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30856" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30856" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">David Brock</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="38"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 11:35 - 12:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="38"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 G1 or L1 or L2 or L3 or L4 or L5</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="38"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. For B. Eng. students only. Precludes additional credit for CHEM 1000(no longer offered) CHEM 1001, CHEM 1005 (no longer offered), and CHEM 1011. Students must also register in a lab.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="39">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30857" ID="select_id30" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30857" target="_blank"><font color="blue">30857</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30857" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">B</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30857" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30857" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Edward Lai</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="39"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 14:35 - 15:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="39"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 G1 or L1 or L2 or L3 or L4 or L5</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="39"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. For B. Eng. students only. Precludes additional credit for CHEM 1000 (no longer offered), CHEM 1001, CHEM 1005 (no longer offered) and CHEM 1011. Students must also register in a lab.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="40">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30858" ID="select_id31" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30858" target="_blank"><font color="blue">30858</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30858" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">G1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30858" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30858" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Natalie Mesnic</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="40"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="40"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 A or B</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="40"><b>Section Information:</b>&nbsp;Special section for lab exemptions. Please send an override with the date you last took the lab. Exemptions only available for labs taken within one year.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="41">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30859" ID="select_id32" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30859" target="_blank"><font color="blue">30859</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30859" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">L1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30859" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30859" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Natalie Mesnic</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="41"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="41"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 A or B</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="41"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. In-person labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="42">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30860" ID="select_id33" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30860" target="_blank"><font color="blue">30860</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30860" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">L2</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30860" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30860" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Natalie Mesnic</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="42"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="42"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 A or B</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="42"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. In-person labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="43">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30861" ID="select_id34" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30861" target="_blank"><font color="blue">30861</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30861" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">L3</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30861" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30861" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Natalie Mesnic</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="43"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="43"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 A or B</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="43"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. In-person labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="44">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30862" target="_blank"><font color="blue">30862</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30862" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">L4</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30862" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30862" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Natalie Mesnic</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="44"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="44"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 A or B</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="44"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. In-person labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="45">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30863" ID="select_id36" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30863" target="_blank"><font color="blue">30863</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30863" target="_blank"><font color="blue">CHEM 1101</font></a>
+</td>
+<td align="left" width="8%">L5</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30863" target="_blank"><font color="blue">Chemistry for Engineers</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30863" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Natalie Mesnic</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="45"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="45"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 1101 A or B</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="45"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. In-person labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="46">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30864" ID="select_id37" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30864" target="_blank"><font color="blue">30864</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30864" target="_blank"><font color="blue">CHEM 2103</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30864" target="_blank"><font color="blue">Physical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30864" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Robert Burk</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="46"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 16:35 - 17:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="46"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2103 ATU <b>and</b> CHEM 2103 A1 or A2</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="46"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additonal credit for BIOC 2300.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="47">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30865" ID="select_id38" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30865" target="_blank"><font color="blue">30865</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30865" target="_blank"><font color="blue">CHEM 2103</font></a>
+</td>
+<td align="left" width="8%">A1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30865" target="_blank"><font color="blue">Physical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Xun Sun</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="47"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="47"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2103 A <b>and</b> CHEM 2103 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="47"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 21. Please attend the 1st tutorial for the lab intro.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="48">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30866" ID="select_id39" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30866" target="_blank"><font color="blue">30866</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30866" target="_blank"><font color="blue">CHEM 2103</font></a>
+</td>
+<td align="left" width="8%">A2</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30866" target="_blank"><font color="blue">Physical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Xun Sun</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="48"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="48"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2103 A <b>and</b> CHEM 2103 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="48"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 21. Please attend the 1st tutorial for the lab intro.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="49">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30867" ID="select_id40" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30867" target="_blank"><font color="blue">30867</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30867" target="_blank"><font color="blue">CHEM 2103</font></a>
+</td>
+<td align="left" width="8%">ATU</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30867" target="_blank"><font color="blue">Physical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Tutorial</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Robert Burk</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="49"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 16:35 - 17:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="49"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2103 A <b>and</b> CHEM 2103 A1 or A2</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="49"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="50">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30868" ID="select_id41" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30868" target="_blank"><font color="blue">30868</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30868" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30868" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30868" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">David Brock</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="50"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 11:35 - 12:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="50"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A1 or A2 or A3 or A4 or A5 or A6 or A7 or G1</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="50"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for CHEM 2207.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="51">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30869" ID="select_id42" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30869" target="_blank"><font color="blue">30869</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30869" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30869" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="51"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="51"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="51"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of Sep 14 with a mandatory Check-in lab.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="52">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30870" target="_blank"><font color="blue">30870</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30870" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A2</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30870" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="52"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="52"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="52"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of Sep 14 with a mandatory Check-in lab.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="53">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30871" ID="select_id44" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30871" target="_blank"><font color="blue">30871</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30871" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A3</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30871" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="53"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="53"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="53"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of Sep 14 with a mandatory Check-in lab.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="54">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30872" target="_blank"><font color="blue">30872</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30872" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A4</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30872" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="54"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="54"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="54"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of Sep 14 with a mandatory Check-in lab.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="55">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30873" target="_blank"><font color="blue">30873</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30873" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A5</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30873" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="55"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="55"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="55"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of Sep 14 with a mandatory Check-in lab.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="56">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30874" ID="select_id47" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30874" target="_blank"><font color="blue">30874</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30874" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A6</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30874" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="56"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="56"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="56"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of Sep 14 with a mandatory Check-in lab.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="57">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30875" target="_blank"><font color="blue">30875</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30875" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">A7</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30875" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="57"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="57"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="57"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of Sep 14 with a mandatory Check-in lab.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="58">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30877" ID="select_id49" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30877" target="_blank"><font color="blue">30877</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30877" target="_blank"><font color="blue">CHEM 2203</font></a>
+</td>
+<td align="left" width="8%">G1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30877" target="_blank"><font color="blue">Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Spencer Ng Cheong Chung</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="58"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="58"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2203 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="58"><b>Section Information:</b>&nbsp;Special section for lab exemptions. Please send an override with the date you last took the lab. Exemptions only available for labs taken within one year.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="59">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30878" ID="select_id50" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30878" target="_blank"><font color="blue">30878</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30878" target="_blank"><font color="blue">CHEM 2207</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30878" target="_blank"><font color="blue">Intro: Organic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30878" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">David Brock</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="59"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 11:35 - 12:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="59"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for CHEM 2203.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="60">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30879" ID="select_id51" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30879" target="_blank"><font color="blue">30879</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30879" target="_blank"><font color="blue">CHEM 2302</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30879" target="_blank"><font color="blue">Analytical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30879" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Jeff Smith</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="60"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 14:35 - 15:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="60"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2302 A1 or A3 or A4 or A5 or G1</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="60"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="61">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30880" target="_blank"><font color="blue">30880</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30880" target="_blank"><font color="blue">CHEM 2302</font></a>
+</td>
+<td align="left" width="8%">A1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30880" target="_blank"><font color="blue">Analytical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Graham Galway</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="61"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="61"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2302 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="61"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="62">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30882" target="_blank"><font color="blue">30882</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30882" target="_blank"><font color="blue">CHEM 2302</font></a>
+</td>
+<td align="left" width="8%">A3</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30882" target="_blank"><font color="blue">Analytical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Graham Galway</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="62"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 13:35 - 16:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="62"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2302 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="62"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="63">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30883" ID="select_id54" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30883" target="_blank"><font color="blue">30883</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30883" target="_blank"><font color="blue">CHEM 2302</font></a>
+</td>
+<td align="left" width="8%">A4</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30883" target="_blank"><font color="blue">Analytical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Graham Galway</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="63"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="63"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2302 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="63"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="64">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30884" ID="select_id55" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30884" target="_blank"><font color="blue">30884</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30884" target="_blank"><font color="blue">CHEM 2302</font></a>
+</td>
+<td align="left" width="8%">A5</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30884" target="_blank"><font color="blue">Analytical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Graham Galway</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="64"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="64"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2302 A</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="64"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 14.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="65">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30885" ID="select_id56" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30885" target="_blank"><font color="blue">30885</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30885" target="_blank"><font color="blue">CHEM 2302</font></a>
+</td>
+<td align="left" width="8%">G1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30885" target="_blank"><font color="blue">Analytical Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Graham Galway</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="65"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="65"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 2302 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="65"><b>Section Information:</b>&nbsp;Special section for lab exemptions. Please send an override with the date you last took the lab. Exemptions only available for labs taken within one year. Minimum previous lab grade of 65% required.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="66">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30886" ID="select_id57" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30886" target="_blank"><font color="blue">30886</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30886" target="_blank"><font color="blue">CHEM 2400</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30886" target="_blank"><font color="blue">Independent Research I</font></a>
+</td>
+<td align="left" width="6%">.25</td>
+<td align="left" width="9%">Research Project</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="66"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="66"><b>Section Information:</b>&nbsp;Independent Research project. Requires Departmental permission.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="67">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30887" ID="select_id58" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30887" target="_blank"><font color="blue">30887</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30887" target="_blank"><font color="blue">CHEM 3101</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30887" target="_blank"><font color="blue">Quantum Chemistry</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30887" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Christopher Rowley</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="67"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 13:05 - 14:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="67"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="68">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30888" ID="select_id59" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30888" target="_blank"><font color="blue">30888</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30888" target="_blank"><font color="blue">CHEM 3201</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30888" target="_blank"><font color="blue">Structure Elucidation</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30888" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">David Sabatino</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="68"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 14:35 - 15:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="68"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3201 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="68"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="69">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30889" ID="select_id60" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30889" target="_blank"><font color="blue">30889</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30889" target="_blank"><font color="blue">CHEM 3201</font></a>
+</td>
+<td align="left" width="8%">ATU</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30889" target="_blank"><font color="blue">Structure Elucidation</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Tutorial</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">David Sabatino</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="69"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Fri <b>Time:</b> 16:35 - 17:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="69"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3201 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="69"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Registration time conflicts are permitted for tutorial only.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="70">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30890" ID="select_id61" />
+</td>
+<td align="left" width="10%">Waitlist Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30890" target="_blank"><font color="blue">30890</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30890" target="_blank"><font color="blue">CHEM 3305</font></a>
+</td>
+<td align="left" width="8%">B</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30890" target="_blank"><font color="blue">Adv Analytical Chem Laboratory</font></a>
+</td>
+<td align="left" width="6%">.25</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30890" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Edward Lai</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="70"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue <b>Time:</b> 08:35 - 12:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="70"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Labs start the week of September 11.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="71">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30891" ID="select_id62" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30891" target="_blank"><font color="blue">30891</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30891" target="_blank"><font color="blue">CHEM 3400</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30891" target="_blank"><font color="blue">Independent Research II</font></a>
+</td>
+<td align="left" width="6%">.25</td>
+<td align="left" width="9%">Research Project</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="71"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="71"><b>Section Information:</b>&nbsp;Independent Research project. Requires Departmental permission.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="72">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30892" ID="select_id63" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30892" target="_blank"><font color="blue">30892</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30892" target="_blank"><font color="blue">CHEM 3503</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30892" target="_blank"><font color="blue">Inorganic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30892" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="72"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 16:05 - 17:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="72"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3503 ATU <b>and</b> CHEM 3503 A1 or A2</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="72"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for CHEM 3507.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="73">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30893" target="_blank"><font color="blue">30893</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30893" target="_blank"><font color="blue">CHEM 3503</font></a>
+</td>
+<td align="left" width="8%">A1</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30893" target="_blank"><font color="blue">Inorganic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Xun Sun</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="73"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 08:35 - 12:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="73"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3503 A <b>and</b> CHEM 3503 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="73"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Lab will start the week of September 21. Please attend the 1st tutorial for the lab intro.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="74">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30894" ID="select_id65" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30894" target="_blank"><font color="blue">30894</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30894" target="_blank"><font color="blue">CHEM 3503</font></a>
+</td>
+<td align="left" width="8%">A2</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30894" target="_blank"><font color="blue">Inorganic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Laboratory</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Xun Sun</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="74"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon <b>Time:</b> 08:35 - 12:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="74"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3503 A <b>and</b> CHEM 3503 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="74"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Lab will start the week of September 21. Please attend the 1st tutorial for the lab intro.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="75">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30895" ID="select_id66" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30895" target="_blank"><font color="blue">30895</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30895" target="_blank"><font color="blue">CHEM 3503</font></a>
+</td>
+<td align="left" width="8%">ATU</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30895" target="_blank"><font color="blue">Inorganic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Tutorial</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="75"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 16:35 - 17:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="75"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3503 A <b>and</b> CHEM 3503 A1 or A2</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="75"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Registration time conflicts are permitted for tutorial only.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="76">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30896" ID="select_id67" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30896" target="_blank"><font color="blue">30896</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30896" target="_blank"><font color="blue">CHEM 3507</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30896" target="_blank"><font color="blue">General Inorganic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30896" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="76"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 16:05 - 17:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="76"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3507 ATU</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="76"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for CHEM 3503.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="77">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30897" ID="select_id68" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30897" target="_blank"><font color="blue">30897</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30897" target="_blank"><font color="blue">CHEM 3507</font></a>
+</td>
+<td align="left" width="8%">ATU</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30897" target="_blank"><font color="blue">General Inorganic Chemistry I</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Tutorial</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="77"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed <b>Time:</b> 16:35 - 17:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="77"><b><a href="https://carleton.ca/registration/terminology/" target="_blank"><font color="blue">Also Register in:</font></a></b>&nbsp;CHEM 3507 A</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="77"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Registration time conflicts are permitted for tutorial only.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="78">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30898" ID="select_id69" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30898" target="_blank"><font color="blue">30898</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30898" target="_blank"><font color="blue">CHEM 3800</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30898" target="_blank"><font color="blue">Environmental Pollutants</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30898" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Amy Rand</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="78"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed Fri <b>Time:</b> 08:35 - 09:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="78"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="79">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30900" ID="select_id70" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30900" target="_blank"><font color="blue">30900</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30900" target="_blank"><font color="blue">CHEM 4103</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30900" target="_blank"><font color="blue">Surface Chem & Nanostructures</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30900" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="79"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 14:35 - 15:55</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="79"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="80">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30901" ID="select_id71" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30901" target="_blank"><font color="blue">30901</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30901" target="_blank"><font color="blue">CHEM 4207</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30901" target="_blank"><font color="blue">Bio-Organic Chemistry</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30901" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">David Sabatino</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="80"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 16:05 - 17:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="80"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="81">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30902" ID="select_id72" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30902" target="_blank"><font color="blue">30902</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30902" target="_blank"><font color="blue">CHEM 4401</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30902" target="_blank"><font color="blue">Physical Biochem</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30902" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">David McMullin</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="81"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed Fri <b>Time:</b> 10:05 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="81"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for BIOC 2200, BIOL 2200, BIOC 3101, and CHEM 3401 (no longer offered).</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="82">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30903" ID="select_id73" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30903" target="_blank"><font color="blue">30903</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30903" target="_blank"><font color="blue">CHEM 4907</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30903" target="_blank"><font color="blue">Hons Essay Rsrch Proposal</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Research Essay</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30903" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="82"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="82"><b>Section Information:</b>&nbsp;Precludes additional credit for CHEM 4908, FOOD 4907 and FOOD 4908. First half of two term course.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="83">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30905" ID="select_id74" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30905" target="_blank"><font color="blue">30905</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30905" target="_blank"><font color="blue">CHEM 4908</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30905" target="_blank"><font color="blue">Research Project and Seminar</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Research Essay</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30905" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="83"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="83"><b>Section Information:</b>&nbsp;Precludes additional credit for CHEM 4907, FOOD 4907 and FOOD 4908. First half of two term course.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="84">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30907" ID="select_id75" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30907" target="_blank"><font color="blue">30907</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30907" target="_blank"><font color="blue">CHEM 5010</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30907" target="_blank"><font color="blue">Bio-Organic Chemistry</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">David Sabatino</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="84"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 16:05 - 17:25</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="84"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="85">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30908" ID="select_id76" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30908" target="_blank"><font color="blue">30908</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30908" target="_blank"><font color="blue">CHEM 5012</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30908" target="_blank"><font color="blue">Data Applications in Biochem</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Workshop</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Yaxi Hu</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="85"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Thu <b>Time:</b> 08:35 - 11:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="85"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="86">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30909" ID="select_id77" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30909" target="_blank"><font color="blue">30909</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30909" target="_blank"><font color="blue">CHEM 5108</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30909" target="_blank"><font color="blue">Surface Chemistry & Nanostruct</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30909" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Sean Barry</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="86"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Mon Wed <b>Time:</b> 14:35 - 15:55</td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="86"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="87">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+&nbsp;
+</td>
+<td align="left" width="10%"><font color="red">Full, No Waitlist</font></td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30910" target="_blank"><font color="blue">30910</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30910" target="_blank"><font color="blue">CHEM 5708</font></a>
+</td>
+<td align="left" width="8%">F</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30910" target="_blank"><font color="blue">Principles of Toxicology</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Lecture</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30910" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Daniel Gregoire</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="87"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Wed Fri <b>Time:</b> 13:05 - 14:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="87"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON.</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="88">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30911" ID="select_id79" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30911" target="_blank"><font color="blue">30911</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30911" target="_blank"><font color="blue">CHEM 5802</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30911" target="_blank"><font color="blue">Seminar II</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Seminar</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30911" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="88"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="88"><b>Section Information:</b>&nbsp;Graduate Seminar</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="89">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30912" ID="select_id80" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30912" target="_blank"><font color="blue">30912</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30912" target="_blank"><font color="blue">CHEM 5804</font></a>
+</td>
+<td align="left" width="8%">A</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30912" target="_blank"><font color="blue">Modern Scientific Communicatio</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Seminar</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Daniel Gregoire</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="89"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> Tue Thu <b>Time:</b> 13:05 - 14:25</td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="89"><b>Section Information:</b>&nbsp;<a href="https://carleton.ca/registration/?p=361"> Section Type -</a> IN-PERSON. Precludes additional credit for CHEM 5801 (no longer offered), FOOD 5801 (no longer offered)</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="90">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="34693" ID="select_id81" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34693" target="_blank"><font color="blue">34693</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34693" target="_blank"><font color="blue">CHEM 5805</font></a>
+</td>
+<td align="left" width="8%">O</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34693" target="_blank"><font color="blue">Seminar in Toxicology</font></a>
+</td>
+<td align="left" width="6%">.5</td>
+<td align="left" width="9%">Seminar</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">Jules Blais</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="90"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="90"><b>Section Information:</b>&nbsp;University of Ottawa - Dr. Jules Blais Wednesday 8:30 -11:30 Seminar in Toxicology</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="91">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="34957" ID="select_id82" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34957" target="_blank"><font color="blue">34957</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34957" target="_blank"><font color="blue">CHEM 5903</font></a>
+</td>
+<td align="left" width="8%">O</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=34957" target="_blank"><font color="blue">Adv Topics in Phys/Theo Chem</font></a>
+</td>
+<td align="left" width="6%">.25</td>
+<td align="left" width="9%">Seminar</td>
+<td align="left" width="12%">No</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="91"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="91"><b>Section Information:</b>&nbsp;Offered at the University of Ottawa (CHM 8309)</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="92">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30913" ID="select_id83" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30913" target="_blank"><font color="blue">30913</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30913" target="_blank"><font color="blue">CHEM 5909</font></a>
+</td>
+<td align="left" width="8%">F</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30913" target="_blank"><font color="blue">M.Sc. Thesis</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">Masters Thesis</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30913" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">&nbsp;</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="92"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td>&nbsp;</td>
+<td colspan="92"><b>Section Information:</b>&nbsp;Unscheduled</td>
+</tr>
+<tr bgcolor="#C0C0C0">
+<td colspan="93">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td align="center" width="5%">
+<input type="checkbox" name="select_action" value="30914" ID="select_id84" />
+</td>
+<td align="left" width="10%">Open</td>
+<td align="left" width="5%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30914" target="_blank"><font color="blue">30914</font></a>
+</td>
+<td align="left" width="10%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30914" target="_blank"><font color="blue">CHEM 6909</font></a>
+</td>
+<td align="left" width="8%">F</td>
+<td align="left" width="15%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30914" target="_blank"><font color="blue">Ph.D. Thesis</font></a>
+</td>
+<td align="left" width="6%">0</td>
+<td align="left" width="9%">PhD Thesis</td>
+<td align="left" width="12%" style="word-wrap: break-word">
+<a href="bwysched.p_display_course?wsea_code=EXT&term_code=202630&disp=26061541&crn=30914" target="_blank"><font color="blue">Yes</font></a>
+</td>
+<td align="left" width="10%">No</td>
+<td align="left" width="10%">&nbsp;</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="93"> <b>Meeting Date:</b> Sep 09, 2026 to Dec 11, 2026 <b>Days:</b> <b>Time:</b></td>
+</tr>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td>&nbsp;</td>
+<td colspan="93"><b>Section Information:</b>&nbsp;Unscheduled</td>
+</tr>
+<tr bgcolor="#DCDCDC">
+<td colspan="94">&nbsp;</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<input type="hidden" name="wsea_code" value="EXT" />
+<input type="hidden" name="term_code" value="202630" id=term_code />
+<input type="hidden" name="session_id" value="26061541" id=session_id />
+<input type="hidden" name="ws_numb" value="" />
+<input type="hidden" name="select_action" value="dummy" />
+<tr>
+<td><br><br>
+<input type="submit" value="Proceed to Worksheet" title="View my planned courses on my worksheet" />
+<input type="submit" name="search_selected" value="Return to Search" title="Go back to Search Course page" />
+<input type="submit" name="term_button" value="Change Term" title="Click to make a new term selection" />
+</td>
+</tr>
+</form>
+<tr>
+<td><br><br></td>
+</tr>
+<tr>
+<td>
+<table cellspacing="0" cellpadding="4" border="0" width="100%" style="font-size:12px;">
+<form action="" method="post">
+<tr>
+<td align="center" colspan="2" style="background-color:#000000; color:#FFFFFF;"><b>DRAFT TIMETABLE</b></td>
+</tr>
+<tr>
+<td style="border:solid 1px #D3D3D3;">
+<ul>
+<li>Classes begin on 09-SEP-2026 and end on 11-DEC-2026</li>
+<li>Courses that have scheduling <font color=#A60000>conflicts</font> will appear in red. University Regulations prohibit time conflicts</li><li>Allowed scheduling conflicts with TV or VOD (online) courses will appear in green.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td bgcolor="#B9B9B9" style="border:solid 1px #D3D3D3;" align="center">
+For the week starting:&nbsp;
+<select name="display_date" id="display_date">
+<option value="06-SEP-2026" selected>September 06, 2026</option>
+<option value="13-SEP-2026" >September 13, 2026</option>
+<option value="20-SEP-2026" >September 20, 2026</option>
+<option value="27-SEP-2026" >September 27, 2026</option>
+<option value="04-OCT-2026" >October   04, 2026</option>
+<option value="11-OCT-2026" >October   11, 2026</option>
+<option value="18-OCT-2026" >October   18, 2026</option>
+<option value="25-OCT-2026" >October   25, 2026</option>
+<option value="01-NOV-2026" >November  01, 2026</option>
+<option value="08-NOV-2026" >November  08, 2026</option>
+<option value="15-NOV-2026" >November  15, 2026</option>
+<option value="22-NOV-2026" >November  22, 2026</option>
+<option value="29-NOV-2026" >November  29, 2026</option>
+<option value="06-DEC-2026" >December  06, 2026</option>
+<option value="13-DEC-2026" >December  13, 2026</option>
+<option value="20-DEC-2026" >December  20, 2026</option>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;Number of Weeks:&nbsp;
+<select name="num_weeks" id="num_weeks" style="width:50px">
+<option value="0" >0</option>
+<option value="1" selected>1</option>
+<option value="2" >2</option>
+<option value="3" >3</option>
+</select>
+<input type="hidden" name="show_block" value="N" />
+</td>
+<tr>
+<tr>
+<td style="border:solid 1px #D3D3D3;">
+<div id="timetable">
+<div class="infotextdiv"><table  CLASS="infotexttable" SUMMARY="This layout table contains information that may be helpful in understanding the content and functionality of this page.  It could be a brief set of instructions, a description of error messages, or other special information." role="complementary"><tr><td CLASS="indefault"><img src="/wtlgifs/web_caution_cascade.png" alt="Caution" CLASS="headerImg" TITLE="Caution"  NAME="web_caution" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=12 WIDTH=13 /></td><td CLASS="indefault"><SPAN class="infotext"> Descriptions of course delivery types listed in the Section Information are available on the <a href=https://carleton.ca/registration/course-delivery-types/" target="_blank"> Registrar’s Office website. </a> </p>
+
+<p>All times are Eastern Standard Time (EST), see individual course information for time commitment requirements.</p>
+
+<p>Please be advised that on June 18th, 2026 classes follow a Monday schedule. On August 14th, 2026 classes follow a Monday schedule. On December 11th, 2026 classes follow a Monday schedule.</p></SPAN></td></tr></table><p></DIV>
+<table width="100%" align="center" style="font-size:12px;">
+<tr>
+<td>
+<table width="90%" align="center" border="0" cellspacing="0" cellpadding="0" style="font-size:12px;">
+<tr><td align="left" colspan="8"><br><b>Week Starting:&nbsp;September 06, 2026</b></td></tr>
+<tr>
+<td style="background-color:#CCCCCC; font-size:12px;" width="9%"></td>
+<td align="center" style="background-color:#CCCCCC; font-size:12px;" width="13%">Sunday</td>
+<td align="center" style="background-color:#CCCCCC; font-size:12px;" width="13%"><font colour="blue">Labour&nbsp;Day</font></td>
+<td align="center" style="background-color:#CCCCCC; font-size:12px;" width="13%">Tuesday</td>
+<td align="center" style="background-color:#CCCCCC; font-size:12px;" width="13%">Wednesday</td>
+<td align="center" style="background-color:#CCCCCC; font-size:12px;" width="13%">Thursday</td>
+<td align="center" style="background-color:#CCCCCC; font-size:12px;" width="13%">Friday</td>
+<td align="center" style="background-color:#CCCCCC; font-size:12px;" width="13%">Saturday</td>
+</tr>
+</table>
+<br>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<tr>
+</form>
+</table>
+</td>
+</tr>
+<tr>
+<td><br>
+
+<br><br></td>
+</tr>
+</table>
+</section>
+<div class="clear"></div>
+</section>
+<div class="footerwrapfull">
+</div>
+<footer>
+<div class="footerleft">
+<p><a href="#">Registrar's Office</a> &nbsp;|&nbsp; Tel: 613-520-3500 &nbsp;|&nbsp; Fax: 613-520-4410 <br/>
+300 Tory Building, 1125 Colonel By Drive, Ottawa, ON, Canada, K1S 5B6</p>
+</div>
+<div class="footerright">
+<p><br/>&copy; 2012 <a href="#">Carleton University</a></p>
+</div>
+<div class="clear"></div>
+</footer>
+</body>
+</html>

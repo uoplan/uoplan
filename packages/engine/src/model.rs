@@ -398,8 +398,10 @@ impl DataView {
             .map(move |&i| (self.course_code_str[i].as_str(), &self.catalogue.courses[i]))
     }
 
-    pub fn credits(&self, code: &str) -> f64 {
-        self.get_course(code).map(|c| c.credits).unwrap_or(3.0)
+    pub fn credits(&self, code: &str, default_credits: f64) -> f64 {
+        self.get_course(code)
+            .map(|c| c.credits)
+            .unwrap_or(default_credits)
     }
 
     pub fn is_honours_project(&self, code: &str) -> bool {

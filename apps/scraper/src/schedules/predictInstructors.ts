@@ -62,7 +62,7 @@ interface PredictedInstructor {
   legacyId?: number;
 }
 
-/** Minimal shape of a grades.json entry (apps/scraper/data/grades.json). */
+/** Minimal shape of a grades.json entry (apps/scraper/data/<school>/grades.json). */
 export interface GradesCourseInput {
   code?: string;
   sections?: Array<{

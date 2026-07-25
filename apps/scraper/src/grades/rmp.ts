@@ -1,6 +1,6 @@
 /**
  * Resolve a feedback professor name to a RateMyProfessors professor
- * (`apps/scraper/data/ratemyprofessors.json`), returning the RMP canonical
+ * (`apps/scraper/data/<school>/ratemyprofessors.json`), returning the RMP canonical
  * display name and `legacyId` when matched.
  *
  * Matching strategy (names are normalized: accents stripped, lowercased,
@@ -15,8 +15,9 @@
  * `legacyId` (matching the existing dataset, where ~24% of entries carry none).
  */
 
+import type { SchoolId } from "@uoplan/domain/school";
 import { readJson } from "../shared/json.ts";
-import { RATEMYPROFESSORS_FILE } from "../shared/paths.ts";
+import { rateMyProfessorsFile } from "../shared/paths.ts";
 
 interface RmpProfessor {
   legacyId: number;
@@ -87,9 +88,8 @@ export function createProfessorResolver(professors: RmpProfessor[]): ProfessorRe
   };
 }
 
-export async function buildProfessorResolver(
-  file: string = RATEMYPROFESSORS_FILE,
-): Promise<ProfessorResolver> {
+export async function buildProfessorResolver(school: SchoolId): Promise<ProfessorResolver> {
+  const file = rateMyProfessorsFile(school);
   let data: RmpFile;
   try {
     data = await readJson<RmpFile>(file);

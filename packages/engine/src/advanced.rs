@@ -19,7 +19,6 @@ use crate::pools::{
     is_broad_elective_pool_type, is_elective_requirement_type, is_group_token,
     is_within_elective_level_cap, pool_course_cap, virtual_schedule_filter_applies,
     RemainingRequirement, RequirementPool, ADDITIONAL_ELECTIVES_ID, CART_POOL_ID,
-    DEFAULT_CREDITS_PER_COURSE,
 };
 use crate::prereq::prerequisites_contain_non_course;
 use crate::rng::{scramble_seed, shuffle_in_place, weighted_random_pick_index, Rng};
@@ -68,6 +67,8 @@ pub struct AdvancedParams<'a> {
     pub blacklisted_courses: Vec<String>,
     pub basic_excluded_categories: Vec<String>,
     pub forced_courses: Vec<String>,
+    pub typical_course_credits: f64,
+    pub default_course_credits: f64,
     pub current_seed: u32,
     pub first_seed: u32,
     /// Total selection work (global-budget units) this generation may spend. When
@@ -523,7 +524,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
     let additional_reserved = effective_remaining
         .iter()
         .find(|r| r.requirement_id == ADDITIONAL_ELECTIVES_ID)
-        .map(|r| (r.credits_needed / DEFAULT_CREDITS_PER_COURSE).ceil() as usize)
+        .map(|r| (r.credits_needed / params.typical_course_credits).ceil() as usize)
         .unwrap_or(0);
 
     // Seed-independent selection context. Building `sel_candidates` (the eligibility
@@ -611,7 +612,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                         if pool.requirement_id != primary {
                             continue;
                         }
-                        pinned_credits += data.credits(code);
+                        pinned_credits += data.credits(code, params.default_course_credits);
                         continue;
                     }
                     if !pool.candidate_courses.contains(code)
@@ -619,14 +620,14 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                     {
                         continue;
                     }
-                    pinned_credits += data.credits(code);
+                    pinned_credits += data.credits(code, params.default_course_credits);
                 }
                 let mut completed_selected_credits = 0.0;
                 for code in &selected_for_pool {
                     if !completed_set.contains(&normalize_course_code(code)) {
                         continue;
                     }
-                    completed_selected_credits += data.credits(code);
+                    completed_selected_credits += data.credits(code, params.default_course_credits);
                 }
                 let remaining_credits =
                     (pool.credits_needed - pinned_credits - completed_selected_credits).max(0.0);
@@ -735,7 +736,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                 req_type: "course".to_string(),
                 label: "Cart".to_string(),
                 candidate_courses: forced_pinned.clone(),
-                credits_needed: forced_capacity as f64 * DEFAULT_CREDITS_PER_COURSE,
+                credits_needed: forced_capacity as f64 * params.typical_course_credits,
                 min_courses: 0,
             });
             candidates_by_requirement.insert(CART_POOL_ID.to_string(), forced_pinned.clone());
@@ -751,7 +752,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             pools
                 .iter()
                 .find(|p| p.requirement_id == id)
-                .map(pool_course_cap)
+                .map(|p| pool_course_cap(p, params.typical_course_credits))
                 .unwrap_or(0)
                 .min(candidates_by_requirement.get(id).map_or(0, Vec::len))
         };
@@ -765,14 +766,18 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             .cloned()
             .collect();
         let others_budget = remaining_needed.saturating_sub(cart_cap);
-        let mut courses_per_pool = compute_courses_per_pool(&budgeted_pools, others_budget);
+        let mut courses_per_pool = compute_courses_per_pool(
+            &budgeted_pools,
+            others_budget,
+            params.typical_course_credits,
+        );
         if cart_cap > 0 {
             courses_per_pool.insert(CART_POOL_ID.to_string(), cart_cap);
         }
         if additional_cap > 0 {
             courses_per_pool.insert(ADDITIONAL_ELECTIVES_ID.to_string(), additional_cap);
         }
-        let pool_caps = build_pool_caps(&budgeted_pools);
+        let pool_caps = build_pool_caps(&budgeted_pools, params.typical_course_credits);
         let redistribution_alts =
             enumerate_single_redistributions(&courses_per_pool, &budgeted_pools, &pool_caps);
 
@@ -1958,6 +1963,8 @@ mod tests {
             blacklisted_courses: Vec::new(),
             basic_excluded_categories: Vec::new(),
             forced_courses: Vec::new(),
+            typical_course_credits: crate::pools::DEFAULT_CREDITS_PER_COURSE,
+            default_course_credits: crate::pools::DEFAULT_CREDITS_PER_COURSE,
             current_seed: 1,
             first_seed: 1,
             work_budget: SELECTION_GLOBAL_WORK_BUDGET,
@@ -2214,7 +2221,7 @@ mod tests {
             req_type: "free_elective".to_string(),
             title: Some("Electives".to_string()),
             candidate_courses: candidates.into_iter().map(str::to_string).collect(),
-            credits_needed: m as f64 * DEFAULT_CREDITS_PER_COURSE,
+            credits_needed: m as f64 * crate::pools::DEFAULT_CREDITS_PER_COURSE,
         }
     }
 

@@ -1,15 +1,15 @@
 /** Plan describing which data assets to load and in what tier. */
 export interface DataAssetPlan {
-  /** Schedule term ids found in the manifest (`schedules.<termId>.pb`). */
+  /** Schedule term ids found in the manifest (`<school>/schedules.<termId>.pb`). */
   scheduleTermIds: string[];
-  /** Catalogue years found in the manifest (`catalogue.<year>.pb`). */
+  /** Catalogue years found in the manifest (`<school>/catalogue.<year>.pb`). */
   catalogueYears: number[];
   /** Newest catalogue year — decoded eagerly for course titles + programs. */
   latestCatalogueYear: number | null;
 }
 
-const SCHEDULE_RE = /^schedules\.(.+)\.pb$/;
-const CATALOGUE_YEAR_RE = /^catalogue\.(\d{4})\.pb$/;
+const SCHEDULE_RE = /^(?:[^/]+\/)?schedules\.(.+)\.pb$/;
+const CATALOGUE_YEAR_RE = /^(?:[^/]+\/)?catalogue\.(\d{4})\.pb$/;
 
 /**
  * Derive the load plan from the manifest's asset ids: every schedule term and
@@ -49,7 +49,8 @@ export function planDataAssets(keys: string[]): DataAssetPlan {
  * background-fetched.
  */
 export function isCourseDescriptionAsset(id: string): boolean {
-  return id.startsWith("catalogue.descriptions.") && id.endsWith(".pb");
+  const bareId = id.split("/").pop() ?? id;
+  return bareId.startsWith("catalogue.descriptions.") && bareId.endsWith(".pb");
 }
 
 /**

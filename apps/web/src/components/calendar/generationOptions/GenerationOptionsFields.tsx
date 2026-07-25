@@ -21,6 +21,7 @@ import { BasicCourseFiltersCard } from "../../requirements/CourseFiltersCard";
 import { FrenchImmersionProgramOverview } from "../../shared/FrenchImmersionProgramOverview";
 import { tr } from "../../../i18n";
 import { useAnalytics } from "../../../lib/analytics";
+import { useSchoolFeature } from "../../../hooks/useSchool";
 import { DayAvoidToggles } from "./DayAvoidToggles";
 import { OptimizationPrioritiesCard } from "./OptimizationPrioritiesCard";
 import { TimeRangeSelect } from "./TimeRangeSelect";
@@ -126,6 +127,7 @@ export interface GenerationOptionsFieldsProps {
  */
 export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
   const analytics = useAnalytics();
+  const hasFrenchImmersion = useSchoolFeature("frenchImmersion");
   const [advancedOpen, setAdvancedOpen] = useState(props.advancedOptions.defaultOpen ?? false);
   const capturePreference = (field: string) => {
     analytics.capture("preferences_updated", { field });
@@ -240,7 +242,9 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     />
   );
 
-  const frenchImmersionControl = (
+  // French Immersion is a uOttawa programme; schools without it never render the
+  // toggle (and never reach the FLS companion-course rules behind it).
+  const frenchImmersionControl = !hasFrenchImmersion ? null : (
     <>
       <Switch
         label={tr("frenchImmersion.toggle.label")}
@@ -261,7 +265,7 @@ export function GenerationOptionsFields(props: GenerationOptionsFieldsProps) {
     tr("advancedOptions.summary.times"),
     tr("advancedOptions.summary.days"),
     tr("advancedOptions.summary.filters"),
-    tr("advancedOptions.summary.frenchImmersion"),
+    ...(hasFrenchImmersion ? [tr("advancedOptions.summary.frenchImmersion")] : []),
     ...(props.advancedOptions.extraSummaryItem ? [props.advancedOptions.extraSummaryItem] : []),
   ];
 

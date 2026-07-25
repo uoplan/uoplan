@@ -41,7 +41,13 @@ export function buildRequirementPools(remaining: RemainingRequirement[]): Requir
   return pools;
 }
 
-const DEFAULT_CREDITS_PER_COURSE = 3;
+export const DEFAULT_CREDITS_PER_COURSE = 3;
+
+function normalizeCreditsPerCourse(creditsPerCourse: number): number {
+  return Number.isFinite(creditsPerCourse) && creditsPerCourse > 0
+    ? creditsPerCourse
+    : DEFAULT_CREDITS_PER_COURSE;
+}
 
 export function isBroadElectivePoolType(type?: string): boolean {
   return (
@@ -93,18 +99,27 @@ export function virtualScheduleFilterApplies(
   return true;
 }
 
-export function poolCourseCap(pool: RequirementPool): number {
-  const raw = Math.max(pool.minCourses, Math.ceil(pool.creditsNeeded / DEFAULT_CREDITS_PER_COURSE));
+export function poolCourseCap(
+  pool: RequirementPool,
+  creditsPerCourse = DEFAULT_CREDITS_PER_COURSE,
+): number {
+  const raw = Math.max(
+    pool.minCourses,
+    Math.ceil(pool.creditsNeeded / normalizeCreditsPerCourse(creditsPerCourse)),
+  );
   if (pool.type === "discipline_elective") {
     return Math.min(raw, 1);
   }
   return raw;
 }
 
-export function buildPoolCaps(pools: RequirementPool[]): Map<string, number> {
+export function buildPoolCaps(
+  pools: RequirementPool[],
+  creditsPerCourse = DEFAULT_CREDITS_PER_COURSE,
+): Map<string, number> {
   const cap = new Map<string, number>();
   for (const pool of pools) {
-    cap.set(pool.requirementId, poolCourseCap(pool));
+    cap.set(pool.requirementId, poolCourseCap(pool, creditsPerCourse));
   }
   return cap;
 }
@@ -166,6 +181,7 @@ export function computeCoursesPerPool(
   pools: RequirementPool[],
   remainingCourseSlots: number,
   _cache: DataCache,
+  creditsPerCourse = DEFAULT_CREDITS_PER_COURSE,
 ): Map<string, number> {
   const result = new Map<string, number>();
   if (remainingCourseSlots <= 0 || pools.length === 0) return result;
@@ -173,7 +189,7 @@ export function computeCoursesPerPool(
   const cap = new Map<string, number>();
   let sumCap = 0;
   for (const pool of pools) {
-    const c = poolCourseCap(pool);
+    const c = poolCourseCap(pool, creditsPerCourse);
     cap.set(pool.requirementId, c);
     sumCap += c;
     result.set(pool.requirementId, 0);

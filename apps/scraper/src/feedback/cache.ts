@@ -12,12 +12,13 @@
  *
  * Stage 2 (parse) reads only the cache and writes the committed dataset:
  *
- *   apps/scraper/data/feedback/feedback.<termId>.json
+ *   apps/scraper/data/<school>/feedback/feedback.<termId>.json
  */
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { FEEDBACK_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { feedbackDataDir } from "../shared/paths.ts";
 
 const FEEDBACK_CACHE_DIR = path.resolve(".cache", "feedback");
 const RAW_DIR = path.join(FEEDBACK_CACHE_DIR, "raw");
@@ -55,8 +56,8 @@ function reportHtmlPath(termId: string, reportId: string): string {
   return path.join(reportDir(termId, reportId), "report.html");
 }
 
-export function outputPath(termId: string): string {
-  return path.join(FEEDBACK_DATA_DIR, `feedback.${termId}.json`);
+export function outputPath(termId: string, school: SchoolId): string {
+  return path.join(feedbackDataDir(school), `feedback.${termId}.json`);
 }
 
 /**
@@ -64,8 +65,8 @@ export function outputPath(termId: string): string {
  * labels (best-first). Labels are a per-question property, so they live here once
  * rather than being duplicated across every section in the per-term datasets.
  */
-export function optionsPath(): string {
-  return path.join(FEEDBACK_DATA_DIR, "feedback.options.json");
+export function optionsPath(school: SchoolId): string {
+  return path.join(feedbackDataDir(school), "feedback.options.json");
 }
 
 async function exists(p: string): Promise<boolean> {
@@ -106,8 +107,8 @@ export async function reportIsCached(termId: string, reportId: string): Promise<
   return exists(reportHtmlPath(termId, reportId));
 }
 
-export async function outputExists(termId: string): Promise<boolean> {
-  return exists(outputPath(termId));
+export async function outputExists(termId: string, school: SchoolId): Promise<boolean> {
+  return exists(outputPath(termId, school));
 }
 
 export async function readListPages(termId: string): Promise<string[]> {

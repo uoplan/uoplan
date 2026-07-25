@@ -27,6 +27,7 @@ import { PageContainer } from "../shared/PageContainer";
 import { ImportantDateBadge } from "./ImportantDateBadge";
 import { ImportantDatesCalendar } from "./ImportantDatesCalendar";
 import classes from "./ImportantDatesPage.module.css";
+import { useSchool } from "../../hooks/useSchool";
 
 // ── Types ────────────────────────────────────────────────────────────────
 
@@ -180,6 +181,7 @@ export function ImportantDatesPage({
   today: todayProp,
 }: ImportantDatesPageProps) {
   useTr();
+  const school = useSchool();
 
   const today = todayProp ?? todayInToronto();
 
@@ -535,7 +537,7 @@ export function ImportantDatesPage({
           <>
             <div className={classes.meta}>
               <Text size="sm" className={classes.disclaimer}>
-                {tr("importantDates.disclaimer")}
+                {tr("importantDates.disclaimer", { school: school.name })}
               </Text>
             </div>
             <EmptyState />
@@ -544,7 +546,7 @@ export function ImportantDatesPage({
           <>
             <div className={classes.meta}>
               <Text size="sm" className={classes.disclaimer}>
-                {tr("importantDates.disclaimer")}
+                {tr("importantDates.disclaimer", { school: school.name })}
               </Text>
               <div className={classes.metaRow}>
                 <Text size="sm" c="var(--app-text-muted)">
@@ -557,7 +559,7 @@ export function ImportantDatesPage({
                     size="sm"
                     c="var(--app-accent)"
                   >
-                    uottawa.ca
+                    {school.sourceLabel}
                   </Text>
                 </Text>
                 {data.reviewedText ? (

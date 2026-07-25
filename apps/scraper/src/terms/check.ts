@@ -2,11 +2,13 @@ import fs from "node:fs/promises";
 import * as cheerio from "cheerio";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { scraperDataDir } from "../shared/paths.ts";
 import { bootstrapPeopleSoft, PEOPLESOFT_CLASS_SEARCH_URL } from "../shared/peoplesoft.ts";
+import { CarletonBannerClient } from "../schools/carleton/banner/client.ts";
+import { parseTerms as parseCarletonTerms } from "../schools/carleton/banner/parseTerms.ts";
 import { normalizeTermName } from "./normalize.ts";
 
-const TERMS_JSON = path.join(SCRAPER_DATA_DIR, "terms.json");
 const SEARCH_URL = PEOPLESOFT_CLASS_SEARCH_URL;
 
 type Term = { termId: string; name: string };
@@ -56,17 +58,44 @@ async function fetchTerms(): Promise<Term[]> {
   );
   return value;
 }
-export async function main() {
-  const currentTerms = await fetchTerms();
 
-  const raw = await fs.readFile(TERMS_JSON, "utf8");
-  const { terms: knownTerms } = JSON.parse(raw) as { terms: Term[] };
+export type FetchCurrentTermsDeps = {
+  fetchUottawaTerms?: () => Promise<Term[]>;
+  fetchCarletonSelectTermHtml?: () => Promise<string>;
+};
+
+export async function fetchCurrentTermsForSchool(
+  school: SchoolId,
+  deps: FetchCurrentTermsDeps = {},
+): Promise<Term[]> {
+  if (school === "carleton") {
+    const html =
+      deps.fetchCarletonSelectTermHtml == null
+        ? await new CarletonBannerClient().fetchSelectTerm()
+        : await deps.fetchCarletonSelectTermHtml();
+    return parseCarletonTerms(html).terms;
+  }
+  return deps.fetchUottawaTerms == null ? fetchTerms() : deps.fetchUottawaTerms();
+}
+
+export async function main(school: SchoolId): Promise<void> {
+  const currentTerms = await fetchCurrentTermsForSchool(school);
+
+  const termsJson = path.join(scraperDataDir(school), "terms.json");
+  let knownTerms: Term[] = [];
+  try {
+    const raw = await fs.readFile(termsJson, "utf8");
+    knownTerms = (JSON.parse(raw) as { terms: Term[] }).terms;
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException)?.code !== "ENOENT") throw err;
+  }
 
   const newTerms = findNewTerms(knownTerms, currentTerms);
   const sorted = sortTerms(currentTerms);
 
   if (!termsListsEqual(knownTerms, sorted)) {
-    await fs.writeFile(TERMS_JSON, `${JSON.stringify({ terms: sorted }, null, 2)}\n`, "utf-8");
+    await fs.mkdir(path.dirname(termsJson), { recursive: true });
+    await fs.writeFile(termsJson, `${JSON.stringify({ terms: sorted }, null, 2)}\n`, "utf-8");
   }
 
   console.log(JSON.stringify(newTerms));
@@ -74,5 +103,6 @@ export async function main() {
 
 // Only run when executed directly (not when imported by tests)
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  await main();
+  const { parseSchoolArg } = await import("../shared/cliSchool.ts");
+  await main(parseSchoolArg(process.argv));
 }

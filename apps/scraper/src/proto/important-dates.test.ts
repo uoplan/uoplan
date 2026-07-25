@@ -20,6 +20,9 @@ vi.mock("node:fs/promises", () => ({
       return [];
     }),
     rm: vi.fn(async () => {}),
+    readFile: vi.fn(async () => {
+      throw Object.assign(new Error("missing"), { code: "ENOENT" });
+    }),
     writeFile: vi.fn(async (filePath: string, data: string | Uint8Array) => {
       if (data instanceof Uint8Array) {
         writtenFiles.push({ filePath, bytes: data });
@@ -184,8 +187,9 @@ describe("proto build important dates output", () => {
     );
   });
 
-  it("fails clearly when a required important-dates locale source file is missing", async () => {
+  it("skips an important-dates locale asset when its source file is missing", async () => {
     const missing = new Error("ENOENT: missing important-dates.fr.json");
+    Object.assign(missing, { code: "ENOENT" });
     readJsonMock.mockImplementation(async (filePath) => {
       if (path.basename(filePath) === "important-dates.fr.json") throw missing;
       return defaultJsonFor(filePath);
@@ -194,6 +198,11 @@ describe("proto build important dates output", () => {
     const { main } = await import("./build.ts");
 
     writtenFiles.length = 0;
-    await expect(main()).rejects.toThrow("ENOENT: missing important-dates.fr.json");
+    await expect(main()).resolves.toBeUndefined();
+    const byFile = new Map(
+      writtenFiles.map((entry) => [path.basename(entry.filePath), entry.bytes]),
+    );
+    expect(byFile.has("important-dates.en.pb")).toBe(true);
+    expect(byFile.has("important-dates.fr.pb")).toBe(false);
   });
 });

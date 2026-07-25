@@ -14,11 +14,11 @@ import type { Plugin } from "vite";
  * URL. The dev server doesn't content-hash or run that build hook, so this plugin
  * mirrors the same contract at dev time:
  *
- * - `GET {DATA_MANIFEST_PATH}` → `{ "<id>.pb": "/data/<id>.pb", … }` for every
- *   `.pb` under `apps/web/src/assets/data`.
- * - `GET /data/<id>.pb` → the raw bytes of that source asset (octet-stream,
- *   uncompressed — Vite dev doesn't brotli, so the native client reads it
- *   directly).
+ * - `GET {DATA_MANIFEST_PATH}` → `{ "<school>/<id>.pb": "/data/<school>/<id>.pb", … }`
+ *   for every `.pb` under `apps/web/src/assets/data`.
+ * - `GET /data/<school>/<id>.pb` → the raw bytes of that source asset
+ *   (octet-stream, uncompressed — Vite dev doesn't brotli, so the native client
+ *   reads it directly).
  *
  * The native app points at the dev server's origin in `__DEV__`, so the manifest
  * + asset URLs resolve against `http://<dev-host>:5173`.
@@ -29,15 +29,26 @@ function dataAssetsDir(): string {
   return path.resolve(here, "..", "src", "assets", "data");
 }
 
+/** Every `.pb` asset id (path relative to `dir`, so including the school dir). */
 function listAssetIds(dir: string): string[] {
-  try {
-    return fs
-      .readdirSync(dir)
-      .filter((name) => name.endsWith(".pb"))
-      .sort();
-  } catch {
-    return [];
-  }
+  const ids: string[] = [];
+  const walk = (current: string, prefix: string): void => {
+    let entries;
+    try {
+      entries = fs.readdirSync(current, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        walk(path.join(current, entry.name), `${prefix}${entry.name}/`);
+      } else if (entry.name.endsWith(".pb")) {
+        ids.push(`${prefix}${entry.name}`);
+      }
+    }
+  };
+  walk(dir, "");
+  return ids.sort();
 }
 
 export function dataDevServerPlugin(): Plugin {
@@ -61,10 +72,10 @@ export function dataDevServerPlugin(): Plugin {
         }
 
         if (pathname.startsWith("/data/") && pathname.endsWith(".pb")) {
-          const id = path.posix.basename(pathname);
-          const file = path.join(dir, id);
+          const id = pathname.slice("/data/".length);
+          const file = path.resolve(dir, id);
           // Guard against path traversal: the resolved file must stay in `dir`.
-          if (path.dirname(file) === dir && fs.existsSync(file)) {
+          if (file.startsWith(`${dir}${path.sep}`) && fs.existsSync(file)) {
             res.setHeader("content-type", "application/octet-stream");
             res.setHeader("cache-control", "no-store");
             res.end(fs.readFileSync(file));

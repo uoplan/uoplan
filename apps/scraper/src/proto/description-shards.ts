@@ -4,8 +4,12 @@ import type * as DataProto from "@uoplan/proto/data";
 import type { CatalogueJsonInput } from "./catalogue.ts";
 
 /**
- * The 13 canonical shard identifiers: 12 faculty slugs + "other".
+ * The 13 canonical shard identifiers for uOttawa: 12 faculty slugs + "other".
  * Order is load-bearing — do not reorder without updating downstream consumers.
+ *
+ * For other schools, use {@link buildShardIdsFromDisciplines} to derive
+ * school-specific shard IDs from the school's disciplines data instead of
+ * using this hardcoded list.
  */
 export const COURSE_DESCRIPTION_SHARD_IDS = [
   "arts",
@@ -25,7 +29,30 @@ export const COURSE_DESCRIPTION_SHARD_IDS = [
 
 export type CourseDescriptionShardId = (typeof COURSE_DESCRIPTION_SHARD_IDS)[number];
 
-const SHARD_ID_SET: ReadonlySet<string> = new Set(COURSE_DESCRIPTION_SHARD_IDS);
+/**
+ * Derive the shard IDs for a school from its disciplines data.
+ *
+ * Each faculty in `disciplines.faculties` is slugified via
+ * {@link facultyIdFromName} (strips "Faculty of"/"School of" prefix, lowercases,
+ * hyphenates). The resulting slugs are sorted and "other" is appended as a
+ * catch-all, producing a stable per-school shard list that mirrors the actual
+ * faculty structure of that school's catalogue.
+ *
+ * Use this instead of {@link COURSE_DESCRIPTION_SHARD_IDS} for any school that
+ * is not uOttawa.
+ */
+export function buildShardIdsFromDisciplines(
+  disciplines: DataProto.DisciplinesData,
+): readonly string[] {
+  const slugs = disciplines.faculties
+    .flatMap((f) => {
+      const id = facultyIdFromName(f.name);
+      return id !== null ? [id] : [];
+    })
+    .map(String);
+  const unique = [...new Set(slugs)].sort();
+  return [...unique, "other"];
+}
 
 /**
  * Normalize a raw description string: collapse interior whitespace runs to a
@@ -71,23 +98,30 @@ export function collectLatestCourseDescriptions(
 }
 
 /**
- * Build a map from each of the 13 {@link CourseDescriptionShardId}s to its
- * {@link DataProto.CourseDescriptionShard}. All 13 shards are pre-created
- * (empty shards have zero-length parallel arrays). Within each shard the
- * entries are sorted ascending by normalized course code so output is
- * deterministic.
+ * Build a map from each shard id to its {@link DataProto.CourseDescriptionShard}.
+ *
+ * When `shardIds` is omitted, {@link COURSE_DESCRIPTION_SHARD_IDS} is used —
+ * the hardcoded uOttawa faculty list. Pass a school-specific list from
+ * {@link buildShardIdsFromDisciplines} for other schools.
+ *
+ * All requested shards are pre-created (empty shards have zero-length parallel
+ * arrays). Within each shard the entries are sorted ascending by normalized
+ * course code so output is deterministic.
  *
  * A course is assigned to the shard matching its discipline's `facultyId`
  * (derived from the faculty name in {@link DataProto.DisciplinesData}).
  * Courses whose discipline is absent from the data, or whose faculty maps to
- * a slug not in {@link COURSE_DESCRIPTION_SHARD_IDS}, go to the `"other"` shard.
+ * a slug not in `shardIds`, go to the `"other"` shard.
  */
 export function buildCourseDescriptionShards(
   descriptions: ReadonlyMap<string, string>,
   disciplines: DataProto.DisciplinesData,
-): ReadonlyMap<CourseDescriptionShardId, DataProto.CourseDescriptionShard> {
+  shardIds: readonly string[] = COURSE_DESCRIPTION_SHARD_IDS,
+): ReadonlyMap<string, DataProto.CourseDescriptionShard> {
+  const idSet = new Set(shardIds);
+
   // Build discipline-code → faculty shard-id lookup.
-  const disciplineToShard = new Map<string, CourseDescriptionShardId>();
+  const disciplineToShard = new Map<string, string>();
   for (const disc of disciplines.disciplines) {
     if (!disc.code) continue;
     const ref = disc.facultyRef;
@@ -97,26 +131,25 @@ export function buildCourseDescriptionShards(
     }
     const faculty = disciplines.faculties[ref - 1];
     const id = facultyIdFromName(faculty.name);
-    const shardId: CourseDescriptionShardId =
-      id !== null && SHARD_ID_SET.has(id) ? (id as CourseDescriptionShardId) : "other";
+    const shardId = id !== null && idSet.has(id) ? id : "other";
     disciplineToShard.set(disc.code, shardId);
   }
 
   // Accumulate entries per shard.
-  const buckets = new Map<CourseDescriptionShardId, { code: string; description: string }[]>();
-  for (const id of COURSE_DESCRIPTION_SHARD_IDS) {
+  const buckets = new Map<string, { code: string; description: string }[]>();
+  for (const id of shardIds) {
     buckets.set(id, []);
   }
 
   for (const [code, description] of descriptions) {
     const disciplineCode = code.split(" ")[0] ?? "";
-    const shardId: CourseDescriptionShardId = disciplineToShard.get(disciplineCode) ?? "other";
+    const shardId = disciplineToShard.get(disciplineCode) ?? "other";
     buckets.get(shardId)!.push({ code, description });
   }
 
   // Sort each bucket and build the proto message.
-  const result = new Map<CourseDescriptionShardId, DataProto.CourseDescriptionShard>();
-  for (const id of COURSE_DESCRIPTION_SHARD_IDS) {
+  const result = new Map<string, DataProto.CourseDescriptionShard>();
+  for (const id of shardIds) {
     const entries = buckets.get(id)!;
     entries.sort((a, b) => (a.code < b.code ? -1 : a.code > b.code ? 1 : 0));
     result.set(id, {

@@ -44,9 +44,16 @@ export interface ComputeStillNeededParams {
   cache: DataCache | null;
   /** Max suggested courses per requirement (default 6). */
   maxSuggestionsPerRequirement?: number;
+  /**
+   * Credits assumed when a course is missing from the catalogue. Pass the
+   * school's `defaultCourseCredits` so the coverage check uses the right scale
+   * (0.5 for Carleton, 3 for uOttawa). Defaults to the uOttawa value.
+   */
+  defaultCourseCredits?: number;
 }
 
 const DEFAULT_CREDITS_NEEDED = 3;
+const DEFAULT_COURSE_CREDITS = 3;
 const DEFAULT_MAX_SUGGESTIONS = 6;
 
 /**
@@ -64,6 +71,7 @@ export function computeStillNeeded({
   basketCourses,
   cache,
   maxSuggestionsPerRequirement = DEFAULT_MAX_SUGGESTIONS,
+  defaultCourseCredits = DEFAULT_COURSE_CREDITS,
 }: ComputeStillNeededParams): StillNeededRequirement[] {
   if (!cache) return [];
 
@@ -91,7 +99,7 @@ export function computeStillNeeded({
       const norm = normalizeCourseCode(code);
       if (committedSet.has(norm)) continue;
       committedSet.add(norm);
-      creditsCovered += getCourseCredits(norm, cache);
+      creditsCovered += getCourseCredits(norm, cache, defaultCourseCredits);
     }
 
     if (creditsCovered >= creditsNeeded) continue;

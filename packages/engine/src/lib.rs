@@ -34,8 +34,8 @@ use constraints::Constraints;
 use model::{DataView, LanguageBucket, LevelBucket};
 use objectives::Objectives;
 use proto::engine::{
-    ChosenCourse, ComponentChoice, EmptyPool, GenerationRequest, GenerationResponse,
-    PoolDiagnostics,
+    ChosenCourse, ComponentChoice, CreditConfig as ProtoCreditConfig, EmptyPool, GenerationRequest,
+    GenerationResponse, PoolDiagnostics,
 };
 use types::Enrollment;
 
@@ -71,6 +71,38 @@ impl std::error::Error for EngineError {}
 /// trivial.
 pub struct EngineCore {
     data: DataView,
+}
+
+#[derive(Clone, Copy)]
+struct CreditConfig {
+    typical_course_credits: f64,
+    default_course_credits: f64,
+}
+
+impl Default for CreditConfig {
+    fn default() -> Self {
+        CreditConfig {
+            typical_course_credits: pools::DEFAULT_CREDITS_PER_COURSE,
+            default_course_credits: pools::DEFAULT_CREDITS_PER_COURSE,
+        }
+    }
+}
+
+impl CreditConfig {
+    fn from_proto(config: Option<&ProtoCreditConfig>) -> Self {
+        let fallback = CreditConfig::default();
+        match config {
+            Some(config) => CreditConfig {
+                typical_course_credits: pools::normalize_course_credits(
+                    config.typical_course_credits,
+                ),
+                default_course_credits: pools::normalize_course_credits(
+                    config.default_course_credits,
+                ),
+            },
+            None => fallback,
+        }
+    }
 }
 
 impl EngineCore {
@@ -186,11 +218,16 @@ fn language_buckets_from(strings: &[String]) -> Vec<LanguageBucket> {
         .collect()
 }
 
-fn build_constraints(req: &GenerationRequest, prefer_professor_rating: bool) -> Constraints {
+fn build_constraints(
+    req: &GenerationRequest,
+    prefer_professor_rating: bool,
+    credit_config: CreditConfig,
+) -> Constraints {
     constraints_from(
         req.constraints.as_ref(),
         &req.professor_ratings,
         prefer_professor_rating,
+        credit_config.default_course_credits,
     )
 }
 
@@ -198,10 +235,12 @@ fn constraints_from(
     gc: Option<&proto::engine::GenerationConstraints>,
     professor_ratings: &HashMap<String, f64>,
     prefer_professor_rating: bool,
+    default_course_credits: f64,
 ) -> Constraints {
     let mut c = Constraints {
         professor_ratings: professor_ratings.clone(),
         prefer_professor_rating,
+        default_course_credits: pools::normalize_course_credits(default_course_credits),
         ..Default::default()
     };
     if let Some(gc) = gc {
@@ -237,10 +276,12 @@ fn run_timetable_fixed_set(
         &empty_aplus,
         &empty_sentiment,
     );
+    let credit_config = CreditConfig::from_proto(req.credit_config.as_ref());
     let constraints = constraints_from(
         req.constraints.as_ref(),
         &req.professor_ratings,
         objectives.prefer_professor_rating(),
+        credit_config.default_course_credits,
     );
 
     // Apply the blacklist as a hard course-scope check (parity with
@@ -389,7 +430,8 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
         &req.course_aplus,
         &req.course_sentiment,
     );
-    let constraints = build_constraints(&req, objectives.prefer_professor_rating());
+    let credit_config = CreditConfig::from_proto(req.credit_config.as_ref());
+    let constraints = build_constraints(&req, objectives.prefer_professor_rating(), credit_config);
     let course_aplus = &req.course_aplus;
     let course_sentiment = &req.course_sentiment;
 
@@ -462,7 +504,7 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
                 title: Some("Electives".to_string()),
                 candidate_courses: pool,
                 credits_needed: req.additional_electives_count as f64
-                    * pools::DEFAULT_CREDITS_PER_COURSE,
+                    * credit_config.typical_course_credits,
             });
         }
     }
@@ -516,6 +558,8 @@ fn run_generation(data: &DataView, req: GenerationRequest) -> GenerationResponse
         blacklisted_courses: req.blacklisted_courses.clone(),
         basic_excluded_categories: req.basic_excluded_categories.clone(),
         forced_courses: forced_courses.clone(),
+        typical_course_credits: credit_config.typical_course_credits,
+        default_course_credits: credit_config.default_course_credits,
         current_seed: effective_base,
         first_seed: req.first_seed,
         work_budget: advanced::SELECTION_GLOBAL_WORK_BUDGET,
@@ -566,6 +610,27 @@ mod tests {
     }
 
     #[test]
+    fn credit_config_defaults_zero_and_absent_values_to_uottawa() {
+        let absent = CreditConfig::from_proto(None);
+        assert_eq!(absent.typical_course_credits, 3.0);
+        assert_eq!(absent.default_course_credits, 3.0);
+
+        let zero = CreditConfig::from_proto(Some(&proto::engine::CreditConfig::default()));
+        assert_eq!(zero.typical_course_credits, 3.0);
+        assert_eq!(zero.default_course_credits, 3.0);
+    }
+
+    #[test]
+    fn credit_config_accepts_carleton_half_credit_values() {
+        let config = CreditConfig::from_proto(Some(&proto::engine::CreditConfig {
+            typical_course_credits: 0.5,
+            default_course_credits: 0.5,
+        }));
+        assert_eq!(config.typical_course_credits, 0.5);
+        assert_eq!(config.default_course_credits, 0.5);
+    }
+
+    #[test]
     fn empty_catalogue_engine() {
         let cat = proto::data::Catalogue::default().encode_to_vec();
         let sched = proto::data::SchedulesData::default().encode_to_vec();
@@ -611,11 +676,11 @@ mod tests {
     fn real_data_basic_generation() {
         let cat_path = concat!(
             env!("CARGO_MANIFEST_DIR"),
-            "/../../apps/web/src/assets/data/catalogue.2026.pb"
+            "/../../apps/web/src/assets/data/uottawa/catalogue.2026.pb"
         );
         let sched_path = concat!(
             env!("CARGO_MANIFEST_DIR"),
-            "/../../apps/web/src/assets/data/schedules.2269.pb"
+            "/../../apps/web/src/assets/data/uottawa/schedules.2269.pb"
         );
         let (Ok(cat_bytes), Ok(sched_bytes)) = (std::fs::read(cat_path), std::fs::read(sched_path))
         else {

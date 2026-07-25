@@ -14,6 +14,11 @@
  * relying on it.
  */
 import type { AppLocale } from "../i18n";
+import { getSchool } from "@uoplan/domain/school";
+import { getActiveSchool } from "./activeSchool";
+
+// The school is frozen for the document's lifetime; resolve it once at module init.
+const school = getSchool(getActiveSchool());
 
 export interface LegalSection {
   heading: string;
@@ -33,13 +38,12 @@ const CONTACT_EMAIL = "admin@uoplan.party";
 const privacyEn: LegalDoc = {
   title: "Privacy Policy",
   lastUpdated: "Last updated: June 21, 2026",
-  intro:
-    "uoPlan is a free, independent course planner for University of Ottawa students. This policy explains what information the service handles and, just as importantly, what it deliberately does not.",
+  intro: `uoPlan is a free, independent course planner for ${school.name} students. This policy explains what information the service handles and, just as importantly, what it deliberately does not.`,
   sections: [
     {
       heading: "Who we are",
       paragraphs: [
-        "uoPlan is an independent, student-run project. It is not affiliated with, endorsed by, or sponsored by the University of Ottawa.",
+        `uoPlan is an independent, student-run project. It is not affiliated with, endorsed by, or sponsored by ${school.nameWithArticleEn}.`,
         `You can reach us at ${CONTACT_EMAIL}.`,
       ],
     },
@@ -47,7 +51,7 @@ const privacyEn: LegalDoc = {
       heading: "Information we process",
       paragraphs: ["We keep data collection to the minimum needed to run the planner:"],
       bullets: [
-        "University data (public): course, program, schedule, and grade-distribution data sourced from public University of Ottawa pages. This is reference data — it is not personal information about you.",
+        `University data (public): course, program, schedule, and grade-distribution data sourced from public ${school.name} pages. This is reference data — it is not personal information about you.`,
         "Your planning choices: the term, program, completed courses, and preferences you enter are stored locally on your device. They are encoded into a share link only when you choose to create one, and are not tied to any account.",
         "Transcript import: if you import a transcript PDF, it is parsed entirely on your device to read your completed courses. The file and its contents are never uploaded to us.",
         "Notifications (optional): if you turn on schedule reminders, we store only what is needed to deliver them — on the web, your browser's push subscription; in the app, a device notification token. You can turn these off at any time.",
@@ -101,13 +105,12 @@ const privacyEn: LegalDoc = {
 const privacyFr: LegalDoc = {
   title: "Politique de confidentialité",
   lastUpdated: "Dernière mise à jour : 21 juin 2026",
-  intro:
-    "uoPlan est un planificateur de cours gratuit et indépendant pour les étudiants de l'Université d'Ottawa. Cette politique explique quels renseignements le service traite et, tout aussi important, ce qu'il choisit délibérément de ne pas faire.",
+  intro: `uoPlan est un planificateur de cours gratuit et indépendant pour les étudiants de ${school.nameWithArticleFr}. Cette politique explique quels renseignements le service traite et, tout aussi important, ce qu'il choisit délibérément de ne pas faire.`,
   sections: [
     {
       heading: "Qui nous sommes",
       paragraphs: [
-        "uoPlan est un projet indépendant géré par des étudiants. Il n'est ni affilié à l'Université d'Ottawa, ni approuvé ou commandité par celle-ci.",
+        `uoPlan est un projet indépendant géré par des étudiants. Il n'est ni affilié à ${school.nameWithArticleFr}, ni approuvé ou commandité par celle-ci.`,
         `Vous pouvez nous joindre à ${CONTACT_EMAIL}.`,
       ],
     },
@@ -117,7 +120,7 @@ const privacyFr: LegalDoc = {
         "Nous limitons la collecte de données au strict nécessaire au fonctionnement du planificateur :",
       ],
       bullets: [
-        "Données universitaires (publiques) : données sur les cours, les programmes, les horaires et la répartition des notes provenant des pages publiques de l'Université d'Ottawa. Ce sont des données de référence — ce ne sont pas des renseignements personnels vous concernant.",
+        `Données universitaires (publiques) : données sur les cours, les programmes, les horaires et la répartition des notes provenant des pages publiques de ${school.nameWithArticleFr}. Ce sont des données de référence — ce ne sont pas des renseignements personnels vous concernant.`,
         "Vos choix de planification : le trimestre, le programme, les cours réussis et les préférences que vous saisissez sont stockés localement sur votre appareil. Ils sont encodés dans un lien de partage uniquement lorsque vous choisissez d'en créer un, et ne sont liés à aucun compte.",
         "Importation de relevé : si vous importez un relevé en PDF, il est analysé entièrement sur votre appareil afin de lire vos cours réussis. Le fichier et son contenu ne nous sont jamais transmis.",
         "Notifications (facultatives) : si vous activez les rappels d'horaire, nous ne stockons que ce qui est nécessaire à leur envoi — sur le Web, l'abonnement push de votre navigateur; dans l'application, un jeton de notification de l'appareil. Vous pouvez les désactiver à tout moment.",
@@ -171,8 +174,7 @@ const privacyFr: LegalDoc = {
 const termsEn: LegalDoc = {
   title: "Terms of Service",
   lastUpdated: "Last updated: June 18, 2026",
-  intro:
-    "These terms govern your use of uoPlan, a free and independent University of Ottawa course planner. Please read them before using the service.",
+  intro: `These terms govern your use of uoPlan, a free and independent ${school.name} course planner. Please read them before using the service.`,
   sections: [
     {
       heading: "Acceptance",
@@ -183,13 +185,13 @@ const termsEn: LegalDoc = {
     {
       heading: "What uoPlan is",
       paragraphs: [
-        "uoPlan is a free planning tool that helps you explore University of Ottawa program requirements and build candidate weekly timetables. It is offered as-is to help you plan.",
+        `uoPlan is a free planning tool that helps you explore ${school.name} program requirements and build candidate weekly timetables. It is offered as-is to help you plan.`,
       ],
     },
     {
       heading: "Not affiliated and not official advice",
       paragraphs: [
-        "uoPlan is an independent, student-run project and is not affiliated with, endorsed by, or sponsored by the University of Ottawa.",
+        `uoPlan is an independent, student-run project and is not affiliated with, endorsed by, or sponsored by ${school.nameWithArticleEn}.`,
         "The information shown may be inaccurate, incomplete, or out of date, and is not official academic advice. Always confirm requirements, course availability, schedules, and enrolment with the University and its official systems before relying on anything here.",
       ],
     },
@@ -205,7 +207,7 @@ const termsEn: LegalDoc = {
       heading: "Intellectual property",
       paragraphs: [
         "The uoPlan name, design, and code belong to the project (the source code is available under the licence in its public repository).",
-        "University course information, program names, and related marks remain the property of their respective owners. uoPlan claims no ownership of University of Ottawa trademarks or content.",
+        `University course information, program names, and related marks remain the property of their respective owners. uoPlan claims no ownership of ${school.name} trademarks or content.`,
       ],
     },
     {
@@ -248,8 +250,7 @@ const termsEn: LegalDoc = {
 const termsFr: LegalDoc = {
   title: "Conditions d'utilisation",
   lastUpdated: "Dernière mise à jour : 18 juin 2026",
-  intro:
-    "Ces conditions régissent votre utilisation de uoPlan, un planificateur de cours gratuit et indépendant pour l'Université d'Ottawa. Veuillez les lire avant d'utiliser le service.",
+  intro: `Ces conditions régissent votre utilisation de uoPlan, un planificateur de cours gratuit et indépendant pour ${school.nameWithArticleFr}. Veuillez les lire avant d'utiliser le service.`,
   sections: [
     {
       heading: "Acceptation",
@@ -260,13 +261,13 @@ const termsFr: LegalDoc = {
     {
       heading: "Ce qu'est uoPlan",
       paragraphs: [
-        "uoPlan est un outil de planification gratuit qui vous aide à explorer les exigences des programmes de l'Université d'Ottawa et à créer des horaires hebdomadaires possibles. Il est offert tel quel pour faciliter votre planification.",
+        `uoPlan est un outil de planification gratuit qui vous aide à explorer les exigences des programmes de ${school.nameWithArticleFr} et à créer des horaires hebdomadaires possibles. Il est offert tel quel pour faciliter votre planification.`,
       ],
     },
     {
       heading: "Aucune affiliation et aucun avis officiel",
       paragraphs: [
-        "uoPlan est un projet indépendant géré par des étudiants; il n'est ni affilié à l'Université d'Ottawa, ni approuvé ou commandité par celle-ci.",
+        `uoPlan est un projet indépendant géré par des étudiants; il n'est ni affilié à ${school.nameWithArticleFr}, ni approuvé ou commandité par celle-ci.`,
         "Les renseignements affichés peuvent être inexacts, incomplets ou périmés, et ne constituent pas un avis scolaire officiel. Confirmez toujours les exigences, la disponibilité des cours, les horaires et l'inscription auprès de l'Université et de ses systèmes officiels avant de vous y fier.",
       ],
     },
@@ -282,7 +283,7 @@ const termsFr: LegalDoc = {
       heading: "Propriété intellectuelle",
       paragraphs: [
         "Le nom, le design et le code de uoPlan appartiennent au projet (le code source est disponible selon la licence figurant dans son dépôt public).",
-        "Les renseignements sur les cours, les noms de programmes et les marques connexes de l'Université demeurent la propriété de leurs titulaires respectifs. uoPlan ne revendique aucun droit sur les marques de commerce ou le contenu de l'Université d'Ottawa.",
+        `Les renseignements sur les cours, les noms de programmes et les marques connexes de l'Université demeurent la propriété de leurs titulaires respectifs. uoPlan ne revendique aucun droit sur les marques de commerce ou le contenu de ${school.nameWithArticleFr}.`,
       ],
     },
     {

@@ -7,6 +7,7 @@ import type {
   OptimizationPriority,
   SchedulesData,
 } from "@uoplan/core";
+import type { SchoolId } from "@uoplan/domain/school";
 import type { AppState, GenerationErrorState } from "./types";
 
 export type WizardStepLike = 0 | 1 | 2 | 3 | 4;
@@ -82,6 +83,12 @@ export interface RetimetableFixedSetInput {
   blacklistedCourses?: readonly string[];
   /** Ordered optimization objectives — shape + professor objectives apply to swaps. */
   optimizationPriorities: OptimizationPriority[];
+  /**
+   * The school whose credit conventions apply. Passed through to the engine so
+   * the first-year credit cap (when set) uses the correct per-course credit value.
+   * Defaults to uOttawa when absent.
+   */
+  school?: SchoolId;
 }
 
 export interface EngineService {

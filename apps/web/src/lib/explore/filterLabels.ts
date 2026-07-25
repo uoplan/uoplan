@@ -1,3 +1,4 @@
+import type { SchoolFeatures } from "@uoplan/domain/school";
 import { tr } from "../../i18n";
 
 export const EXPLORE_FILTER_KEYS = [
@@ -13,6 +14,27 @@ export const EXPLORE_FILTER_KEYS = [
 ] as const;
 
 export type FilterKey = (typeof EXPLORE_FILTER_KEYS)[number];
+
+/**
+ * The school capability a filter depends on, for filters that are only
+ * meaningful when that data exists. Keys absent from this map are universal.
+ *
+ * Without this, a school with no grade or feedback data renders pills that can
+ * only ever narrow the results to nothing.
+ */
+const FILTER_REQUIRED_FEATURE: Partial<Record<FilterKey, keyof SchoolFeatures>> = {
+  difficulty: "grades",
+  feedback: "feedback",
+  language: "bilingualCatalogue",
+};
+
+/** The filter pills that are usable for a school, in display order. */
+export function exploreFilterKeysFor(features: SchoolFeatures): readonly FilterKey[] {
+  return EXPLORE_FILTER_KEYS.filter((key) => {
+    const required = FILTER_REQUIRED_FEATURE[key];
+    return required === undefined || features[required];
+  });
+}
 
 export function filterSectionLabel(key: FilterKey): string {
   switch (key) {

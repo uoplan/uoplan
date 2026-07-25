@@ -26,6 +26,8 @@ import type {
   OptimizationPriority,
 } from "@uoplan/generation/optimizationPriorities";
 import { urlToSlug } from "@uoplan/domain/utils/urlToSlug";
+import { DEFAULT_SCHOOL_ID, SCHOOL_WIRE_IDS, schoolFromWireId } from "@uoplan/domain/school";
+import type { SchoolId } from "@uoplan/domain/school";
 import type { DecodedState } from "@uoplan/generation/decodedState";
 import { requirementIdsFromTree } from "@uoplan/requirements/requirements/priority";
 
@@ -84,6 +86,12 @@ const OPT_SENTINEL_BASE = 0xfffffff0; // Safely inside uint32 space
 
 export interface EncodeInput {
   wizardMode: "basic" | "advanced" | null;
+  /**
+   * School this state belongs to. Every course/program index below is relative
+   * to this school's `indices.pb`, so a payload is meaningless without it.
+   * Defaults to uOttawa when omitted, matching the proto-3 zero value.
+   */
+  school?: SchoolId;
   basketCourses: string[];
   additionalElectivesCount: number;
   basicExcludedCategories: string[];
@@ -255,6 +263,7 @@ export function encodeState(
     generationLimitFirstYearCredits: input.generationLimitFirstYearCredits,
     optimizationPriorities: input.optimizationPriorities.map(optimizationPriorityToStateProto),
     frenchImmersionStream: input.frenchImmersionStream,
+    school: SCHOOL_WIRE_IDS[input.school ?? DEFAULT_SCHOOL_ID],
     magic: STATE_MAGIC,
     activeStep: input.activeStep,
     showCalendar: input.showCalendar,
@@ -332,6 +341,26 @@ export function encodeState(
 }
 
 export type DecodeError = { error: string };
+
+/**
+ * Read the school out of a payload WITHOUT resolving any index.
+ *
+ * This is a chicken-and-egg fix: every course/program index in the payload is
+ * relative to one school's `indices.pb`, so the caller has to know the school
+ * before it can load the indices that {@link decodeState} needs. Unknown wire
+ * ids (a payload from a newer build) and undecodable bytes both fall back to
+ * uOttawa, which is also the proto-3 zero value every pre-multi-school payload
+ * decodes to.
+ */
+export function peekSchool(bytes: Uint8Array): SchoolId {
+  try {
+    const state = ShareableState.decode(bytes);
+    if (state.magic !== STATE_MAGIC) return DEFAULT_SCHOOL_ID;
+    return schoolFromWireId(state.school) ?? DEFAULT_SCHOOL_ID;
+  } catch {
+    return DEFAULT_SCHOOL_ID;
+  }
+}
 
 export function peekTermAndYear(
   bytes: Uint8Array,
@@ -538,6 +567,15 @@ export function decodeState(
   };
 }
 
+/**
+ * Deflate + base64 raw `ShareableState` bytes into the `?s=` representation.
+ * Exported so callers that already hold encoded bytes (tests, tooling) can
+ * produce a share param without rebuilding a full {@link EncodeInput}.
+ */
+export function stateBytesToBase64(bytes: Uint8Array): string {
+  return bytesToBase64(bytes);
+}
+
 function bytesToBase64(bytes: Uint8Array): string {
   const compressed = deflateSync(bytes, { level: 6 });
   let binary = "";
@@ -607,6 +645,13 @@ export function peekTermAndYearFromBase64(
   const bytes = base64ToBytes(base64);
   if (!bytes) return null;
   return peekTermAndYear(bytes);
+}
+
+/** {@link peekSchool} for a raw `?s=` param value. */
+export function peekSchoolFromBase64(base64: string): SchoolId {
+  const bytes = base64ToBytes(base64);
+  if (!bytes) return DEFAULT_SCHOOL_ID;
+  return peekSchool(bytes);
 }
 
 export function peekHasPersonalizedFromBase64(base64: string): boolean {

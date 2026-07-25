@@ -353,6 +353,7 @@ export const createSchedulesSlice =
                   virtualSectionsOnly,
                   virtualExemptCourses: basketCourses,
                   optimizationPriorities: get().optimizationPriorities,
+                  school: state.school,
                 })
               : null;
           if (!newSched) return;

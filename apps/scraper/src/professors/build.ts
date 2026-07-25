@@ -9,14 +9,17 @@
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import type { SchoolId } from "@uoplan/domain/school";
+import { getSchool } from "@uoplan/domain/school";
 
+import { normalizeCarletonInstructorName } from "../schools/carleton/rateMyProfessors.ts";
 import { readJson } from "../shared/json.ts";
 import {
-  FEEDBACK_DATA_DIR,
-  GRADES_FILE,
-  RATEMYPROFESSORS_FILE,
-  SCHEDULES_DATA_DIR,
-  SCRAPER_DATA_DIR,
+  feedbackDataDir,
+  gradesFile,
+  rateMyProfessorsFile,
+  schedulesDataDir,
+  scraperDataDir,
 } from "../shared/paths.ts";
 import { buildProfessorRegistry } from "./buildRegistry.ts";
 import type {
@@ -27,8 +30,13 @@ import type {
   RmpInput,
 } from "./buildRegistry.ts";
 
-export const PROFESSORS_FILE = path.join(SCRAPER_DATA_DIR, "professors.json");
-const PROFESSORS_OVERRIDES_FILE = path.join(SCRAPER_DATA_DIR, "professors.overrides.json");
+export function professorsFile(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "professors.json");
+}
+
+function professorsOverridesFile(school: SchoolId): string {
+  return path.join(scraperDataDir(school), "professors.overrides.json");
+}
 
 interface RmpFile {
   professors?: RmpInput[];
@@ -65,10 +73,13 @@ async function listJsonFiles(dir: string, prefix: RegExp): Promise<string[]> {
 }
 
 /** Gather every professor-name source into the registry-builder input shape. */
-async function collectRegistryInputs(): Promise<RegistryInputs> {
-  const rmp = (await readJsonOptional<RmpFile>(RATEMYPROFESSORS_FILE))?.professors ?? [];
+async function collectRegistryInputs(school: SchoolId): Promise<RegistryInputs> {
+  const features = getSchool(school).features;
+  const rmp = (await readJsonOptional<RmpFile>(rateMyProfessorsFile(school)))?.professors ?? [];
 
-  const gradesJson = (await readJsonOptional<GradesCourse[]>(GRADES_FILE)) ?? [];
+  const gradesJson = features.grades
+    ? ((await readJsonOptional<GradesCourse[]>(gradesFile(school))) ?? [])
+    : [];
   const grades: NamedInput[] = [];
   for (const course of gradesJson) {
     for (const prof of course.sections ?? course.professors ?? []) {
@@ -77,13 +88,18 @@ async function collectRegistryInputs(): Promise<RegistryInputs> {
   }
 
   const schedules: string[] = [];
-  for (const fileName of await listJsonFiles(SCHEDULES_DATA_DIR, /^schedules\.\d+\.json$/)) {
-    const data = await readJson<ScheduleFile>(path.join(SCHEDULES_DATA_DIR, fileName));
+  const scheduleDir = schedulesDataDir(school);
+  const normalizeInstructor =
+    school === "carleton"
+      ? (name: string) => normalizeCarletonInstructorName(name)
+      : (name: string) => name;
+  for (const fileName of await listJsonFiles(scheduleDir, /^schedules\.\d+\.json$/)) {
+    const data = await readJson<ScheduleFile>(path.join(scheduleDir, fileName));
     for (const course of data.schedules ?? []) {
       for (const sections of Object.values(course.components ?? {})) {
         for (const section of sections) {
           for (const time of section.times ?? []) {
-            if (time.instructor) schedules.push(time.instructor);
+            if (time.instructor) schedules.push(normalizeInstructor(time.instructor));
           }
         }
       }
@@ -91,24 +107,32 @@ async function collectRegistryInputs(): Promise<RegistryInputs> {
   }
 
   const feedback: string[] = [];
-  for (const fileName of await listJsonFiles(FEEDBACK_DATA_DIR, /^feedback\.\d+\.json$/)) {
-    const data = await readJson<FeedbackCourse[]>(path.join(FEEDBACK_DATA_DIR, fileName));
-    for (const course of data) {
-      for (const section of course.sections ?? []) {
-        if (section.professor) feedback.push(section.professor);
+  if (features.feedback) {
+    const feedbackDir = feedbackDataDir(school);
+    for (const fileName of await listJsonFiles(feedbackDir, /^feedback\.\d+\.json$/)) {
+      const data = await readJson<FeedbackCourse[]>(path.join(feedbackDir, fileName));
+      for (const course of data) {
+        for (const section of course.sections ?? []) {
+          if (section.professor) feedback.push(section.professor);
+        }
       }
     }
   }
 
-  const overrides = (await readJsonOptional<RegistryOverrides>(PROFESSORS_OVERRIDES_FILE)) ?? {};
+  const overrides =
+    (await readJsonOptional<RegistryOverrides>(professorsOverridesFile(school))) ?? {};
 
   return { rmp, grades, schedules, feedback, overrides };
 }
 
 /** Build the registry from all committed sources and write data/professors.json. */
-export async function buildAndWriteProfessors(): Promise<ProfessorRegistryEntry[]> {
-  const inputs = await collectRegistryInputs();
+export async function buildAndWriteProfessors(school: SchoolId): Promise<ProfessorRegistryEntry[]> {
+  const inputs = await collectRegistryInputs(school);
   const professors = buildProfessorRegistry(inputs);
-  await fs.writeFile(PROFESSORS_FILE, `${JSON.stringify({ professors }, null, 2)}\n`, "utf-8");
+  await fs.writeFile(
+    professorsFile(school),
+    `${JSON.stringify({ professors }, null, 2)}\n`,
+    "utf-8",
+  );
   return professors;
 }

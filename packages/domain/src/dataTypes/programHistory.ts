@@ -5,6 +5,7 @@ import type {
 } from "@uoplan/proto/data";
 import { fromProtoCatalogue } from "./schedules";
 import type { Program } from "./domain";
+import type { SchoolId } from "../school";
 
 /** Resolve a programs-only proto catalogue (courses stripped) to domain programs,
  * reusing the shared code-ref resolution in {@link fromProtoCatalogue}. */
@@ -12,13 +13,17 @@ function resolvePrograms(
   courseCodes: readonly string[],
   extraCodes: readonly string[],
   programs: ProtoProgram[],
+  school?: SchoolId,
 ): Program[] {
-  return fromProtoCatalogue({
-    courseCodes: [...courseCodes],
-    extraCodes: [...extraCodes],
-    courses: [],
-    programs,
-  }).programs;
+  return fromProtoCatalogue(
+    {
+      courseCodes: [...courseCodes],
+      extraCodes: [...extraCodes],
+      courses: [],
+      programs,
+    },
+    school,
+  ).programs;
 }
 
 /**
@@ -42,14 +47,15 @@ export function reconstructProgramsForYear(
   union: ProtoCatalogue,
   history: ProtoCatalogueProgramHistory | null | undefined,
   year: number,
+  school?: SchoolId,
 ): Program[] {
   const bit = history ? history.years.indexOf(year) : -1;
-  if (!history || bit < 0) return fromProtoCatalogue(union).programs;
+  if (!history || bit < 0) return fromProtoCatalogue(union, school).programs;
 
   const mask = 1 << bit;
 
   // Union baseline programs, resolved once against the union's own code space.
-  const baseline = fromProtoCatalogue(union).programs;
+  const baseline = fromProtoCatalogue(union, school).programs;
 
   // This year's overlay revisions (proto), resolved once against the overlay's
   // extra_codes. Keyed by program key for assembly below.
@@ -61,7 +67,12 @@ export function reconstructProgramsForYear(
     if (revision?.program) revisionProto.push(revision.program);
   }
   const revisionByKey = new Map<string, Program>();
-  for (const program of resolvePrograms(union.courseCodes, history.extraCodes, revisionProto)) {
+  for (const program of resolvePrograms(
+    union.courseCodes,
+    history.extraCodes,
+    revisionProto,
+    school,
+  )) {
     if (program.slug) revisionByKey.set(program.slug, program);
   }
 

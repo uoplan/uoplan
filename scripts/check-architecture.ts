@@ -500,6 +500,58 @@ function checkStorePurity(): string[] {
   return errors;
 }
 
+/**
+ * Hard-coded uOttawa references must not leak into shared code. Once a second
+ * school exists, any `uottawa.ca` host, `catalogue.uottawa.ca` deep link, or
+ * literal "University of Ottawa" string outside the school registry silently
+ * makes that code wrong for Carleton. Everything school-specific belongs in
+ * `packages/domain/src/school.ts` (or a school's own scraper subtree), so this
+ * check keeps the rest of the shared layers school-agnostic.
+ */
+function checkSchoolPurity(): string[] {
+  const errors: string[] = [];
+  // Literals that only ever make sense for one school.
+  const patterns: { re: RegExp; label: string }[] = [
+    { re: /uottawa\.ca/i, label: "a uottawa.ca URL" },
+    { re: /University of Ottawa|Universit[ée] d'Ottawa/i, label: "a hard-coded uOttawa name" },
+    { re: /carleton\.ca/i, label: "a carleton.ca URL" },
+    { re: /Carleton University/i, label: "a hard-coded Carleton name" },
+  ];
+
+  // The registry is where school-specific values are *supposed* to live, and a
+  // school's own scraper/parser subtree is inherently school-specific.
+  const allowed = [
+    "packages/domain/src/school.ts",
+    "apps/scraper/src/schools/",
+    "apps/scraper/src/ratemyprofessors/",
+  ];
+
+  const scanned = [
+    join(repoRoot, "packages/domain/src"),
+    join(repoRoot, "packages/data/src"),
+    join(repoRoot, "packages/state-codec/src"),
+    join(repoRoot, "packages/navigation/src"),
+    join(repoRoot, "packages/app/src"),
+    join(repoRoot, "packages/ui/src"),
+  ];
+
+  for (const dir of scanned) {
+    forEachSourceFile(dir, (src, rel) => {
+      if (allowed.some((prefix) => rel.startsWith(prefix))) return;
+      for (const { re, label } of patterns) {
+        if (re.test(src)) {
+          errors.push(
+            `Shared code must stay school-agnostic: "${rel}" contains ${label}. ` +
+              `Move it into the school registry (packages/domain/src/school.ts).`,
+          );
+          break;
+        }
+      }
+    });
+  }
+  return errors;
+}
+
 function main(): void {
   const pkgs = readWorkspacePackages();
   const errors = [
@@ -509,6 +561,7 @@ function main(): void {
     ...checkStorePurity(),
     ...checkProtoDrift(),
     ...checkWorkerBundle(),
+    ...checkSchoolPurity(),
   ];
 
   if (errors.length > 0) {
@@ -520,7 +573,8 @@ function main(): void {
 
   console.log(
     "Architecture guardrails passed: package layering is acyclic, the web store is " +
-      "component-free, cli.proto is in sync, and the worker bundle is pdfjs-free.",
+      "component-free, cli.proto is in sync, the worker bundle is pdfjs-free, and " +
+      "shared code is school-agnostic.",
   );
 }
 

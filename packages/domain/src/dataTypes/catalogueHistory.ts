@@ -5,6 +5,7 @@ import type {
 } from "@uoplan/proto/data";
 import { fromProtoCatalogue } from "./schedules";
 import type { Catalogue } from "./domain";
+import type { SchoolId } from "../school";
 
 /**
  * Reconstructs the catalogue as it was for a specific cohort `year` from the
@@ -21,9 +22,10 @@ export function reconstructCatalogueForYear(
   union: ProtoCatalogue,
   history: ProtoCataloguePrereqHistory | null | undefined,
   year: number,
+  school?: SchoolId,
 ): Catalogue {
   const bit = history ? history.years.indexOf(year) : -1;
-  if (!history || bit < 0) return fromProtoCatalogue(union);
+  if (!history || bit < 0) return fromProtoCatalogue(union, school);
 
   const mask = 1 << bit;
   const revisionByCodeIndex = new Map<number, ProtoPrereqRevision>();
@@ -31,7 +33,7 @@ export function reconstructCatalogueForYear(
     const revision = overlay.revisions.find((r) => (r.yearMask & mask) !== 0);
     if (revision) revisionByCodeIndex.set(overlay.code, revision);
   }
-  if (revisionByCodeIndex.size === 0) return fromProtoCatalogue(union);
+  if (revisionByCodeIndex.size === 0) return fromProtoCatalogue(union, school);
 
   const courses = union.courses.map((course) => {
     const revision = revisionByCodeIndex.get(course.code);
@@ -42,5 +44,5 @@ export function reconstructCatalogueForYear(
       hasPrereqText: revision.hasPrereqText,
     };
   });
-  return fromProtoCatalogue({ ...union, courses });
+  return fromProtoCatalogue({ ...union, courses }, school);
 }

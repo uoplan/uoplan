@@ -1,9 +1,21 @@
 import seoPages from "./seo-pages.json";
 import { tr } from "../i18n";
+import { getSchool, withSchoolPath } from "@uoplan/domain/school";
+import { getActiveSchool } from "./activeSchool";
 
 const SITE_ORIGIN = "https://uoplan.party";
 const SITE_NAME = "uoPlan";
-const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+
+/** OG image URL for the active school. uOttawa serves from the root; others from `/<pathSlug>/`. */
+function defaultOgImage(): string {
+  const { id } = activeSchoolEntry();
+  return `${SITE_ORIGIN}${withSchoolPath(id, "/og-image.png")}`;
+}
+
+/** The active school's registry entry, resolved once per page load via the frozen active-school. */
+function activeSchoolEntry() {
+  return getSchool(getActiveSchool());
+}
 
 type SeoPageId = keyof typeof seoPages;
 
@@ -108,10 +120,10 @@ function humanizeFacultyParam(param: string): string {
   return `Faculty of ${name}`;
 }
 
-function professorSeoTitle(name: string | null): string {
+function professorSeoTitle(name: string | null, shortName: string): string {
   return name
-    ? `${name} — uOttawa professor ratings & grades | uoPlan`
-    : "uOttawa professor ratings & grades | uoPlan";
+    ? `${name} — ${shortName} professor ratings & grades | uoPlan`
+    : `${shortName} professor ratings & grades | uoPlan`;
 }
 
 function localized(pageId: SeoPageId, field: "title" | "description" | "keywords"): string {
@@ -145,12 +157,13 @@ function buildWebsiteJsonLd(): Record<string, unknown> {
 }
 
 function buildWebApplicationJsonLd(): Record<string, unknown> {
+  const school = activeSchoolEntry();
   return {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: SITE_NAME,
     url: `${SITE_ORIGIN}/`,
-    description: "Free course planner and timetable generator for University of Ottawa students.",
+    description: `Free course planner and timetable generator for ${school.name} students.`,
     applicationCategory: "EducationApplication",
     operatingSystem: "Web",
     offers: { "@type": "Offer", price: "0", priceCurrency: "CAD" },
@@ -162,13 +175,14 @@ function buildWebApplicationJsonLd(): Record<string, unknown> {
 }
 
 export function buildRootHead() {
+  const ogImage = defaultOgImage();
   return {
     meta: [
       { name: "robots", content: "index, follow" },
       { property: "og:site_name", content: SITE_NAME },
-      { property: "og:image", content: DEFAULT_OG_IMAGE },
+      { property: "og:image", content: ogImage },
       { property: "twitter:card", content: "summary_large_image" },
-      { property: "twitter:image", content: DEFAULT_OG_IMAGE },
+      { property: "twitter:image", content: ogImage },
       { "script:ld+json": buildWebsiteJsonLd() },
       { "script:ld+json": buildWebApplicationJsonLd() },
     ],
@@ -228,27 +242,29 @@ function buildDynamicHead({
 
 export function buildCourseHead({ courseCode, pathParam }: CourseHeadInput) {
   const compactCode = courseCode.replaceAll(/\s+/g, "");
+  const school = activeSchoolEntry();
 
   return buildDynamicHead({
     tabTitle: courseCode,
-    title: `${courseCode} — uOttawa grades, sections & professor ratings | uoPlan`,
-    description: `Explore ${courseCode} grade distributions, sections, schedules, and professor ratings at the University of Ottawa.`,
-    keywords: `${courseCode}, ${compactCode}, uOttawa course grades, uOttawa sections, uOttawa professor ratings`,
+    title: `${courseCode} — ${school.shortName} grades, sections & professor ratings | uoPlan`,
+    description: `Explore ${courseCode} grade distributions, sections, schedules, and professor ratings at ${school.nameWithArticleEn}.`,
+    keywords: `${courseCode}, ${compactCode}, ${school.shortName} course grades, ${school.shortName} sections, ${school.shortName} professor ratings`,
     canonicalPath: `/explore/course/${pathSegmentFromParam(pathParam)}`,
   });
 }
 
 export function buildProfessorHead(pathParam: string) {
   const name = humanizeProfessorParam(pathParam);
-  const subject = name ? `${name} at uOttawa` : "uOttawa professors";
+  const school = activeSchoolEntry();
+  const subject = name ? `${name} at ${school.shortName}` : `${school.shortName} professors`;
 
   return buildDynamicHead({
     tabTitle: name ?? "Professor",
-    title: professorSeoTitle(name),
+    title: professorSeoTitle(name, school.shortName),
     description: `Explore ${subject}: grade distributions, course history, professor ratings, and student feedback.`,
     keywords: name
-      ? `${name}, uOttawa professor ratings, uOttawa grades, University of Ottawa professors`
-      : "uOttawa professor ratings, uOttawa grades, University of Ottawa professors",
+      ? `${name}, ${school.shortName} professor ratings, ${school.shortName} grades, ${school.name} professors`
+      : `${school.shortName} professor ratings, ${school.shortName} grades, ${school.name} professors`,
     canonicalPath: `/explore/professor/${pathSegmentFromParam(pathParam)}`,
   });
 }
@@ -259,24 +275,26 @@ export function buildProfessorDocumentTitle(displayName: string) {
 
 export function buildProgramHead({ slug, pathParam }: ProgramHeadInput) {
   const programName = humanizeProgramSlug(slug);
+  const school = activeSchoolEntry();
 
   return buildDynamicHead({
     tabTitle: programName,
-    title: `${programName} — uOttawa program requirements | uoPlan`,
-    description: `Explore ${programName} requirements, required courses, and grade data for University of Ottawa programs.`,
-    keywords: `${programName}, uOttawa program requirements, University of Ottawa programs, uOttawa degree planner`,
+    title: `${programName} — ${school.shortName} program requirements | uoPlan`,
+    description: `Explore ${programName} requirements, required courses, and grade data for ${school.name} programs.`,
+    keywords: `${programName}, ${school.shortName} program requirements, ${school.name} programs, ${school.shortName} degree planner`,
     canonicalPath: `/explore/program/${pathFromSplatParam(pathParam)}`,
   });
 }
 
 export function buildDisciplineHead(disciplineParam: string) {
   const code = decodePathValue(disciplineParam).trim().toUpperCase();
+  const school = activeSchoolEntry();
 
   return buildDynamicHead({
     tabTitle: code,
-    title: `${code} — uOttawa courses & grades by discipline | uoPlan`,
-    description: `Explore ${code} courses at the University of Ottawa with grade distributions, sections, schedules, and professor ratings.`,
-    keywords: `${code}, uOttawa ${code} courses, uOttawa course grades, University of Ottawa disciplines`,
+    title: `${code} — ${school.shortName} courses & grades by discipline | uoPlan`,
+    description: `Explore ${code} courses at ${school.nameWithArticleEn} with grade distributions, sections, schedules, and professor ratings.`,
+    keywords: `${code}, ${school.shortName} ${code} courses, ${school.shortName} course grades, ${school.name} disciplines`,
     canonicalPath: `/explore/discipline/${pathSegmentFromParam(code.toLowerCase())}`,
   });
 }
@@ -284,12 +302,13 @@ export function buildDisciplineHead(disciplineParam: string) {
 export function buildFacultyHead(facultyParam: string) {
   const facultyName = humanizeFacultyParam(facultyParam);
   const facultyId = decodePathValue(facultyParam).trim().toLowerCase();
+  const school = activeSchoolEntry();
 
   return buildDynamicHead({
     tabTitle: facultyName,
-    title: `${facultyName} — uOttawa courses & grades | uoPlan`,
-    description: `Explore ${facultyName} courses, disciplines, grade distributions, and professor ratings at the University of Ottawa.`,
-    keywords: `${facultyName}, uOttawa courses, uOttawa course grades, University of Ottawa faculties`,
+    title: `${facultyName} — ${school.shortName} courses & grades | uoPlan`,
+    description: `Explore ${facultyName} courses, disciplines, grade distributions, and professor ratings at ${school.nameWithArticleEn}.`,
+    keywords: `${facultyName}, ${school.shortName} courses, ${school.shortName} course grades, ${school.name} faculties`,
     canonicalPath: `/explore/faculty/${pathSegmentFromParam(facultyId)}`,
   });
 }

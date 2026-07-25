@@ -69,10 +69,22 @@ export function blacklistConstraint(blacklistedCourses: readonly string[]): Cons
   };
 }
 
-function firstYearCredits(code: string, credits: number | undefined): number {
+const DEFAULT_COURSE_CREDITS = 3;
+
+function normalizeDefaultCredits(defaultCredits: number): number {
+  return Number.isFinite(defaultCredits) && defaultCredits > 0
+    ? defaultCredits
+    : DEFAULT_COURSE_CREDITS;
+}
+
+function firstYearCredits(
+  code: string,
+  credits: number | undefined,
+  defaultCredits = DEFAULT_COURSE_CREDITS,
+): number {
   const m = code.match(/\d{4}/);
   if (!m || Number(m[0]) >= 2000) return 0;
-  return credits ?? 3;
+  return credits ?? normalizeDefaultCredits(defaultCredits);
 }
 
 /**
@@ -80,7 +92,10 @@ function firstYearCredits(code: string, credits: number | undefined): number {
  * this while picking courses; here the course set is fixed per plan, so it is a
  * whole-timetable check on the (fixed) set's first-year credit sum.
  */
-function maxFirstYearCreditsConstraint(constraints: GenerationConstraints): Constraint {
+function maxFirstYearCreditsConstraint(
+  constraints: GenerationConstraints,
+  defaultCourseCredits = DEFAULT_COURSE_CREDITS,
+): Constraint {
   const cap = constraints.maxFirstYearCredits;
   return {
     id: "max-first-year-credits",
@@ -90,7 +105,11 @@ function maxFirstYearCreditsConstraint(constraints: GenerationConstraints): Cons
       if (cap == null) return true;
       let total = 0;
       for (const e of enrollments) {
-        total += firstYearCredits(e.courseCode, ctx.cache.getCourse(e.courseCode)?.credits);
+        total += firstYearCredits(
+          e.courseCode,
+          ctx.cache.getCourse(e.courseCode)?.credits,
+          defaultCourseCredits,
+        );
         if (total > cap) return false;
       }
       return true;
@@ -106,11 +125,12 @@ function maxFirstYearCreditsConstraint(constraints: GenerationConstraints): Cons
 export function buildHardConstraintPipeline(
   constraints: GenerationConstraints,
   blacklistedCourses: readonly string[] = [],
+  defaultCourseCredits = DEFAULT_COURSE_CREDITS,
 ): Constraint[] {
   return [
     overlapConstraint,
     timeWindowConstraint(constraints),
-    maxFirstYearCreditsConstraint(constraints),
+    maxFirstYearCreditsConstraint(constraints, defaultCourseCredits),
     blacklistConstraint(blacklistedCourses),
   ];
 }

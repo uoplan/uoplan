@@ -3,6 +3,7 @@ import type { StoreApi } from "zustand/vanilla";
 import { useStore } from "zustand";
 import { createContext, useContext } from "react";
 import { defaultOptimizationPriorities, generateRandomSeed } from "@uoplan/core";
+import { DEFAULT_SCHOOL_ID } from "@uoplan/domain/school";
 import type { AppStore } from "./types";
 import { createCompareSlice, createConstraintsSlice, createSelectionSlice } from "./slices/index";
 import { createDataSlice } from "./slices/data";
@@ -82,6 +83,7 @@ export function createAppStore(services: AppServices): AppStoreApi {
       ...createSchedulesSlice(services)(...a),
 
       // Initial State values that are cross-slice or global defaults
+      school: DEFAULT_SCHOOL_ID,
       catalogue: null,
       indices: null,
       schedulesData: null,
@@ -151,8 +153,10 @@ export function createAppStore(services: AppServices): AppStoreApi {
           loadProgress,
           error,
           availableYears,
+          school,
         } = get();
         set({
+          school,
           catalogue,
           indices,
           schedulesData,

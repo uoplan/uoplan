@@ -28,6 +28,9 @@ importers:
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260512.1
         version: 7.0.0-dev.20260512.1
+      '@uoplan/domain':
+        specifier: workspace:*
+        version: link:packages/domain
       esbuild:
         specifier: ^0.28.0
         version: 0.28.0
@@ -230,6 +233,9 @@ importers:
       '@uoplan/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@uoplan/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@uoplan/proto':
         specifier: workspace:*
         version: link:../../packages/proto
@@ -351,6 +357,9 @@ importers:
       '@uoplan/data':
         specifier: workspace:^
         version: link:../../packages/data
+      '@uoplan/domain':
+        specifier: workspace:^
+        version: link:../../packages/domain
       '@uoplan/engine':
         specifier: workspace:^
         version: link:../../packages/engine

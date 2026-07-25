@@ -1,16 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { withSchoolPath } from "@uoplan/domain/school";
+import { schoolDataPaths, schoolsWithData } from "./school-data.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const webRoot = path.join(__dirname, "..");
-const repoRoot = path.join(webRoot, "..", "..");
 const distDir = path.join(webRoot, "dist", "client");
-const dataRoot = path.join(repoRoot, "apps", "scraper", "data");
-const catalogueDir = path.join(dataRoot, "catalogue");
 const seoPagesPath = path.join(webRoot, "src", "lib", "seo-pages.json");
-const professorsPath = path.join(dataRoot, "professors.json");
-const disciplinesPath = path.join(dataRoot, "disciplines.json");
 
 const SITE_ORIGIN = "https://uoplan.party";
 const SITEMAP_DIR = "sitemap";
@@ -93,7 +90,7 @@ function normalizeProgramSlug(rawSlug: unknown): string | null {
   return slug || null;
 }
 
-function readCatalogueCollections(): {
+function readCatalogueCollections(catalogueDir: string): {
   catalogueFiles: string[];
   courseCodes: string[];
   programSlugs: string[];
@@ -127,7 +124,8 @@ function readCatalogueCollections(): {
   };
 }
 
-function readProfessorSlugs(): string[] {
+function readProfessorSlugs(professorsPath: string): string[] {
+  if (!fs.existsSync(professorsPath)) return [];
   const data = readJson<ProfessorsData>(professorsPath);
   const slugs: string[] = [];
 
@@ -140,7 +138,8 @@ function readProfessorSlugs(): string[] {
   return uniqueSorted(slugs);
 }
 
-function readDisciplineAndFacultyPaths(): string[] {
+function readDisciplineAndFacultyPaths(disciplinesPath: string): string[] {
+  if (!fs.existsSync(disciplinesPath)) return [];
   const data = readJson<DisciplinesData>(disciplinesPath);
   const paths: string[] = [];
 
@@ -200,28 +199,68 @@ function writeFile(fileName: string, content: string): void {
 
 fs.mkdirSync(distDir, { recursive: true });
 
-const { catalogueFiles, courseCodes, programSlugs } = readCatalogueCollections();
-const professorSlugs = readProfessorSlugs();
-const miscPaths = uniqueSorted([...readStaticPaths(), ...readDisciplineAndFacultyPaths()]);
+const schools = schoolsWithData();
+if (schools.length === 0) {
+  throw new Error("generate-sitemap: no school has catalogue data under apps/scraper/data.");
+}
 
-const coursePaths = courseCodes.map(
-  (courseCode) => `/explore/course/${courseNormToPathParam(courseCode)}`,
-);
-const professorPaths = professorSlugs.map(
-  (slug) => `/explore/professor/${encodePathSegment(slug)}`,
-);
-const programPaths = programSlugs.map((slug) => `/explore/program/${encodePath(slug)}`);
+const coursePaths: string[] = [];
+const professorPaths: string[] = [];
+const programPaths: string[] = [];
+const miscPaths: string[] = [];
+const perSchoolCounts: string[] = [];
 
-writeFile(`${SITEMAP_DIR}/courses.xml`, urlsetXml(coursePaths));
-writeFile(`${SITEMAP_DIR}/professors.xml`, urlsetXml(professorPaths));
-writeFile(`${SITEMAP_DIR}/programs.xml`, urlsetXml(programPaths));
-writeFile(`${SITEMAP_DIR}/misc.xml`, urlsetXml(miscPaths));
+// Static SEO pages are school-neutral templates, so each school gets its own
+// prefixed copy. uOttawa is the unprefixed school, so `withSchoolPath` leaves
+// its URLs exactly as they were before Carleton existed — the sitemap that
+// search engines have already indexed does not change.
+const staticPaths = readStaticPaths();
+
+for (const school of schools) {
+  const paths = schoolDataPaths(school);
+  // `withSchoolPath(school, "/")` yields "/carleton" for prefixed schools. A school
+  // home page is a directory, so keep its trailing slash to match the canonical the
+  // prerenderer emits (uOttawa's root is already "/", so it is untouched). Non-root
+  // paths keep whatever slash convention they were declared with.
+  const prefix = (pathname: string) => {
+    const prefixed = withSchoolPath(school, pathname);
+    return pathname === "/" && !prefixed.endsWith("/") ? `${prefixed}/` : prefixed;
+  };
+
+  const { catalogueFiles, courseCodes, programSlugs } = readCatalogueCollections(
+    paths.catalogueDir,
+  );
+  const professorSlugs = readProfessorSlugs(paths.professorsPath);
+
+  coursePaths.push(
+    ...courseCodes.map((code) => prefix(`/explore/course/${courseNormToPathParam(code)}`)),
+  );
+  professorPaths.push(
+    ...professorSlugs.map((slug) => prefix(`/explore/professor/${encodePathSegment(slug)}`)),
+  );
+  programPaths.push(...programSlugs.map((slug) => prefix(`/explore/program/${encodePath(slug)}`)));
+  miscPaths.push(
+    ...staticPaths.map(prefix),
+    ...readDisciplineAndFacultyPaths(paths.disciplinesPath).map(prefix),
+  );
+
+  perSchoolCounts.push(
+    `${school}(catalogues=${catalogueFiles.length} courses=${courseCodes.length} ` +
+      `professors=${professorSlugs.length} programs=${programSlugs.length})`,
+  );
+}
+
+writeFile(`${SITEMAP_DIR}/courses.xml`, urlsetXml(uniqueSorted(coursePaths)));
+writeFile(`${SITEMAP_DIR}/professors.xml`, urlsetXml(uniqueSorted(professorPaths)));
+writeFile(`${SITEMAP_DIR}/programs.xml`, urlsetXml(uniqueSorted(programPaths)));
+writeFile(`${SITEMAP_DIR}/misc.xml`, urlsetXml(uniqueSorted(miscPaths)));
 writeFile("sitemap.xml", sitemapIndexXml(SITEMAPS));
 
 console.log(
   [
-    `generate-sitemap: catalogues=${catalogueFiles.length}`,
-    `courses=${coursePaths.length}`,
+    `generate-sitemap: schools=${schools.length}`,
+    ...perSchoolCounts,
+    `total courses=${coursePaths.length}`,
     `professors=${professorPaths.length}`,
     `programs=${programPaths.length}`,
     `misc=${miscPaths.length}`,

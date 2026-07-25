@@ -8,6 +8,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./brand": "./src/brand.ts",
+    "./school": "./src/school.ts",
     "./dataCache": "./src/dataCache.ts",
     "./dataTypes": "./src/dataTypes/index.ts",
     "./dataTypes/*": "./src/dataTypes/*.ts",

@@ -1,6 +1,7 @@
 /**
  * Data-asset size report. Lists every built `.pb` asset in the web app's
- * assets/data directory with its raw, gzipped, and Brotli-compressed size, so
+ * assets/data directory (including per-school subdirectories) with its raw, gzipped,
+ * and Brotli-compressed size, so
  * a data / proto change can be size-justified (before vs after).
  *
  * Run `pnpm build:data-proto` first to (re)generate the assets, then:
@@ -33,8 +34,14 @@ export function collect(): AssetSize[] {
   if (!existsSync(DATA_DIR)) {
     throw new Error(`No data dir at ${DATA_DIR}. Run \`pnpm build:data-proto\` first.`);
   }
-  const files = readdirSync(DATA_DIR)
-    .filter((f) => f.endsWith(".pb"))
+  const files = readdirSync(DATA_DIR, { withFileTypes: true })
+    .flatMap((entry) => {
+      if (entry.isFile() && entry.name.endsWith(".pb")) return [entry.name];
+      if (!entry.isDirectory()) return [];
+      return readdirSync(join(DATA_DIR, entry.name))
+        .filter((file) => file.endsWith(".pb"))
+        .map((file) => `${entry.name}/${file}`);
+    })
     .sort();
   return files.map((id) => {
     const bytes = readFileSync(join(DATA_DIR, id));
@@ -136,7 +143,7 @@ function printDiff(current: AssetSize[], base: AssetSize[]): void {
  *   - Each  raw     ≤ 1,000,000 bytes
  */
 export function checkDescriptionBudgets(sizes: AssetSize[]): string[] {
-  const shards = sizes.filter((s) => /^catalogue\.descriptions\..+\.pb$/.test(s.id));
+  const shards = sizes.filter((s) => /(^|\/)catalogue\.descriptions\..+\.pb$/.test(s.id));
   const errors: string[] = [];
 
   const EXPECTED_COUNT = 13;

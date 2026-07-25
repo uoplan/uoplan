@@ -7,6 +7,14 @@ use crate::model::course_level;
 
 pub const DEFAULT_CREDITS_PER_COURSE: f64 = 3.0;
 
+pub fn normalize_course_credits(value: f64) -> f64 {
+    if value.is_finite() && value > 0.0 {
+        value
+    } else {
+        DEFAULT_CREDITS_PER_COURSE
+    }
+}
+
 /// Synthesized requirement id for the "additional electives" pool (the `M`
 /// free electives generated *on top* of the `courses_this_semester` target).
 /// Its budget is reserved separately so structured requirement pools can never
@@ -142,10 +150,11 @@ pub fn virtual_schedule_filter_applies(
     !explicit_exempt.iter().any(|c| c == norm_code)
 }
 
-pub fn pool_course_cap(pool: &RequirementPool) -> usize {
+pub fn pool_course_cap(pool: &RequirementPool, credits_per_course: f64) -> usize {
+    let credits_per_course = normalize_course_credits(credits_per_course);
     let raw = pool
         .min_courses
-        .max((pool.credits_needed / DEFAULT_CREDITS_PER_COURSE).ceil() as usize);
+        .max((pool.credits_needed / credits_per_course).ceil() as usize);
     if pool.req_type == "discipline_elective" {
         raw.min(1)
     } else {
@@ -153,10 +162,16 @@ pub fn pool_course_cap(pool: &RequirementPool) -> usize {
     }
 }
 
-pub fn build_pool_caps(pools: &[RequirementPool]) -> BTreeMap<String, usize> {
+pub fn build_pool_caps(
+    pools: &[RequirementPool],
+    credits_per_course: f64,
+) -> BTreeMap<String, usize> {
     let mut cap = BTreeMap::new();
     for pool in pools {
-        cap.insert(pool.requirement_id.clone(), pool_course_cap(pool));
+        cap.insert(
+            pool.requirement_id.clone(),
+            pool_course_cap(pool, credits_per_course),
+        );
     }
     cap
 }
@@ -257,6 +272,7 @@ fn greedy_place_one(
 pub fn compute_courses_per_pool(
     pools: &[RequirementPool],
     remaining_slots: usize,
+    credits_per_course: f64,
 ) -> BTreeMap<String, usize> {
     let mut result: BTreeMap<String, usize> = BTreeMap::new();
     if remaining_slots == 0 || pools.is_empty() {
@@ -266,7 +282,7 @@ pub fn compute_courses_per_pool(
     let mut cap: BTreeMap<String, usize> = BTreeMap::new();
     let mut sum_cap = 0usize;
     for pool in pools {
-        let c = pool_course_cap(pool);
+        let c = pool_course_cap(pool, credits_per_course);
         cap.insert(pool.requirement_id.clone(), c);
         sum_cap += c;
         result.insert(pool.requirement_id.clone(), 0);
@@ -408,11 +424,39 @@ mod tests {
             pool("free", "free_elective", 3.0, 0),
         ];
 
-        let allocation = compute_courses_per_pool(&pools, 4);
+        let allocation = compute_courses_per_pool(&pools, 4, DEFAULT_CREDITS_PER_COURSE);
 
         assert_eq!(allocation.get("core"), Some(&2));
         assert_eq!(allocation.get("discipline"), Some(&1));
         assert_eq!(allocation.get("free"), Some(&1));
+    }
+
+    #[test]
+    fn pool_course_cap_uses_school_typical_course_credits() {
+        assert_eq!(
+            pool_course_cap(&pool("carleton", "elective", 3.0, 0), 0.5),
+            6
+        );
+        assert_eq!(
+            pool_course_cap(&pool("uottawa", "elective", 3.0, 0), 3.0),
+            1
+        );
+    }
+
+    #[test]
+    fn pool_caps_and_allocation_use_school_typical_course_credits() {
+        let pools = vec![
+            pool("core", "course", 0.5, 1),
+            pool("comp", "elective", 3.0, 0),
+        ];
+
+        let caps = build_pool_caps(&pools, 0.5);
+        let allocation = compute_courses_per_pool(&pools, 7, 0.5);
+
+        assert_eq!(caps.get("core"), Some(&1));
+        assert_eq!(caps.get("comp"), Some(&6));
+        assert_eq!(allocation.get("core"), Some(&1));
+        assert_eq!(allocation.get("comp"), Some(&6));
     }
 
     #[test]
@@ -422,7 +466,7 @@ mod tests {
             pool("free", "free_elective", 3.0, 0),
         ];
 
-        let allocation = compute_courses_per_pool(&pools, 3);
+        let allocation = compute_courses_per_pool(&pools, 3, DEFAULT_CREDITS_PER_COURSE);
 
         assert_eq!(allocation.get("core"), Some(&1));
         assert_eq!(allocation.get("free"), Some(&2));

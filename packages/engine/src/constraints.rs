@@ -7,13 +7,15 @@
 use std::collections::HashMap;
 
 use crate::model::{first_four_digit_number, DataView};
+use crate::pools::{normalize_course_credits, DEFAULT_CREDITS_PER_COURSE};
 use crate::types::{Enrollment, RtSection, RtTime};
 
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct Constraints {
     pub min_start: u32,
     pub max_end: u32,
     pub max_first_year_credits: Option<f64>,
+    pub default_course_credits: f64,
     /// (day 0-6 Monday, start, end)
     pub blocked: Vec<(u8, u32, u32)>,
     /// normalized professor name -> rating (only rated profs present).
@@ -21,6 +23,20 @@ pub struct Constraints {
     /// When set, section selection is biased toward higher-rated professors
     /// (soft preference; see `timetable::combos`). Not a hard filter.
     pub prefer_professor_rating: bool,
+}
+
+impl Default for Constraints {
+    fn default() -> Self {
+        Constraints {
+            min_start: 0,
+            max_end: 0,
+            max_first_year_credits: None,
+            default_course_credits: DEFAULT_CREDITS_PER_COURSE,
+            blocked: Vec::new(),
+            professor_ratings: HashMap::new(),
+            prefer_professor_rating: false,
+        }
+    }
 }
 
 impl Constraints {
@@ -73,6 +89,7 @@ impl Constraints {
                 total += first_year_credits(
                     &e.course_code,
                     data.get_course(&e.course_code).map(|c| c.credits),
+                    self.default_course_credits,
                 );
                 if total > cap {
                     return false;
@@ -94,9 +111,9 @@ pub fn normalize_professor_name(name: &str) -> String {
     out
 }
 
-fn first_year_credits(code: &str, credits: Option<f64>) -> f64 {
+fn first_year_credits(code: &str, credits: Option<f64>, default_credits: f64) -> f64 {
     match first_four_digit_number(code) {
-        Some(n) if n < 2000 => credits.unwrap_or(3.0),
+        Some(n) if n < 2000 => credits.unwrap_or_else(|| normalize_course_credits(default_credits)),
         _ => 0.0,
     }
 }
@@ -197,6 +214,26 @@ mod tests {
             &[
                 enrollment("CSI 1100", Vec::new()),
                 enrollment("CSI 1500", Vec::new()),
+            ],
+            &data,
+        ));
+    }
+
+    #[test]
+    fn first_year_credit_cap_uses_school_default_for_unknown_courses() {
+        let data = data_with_credits(&[]);
+        let constraints = Constraints {
+            max_end: 24 * 60,
+            max_first_year_credits: Some(0.5),
+            default_course_credits: 0.5,
+            ..Default::default()
+        };
+
+        assert!(constraints.allows_final(&[enrollment("COMP 1005", Vec::new())], &data));
+        assert!(!constraints.allows_final(
+            &[
+                enrollment("COMP 1005", Vec::new()),
+                enrollment("COMP 1006", Vec::new()),
             ],
             &data,
         ));

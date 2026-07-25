@@ -9,6 +9,7 @@ import {
   runAdvancedGeneration,
   runBasicGeneration,
 } from "@uoplan/core";
+import { SCHOOLS } from "@uoplan/domain/school";
 import type {
   AdvancedRequestInput,
   BasicRequestInput,
@@ -33,12 +34,13 @@ export { type GenerateSchedulesInput } from "@uoplan/store/generationInput";
 function sumCompletedFirstYearCredits(
   completedCourses: readonly string[],
   cache: DataCache,
+  defaultCourseCredits: number,
 ): number {
   return completedCourses.reduce((sum, code) => {
     const m = code.match(/\d{4}/);
     if (!m || Number(m[0]) >= 2000) return sum;
     const course = cache.getCourse(code);
-    return sum + (course?.credits ?? 3);
+    return sum + (course?.credits ?? defaultCourseCredits);
   }, 0);
 }
 
@@ -96,6 +98,7 @@ export async function generateSchedulesAction(
     courseSentimentByNorm,
     frenchImmersionStream,
   } = input;
+  const creditConfig = SCHOOLS[input.school].credits;
 
   // Strict priority gate: only offer requirements at the lowest priority tier still outstanding.
   // A no-op when the user has not set any priorities (all default 0).
@@ -177,14 +180,18 @@ export async function generateSchedulesAction(
     };
   }
 
-  const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
+  const completedFirstYearCredits = sumCompletedFirstYearCredits(
+    completedCourses,
+    cache,
+    creditConfig.defaultCourseCredits,
+  );
 
   const constraints: GenerationConstraints = {
     minStartMinutes: generationMinStartMinutes,
     maxEndMinutes: generationMaxEndMinutes,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
-      ? Math.max(0, 48 - (completedFirstYearCredits ?? 0))
+      ? Math.max(0, creditConfig.firstYearCreditCap - (completedFirstYearCredits ?? 0))
       : undefined,
     blockedTimes: input.blockedTimes,
   };
@@ -206,6 +213,7 @@ export async function generateSchedulesAction(
     selectedPerRequirement,
     prereqEligibleCourses,
     cache,
+    creditConfig.defaultCourseCredits,
   );
 
   const effectiveConstrainedPerRequirement: Record<string, string[]> = {};
@@ -235,6 +243,7 @@ export async function generateSchedulesAction(
   ];
 
   const advancedInput: AdvancedRequestInput = {
+    school: input.school,
     constraints,
     completedCourses,
     prereqEligibleCourses,
@@ -362,8 +371,13 @@ async function handleBasicGeneration(
     frenchImmersionStream,
     blacklistedCourses: basicBlacklistedCourses,
   } = input;
+  const creditConfig = SCHOOLS[input.school].credits;
 
-  const completedFirstYearCredits = sumCompletedFirstYearCredits(completedCourses, cache);
+  const completedFirstYearCredits = sumCompletedFirstYearCredits(
+    completedCourses,
+    cache,
+    creditConfig.defaultCourseCredits,
+  );
   const effectiveAdditionalElectivesCount = clampAdditionalElectiveCount(
     additionalElectivesCount,
     basketCourses.length,
@@ -375,12 +389,13 @@ async function handleBasicGeneration(
     maxEndMinutes: generationMaxEndMinutes,
     professorRatings: professorRatings ?? undefined,
     maxFirstYearCredits: generationLimitFirstYearCredits
-      ? Math.max(0, 48 - completedFirstYearCredits)
+      ? Math.max(0, creditConfig.firstYearCreditCap - completedFirstYearCredits)
       : undefined,
     blockedTimes: input.blockedTimes,
   };
 
   const basicInput: BasicRequestInput = {
+    school: input.school,
     constraints,
     basketCourses,
     additionalElectivesCount: effectiveAdditionalElectivesCount,

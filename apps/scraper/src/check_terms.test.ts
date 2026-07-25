@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { findNewTerms, parseTermDropdown, sortTerms, termsListsEqual } from "./terms/check.ts";
+import {
+  fetchCurrentTermsForSchool,
+  findNewTerms,
+  parseTermDropdown,
+  sortTerms,
+  termsListsEqual,
+} from "./terms/check.ts";
 import { normalizeTermName } from "./terms/normalize.ts";
 
 describe("normalizeTermName", () => {
@@ -130,5 +136,41 @@ describe("termsListsEqual", () => {
     ];
     expect(termsListsEqual(known, current)).toBe(false);
     expect(findNewTerms(known, current)).toEqual([{ termId: "2271", name: "2027 Winter Term" }]);
+  });
+});
+
+describe("fetchCurrentTermsForSchool", () => {
+  it("uses the uOttawa term fetcher by default", async () => {
+    const terms = await fetchCurrentTermsForSchool("uottawa", {
+      fetchUottawaTerms: async () => [{ termId: "2269", name: "2026 Fall Term" }],
+      fetchCarletonSelectTermHtml: async () => {
+        throw new Error("should not fetch Carleton");
+      },
+    });
+
+    expect(terms).toEqual([{ termId: "2269", name: "2026 Fall Term" }]);
+  });
+
+  it("parses Carleton Banner terms when --school carleton is selected", async () => {
+    const html = `
+      <form>
+        <input name="session_id" value="26061541" />
+        <select name="term_code">
+          <option value="202620">Summer 2026 (View only)</option>
+          <option value="202630">Fall 2026</option>
+        </select>
+      </form>
+    `;
+    const terms = await fetchCurrentTermsForSchool("carleton", {
+      fetchUottawaTerms: async () => {
+        throw new Error("should not fetch uOttawa");
+      },
+      fetchCarletonSelectTermHtml: async () => html,
+    });
+
+    expect(terms).toEqual([
+      { termId: "202620", name: "Summer 2026" },
+      { termId: "202630", name: "Fall 2026" },
+    ]);
   });
 });

@@ -27,6 +27,7 @@ export default defineConfig({
     "apps/notifications/**",
     "apps/native/**",
     "apps/marketing/**",
+    "apps/scraper/*.mts",
     "worker-configuration.d.ts",
   ],
   rules: {
@@ -135,7 +136,7 @@ export default defineConfig({
     {
       // The scraper is a Node CLI/tooling suite where stdout/stderr is the
       // intended output channel, so `console` usage is expected here.
-      files: ["apps/scraper/**/*.{ts,tsx}"],
+      files: ["apps/scraper/**/*.{ts,tsx,mts}"],
       rules: {
         "no-console": "off",
       },

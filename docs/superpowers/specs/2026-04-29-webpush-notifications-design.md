@@ -147,7 +147,7 @@ Exposed via Vite env var `VITE_VAPID_PUBLIC_KEY` (set in Cloudflare Pages env or
 
 ### New scraper: `apps/scraper/src/check_terms.ts`
 
-Fetches the uOttawa public class search page and parses the term `<select>` dropdown. Compares the found term IDs against `apps/web/public/data/terms.json`.
+Fetches the uOttawa public class search page and parses the term `<select>` dropdown. Compares the found term IDs against `apps/web/src/assets/data/uottawa/terms.pb`.
 
 **Output:** JSON array of new term objects to stdout, e.g.:
 

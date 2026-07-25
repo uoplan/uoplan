@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Badge, Box, Group, Text } from "@mantine/core";
 import type { CSSProperties } from "react";
 import { tr, useTr } from "../../i18n";
+import { useSchoolFeature } from "../../hooks/useSchool";
 import { GradeDistributionBottomBar } from "../calendar/GradeDistributionViz";
 import { RatingBadge } from "../shared/RatingBadge";
 import type { ExploreCourseSearchEntry } from "../../lib/explore/gradesSearch";
@@ -42,6 +43,7 @@ export function SearchResultCourseCard({
   virtual: boolean;
 }) {
   useTr();
+  const hasGrades = useSchoolFeature("grades");
   const { gradeViz } = entry;
 
   return (
@@ -85,9 +87,14 @@ export function SearchResultCourseCard({
           <SearchResultGradeSummary
             gradeViz={gradeViz}
             fallback={
-              <Text size="xs" c="dimmed" lh={1.3}>
-                {tr("search.noGradeData")}
-              </Text>
+              // Schools without registrar grade data (e.g. Carleton) would show
+              // "No grade data" on every single card, which is noise rather than
+              // information — omit the line entirely there.
+              hasGrades ? (
+                <Text size="xs" c="dimmed" lh={1.3}>
+                  {tr("search.noGradeData")}
+                </Text>
+              ) : null
             }
           />
         </SearchResultCardBody>

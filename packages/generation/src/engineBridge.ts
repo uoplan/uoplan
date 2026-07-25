@@ -24,6 +24,8 @@ import type {
 } from "@uoplan/proto/engine";
 import type { DataCache } from "@uoplan/domain/dataCache";
 import type { NormalizedCourseCode } from "@uoplan/domain/brand";
+import { DEFAULT_SCHOOL_ID, SCHOOLS } from "@uoplan/domain/school";
+import type { SchoolId } from "@uoplan/domain/school";
 import { courseAPlusPercent } from "@uoplan/grades/gradeDistribution";
 import { getEnrollmentsForCourse } from "./generation/sectionCombos";
 import type {
@@ -71,6 +73,7 @@ export interface ScheduleEngine {
 
 /** Shared selection/preference inputs common to basic and advanced requests. */
 interface CommonRequestInput {
+  school?: SchoolId;
   constraints: GenerationConstraints;
   completedCourses: string[];
   levelBuckets: string[];
@@ -131,6 +134,12 @@ export interface TimetableFixedSetInput {
   blacklistedCourses?: string[];
   /** Ordered optimization objectives — shape + professor objectives apply to swaps. */
   optimizationPriorities: OptimizationPriority[];
+  /**
+   * The school whose credit conventions apply. Determines `credit_config` forwarded to
+   * the engine so the first-year credit cap uses the right per-course credit value.
+   * Defaults to uOttawa when absent (preserves existing behaviour).
+   */
+  school?: SchoolId;
 }
 
 /** Mapped {@link GenerationResponse} in the shapes the app store consumes. */
@@ -275,6 +284,7 @@ type CommonGenerationRequestFields = Pick<
   | "courseAplus"
   | "courseSentiment"
   | "optimizationPriorities"
+  | "creditConfig"
 >;
 
 type SharedGenerationRequestFields = Omit<
@@ -295,6 +305,7 @@ function buildCommonGenerationRequestFields(
     input.optimizationPriorities,
     "prefer_professor_rating",
   );
+  const creditConfig = SCHOOLS[input.school ?? DEFAULT_SCHOOL_ID].credits;
   return {
     basicExcludedCategories: input.basicExcludedCategories,
     completedCourses: input.completedCourses,
@@ -315,6 +326,10 @@ function buildCommonGenerationRequestFields(
         ? buildCourseSentimentMap(cache, input.courseSentimentByNorm)
         : {},
     optimizationPriorities: optimizationPrioritiesToProto(input.optimizationPriorities),
+    creditConfig: {
+      typicalCourseCredits: creditConfig.typicalCourseCredits,
+      defaultCourseCredits: creditConfig.defaultCourseCredits,
+    },
   };
 }
 
@@ -336,6 +351,7 @@ function buildSharedGenerationRequestFields(
     courseAplus: common.courseAplus,
     courseSentiment: common.courseSentiment,
     optimizationPriorities: common.optimizationPriorities,
+    creditConfig: common.creditConfig,
   };
 }
 
@@ -457,6 +473,7 @@ function buildTimetableRequest(input: TimetableFixedSetInput): TimetableRequest 
     input.optimizationPriorities,
     "prefer_professor_rating",
   );
+  const creditConfig = SCHOOLS[input.school ?? DEFAULT_SCHOOL_ID].credits;
   return {
     courseCodes: input.courseCodes,
     constraints: constraintsToProto(input.constraints),
@@ -468,6 +485,10 @@ function buildTimetableRequest(input: TimetableFixedSetInput): TimetableRequest 
     applyBlacklist: input.applyBlacklist ?? false,
     blacklistedCourses: input.blacklistedCourses ?? [],
     optimizationPriorities: optimizationPrioritiesToProto(input.optimizationPriorities),
+    creditConfig: {
+      typicalCourseCredits: creditConfig.typicalCourseCredits,
+      defaultCourseCredits: creditConfig.defaultCourseCredits,
+    },
   };
 }
 

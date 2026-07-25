@@ -17,6 +17,8 @@ import type {
   Term as ProtoTerm,
   TermsData as ProtoTermsData,
 } from "@uoplan/proto/data";
+import { DEFAULT_SCHOOL_ID, getSchool } from "../school";
+import type { SchoolId } from "../school";
 import type {
   Catalogue,
   CatalogueManifest,
@@ -140,11 +142,6 @@ function programKeyFromProgram(program: Program): string {
   return p.title.trim();
 }
 
-function programUrlFromKey(key: string): string {
-  if (/^https?:\/\//.test(key)) return key;
-  return `https://catalogue.uottawa.ca/en/${key.replace(/^\/+/, "")}`;
-}
-
 function statusToProto(status: string | null): ProtoSectionStatus {
   if (status === "Open") return ProtoSectionStatus.SECTION_STATUS_OPEN;
   if (status === "Closed") return ProtoSectionStatus.SECTION_STATUS_CLOSED;
@@ -195,7 +192,10 @@ export function toProtoCatalogue(input: Catalogue): ProtoCatalogue {
   };
 }
 
-export function fromProtoCatalogue(input: ProtoCatalogue): Catalogue {
+export function fromProtoCatalogue(
+  input: ProtoCatalogue,
+  school: SchoolId = DEFAULT_SCHOOL_ID,
+): Catalogue {
   const courseCodeTable = input.courseCodes;
   const extraCodes = input.extraCodes;
   const resolveCodeRef = (ref: number | undefined): string | undefined => {
@@ -225,7 +225,7 @@ export function fromProtoCatalogue(input: ProtoCatalogue): Catalogue {
     programs: input.programs.map(
       (program): Program => ({
         title: program.title,
-        url: programUrlFromKey(program.programKey),
+        url: getSchool(school).programCatalogueUrl(program.programKey),
         slug: program.programKey,
         requirements: program.requirements.map((requirement) =>
           fromProtoProgramRequirement(requirement, resolveCodeRef),

@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9 no-js" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" dir="ltr" lang="en-US"><!--<![endif]-->
+<!-- the "no-js" class is for Modernizr. -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Course Search - Carleton University</title>
+<link rel="stylesheet" href="/css/ro/ro_course_search.css" type="text/css" media="screen"/>
+<!--[if lt IE 9]>
+<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+<body>
+<header class="centered">
+<div class="culogo">
+<h2>Registrar's Office</h2>
+</div> <!-- end culogo -->
+<div class="clear"></div>
+</header>
+<div class="banner">
+<h1>Search For Courses</h1>
+<div class="buttonsarea">
+<ul>
+<li class="redbutton"><a href="https://carleton.ca/registration/" target="_blank">How-To Video</a></li>
+<li class="redbutton"><a href="https://carleton.ca/registration/registration-steps/" target="_blank">User Guide</a></li>
+<li class="redbutton"><a href="http://calendar.carleton.ca/undergrad/" target="_blank">Undergrad Calendar</a></li>
+<li class="redbutton"><a href="http://calendar.carleton.ca/grad/" target="_blank">Graduate Calendar</a></li>
+</ul>
+</div>
+<div class="clear"></div>
+</div>
+<div class="bannerwrap">
+</div>
+<section class="containerfull centered">
+<section class="contentareafull">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/blitzer/jquery-ui.css">
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!-- Hide JavaScript from older browsers
+$(document).ready(function() {
+ $("#adv_div").hide();
+ $("#levl_id").change(function () {
+     $.get("bwysched.p_search_subj_op", {wsea_code: $("#wsea_code").val(), term_code: $("#term_code").val(), levl_code: $("#levl_id").val()}, function(data){ $("#subj_id").empty().append(data); });
+ });
+});
+function adv_clicked() {
+ if ($("#adv_div").is(':hidden')) { 
+     $("#adv_div").show();
+     $("#adv_link").empty().append("Click here to remove advanced search options");
+ }
+ else { 
+     $("#adv_div").hide(); 
+     $("#adv_link").empty().append("Click here for advanced search options");
+ }
+}
+function validate_breadth() {
+ if (($("#breadth_id").val() != "") && ($("#number_id").val() == "")) { 
+     alert("Please select a course level by entering 1, 2, 3 or 4 in the course number field.");
+     return false;
+ }
+ else { 
+     return true;
+ }
+}
+//  End script hiding -->
+</SCRIPT>
+<form action="bwysched.p_course_search" method="post">
+</td>
+</tr>
+</table>
+<table cellspacing="0" cellpadding="4" border="0" width="95%" style="font-size:12px;">
+<tr>
+<td><b>Registration Term:&nbsp</b>Fall 2026 (September-December)<br><br></td>
+</tr>
+<tr>
+<td>
+**The University strives to limit changes to the schedule, however it is important that you continue to check the schedule since dates and the days/times of some classes <b> may change </b>.
+<br><br></td>
+</tr>
+<input type="hidden" name="wsea_code" value="EXT" id=wsea_code />
+<input type="hidden" name="term_code" value="202630" id=term_code />
+<input type="hidden" name="session_id" value="26061541" />
+<input type="hidden" name="ws_numb" value="" />
+<input type="hidden" name="sel_aud" value="dummy" />
+<input type="hidden" name="sel_subj" value="dummy" />
+<input type="hidden" name="sel_camp" value="dummy" />
+<input type="hidden" name="sel_sess" value="dummy" />
+<input type="hidden" name="sel_attr" value="dummy" />
+<input type="hidden" name="sel_levl" value="dummy" />
+<input type="hidden" name="sel_schd" value="dummy" />
+<input type="hidden" name="sel_insm" value="dummy" />
+<input type="hidden" name="sel_link" value="dummy" />
+<input type="hidden" name="sel_wait" value="dummy" />
+<input type="hidden" name="sel_day" value="dummy" />
+<input type="hidden" name="sel_begin_hh" value="dummy" />
+<input type="hidden" name="sel_begin_mi" value="dummy" />
+<input type="hidden" name="sel_begin_am_pm" value="dummy" />
+<input type="hidden" name="sel_end_hh" value="dummy" />
+<input type="hidden" name="sel_end_mi" value="dummy" />
+<input type="hidden" name="sel_end_am_pm" value="dummy" />
+<input type="hidden" name="sel_instruct" value="dummy" />
+<input type="hidden" name="sel_special" value="dummy" />
+<input type="hidden" name="sel_resd" value="dummy" />
+<input type="hidden" name="sel_breadth" value="dummy" />
+<tr>
+<td>
+<table cellspacing="0" cellpadding="4" border="0" width="100%" style="font-size:12px;">
+<tr>
+<td width="15%"><b><p style="color:#0000FF">COURSE LEVEL:</p></td>
+<td>
+<select name="sel_levl" id="levl_id" size="3">
+<option value="" selected>All Levels</option>
+<option value="UG" >Undergraduate</option>
+<option value="GR" >Graduate</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<br>
+</td>
+</tr>
+<tr>
+<td width="15%"><b><p style="color:#0000FF">SUBJECT:</p></td>
+<td>
+<select name="sel_subj" id="subj_id" size="6" multiple>
+<option value="" selected>All Subjects</option>
+<option value="ACCS" >Accessibility (ACCS)</option>
+<option value="ACCT" >Accounting (ACCT)</option>
+<option value="AERO" >Aerospace Engineering (AERO)</option>
+<option value="AFRI" >African Studies (AFRI)</option>
+<option value="ASLA" >American Sign Language (ASLA)</option>
+<option value="ANTH" >Anthropology (ANTH)</option>
+<option value="ALDS" >Appl. Linguistics & Discourse (ALDS)</option>
+<option value="ACSE" >Arch Conserv & Sustainabil Eng (ACSE)</option>
+<option value="ARCT" >Arch-Mas (ARCT)</option>
+<option value="ARCY" >Archaeology (ARCY)</option>
+<option value="ARCS" >Architecture - Studio (ARCS)</option>
+<option value="ARCC" >Architecture - Technical (ARCC)</option>
+<option value="ARCN" >Architecture - Techniques (ARCN)</option>
+<option value="ARCH" >Architecture - Theory/History (ARCH)</option>
+<option value="ARCU" >Architecture - Urban (ARCU)</option>
+<option value="ARTH" >Art and Architectural History (ARTH)</option>
+<option value="BIOC" >Biochemistry (BIOC)</option>
+<option value="BIOL" >Biology (BIOL)</option>
+<option value="BIOM" >Biomed (BIOM)</option>
+<option value="BLDG" >Building Engineering (BLDG)</option>
+<option value="BUSI" >Business (BUSI)</option>
+<option value="CDNS" >Canadian Studies (CDNS)</option>
+<option value="CIED" >Centre for Initiatives in Edu (CIED)</option>
+<option value="CHEM" >Chemistry (CHEM)</option>
+<option value="CHST" >Childhood and Youth Studies (CHST)</option>
+<option value="CHIN" >Chinese (CHIN)</option>
+<option value="CIVE" >Civil Engineering (CIVE)</option>
+<option value="CIVJ" >Civil Engineering - Joint (CIVJ)</option>
+<option value="CLCV" >Classical Civilization (CLCV)</option>
+<option value="CLIM" >Climate Change (CLIM)</option>
+<option value="COOP" >Co-op (COOP)</option>
+<option value="CGSC" >Cognitive Science (CGSC)</option>
+<option value="CCDP" >Comm. Crses Discipline & Prof. (CCDP)</option>
+<option value="COMS" >Communication & Media Studies (COMS)</option>
+<option value="COMP" >Computer Science (COMP)</option>
+<option value="CRCJ" >Criminology and Crim Just (CRCJ)</option>
+<option value="CRST" >Critical Race Studies (CRST)</option>
+<option value="CLMD" >Cultural Mediations (CLMD)</option>
+<option value="CURA" >Curatorial studies (CURA)</option>
+<option value="CSEC" >Cybersecurity (CSEC)</option>
+<option value="CYBR" >Cybersecurity (CYBR)</option>
+<option value="DATA" >Data Science (DATA)</option>
+<option value="DIGH" >Digital Humanities (DIGH)</option>
+<option value="DBST" >Disability Studies (DBST)</option>
+<option value="ESPW" >ESP Workshop (ESPW)</option>
+<option value="ERTH" >Earth Sciences (ERTH)</option>
+<option value="ECON" >Economics (ECON)</option>
+<option value="EACJ" >Electrical Engineering - Joint (EACJ)</option>
+<option value="ELEC" >Electronics (ELEC)</option>
+<option value="ECMP" >Engineering Complementar Crses (ECMP)</option>
+<option value="ECOR" >Engineering Core (ECOR)</option>
+<option value="EGEN" >Engineering General (EGEN)</option>
+<option value="EWEX" >Engineering Work Experience (EWEX)</option>
+<option value="ENGL" >English (ENGL)</option>
+<option value="ESLA" >English as a Second Language (ESLA)</option>
+<option value="EACH" >Environ. & Climate Humanities (EACH)</option>
+<option value="ENVJ" >Environmental Engineer - Joint (ENVJ)</option>
+<option value="ENVE" >Environmental Engineering (ENVE)</option>
+<option value="ENSC" >Environmental Science (ENSC)</option>
+<option value="ENST" >Environmental Studies (ENST)</option>
+<option value="EPAF" >Ethics and Public Affairs (EPAF)</option>
+<option value="EURR" >European and Russian Studies (EURR)</option>
+<option value="FILM" >Film Studies (FILM)</option>
+<option value="FINA" >Financial Management (FINA)</option>
+<option value="FYSM" >First Year Seminar (FYSM)</option>
+<option value="FOOD" >Food Science (FOOD)</option>
+<option value="FREN" >French (FREN)</option>
+<option value="FINS" >French Interdiscip. Studies (FINS)</option>
+<option value="GEOG" >Geography (GEOG)</option>
+<option value="GEOM" >Geomatics (GEOM)</option>
+<option value="GERM" >German (GERM)</option>
+<option value="GINS" >Global and Inter. Studies (GINS)</option>
+<option value="GREK" >Greek (GREK)</option>
+<option value="HLTH" >Health (HLTH)</option>
+<option value="HIST" >History (HIST)</option>
+<option value="HRSJ" >Human Rights & Social Justice (HRSJ)</option>
+<option value="HCIN" >Human-Computer Interaction (HCIN)</option>
+<option value="HUMS" >Humanities (HUMS)</option>
+<option value="IESP" >Indigenous Enriched Support (IESP)</option>
+<option value="INDG" >Indigenous Studies (INDG)</option>
+<option value="IDES" >Industrial Design (IDES)</option>
+<option value="IRM" >Information Resource Mgmt (IRM)</option>
+<option value="ITIS" >Information Systems (ITIS)</option>
+<option value="BIT" >Information Technology (BIT)</option>
+<option value="ITEC" >Information Technology (ITEC)</option>
+<option value="IPIS" >Infrastruc Protec/Intl Securit (IPIS)</option>
+<option value="IMD" >Inter. Multi Media & Design (IMD)</option>
+<option value="ISAP" >Interdis. Science and Practice (ISAP)</option>
+<option value="IPAF" >Interdisc. Public Affairs (IPAF)</option>
+<option value="ISCI" >Interdisciplinary Science (ISCI)</option>
+<option value="INAF" >International Affairs (INAF)</option>
+<option value="IBUS" >International Business (IBUS)</option>
+<option value="ITAL" >Italian (ITAL)</option>
+<option value="JAPA" >Japanese (JAPA)</option>
+<option value="JOUR" >Journalism (JOUR)</option>
+<option value="KORE" >Korean (KORE)</option>
+<option value="LANG" >Language Studies (LANG)</option>
+<option value="LATN" >Latin (LATN)</option>
+<option value="LACS" >Latin American & Caribbean (LACS)</option>
+<option value="LAWS" >Law (LAWS)</option>
+<option value="LING" >Linguistics (LING)</option>
+<option value="MGMT" >Management (MGMT)</option>
+<option value="MKTG" >Marketing (MKTG)</option>
+<option value="MATH" >Mathematics (MATH)</option>
+<option value="MAAJ" >Mech and Aero - Joint (MAAJ)</option>
+<option value="MECH" >Mechanical Engineering (MECH)</option>
+<option value="MAAE" >Mechanical and Aero Engineer (MAAE)</option>
+<option value="MPAD" >Media Production and Design (MPAD)</option>
+<option value="MEMS" >Medieval &Early Modern Studies (MEMS)</option>
+<option value="MGDS" >Migration and Diaspora Studies (MGDS)</option>
+<option value="MUSI" >Music (MUSI)</option>
+<option value="NSCI" >Natural Science (NSCI)</option>
+<option value="NET" >Network Technology (NET)</option>
+<option value="NEUR" >Neuroscience (NEUR)</option>
+<option value="NURS" >Nursing (NURS)</option>
+<option value="OSS" >Optical Systems and Sensors (OSS)</option>
+<option value="PANL" >Philanthropy&Nonprof Leadershi (PANL)</option>
+<option value="PHIL" >Philosophy (PHIL)</option>
+<option value="PHYS" >Physics (PHYS)</option>
+<option value="PHYJ" >Physics - Joint (PHYJ)</option>
+<option value="PECO" >Political Economy (PECO)</option>
+<option value="POLM" >Political Management (POLM)</option>
+<option value="PSCI" >Political Science (PSCI)</option>
+<option value="PSYC" >Psychology (PSYC)</option>
+<option value="PADM" >Public Administration (PADM)</option>
+<option value="PAPM" >Public Affairs and Policy Mngm (PAPM)</option>
+<option value="RELI" >Religion (RELI)</option>
+<option value="SXST" >Sexuality Studies (SXST)</option>
+<option value="SOWK" >Social Work (SOWK)</option>
+<option value="SOCI" >Sociology (SOCI)</option>
+<option value="SPAN" >Spanish (SPAN)</option>
+<option value="STAT" >Statistics (STAT)</option>
+<option value="STGY" >Strategic Management (STGY)</option>
+<option value="SREE" >Sustainable & Renewable Energy (SREE)</option>
+<option value="SERG" >Sustainable Energy (SERG)</option>
+<option value="SYSC" >Systems and Computer Engin (SYSC)</option>
+<option value="TEAL" >Teaching English Additn'l Lang (TEAL)</option>
+<option value="TSES" >Tech, Soc, Env (Multidiscip) (TSES)</option>
+<option value="TIMG" >Technology Innovation Mgmt (TIMG)</option>
+<option value="TOMS" >Technology Management (TOMS)</option>
+<option value="WGST" >Women's and Gender Studies (WGST)</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p><b>NOTE:<i> Select at least one subject from the list. Select multiple Subjects by holding the CTRL key on your keyboard for Windows and the Command key for MAC's.<br><br></i></p>
+</td>
+</tr>
+<tr>
+<td><b><p style="color:#0000FF">COURSE NUMBER:</p></td>
+<td>
+<input type="text" name="sel_number" id="number_id" size="4" maxlength="4">
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p><b>NOTE:<i> You can search the course number in whole or in part. Example: to search all 1st year courses in a particular subject, you would enter 1 in the course number field.</i><br><br></p>
+</td>
+</tr>
+<tr>
+<td><b><p style="color:#0000FF">SEARCH BY CRN:</p></td>
+<td>
+<input type="text" name="sel_crn" id="crn_id" size="5" maxlength="5">
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p><b>NOTE:<i> If you know the CRN (5 digit course reference number) enter it here.</i><br><br></p>
+</td>
+</tr>
+<tr>
+<td width="15%"><b><p style="color:#0000FF">SPECIAL CRITERIA:</p></td>
+<td>
+<select name="sel_special" id="special_id" multiple>
+<option value="N" selected>Show All</option>
+<option value="O">Show courses that are open for registration</option>
+<option value="OL">Show online courses</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p><b>NOTE:<i> "Show courses that are open for registration" will not include courses that have an open waitlist.</i><br><br></p>
+</td>
+</tr>
+</td>
+</tr>
+<tr>
+<td colspan="2"><br><b>
+<a href="#" id="adv_link" onClick="adv_clicked(); return false;">Click here for advanced search options</a>
+</b><br><br></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<div id="adv_div">
+<table cellspacing="0" cellpadding="4" border="0" width="100%" style="font-size:12px;">
+<tr>
+<td width="15%"><b><p style="color:#0000FF">SESSION TYPE:</p></td>
+<td>
+<select name="sel_sess" id="sess_id" size="5" multiple>
+<option value="" selected>All Sessions</option>
+<option value="Q" >Algonquin</option>
+<option value="D" >Day</option>
+<option value="E" >Evening</option>
+<option value="O" >U of O</option>
+<option value="U" >Unscheduled</option>
+<option value="W" >Web</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<br>
+</td>
+</tr>
+<tr>
+<td width="15%"><b><p style="color:#0000FF">SCHEDULE TYPE:</p></td>
+<td>
+<select name="sel_schd" id="schd_id" size="5" multiple>
+<option value="" selected>All Schedule Types</option>
+<option value="CAP" >Capstone</option>
+<option value="CMP" >Comprehensive</option>
+<option value="DIR" >Directed Studies</option>
+<option value="GRP" >Discussion Group</option>
+<option value="FIE" >Field Course</option>
+<option value="PLA" >Field Placement</option>
+<option value="FLM" >Film Screening</option>
+<option value="HON" >Honours Essay</option>
+<option value="IND" >Independent Study</option>
+<option value="LAB" >Laboratory</option>
+<option value="LEC" >Lecture</option>
+<option value="MAT" >Masters Thesis</option>
+<option value="NTC" >Non-Term Credit</option>
+<option value="OTH" >Other</option>
+<option value="DRT" >PhD Thesis</option>
+<option value="PRC" >Practicum</option>
+<option value="PAN" >Problem Analysis</option>
+<option value="RES" >Research Essay</option>
+<option value="REP" >Research Project</option>
+<option value="SEM" >Seminar</option>
+<option value="STU" >Studio</option>
+<option value="TUT" >Tutorial</option>
+<option value="UGT" >Undergraduate Thesis</option>
+<option value="VOD" >Video on Demand</option>
+<option value="WRK" >Work Term</option>
+<option value="WKS" >Workshop</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<br>
+</td>
+</tr>
+<tr>
+<td width="15%"><b><p style="color:#0000FF">INSTRUCTOR:</p></td>
+<td>
+<select name="sel_instruct" id="instruct_id" size="5" multiple>
+<option value="" selected>All Instructors</option>
+<option value="844764" >Abdou, AbdelRahman</option>
+<option value="724949" >Abizaid Bucio, Alfonso</option>
+<option value="288423" >Abo El Ella, Hamza</option>
+<option value="1466695" >Abu-Hajiar, Iyas</option>
+<option value="250280" >Achar, Ram</option>
+<option value="1811748" >Adamiak, Rochelle</option>
+<option value="745161" >Adou, Frank</option>
+<option value="195688" >Adrian, Melanie</option>
+<option value="324651" >Afagh, Fred</option>
+<option value="1126759" >Aguilar Valles, Argel</option>
+<option value="1344645" >Ahmadi, Arash</option>
+<option value="697710" >Ahmadi, Mojtaba</option>
+<option value="1665033" >Ahmed, Hussam</option>
+<option value="882278" >Ahmed, Jamila</option>
+<option value="1421714" >Ahmed, Menna Agha</option>
+<option value="200832" >Ahuja, Tarun</option>
+<option value="1087587" >Aiello, Damiano</option>
+<option value="536936" >Aitken, Susan</option>
+<option value="747901" >Al Guindy, Mohamed</option>
+<option value="697918" >Alfonso, Margarita</option>
+<option value="311620" >Ali, Mohamed</option>
+<option value="531619" >Almaskut, Ahmed</option>
+<option value="907259" >Almuhtadi, Wahab</option>
+<option value="222314" >Amaya, Rony</option>
+<option value="383700" >Amery, Zainab</option>
+<option value="975179" >Amos, Richard</option>
+<option value="1005879" >Anable, Aubrey</option>
+<option value="1324887" >Anderson, John</option>
+<option value="190853" >Anderson, Michael</option>
+<option value="780497" >Anderson, Troy</option>
+<option value="723656" >Andree, Peter</option>
+<option value="1209542" >Andrisani, Vincent</option>
+<option value="751393" >Angnakak, Tara</option>
+<option value="1419232" >Angod, Leila</option>
+<option value="1547922" >Angus, Siobhan</option>
+<option value="316612" >Anisman, Hymie</option>
+<option value="843667" >Anonby, Erik</option>
+<option value="806542" >Ansara, Rufino</option>
+<option value="814036" >Apostolova, Iva</option>
+<option value="1690602" >Apostolski, Dijana</option>
+<option value="309249" >Armstrong, Kathy</option>
+<option value="1579759" >Arnold, Daniel</option>
+<option value="1206704" >Arraiz Matute, Alexandra</option>
+<option value="1500947" >Ashraf Semnani, Bahman</option>
+<option value="940033" >Assal, Hala</option>
+<option value="1043263" >Atia, Mohamed</option>
+<option value="380251" >Attridge Bufton, Martha</option>
+<option value="809097" >Auld, Graeme</option>
+<option value="781939" >Avis, Tyler</option>
+<option value="1418935" >Avramov, Marc</option>
+<option value="1084071" >Awad, Reem</option>
+<option value="350661" >Ayed, Saud</option>
+<option value="1099623" >Ayub, Nailah</option>
+<option value="217979" >Azad, Mastaneh</option>
+<option value="115498" >Azzi, Stephen</option>
+<option value="43330" >Azzie, Philippe</option>
+<option value="400261" >Babchishin, Kelly</option>
+<option value="314981" >Baez, Manuel</option>
+<option value="1150353" >Bahran, Mustafa</option>
+<option value="1677763" >Bajwa, Jasdeep</option>
+<option value="753790" >Balasubramaniam, Rueban</option>
+<option value="675886" >Baldwin, Simon</option>
+<option value="206841" >Ballamingie, Patricia</option>
+<option value="160716" >Ballantine, Jacquie</option>
+<option value="934171" >Banducci, Laura</option>
+<option value="336963" >Banihashemi, Amir</option>
+<option value="669587" >Bano, Nafisa</option>
+<option value="1430807" >Barati, Masoud</option>
+<option value="340799" >Barbeau, Michel</option>
+<option value="752789" >Barrera, David</option>
+<option value="1014865" >Barron, Sandy</option>
+<option value="809049" >Barrows, Adam</option>
+<option value="526478" >Barry, Sean</option>
+<option value="1701862" >Bashandy Taalab, Hamza</option>
+<option value="1673026" >Bashir, Hassan</option>
+<option value="1091278" >Bausch, Katie</option>
+<option value="526559" >Beattie, Sherri</option>
+<option value="754810" >Beausoleil-Morrison, Ian</option>
+<option value="270802" >Becker, Hilary</option>
+<option value="1172347" >Bedawi, Safaa</option>
+<option value="1206553" >Beland, Louis-Philippe</option>
+<option value="180238" >Bellamy, Matthew</option>
+<option value="345271" >Bellerive, Alain</option>
+<option value="305401" >Benjamin, Sean</option>
+<option value="372704" >Bennell, Craig</option>
+<option value="938760" >Bennett, Joe</option>
+<option value="316593" >Bennett, Scott</option>
+<option value="378416" >Benny, Francine</option>
+<option value="1410301" >Berman, Avery</option>
+<option value="1159703" >Bernbaum, Piper</option>
+<option value="1553239" >Beshir, Mohamed</option>
+<option value="790048" >Bezo, Brent</option>
+<option value="1538741" >Biglar Begian, Mohammad</option>
+<option value="533589" >Birkwood, Susan</option>
+<option value="842189" >Bivens, Rena</option>
+<option value="1005441" >Blackwell, Megg</option>
+<option value="1257511" >Blais, Jules</option>
+<option value="752333" >Blumenfeld, Lev</option>
+<option value="133791" >Blunt, Allan</option>
+<option value="1040324" >Bokore, Nimo</option>
+<option value="724223" >Boland, Jennifer</option>
+<option value="1216681" >Bonnotte-Hoover, Celine</option>
+<option value="1560021" >Bordeleau, Anne</option>
+<option value="335519" >Bose, Prosenjit</option>
+<option value="256230" >Bosley, Aneurin</option>
+<option value="107187" >Boswell, Randy</option>
+<option value="171788" >Bou-Zeid, Zeina</option>
+<option value="961653" >Bourbonniere, Lane</option>
+<option value="100144" >Boyle, Sheryl</option>
+<option value="1004663" >Bradley, Jeffrey</option>
+<option value="1411304" >Brady, Allyson</option>
+<option value="813623" >Brady, Miranda</option>
+<option value="284912" >Brandon, Robert</option>
+<option value="73590" >Brascoupe, Simon</option>
+<option value="997713" >Brazil, Kristopher</option>
+<option value="1267861" >Brock, David</option>
+<option value="813309" >Brouillette, Sarah</option>
+<option value="2004442" >Brown, Olivier</option>
+<option value="154341" >Brown, Shelley</option>
+<option value="842002" >Bruce, Amy</option>
+<option value="1405940" >Bruff, Kyla</option>
+<option value="959487" >Brunet, James</option>
+<option value="1085630" >Brzezinski, Kaylen</option>
+<option value="675801" >Bullock, Amanda</option>
+<option value="816115" >Bulte, Gregory</option>
+<option value="663021" >Bumagin, Inna</option>
+<option value="240141" >Burges, Sean</option>
+<option value="192400" >Burhoe, Susan</option>
+<option value="93015" >Burk, Robert</option>
+<option value="26098" >Burlton, Bruce</option>
+<option value="316599" >Burns, Brian</option>
+<option value="1088203" >Burns, Rachel</option>
+<option value="340028" >Buschek, John</option>
+<option value="116004" >Buss, Doris</option>
+<option value="1280063" >Butcher, Loughran</option>
+<option value="723006" >Butler, Deidre</option>
+<option value="1008986" >Butler, Shannon</option>
+<option value="124227" >Buttera, Claudia</option>
+<option value="788241" >Buttle, Megan</option>
+<option value="1103131" >Buxton, Rachel</option>
+<option value="787487" >Byvelds, Christie</option>
+<option value="777058" >Cai, Alan</option>
+<option value="971505" >Cai, Song</option>
+<option value="209097" >Cairns, Hugh</option>
+<option value="241898" >Caldwell, Julie</option>
+<option value="347612" >Calkin, Siobhain</option>
+<option value="847243" >Cameron, Emilie</option>
+<option value="1231686" >Campbell, Dave</option>
+<option value="531762" >Campbell, Lucy</option>
+<option value="1081741" >Campbell, Michael</option>
+<option value="1017980" >Campos Espinosa, Gabriela</option>
+<option value="1369691" >Can-Tamakloe, Stacey</option>
+<option value="226910" >Cancura, Petr</option>
+<option value="336971" >Caputo, Virginia</option>
+<option value="750310" >Cardenas, Daniel</option>
+<option value="92851" >Carment, David</option>
+<option value="778552" >Carrier, Nicolas</option>
+<option value="901713" >Carrier-Moisan, Marie-Eve</option>
+<option value="1006642" >Carvin, Stephanie</option>
+<option value="974488" >Cassol, Edana</option>
+<option value="529534" >Casteel, James</option>
+<option value="242567" >Casteel, Sarah</option>
+<option value="296246" >Chakasim, Jake</option>
+<option value="844457" >Chakravorty, Mayurika</option>
+<option value="380430" >Chan, Adrian</option>
+<option value="985908" >Chan, Laurie</option>
+<option value="1275685" >Charanek, Nadine</option>
+<option value="1688037" >Charles, Shenella</option>
+<option value="802438" >Chatterjee, Sujoy</option>
+<option value="871979" >Chaves, Kevin</option>
+<option value="1038868" >Chee, Melissa</option>
+<option value="334958" >Cheetham, James</option>
+<option value="695399" >Chen, Xiaobei</option>
+<option value="68358" >Chen, Zhiqi</option>
+<option value="697554" >Cheung, Kevin</option>
+<option value="1115947" >Chiasson, Ross</option>
+<option value="939196" >Christensen, Michael</option>
+<option value="753956" >Chung, WonJoon</option>
+<option value="397257" >Clarke, Amanda</option>
+<option value="1050804" >Clausen, Marie</option>
+<option value="1375352" >Cloutier de Repentigny, Pierre</option>
+<option value="1098987" >Coady, Ellen</option>
+<option value="1069383" >Colbert, Zach</option>
+<option value="1009249" >Collier, Robert</option>
+<option value="698507" >Collins, KC</option>
+<option value="1008134" >Connor, Kristin</option>
+<option value="1067478" >Conrad, Ryan</option>
+<option value="752332" >Contessa, Gabriele</option>
+<option value="309607" >Cook, John</option>
+<option value="697391" >Cooke, Steven</option>
+<option value="249252" >Cooper, Suzanne</option>
+<option value="1573400" >Copeland, Lyndsey</option>
+<option value="334334" >Coplan, Robert</option>
+<option value="999727" >Costa, Andrew</option>
+<option value="1519361" >Couchoux, Oriane</option>
+<option value="1040130" >Cox, Christopher</option>
+<option value="849775" >Cram, Alixe</option>
+<option value="806171" >Crann, Jason</option>
+<option value="881081" >Crinjala, Carmen</option>
+<option value="1384884" >Crockford, Peter</option>
+<option value="531764" >Crook, Zeba</option>
+<option value="282844" >Cruickshank, Cynthia</option>
+<option value="1176573" >Cullingham, Catherine</option>
+<option value="725509" >Currie, Morgan</option>
+<option value="1377304" >Cyr, Edward</option>
+<option value="985642" >Czastkiewicz, Carolina</option>
+<option value="1103108" >Dakin, Roslyn</option>
+<option value="1845411" >Dale-Tam, Jennifer</option>
+<option value="778353" >Dammert, Ana</option>
+<option value="1334958" >Dang, Sanjeena</option>
+<option value="243760" >Dansereau, Richard</option>
+<option value="1384943" >Darmody, Aron</option>
+<option value="1125629" >Darroch, Francine</option>
+<option value="308104" >Daudelin, Jean</option>
+<option value="264010" >Davidson, Tonya</option>
+<option value="720743" >Davies, Jim</option>
+<option value="1920470" >Davies, Jon</option>
+<option value="316013" >Davis, Chris</option>
+<option value="669032" >Davis, Gordon</option>
+<option value="349342" >Davis, Kimberley</option>
+<option value="841357" >Dawson, Sabrina</option>
+<option value="971866" >Dayagbil, Ian</option>
+<option value="722177" >DeCook, Travis</option>
+<option value="957627" >DeShaw, Denise</option>
+<option value="134467" >Debanne, Janine</option>
+<option value="146553" >Dehejia, Vivek</option>
+<option value="316659" >Demers, Fanny</option>
+<option value="1563962" >Demircioglu, Mehmet</option>
+<option value="772868" >Dempsey, Amy</option>
+<option value="926098" >Deng, Qi</option>
+<option value="880495" >Denomme, William</option>
+<option value="305103" >Devdariani, Elena</option>
+<option value="878133" >Dhahir, Bashar</option>
+<option value="874573" >DiNovelli-Lang, Danielle</option>
+<option value="1102538" >Dick, Hannah</option>
+<option value="328911" >Dickson, Jane</option>
+<option value="1364244" >Digesto, Salvio</option>
+<option value="844044" >Dimitriu, Ioana</option>
+<option value="962964" >Dionisi, Angela</option>
+<option value="695853" >Diptee, Audra</option>
+<option value="1531587" >Dixon, Dan</option>
+<option value="1006952" >Dobai, Andras</option>
+<option value="841611" >Doha, Ahmed</option>
+<option value="868771" >Dolansky, Shawna</option>
+<option value="652948" >Dorland, Alexandra</option>
+<option value="869197" >Dorohoi, Alexander</option>
+<option value="1201180" >Dorward, Sarah</option>
+<option value="279192" >Douglas, Stacy</option>
+<option value="748600" >Downie, Susan</option>
+<option value="372703" >Doyle, Aaron</option>
+<option value="662673" >Dragunoiu, Dana</option>
+<option value="1461194" >Drake, Jennifer</option>
+<option value="818650" >Drummond, Rebecca</option>
+<option value="240618" >Drydyk, Jay</option>
+<option value="669880" >Duff, Christine</option>
+<option value="1391664" >Duncan, Nana aba</option>
+<option value="849249" >Dunn, Jesse</option>
+<option value="926538" >Dupre, Kathryne</option>
+<option value="844706" >Duquette, Jean</option>
+<option value="1484033" >Duval, Gabrielle</option>
+<option value="324238" >Duxbury, Linda</option>
+<option value="127524" >Eagles, Wayne</option>
+<option value="367564" >Eaket, Christopher</option>
+<option value="340026" >Echard, William</option>
+<option value="189565" >Edmonds, Louise</option>
+<option value="739260" >Edwards, Alex</option>
+<option value="796648" >Eedy, Sean</option>
+<option value="985914" >Ekker, Mark</option>
+<option value="1057062" >El Kouzi, Malek</option>
+<option value="1012211" >El Sayed, Mostafa</option>
+<option value="1125083" >El-Roby, Ahmed</option>
+<option value="703092" >Ellery, Alex</option>
+<option value="1793508" >Elmasri, Mohamad</option>
+<option value="1707397" >Elmenabbawi, Radwa</option>
+<option value="1673373" >Elsaadawy, Norhan</option>
+<option value="936458" >Elzanowski, Jerzy</option>
+<option value="1349101" >Enjilela, Razieh</option>
+<option value="1093533" >Erdal, Cihan</option>
+<option value="338494" >Esfandiari, Babak</option>
+<option value="864701" >Eshaghi, Mehdi</option>
+<option value="781940" >Esponda Cascajares, Mariana</option>
+<option value="345272" >Evans, Jennifer</option>
+<option value="297392" >Everett, Allison</option>
+<option value="531413" >Everts, Sarah</option>
+<option value="2006156" >Fadul, Saber</option>
+<option value="1408886" >Fahy, Sandra</option>
+<option value="1657852" >Fain, Nusa</option>
+<option value="726337" >Fall, Mamadou</option>
+<option value="1155786" >Farivar, Samira</option>
+<option value="342899" >Farrell, Patrick</option>
+<option value="1235262" >Faulkner, Ellen</option>
+<option value="1347739" >Fehri Cherif, Rim</option>
+<option value="873467" >Ferguson, Genevieve</option>
+<option value="889185" >Fernando, Naomi</option>
+<option value="1012516" >Fernando, Pasan</option>
+<option value="1388116" >Ferrer, Ilyan</option>
+<option value="886730" >Feuerherm, Michael</option>
+<option value="349232" >Few, Rowland</option>
+<option value="125079" >Field, Stephen</option>
+<option value="979612" >Finger, Cristina</option>
+<option value="1065167" >Firoozi, Maryam</option>
+<option value="1662818" >Fletcher, Eugene</option>
+<option value="1990842" >Flude, Sarena</option>
+<option value="369726" >Flueraru, Mihaela</option>
+<option value="939300" >Flynn, William</option>
+<option value="939054" >Fodden, Brandon</option>
+<option value="398675" >Fogarty-Bourget, Chloe Grace</option>
+<option value="1292059" >Ford, Jessica</option>
+<option value="89041" >Fortin, Lyette</option>
+<option value="698746" >Frankel, Melissa</option>
+<option value="130093" >Franks, Gregory</option>
+<option value="878339" >Fraser, Devin</option>
+<option value="939118" >Fraser, Erica</option>
+<option value="754416" >Frei, Hanspeter</option>
+<option value="304368" >Fritsch, Kelly</option>
+<option value="175712" >Fuenzalida, Ariel</option>
+<option value="723553" >Furstenau, Marc</option>
+<option value="1094181" >Fyfe, Erika</option>
+<option value="132687" >Gabriel, Christina</option>
+<option value="786285" >Gagne, Laura</option>
+<option value="839905" >Gagnon, Ma</option>
+<option value="778079" >Galdo, Jose</option>
+<option value="1005777" >Galizia, Dana</option>
+<option value="273996" >Galway, Graham</option>
+<option value="1507586" >Gao, Jie</option>
+<option value="330068" >Gao, Zhicheng</option>
+<option value="1565218" >Garces, Irina</option>
+<option value="1018765" >Gasoi, Lowell</option>
+<option value="774264" >Gaucher, Megan</option>
+<option value="875584" >Geiger, Martin</option>
+<option value="805508" >Geissinger, Ash</option>
+<option value="296424" >Gelbard, Sarah</option>
+<option value="648688" >Gentil, Guillaume</option>
+<option value="250958" >Gentile, Patrizia</option>
+<option value="1057519" >George, Evan</option>
+<option value="186276" >Gerlach, Neil</option>
+<option value="265290" >Ghaharbeighi, Ali</option>
+<option value="1017448" >Gibb, Keely</option>
+<option value="118707" >Gildea, Kevin</option>
+<option value="809322" >Gillberg, Dag</option>
+<option value="1253817" >Gilmore, Elisabeth</option>
+<option value="253280" >Gin, Pascal</option>
+<option value="752384" >Goffi, Federica</option>
+<option value="840556" >Gohary, Ramy</option>
+<option value="669921" >Goldman, Harold</option>
+<option value="782190" >Golestaneh, Mehrnaz</option>
+<option value="1432384" >Gollapudi, Anil</option>
+<option value="535349" >Golshani, Ashkan</option>
+<option value="1565243" >Gomar, Shaghayegh</option>
+<option value="725010" >Gorelick, Root</option>
+<option value="998575" >Gornea, Razvan</option>
+<option value="369243" >Graham, Katie</option>
+<option value="667388" >Graham, Megan</option>
+<option value="841617" >Graham, Shawn</option>
+<option value="336960" >Grant, Gerald</option>
+<option value="755156" >Grassau, Pamela</option>
+<option value="998069" >Grasse, Nathan</option>
+<option value="697010" >Green, James</option>
+<option value="1273378" >Green, Trevor</option>
+<option value="872907" >Greene, Julien</option>
+<option value="338501" >Greenspan, Brian</option>
+<option value="1350402" >Gregoire, Daniel</option>
+<option value="811110" >Gregoire, Thomas</option>
+<option value="873875" >Gross, Till</option>
+<option value="934485" >Gruber, Stephan</option>
+<option value="258443" >Guha, Malini</option>
+<option value="896927" >Gulanowski, Daniel</option>
+<option value="939400" >Gulati, Sonia</option>
+<option value="785093" >Guler-Edwards, Ayca</option>
+<option value="796667" >Gunay, Burak</option>
+<option value="903870" >Gunn, Chris</option>
+<option value="1088202" >Gunnell, Katie</option>
+<option value="1202146" >Gunupudi, Dhatri</option>
+<option value="372722" >Gunupudi, Pavan</option>
+<option value="1007221" >Guo, Yuhong</option>
+<option value="1020846" >Gupta, Shulabh</option>
+<option value="691676" >Gvero, Aleksandra</option>
+<option value="705959" >Haats, Tim</option>
+<option value="1553310" >Hafeez, Pakeeza</option>
+<option value="1217825" >Hajiloo, Hamzeh</option>
+<option value="1092304" >Hamdan, Kevin</option>
+<option value="1011666" >Hamou-Lhadj, Abdel</option>
+<option value="66092" >Hampson, Fen</option>
+<option value="1001456" >Haneefi, Najia</option>
+<option value="1347957" >Hanna, Dalal</option>
+<option value="785035" >Hanvelt, Marc</option>
+<option value="843714" >Harasymchuk, Cheryl</option>
+<option value="845417" >Harewood, Adrian</option>
+<option value="1367192" >Harris, Andrew</option>
+<option value="903310" >Harrison, George</option>
+<option value="851263" >Hasan, Zaria</option>
+<option value="394745" >Hawkins, Matthew</option>
+<option value="377145" >Hawkins, Shane</option>
+<option value="778351" >Hayibor, Sefa</option>
+<option value="252912" >Hayley, Shawn</option>
+<option value="121820" >Healey, Martha</option>
+<option value="1010226" >Hebert, Karen</option>
+<option value="1092268" >Heibati, Reza</option>
+<option value="755488" >Heidrich, Pablo</option>
+<option value="187794" >Helal, Robert</option>
+<option value="783595" >Hellemans, Kim</option>
+<option value="1091439" >Hemami, Ahmad</option>
+<option value="1520286" >Henchey, Angel</option>
+<option value="667213" >Henderson, Jennifer</option>
+<option value="1605521" >Henry, Eugene</option>
+<option value="696484" >Hepworth, Shelley</option>
+<option value="325703" >Herdman, Chris</option>
+<option value="1872515" >Hetletvedt, Amy</option>
+<option value="531189" >Higney, John</option>
+<option value="238740" >Hill, Darryl</option>
+<option value="853504" >Hillen, Connor</option>
+<option value="865437" >Hiltz, Emily</option>
+<option value="526733" >Hine, Mike</option>
+<option value="262749" >Hines, Kristen</option>
+<option value="734117" >Hirotani, Mako</option>
+<option value="207562" >Hodgins, Peter</option>
+<option value="696276" >Hoefnagels, Anna</option>
+<option value="809096" >Hogue, Michel</option>
+<option value="724066" >Holahan, Matthew</option>
+<option value="1024710" >Hooper, Brett</option>
+<option value="1085851" >Hopfener, Birgit</option>
+<option value="726383" >Horn, Wayne</option>
+<option value="1328421" >Hossain, Kamal</option>
+<option value="811772" >Hosseinian, Farah</option>
+<option value="76887" >Howe, Douglas</option>
+<option value="762405" >Hoyeck, Philippe-Antoine</option>
+<option value="1433093" >Hu, Yaxi</option>
+<option value="244114" >Huang, Changcheng</option>
+<option value="372723" >Huang, Xiao</option>
+<option value="141178" >Hughes, Beth</option>
+<option value="979637" >Hugill, David</option>
+<option value="661511" >Humphreys, Elyn</option>
+<option value="689715" >Huot, Richard</option>
+<option value="699866" >Hurrelmann, Achim</option>
+<option value="811608" >Iacovino, Raffaele</option>
+<option value="1413152" >Ijaz, Nadine</option>
+<option value="1011723" >Ilea, Adina</option>
+<option value="198164" >Infante, Jules-Ange</option>
+<option value="1051002" >Ingalls, Colin</option>
+<option value="230936" >Iozzo, Alessandra</option>
+<option value="1216660" >Ipek, Seyda</option>
+<option value="1017108" >Irani, Rishad</option>
+<option value="751200" >Irving, Dan</option>
+<option value="256818" >Isabelle, Diane</option>
+<option value="840673" >Ismail, Karim</option>
+<option value="1384589" >Istead, Lesley</option>
+<option value="308393" >Ivanovic, Igor</option>
+<option value="986971" >Iversen, Gunnar</option>
+<option value="819647" >Iwanski, Andrej</option>
+<option value="198460" >Jackson, David</option>
+<option value="752738" >Jamieson, Sara</option>
+<option value="843400" >Jangam, Chinnaiah</option>
+<option value="176900" >Jarecsni, John</option>
+<option value="348866" >Jasen, Paul</option>
+<option value="1067497" >Jaskolka, Jason</option>
+<option value="1092698" >Jensen, Christopher</option>
+<option value="1090109" >Jesney, Karen</option>
+<option value="342906" >Ji, Shaobo</option>
+<option value="1039415" >Jiang, Frank</option>
+<option value="1389398" >Jimenez Garcia, Juan Carlos</option>
+<option value="698898" >Johnson, Matthew</option>
+<option value="722933" >Johnston, Andrew</option>
+<option value="1589175" >Jones, Brian</option>
+<option value="263503" >Jones Joanisse, Emily</option>
+<option value="226243" >Jorgenson, Cecilia</option>
+<option value="183270" >Joseph, Troy</option>
+<option value="699721" >Joslin, Chris</option>
+<option value="1084128" >Jouravlev, Olessia</option>
+<option value="1044965" >Kabir, Abu Syed</option>
+<option value="138179" >Kabo, Ann</option>
+<option value="1256201" >Kadri, Abdullah</option>
+<option value="1330157" >Kahani, Nafiseh</option>
+<option value="1040139" >Kaisary, Philip</option>
+<option value="374031" >Kamawar, Deepthi</option>
+<option value="809851" >Karaian, Lara</option>
+<option value="1160394" >Karamat, Tashfeen</option>
+<option value="314791" >Kariouk, Paul</option>
+<option value="938360" >Kartchava, Eva</option>
+<option value="1414368" >Karunananthan, Meera</option>
+<option value="354999" >Kaya, Tarik</option>
+<option value="698649" >Kazmierski, Vincent</option>
+<option value="838584" >Kelly, Mary</option>
+<option value="1267894" >Kennedy, Suzanne</option>
+<option value="780983" >Kennelly, Jackie</option>
+<option value="683012" >Kent, Michael</option>
+<option value="1691655" >Kerr, Roseann</option>
+<option value="378955" >Khataei, Sam</option>
+<option value="1150144" >Kholghy, Reza</option>
+<option value="347708" >Khoo, Heng</option>
+<option value="223131" >Khouli, Fidel</option>
+<option value="1650679" >Kieft, Hannah</option>
+<option value="1561617" >Kilicaslan, Gulay</option>
+<option value="978988" >King, JaShong</option>
+<option value="843782" >Kinsey, Danielle</option>
+<option value="1112454" >Kirumira, Destiny</option>
+<option value="721760" >Kjarsgaard, Ingrid</option>
+<option value="534418" >Kmiec, Patricia</option>
+<option value="964773" >Knezevic, Irena</option>
+<option value="79339" >Koggel, Christine</option>
+<option value="1125013" >Komeili, Majid</option>
+<option value="1017991" >Kostiuk, Larry</option>
+<option value="324624" >Kovalio, Jacob</option>
+<option value="329923" >Kranakis, Evangelos</option>
+<option value="699412" >Kruczek, Boguslaw</option>
+<option value="1258447" >Kupchak, Connor</option>
+<option value="778336" >Kwan, Ernest</option>
+<option value="314802" >Labiche, Yvan</option>
+<option value="407261" >Lagasse, Philippe</option>
+<option value="316671" >Lai, Edward</option>
+<option value="892555" >Laing, Michelle</option>
+<option value="171528" >Laliberte, Jeremy</option>
+<option value="316639" >Lalonde, Wilf</option>
+<option value="331110" >Lambadaris, Ioannis</option>
+<option value="1188123" >Landry, Jean-Michel</option>
+<option value="807083" >Landsman, Sean</option>
+<option value="315319" >Langlois, Robert</option>
+<option value="745754" >Langlois Bertrand, Simon</option>
+<option value="152723" >Lanthier, Mark</option>
+<option value="750808" >Larivee, Annie</option>
+<option value="740325" >Larocque, Meagan</option>
+<option value="277585" >Lau, David</option>
+<option value="245050" >Laurendeau, Christine</option>
+<option value="235606" >Lauriault, Tracey</option>
+<option value="1022431" >LeClair, Blake</option>
+<option value="71826" >Lee, Ian</option>
+<option value="1037395" >Lee, Minjoon</option>
+<option value="1403011" >Lee, Vivian</option>
+<option value="775958" >Leffers, Donald</option>
+<option value="1042109" >Leger, Frenand</option>
+<option value="752393" >Leistle, Bernhard</option>
+<option value="385138" >Lenet, Jaime</option>
+<option value="131009" >Leth-Steensen, Craig</option>
+<option value="193463" >Leung, Thomas</option>
+<option value="909407" >Lewis, John</option>
+<option value="1295165" >Li, Lei</option>
+<option value="1092527" >Li, Yukai</option>
+<option value="1040004" >Lilly, Meredith</option>
+<option value="841836" >Lim, Jay Sze-Leon</option>
+<option value="936739" >Lim, Merlyna</option>
+<option value="334339" >Lin, Zhiqiu</option>
+<option value="328910" >Lipsett-Rivera, Sonya</option>
+<option value="942787" >Lister, Edward</option>
+<option value="844250" >Liu, Jie</option>
+<option value="304651" >Liu, Rong</option>
+<option value="838581" >Liu, Shichao</option>
+<option value="374059" >Liu, Xiaoping</option>
+<option value="1389369" >Liu, Yan</option>
+<option value="664921" >Ljubisic, Davorka</option>
+<option value="663092" >Llaca-Buznego, Antonio</option>
+<option value="1077367" >Lock, Jesse</option>
+<option value="697963" >Logan, Heather</option>
+<option value="1371471" >Lopez, Andres</option>
+<option value="813151" >Lorin de la Grandmaison, Emmanuel</option>
+<option value="259065" >Loschmann, Jonathan</option>
+<option value="1657842" >Lozinsky, Cara</option>
+<option value="720424" >Lucas, Katie</option>
+<option value="269959" >Lundy, Marlene</option>
+<option value="169264" >Luo, Laura</option>
+<option value="713076" >Lynch, Jessica</option>
+<option value="666888" >MacAdam, David</option>
+<option value="1161303" >MacDonald, Joanne</option>
+<option value="336958" >MacIsaac, Gregory</option>
+<option value="376399" >MacLeod, Mark</option>
+<option value="382414" >MacMillan, Heath</option>
+<option value="751772" >MacRae, Alisdair</option>
+<option value="939431" >Maddin, Hillary</option>
+<option value="256051" >Madokoro, Laura</option>
+<option value="819297" >Madore, Alexandre</option>
+<option value="778558" >Maeder, Evelyn</option>
+<option value="1914632" >Magdouli, Sara</option>
+<option value="1685281" >Mahdi, Esam</option>
+<option value="333811" >Maheshwari, Anil</option>
+<option value="230005" >Mailloux, Donna</option>
+<option value="972867" >Malette, Sebastien</option>
+<option value="238199" >Malgarai, Ahmadshah</option>
+<option value="377424" >Mallett, Alexandra</option>
+<option value="342900" >Malloy, Jonathan</option>
+<option value="715125" >Manley, Danielle</option>
+<option value="1894747" >Manning, Megan</option>
+<option value="1094515" >Manseau, Carol</option>
+<option value="746596" >Manulak, Michael</option>
+<option value="761925" >Maracle, Gabriel</option>
+<option value="1781148" >Marceddu, Marcella</option>
+<option value="1092532" >Marcotte-Chenard, Sophie</option>
+<option value="1657790" >Marczenko, Katherine</option>
+<option value="788489" >Marier, Jean-Sebastien</option>
+<option value="327763" >Marshall, Dominique</option>
+<option value="315477" >Marshall, Lynn</option>
+<option value="338499" >Marsland, Ian</option>
+<option value="722058" >Martinez-Salazar, Egla</option>
+<option value="666510" >Matida, Edgar</option>
+<option value="254706" >Matrawy, Ashraf</option>
+<option value="1393031" >Mayanja, Evelyn</option>
+<option value="1547559" >Mazdarani, Helia</option>
+<option value="1391656" >McCabe, Kira</option>
+<option value="261221" >McCarroll, Julie</option>
+<option value="1313269" >McCue, Duncan</option>
+<option value="943468" >McEvoy, Amanda</option>
+<option value="262836" >McGrath, Christopher</option>
+<option value="663251" >McKay, Ruth</option>
+<option value="544008" >McKenney, Ava</option>
+<option value="102077" >McKie, David</option>
+<option value="844733" >McKinnell, Iain</option>
+<option value="979053" >McLachlen, Jennifer</option>
+<option value="394326" >McMullin, David</option>
+<option value="796677" >McQuaid, Robyn</option>
+<option value="109534" >McSorley, Thomas</option>
+<option value="1348786" >Mcgaughey, Tomoko</option>
+<option value="667381" >Meadowcroft, James</option>
+<option value="342901" >Medd, Jodie</option>
+<option value="906343" >Medjhoum, AbdeRahim</option>
+<option value="1083731" >Mejicano Quintana, Miguel</option>
+<option value="1384788" >Melcer, Edward</option>
+<option value="252400" >Melessanakis, Vlasios</option>
+<option value="325699" >Melkonian, Sam</option>
+<option value="99631" >Menard, Lisa</option>
+<option value="232300" >Mendes, Ian</option>
+<option value="933372" >Mendez, Pablo</option>
+<option value="1154984" >Merkley, Rebecca</option>
+<option value="1039256" >Merriam, Helena</option>
+<option value="689766" >Mesnic, Natalie</option>
+<option value="935068" >Metaxoglou, Konstantinos</option>
+<option value="531779" >Mezo, Paul</option>
+<option value="939375" >Mielke, Virginia May</option>
+<option value="845584" >Millard, Koreen</option>
+<option value="315318" >Miller, Ron</option>
+<option value="347663" >Mills, Lisa</option>
+<option value="211931" >Milner, James</option>
+<option value="46614" >Milton, John</option>
+<option value="1004777" >Milyavskaya, Marina</option>
+<option value="327761" >Mingarelli, Angelo</option>
+<option value="696929" >Mire, Amina</option>
+<option value="1323057" >Moffitt, Lisa</option>
+<option value="1457421" >Mohamed, Hashim</option>
+<option value="1300050" >Mohammad Zadeh, Hadiseh Alhoda</option>
+<option value="845606" >Mohammadian, Abdolmajid</option>
+<option value="702533" >Mohareb, Magdi</option>
+<option value="199358" >Mohindra, Katia</option>
+<option value="793014" >Mohsni, Sana</option>
+<option value="975937" >Momeni, Abbas</option>
+<option value="259419" >Monaghan, Jeffrey</option>
+<option value="1467562" >Moo, Eng Kuan</option>
+<option value="531514" >Moore, Dawn</option>
+<option value="1405640" >Moossavi, Seyedeh Boshra</option>
+<option value="1886708" >More, Hrishikesh</option>
+<option value="210042" >Morin, Patrick</option>
+<option value="940253" >Morris, Brenda</option>
+<option value="1673382" >Morrison, Cassandra</option>
+<option value="1323804" >Morrow, Katherine</option>
+<option value="839532" >Morrow, Kyle</option>
+<option value="1254539" >Morton, David</option>
+<option value="1585726" >Moscrop, David</option>
+<option value="254845" >Motazedian, Dariush</option>
+<option value="777883" >Mould, David</option>
+<option value="265577" >Mousavi, Hamed</option>
+<option value="1037948" >Mozaffari Maaref, Hamed</option>
+<option value="1655223" >Mozaffari Vala, Omid</option>
+<option value="1510193" >Mpofu-Mketwa, Tsitsi</option>
+<option value="268625" >Muegge, Steven</option>
+<option value="837807" >Mueller, Derek</option>
+<option value="976980" >Muldner, Kasia</option>
+<option value="532845" >Mullally, Martha</option>
+<option value="143397" >Murasugi, Kumiko</option>
+<option value="1091934" >Murphy, Mike</option>
+<option value="666229" >Murray, Julie</option>
+<option value="869263" >Murray, Stuart</option>
+<option value="815497" >Murugkar, Sangeeta</option>
+<option value="134762" >Myles, Donald</option>
+<option value="974001" >Mylopoulos, Myrto</option>
+<option value="652705" >Nahwegahbow, Alexandra</option>
+<option value="807583" >Nardon, Luciara</option>
+<option value="909717" >Nasrallah, Yamen</option>
+<option value="1014690" >Nazari, Ryan</option>
+<option value="111452" >Nearing-Guibord, Danette</option>
+<option value="1224576" >Neggaz, Soumaya</option>
+<option value="346770" >Nelles, Paul</option>
+<option value="153216" >Nelson, Rodney</option>
+<option value="719357" >Nemiroff, Howard</option>
+<option value="787134" >Nettleton, Robert</option>
+<option value="756113" >Newlands, Shannon</option>
+<option value="1078562" >Ng Cheong Chung, Spencer</option>
+<option value="656998" >Nguyen, Vivian</option>
+<option value="1043420" >Nguyen, Xuan Thuy</option>
+<option value="749116" >Nielsen, Jason</option>
+<option value="1500048" >Niknam, Mehdi</option>
+<option value="811768" >Nikolko, Milana</option>
+<option value="402394" >Nikzad, Rashid</option>
+<option value="1094129" >Nissan, Nour</option>
+<option value="1195997" >Nojedehi, Pedram</option>
+<option value="818900" >Nordstrom, Ardyn</option>
+<option value="724834" >Norris, Robin</option>
+<option value="186999" >Novas, Carlos</option>
+<option value="346887" >Nsakanda, Aaron</option>
+<option value="870869" >O'Brien, Liam</option>
+<option value="102253" >O'Neil, Kim</option>
+<option value="885662" >O'Neill, Caroline</option>
+<option value="1506806" >Obraztsova, Svetlana</option>
+<option value="396341" >Occhiuto, Katherine</option>
+<option value="793520" >Odoom, Isaac</option>
+<option value="257008" >Offman, Alia</option>
+<option value="1973317" >Oh, Young-Tack</option>
+<option value="1433260" >Ojo, Adegboyega</option>
+<option value="776931" >Oklopcic, Zoran</option>
+<option value="1224682" >Oloruntoba, Samuel Ojo</option>
+<option value="251615" >Opp, James</option>
+<option value="984417" >Oram, Rylee</option>
+<option value="1087957" >Orazani, Seyed Nima</option>
+<option value="1867177" >Ordek, Kemal</option>
+<option value="691986" >Ormeci, Banu</option>
+<option value="1323061" >Osborne, Peter</option>
+<option value="186521" >Otchere, Isaac</option>
+<option value="905103" >Otiono, Nduka</option>
+<option value="1429299" >Oudhoff, Menno</option>
+<option value="532402" >Ould Mohamed Abdel Haye, Mohamedou</option>
+<option value="1090295" >Overhage, Joerg</option>
+<option value="1040149" >Ozsu, Umut</option>
+<option value="839082" >Panitch, Vida</option>
+<option value="938198" >Papineau-Koritar, Maya</option>
+<option value="1616155" >Parish, Jessica</option>
+<option value="187771" >Park, Gareth</option>
+<option value="234657" >Parmar, Ilesh</option>
+<option value="1337870" >Pasquale, Linda</option>
+<option value="531780" >Patrick, Donna</option>
+<option value="325701" >Patterson, Tim</option>
+<option value="380846" >Patterson, Zachary</option>
+<option value="781302" >Paulson, Justin</option>
+<option value="1195316" >Pearlman, Emily</option>
+<option value="869262" >Peetz, Johanna</option>
+<option value="185404" >Penny, Chris</option>
+<option value="169571" >Percival, Valerie</option>
+<option value="938643" >Petel, Oren</option>
+<option value="1092182" >Peters, Paul</option>
+<option value="879130" >Petoukhov, Konstantin</option>
+<option value="1347773" >Petrova, Marina</option>
+<option value="729474" >Pettipiece, Timothy</option>
+<option value="1012653" >Pettit, Alexandra</option>
+<option value="1912606" >Peña Tijerina, Gabriel Alejandro</option>
+<option value="326653" >Phillips, Roderick</option>
+<option value="309020" >Pienkowska-Roseman, Honorata</option>
+<option value="270792" >Pignotta, Geoff</option>
+<option value="1092194" >Pinchbeck, Geoff</option>
+<option value="402205" >Pong, Steven</option>
+<option value="1058933" >Pontone, Nicholas</option>
+<option value="1094567" >Popovic, Vladimir</option>
+<option value="363853" >Popplewell, Brett</option>
+<option value="1223908" >Pouragha, Mehdi</option>
+<option value="342904" >Pozzulo, Joanna</option>
+<option value="255214" >Prakash, Kavita</option>
+<option value="1154552" >Prakash, Ravi</option>
+<option value="56453" >Presentey, Nicole</option>
+<option value="1345675" >Prokop, Adam</option>
+<option value="314610" >Proulx, Patricia</option>
+<option value="346941" >Prus, Steven</option>
+<option value="1394793" >Pulatsu, Bora</option>
+<option value="384128" >Pulsifer, Ian</option>
+<option value="170910" >Pulsifer, Peter</option>
+<option value="1792735" >Pupco, Shani</option>
+<option value="806971" >Pybus, Cailen</option>
+<option value="168012" >Pylypa, Jen</option>
+<option value="848324" >Quijano, Martha</option>
+<option value="1506807" >Rabinovich, Zinovi</option>
+<option value="1695051" >Rahman, Mohammad</option>
+<option value="1001411" >Rajan, Sreeraman</option>
+<option value="1038254" >Ramezani, Kimia</option>
+<option value="839193" >Ramlal, Nalini</option>
+<option value="977751" >Ramzy, Carolyn</option>
+<option value="1090899" >Rand, Amy</option>
+<option value="734148" >Ratelle, Jean-Francois</option>
+<option value="785142" >Razo-Garcia, Raul</option>
+<option value="903139" >Redmond, Melissa</option>
+<option value="868682" >Redstone, Josh</option>
+<option value="31730" >Reid, Hugh</option>
+<option value="726183" >Renfroe, Rebecca</option>
+<option value="841613" >Riar, Inderbir</option>
+<option value="840591" >Richardson, Lindsay</option>
+<option value="809850" >Richardson, Murray</option>
+<option value="1092687" >Richmond, Sean</option>
+<option value="370903" >Rigakos, George</option>
+<option value="779307" >Ritchie, Robin</option>
+<option value="693396" >Rivers-Moore, Megan</option>
+<option value="1009585" >Rizo Garza, Hanika</option>
+<option value="1252949" >Robbins, Papagena</option>
+<option value="1465302" >Roberts, Kareem</option>
+<option value="721263" >Robinson, Sandra</option>
+<option value="256722" >Robson, Jennifer</option>
+<option value="379023" >Rocca, Claudia</option>
+<option value="201378" >Rogers, John</option>
+<option value="230884" >Rohde, Christopher</option>
+<option value="358344" >Romaniec, Wanda</option>
+<option value="264391" >Rooney, Morgan</option>
+<option value="752747" >Rosenblatt, Daniel</option>
+<option value="764197" >Rosenbloom, Daniel</option>
+<option value="921703" >Ross, Mitchell</option>
+<option value="881416" >Ross, Sophia</option>
+<option value="877817" >Ross, Susan</option>
+<option value="1355045" >Rossa, Carlos</option>
+<option value="134387" >Roulston, Joanne</option>
+<option value="272072" >Rousseau, Jacqueline</option>
+<option value="696485" >Rowland, Owen</option>
+<option value="382208" >Rowland, Timothy</option>
+<option value="108446" >Rowlands, Dane</option>
+<option value="268212" >Rowley, Christopher</option>
+<option value="785847" >Roy, Stephane</option>
+<option value="677540" >Rozina, Tamara</option>
+<option value="815543" >Rozo Martinez, Maria</option>
+<option value="369793" >Ruci, Lorena</option>
+<option value="392271" >Rudyk, Christopher</option>
+<option value="1823452" >Ruidiaz, Emiliano</option>
+<option value="715680" >Russell, Luke</option>
+<option value="813004" >Russill, Chris</option>
+<option value="807140" >Rustom, Mohammed</option>
+<option value="345414" >Rutherford, Blair</option>
+<option value="185560" >Ryan, Philip</option>
+<option value="174591" >Saari, Henry</option>
+<option value="1433091" >Sabatino, David</option>
+<option value="400778" >Sabin, Jerald</option>
+<option value="782268" >Sabouni, Rami</option>
+<option value="1151732" >Sadaf, Shazia</option>
+<option value="1150140" >Sadeghian, Vahid</option>
+<option value="1690601" >Sage, Bryce</option>
+<option value="187163" >Sahadeo, Jeff</option>
+<option value="873218" >Saideman, Stephen</option>
+<option value="1011819" >Sakalauskas, Dennis</option>
+<option value="777057" >Sakka, Ouafa</option>
+<option value="956182" >Salama, Rehab</option>
+<option value="13252" >Salazar, Alberto</option>
+<option value="1398623" >Salmon, Makenzie</option>
+<option value="212966" >Saloojee, Ozayr</option>
+<option value="1050884" >Sanchez, Leandro</option>
+<option value="843228" >Sang, Murray</option>
+<option value="1459437" >Sanghvi, Ankit</option>
+<option value="781332" >Sanogo, Aboubakar</option>
+<option value="869579" >Santana Quintero, Mario</option>
+<option value="183885" >Santos, Madalena</option>
+<option value="540457" >Sarkar, Abhijit</option>
+<option value="1329773" >Sarkar, Dipto</option>
+<option value="234631" >Sasaki, Mami</option>
+<option value="316585" >Sasiadek, Jurek</option>
+<option value="805152" >Saunders, Kelsey</option>
+<option value="668232" >Savides-Dupras, Theosophia</option>
+<option value="1774919" >Sawler, Scott</option>
+<option value="1326199" >Sayed, Mahmoud</option>
+<option value="226443" >Scaini, Carmelo</option>
+<option value="843485" >Schein, Rebecca</option>
+<option value="2004439" >Scherling, Carole</option>
+<option value="538222" >Schmidt, Brian</option>
+<option value="276077" >Schroeder, David</option>
+<option value="324625" >Schwartz, Howard</option>
+<option value="271486" >Schweitzer, Linda</option>
+<option value="53191" >Schwisberg, Sam</option>
+<option value="397620" >Scribner, Matthew</option>
+<option value="724065" >Sears, Greg</option>
+<option value="536534" >Sebastian, Frederick</option>
+<option value="785673" >Seidou, Ousmane</option>
+<option value="775313" >Shafi, Salman</option>
+<option value="1044976" >Shafiq, Omair</option>
+<option value="1344481" >Shahmohammadimehrjardi, Mahya</option>
+<option value="843060" >Shaikhet, Gennady</option>
+<option value="342905" >Shams, Maitham</option>
+<option value="1228299" >Shams, Shoeleh</option>
+<option value="1416005" >Shanouda, Fady</option>
+<option value="1301345" >Sharp, Alexa</option>
+<option value="906459" >Shaukat, Rumaisa</option>
+<option value="1414352" >Shen, Chao</option>
+<option value="130583" >Shepherd, Robert</option>
+<option value="374020" >Sherratt, Tom</option>
+<option value="753884" >Sherwood, Ted</option>
+<option value="344145" >Shi, Wei</option>
+<option value="707490" >Shopova, Maya</option>
+<option value="904914" >Shotwell, Alexis</option>
+<option value="1094155" >Shrestha, Atma</option>
+<option value="1542690" >Sidhu, David</option>
+<option value="844128" >Sikorska, Margaret</option>
+<option value="1538750" >Simard-Duplain, Gaelle</option>
+<option value="314695" >Simons, Andrew</option>
+<option value="1147966" >Simpson, Sheryl-Ann</option>
+<option value="1694384" >Sin, Jaisie</option>
+<option value="1012609" >Singh, Jaswinder</option>
+<option value="529487" >Sinha, Sanjoy</option>
+<option value="1187130" >Siri, Farid</option>
+<option value="1697405" >Sivachenko, Olena</option>
+<option value="315392" >Sivathayalan, Siva</option>
+<option value="1631176" >Skierszkan, Elliott</option>
+<option value="1925301" >Slipenkyj, Michael</option>
+<option value="1089028" >Slobodenyuk, Nadiya</option>
+<option value="949964" >Smale, Jacob</option>
+<option value="225376" >Smart, Rob</option>
+<option value="907372" >Smelser, Christopher</option>
+<option value="985460" >Smith, Christopher</option>
+<option value="133490" >Smith, Derek</option>
+<option value="782368" >Smith, Jeff</option>
+<option value="768918" >Smith, Kory</option>
+<option value="334336" >Smith, Myron</option>
+<option value="327578" >Smy, Tom</option>
+<option value="1099387" >Snow, Jaime</option>
+<option value="1009615" >Sobers, Candace</option>
+<option value="376304" >Sohrabi, Ahmad</option>
+<option value="1184911" >Solana Moreno, Vivian</option>
+<option value="751952" >Solanki, Gopika</option>
+<option value="534745" >Somayaji, Anil</option>
+<option value="1205255" >Sorenson Duncan, Tamara</option>
+<option value="153358" >Sorley, Matthew</option>
+<option value="530027" >Spencer, Christina</option>
+<option value="724640" >St-Hilaire, Marc</option>
+<option value="385209" >Stamplecoskie, Keith</option>
+<option value="1091990" >Starling, Charles</option>
+<option value="666474" >Stead, John</option>
+<option value="1558571" >Steckley, Joshua</option>
+<option value="793555" >Steckley, Marylynn</option>
+<option value="372741" >Steele, Alan</option>
+<option value="528947" >Stepanova, Natalia</option>
+<option value="935078" >Stephens, Eric</option>
+<option value="282677" >Stephenson, Erik</option>
+<option value="316033" >Stevens, Brett</option>
+<option value="1274061" >Stevens, Samantha</option>
+<option value="785290" >Stewart, Jesse</option>
+<option value="848335" >Stidwill, Jen</option>
+<option value="1012369" >Stinson, Jane</option>
+<option value="1008346" >Stolarski, Daniel</option>
+<option value="345307" >Stratton, Kim</option>
+<option value="783120" >Stymeist, David</option>
+<option value="367384" >Sun, Xun</option>
+<option value="1515237" >Sutton, Julie</option>
+<option value="752193" >Szereszewski, Kama</option>
+<option value="1211993" >Tabbarah, Faysal</option>
+<option value="1156823" >Taha, Mostafa</option>
+<option value="336304" >Tait, Niall</option>
+<option value="348851" >Talim, Jerome</option>
+<option value="245330" >Tamas, Sophie</option>
+<option value="257550" >Tanev, Stoyan</option>
+<option value="748743" >Tanner, Josee-Anna</option>
+<option value="316778" >Tansley, Brian</option>
+<option value="202221" >Tasson, Steve</option>
+<option value="233963" >Taylor, Karen</option>
+<option value="2004793" >Teruelle, Rhon</option>
+<option value="1094159" >Teymouri, Ahmad</option>
+<option value="762490" >Thakrar, Ushma</option>
+<option value="200873" >Thibaudeau, Paul</option>
+<option value="195105" >Thibodeau, Rachelle</option>
+<option value="1673012" >Thomas, Carieta</option>
+<option value="122663" >Thompson, Allan</option>
+<option value="908978" >Thompson, Ashley</option>
+<option value="235549" >Thomson, Rowan</option>
+<option value="1172354" >Thue, David</option>
+<option value="533435" >Tiampo, Ming</option>
+<option value="865984" >Tibbetts, Janice</option>
+<option value="875612" >Tittle, Miles</option>
+<option value="1012439" >Tobin, Todd</option>
+<option value="377078" >Todd, Sarah</option>
+<option value="1342915" >Todorov, Radomir</option>
+<option value="812090" >Tofigh Rayhani, Mohammad</option>
+<option value="725093" >Toivonen, Ida</option>
+<option value="1110756" >Tolley, Erin</option>
+<option value="665215" >Tomiak, Julie</option>
+<option value="905305" >Torres Da Rocha, Joana</option>
+<option value="877828" >Totten, Jennifer</option>
+<option value="1014146" >Toulan, Sherif</option>
+<option value="815415" >Toumilovitch, Galina</option>
+<option value="1422284" >Trebus, Kimberly</option>
+<option value="878602" >Tremblay, Donovan</option>
+<option value="181567" >Tremblay, Michael</option>
+<option value="990095" >Tremblay-Boire, Joannie</option>
+<option value="793748" >Trepanier, Anne</option>
+<option value="91632" >Trevisan, Cristina</option>
+<option value="174693" >Triantafellou, Helen</option>
+<option value="266671" >Trudel, Chantal</option>
+<option value="1314624" >Tsang, Koon-Ho Alan</option>
+<option value="779935" >Tsopmo, Apollinaire</option>
+<option value="379741" >Tzaneva, Velislava</option>
+<option value="218059" >Valdez, Carlos</option>
+<option value="984067" >Valgardsson, Sasha</option>
+<option value="1402986" >Van De Ven, Cole</option>
+<option value="307628" >Van Oorschot, Paul</option>
+<option value="110531" >Vandenberg, Jack</option>
+<option value="841221" >Varughese, Anil</option>
+<option value="330511" >Vellino, Brenda</option>
+<option value="846487" >Vermaire, Jesse</option>
+<option value="725444" >Vessey, Rachelle</option>
+<option value="1414340" >Viau, Christian</option>
+<option value="304846" >Vicencio Diaz, Liz</option>
+<option value="1052499" >Viel, Simon</option>
+<option value="810142" >Viju, Crina</option>
+<option value="187244" >Vincter, Manuella</option>
+<option value="877082" >Voordouw, Johan</option>
+<option value="257002" >Waddington Lamont, Elaine</option>
+<option value="1553251" >Waghmare, Prashant</option>
+<option value="278596" >Waghorn, Noel</option>
+<option value="315019" >Wagman, Ira</option>
+<option value="314533" >Wainer, Gabriel</option>
+<option value="799248" >Wainio, Kalle</option>
+<option value="185722" >Waldron, Andrew</option>
+<option value="328907" >Walker, Pamela</option>
+<option value="737684" >Walker, Steven</option>
+<option value="293512" >Walker, Thomas</option>
+<option value="528666" >Wallace, Andrew</option>
+<option value="1556703" >Waller, James</option>
+<option value="407876" >Walsh, John</option>
+<option value="274781" >Walters, William</option>
+<option value="1989831" >Wamsley, Dillon</option>
+<option value="1817949" >Wang, Di</option>
+<option value="956763" >Wang, Dora</option>
+<option value="256884" >Wang, Steven</option>
+<option value="905793" >Wang, Xiaoyu</option>
+<option value="342911" >Wang, Xin</option>
+<option value="531026" >Wang, Yanling</option>
+<option value="1151740" >Waterman, Ellen</option>
+<option value="175852" >Watters, Rob</option>
+<option value="1007756" >Webb, Matt</option>
+<option value="101180" >Weekes, John</option>
+<option value="149488" >Wefers Bettink, Paul</option>
+<option value="1402835" >Wei, Yunran</option>
+<option value="109244" >Weibust, Inger</option>
+<option value="1328461" >Weiss, Adam</option>
+<option value="269094" >Weiss, Michael</option>
+<option value="1506805" >Wen, Junfeng</option>
+<option value="1193885" >West, Leah</option>
+<option value="338498" >West, Robert</option>
+<option value="871748" >Westerlund, Mika</option>
+<option value="125383" >Whelan, Deanna</option>
+<option value="188993" >White, Micheline</option>
+<option value="1006027" >White, Stephen</option>
+<option value="379657" >Whitney, Jessica</option>
+<option value="234697" >Whynot, Jane</option>
+<option value="85515" >Wight, Jim</option>
+<option value="749928" >Wigle, Jill</option>
+<option value="257298" >Wildeman, Jeremy</option>
+<option value="82386" >Wiles, Anne</option>
+<option value="691540" >Wilke, Christiane</option>
+<option value="692910" >Williams, Grant</option>
+<option value="728621" >Williams, Paul</option>
+<option value="95521" >Willman, John</option>
+<option value="1007700" >Wilner, Alex</option>
+<option value="316617" >Winn, Conrad</option>
+<option value="105948" >Winogron, Steven</option>
+<option value="336566" >Winseck, Dwayne</option>
+<option value="751295" >Wolfart, Johannes</option>
+<option value="231591" >Wong, Alex</option>
+<option value="974096" >Woo, Benjamin</option>
+<option value="1057205" >Worden, Rebecca</option>
+<option value="340800" >Worswick, Christopher</option>
+<option value="1999825" >Wouters, Jan</option>
+<option value="1394698" >Wright, Amie</option>
+<option value="245908" >Wright, James</option>
+<option value="1200364" >Wu, Migao</option>
+<option value="535476" >Xing, Tim</option>
+<option value="107125" >Yack, Jayne</option>
+<option value="185219" >Yan, Xiaoyi</option>
+<option value="1752811" >Yang, Yan</option>
+<option value="336990" >Yanikomeroglu, Halim</option>
+<option value="92308" >Yaras, Metin</option>
+<option value="228745" >Ye, Winnie</option>
+<option value="1694390" >Yergeau, M. Remi</option>
+<option value="982147" >Yoo, Hyoun Jeong</option>
+<option value="1116877" >Young, Deborah</option>
+<option value="367925" >Young, Liam</option>
+<option value="406350" >Ysseldyk, Renate</option>
+<option value="372728" >Yu, Zhihao</option>
+<option value="1430769" >Zabolotnii, Elena</option>
+<option value="776567" >Zabolotnyuk, Yuriy</option>
+<option value="344130" >Zalok, Ehab</option>
+<option value="1184907" >Zbyszewska, Ania</option>
+<option value="1397010" >Zeidabadi, Golnoush</option>
+<option value="373515" >Zelenski, John</option>
+<option value="2003687" >Zhang, Mary</option>
+<option value="328732" >Zhang, Qi-jun</option>
+<option value="1216674" >Zhang, Yue</option>
+<option value="1207199" >Zhao, Lianying</option>
+<option value="719193" >Zherebtsov, Mikhail</option>
+<option value="1556300" >Ziglidopoulos, Stilianos</option>
+<option value="1572787" >Zrill, Lanny</option>
+<option value="1339569" >kavgic, Miroslava</option>
+<option value="978886" >van Kaick, Oliver</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<br>
+</td>
+</tr>
+<tr>
+<td width="15%"><b><p style="color:#0000FF">START TIME:</p></td>
+<td>
+Hour
+<select name="sel_begin_hh" id="sel_begin_hh_id">
+<option value="0"> 00</option>
+<option value="1"> 01</option>
+<option value="2"> 02</option>
+<option value="3"> 03</option>
+<option value="4"> 04</option>
+<option value="5"> 05</option>
+<option value="6"> 06</option>
+<option value="7"> 07</option>
+<option value="8"> 08</option>
+<option value="9"> 09</option>
+<option value="10"> 10</option>
+<option value="11"> 11</option>
+<option value="12"> 12</option>
+</select>
+&nbsp;&nbsp;Minute
+<select name="sel_begin_mi" id="sel_begin_mi_id">
+<option value="0"> 00</option>
+<option value="5"> 05</option>
+<option value="10"> 10</option>
+<option value="15"> 15</option>
+<option value="20"> 20</option>
+<option value="25"> 25</option>
+<option value="30"> 30</option>
+<option value="35"> 35</option>
+<option value="40"> 40</option>
+<option value="45"> 45</option>
+<option value="50"> 50</option>
+<option value="55"> 55</option>
+</select>
+&nbsp;&nbsp;am/pm
+<select name="sel_begin_am_pm" id="sel_begin_am_pm_id">
+<option value="a">am</option>
+<option value="p">pm</option>
+</select>
+</td>
+</tr>
+<tr>
+<td width="15%"><b><p style="color:#0000FF">END TIME:</p></td>
+<td>
+Hour
+<select name="sel_end_hh" id="sel_end_hh_id">
+<option value="0"> 00</option>
+<option value="1"> 01</option>
+<option value="2"> 02</option>
+<option value="3"> 03</option>
+<option value="4"> 04</option>
+<option value="5"> 05</option>
+<option value="6"> 06</option>
+<option value="7"> 07</option>
+<option value="8"> 08</option>
+<option value="9"> 09</option>
+<option value="10"> 10</option>
+<option value="11"> 11</option>
+<option value="12"> 12</option>
+</select>
+&nbsp;&nbsp;Minute
+<select name="sel_end_mi" id="sel_end_mi_id">
+<option value="0"> 00</option>
+<option value="5"> 05</option>
+<option value="10"> 10</option>
+<option value="15"> 15</option>
+<option value="20"> 20</option>
+<option value="25"> 25</option>
+<option value="30"> 30</option>
+<option value="35"> 35</option>
+<option value="40"> 40</option>
+<option value="45"> 45</option>
+<option value="50"> 50</option>
+<option value="55"> 55</option>
+</select>
+&nbsp;&nbsp;am/pm
+<select name="sel_end_am_pm" id="sel_end_am_pm_id">
+<option value="a">am</option>
+<option value="p">pm</option>
+</select>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<br>
+</td>
+</tr>
+<tr>
+<td width="15%"><b><p style="color:#0000FF">DAYS:</p></td>
+<td>
+Mon
+<input type="checkbox" name="sel_day" value="m" checked="checked" ID="sel_day_mon_id" />
+&nbsp;&nbsp;Tue
+<input type="checkbox" name="sel_day" value="t" checked="checked" ID="sel_day_tue_id" />
+&nbsp;&nbsp;Wed
+<input type="checkbox" name="sel_day" value="w" checked="checked" ID="sel_day_wed_id" />
+&nbsp;&nbsp;Thu
+<input type="checkbox" name="sel_day" value="r" checked="checked" ID="sel_day_thu_id" />
+&nbsp;&nbsp;Fri
+<input type="checkbox" name="sel_day" value="f" checked="checked" ID="sel_day_fri_id" />
+&nbsp;&nbsp;Sat
+<input type="checkbox" name="sel_day" value="s" checked="checked" ID="sel_day_sat_id" />
+&nbsp;&nbsp;Sun
+<input type="checkbox" name="sel_day" value="u" checked="checked" ID="sel_day_sun_id" />
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p><b>NOTE:<i> For maximum course availability, please ensure all days remain checked</i><br><br></p>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<br />
+<tr>
+<td><br>
+<input type="submit" value="Search" title="Search for courses based on my criteria"  />
+<input type="submit" name="time_table" value="View Worksheet" title="View my worksheet" />
+<input type="submit" name="reset_button" value="Reset" title="Remove my search options" />
+<input type="submit" name="term_button" value="Change Term" title="Click to make a new term selection" />
+<input type="hidden" name="block_button" value="" />
+</td>
+</tr>
+<tr>
+<td><br>
+
+<br><br></td>
+</tr>
+</form>
+</table>
+</section>
+<div class="clear"></div>
+</section>
+<div class="footerwrapfull">
+</div>
+<footer>
+<div class="footerleft">
+<p><a href="#">Registrar's Office</a> &nbsp;|&nbsp; Tel: 613-520-3500 &nbsp;|&nbsp; Fax: 613-520-4410 <br/>
+300 Tory Building, 1125 Colonel By Drive, Ottawa, ON, Canada, K1S 5B6</p>
+</div>
+<div class="footerright">
+<p><br/>&copy; 2012 <a href="#">Carleton University</a></p>
+</div>
+<div class="clear"></div>
+</footer>
+</body>
+</html>

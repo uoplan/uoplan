@@ -1,10 +1,27 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import got from "got";
-import { SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { rateMyProfessorsFile } from "../shared/paths.ts";
+import { CARLETON_RMP_SCHOOL_ID } from "../schools/carleton/rateMyProfessors.ts";
+import { UOTTAWA_RMP_SCHOOL_ID } from "../schools/uottawa/rateMyProfessors.ts";
 
 const GRAPHQL_URL = "https://www.ratemyprofessors.com/graphql";
 const PAGE_SIZE = 1000;
+const RMP_SCHOOL_IDS: Record<SchoolId, number> = {
+  carleton: CARLETON_RMP_SCHOOL_ID,
+  uottawa: UOTTAWA_RMP_SCHOOL_ID,
+};
+
+/**
+ * RateMyProfessors' GraphQL API identifies a school by a Relay global id, which
+ * is just base64("School-<numeric id>") — the same number that appears in the
+ * public `/school/<id>` URL. Deriving it keeps a single source of truth per
+ * school instead of a magic base64 blob that has to be decoded to be reviewed.
+ */
+function rmpSchoolNodeId(schoolId: number): string {
+  return Buffer.from(`School-${schoolId}`, "utf8").toString("base64");
+}
 
 const TEACHER_SEARCH_QUERY = `query TeacherSearchPaginationQuery(
   $count: Int!
@@ -109,9 +126,8 @@ async function fetchTeachersPage(
   return res.body as TeacherSearchResponse;
 }
 
-export async function main(): Promise<void> {
-  // Optional: scrape a specific school (e.g. University of Ottawa). Omit to try global search.
-  const schoolId = process.env.RMP_SCHOOL_ID || "U2Nob29sLTE0NTI=";
+export async function main(school: SchoolId): Promise<void> {
+  const schoolId = process.env.RMP_SCHOOL_ID || getRateMyProfessorsSchoolNodeId(school);
 
   const allTeachers: FormattedTeacherNode[] = [];
   let cursor: string | null = null;
@@ -184,9 +200,8 @@ export async function main(): Promise<void> {
     console.log(`Deduplicated ${duplicatesRemoved} duplicate professor entries.`);
   }
 
-  const outDir = SCRAPER_DATA_DIR;
-  await fs.mkdir(outDir, { recursive: true });
-  const outPath = path.join(outDir, "ratemyprofessors.json");
+  const outPath = rateMyProfessorsFile(school);
+  await fs.mkdir(path.dirname(outPath), { recursive: true });
 
   dedupedTeachers.sort((a, b) => a.name.localeCompare(b.name) || a.legacyId - b.legacyId);
 
@@ -197,4 +212,8 @@ export async function main(): Promise<void> {
 
   await fs.writeFile(outPath, JSON.stringify(output, null, 2), "utf-8");
   console.log(`Saved ${dedupedTeachers.length} professors to ${outPath}`);
+}
+
+export function getRateMyProfessorsSchoolNodeId(school: SchoolId): string {
+  return rmpSchoolNodeId(RMP_SCHOOL_IDS[school]);
 }

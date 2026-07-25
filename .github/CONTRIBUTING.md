@@ -11,7 +11,7 @@ By participating you agree to abide by our [Code of Conduct](./CODE_OF_CONDUCT.m
 - **Report a bug** — open a [bug report](https://github.com/uoplan/uoplan/issues/new?template=bug_report.yml).
 - **Suggest a feature** — open a [feature request](https://github.com/uoplan/uoplan/issues/new?template=feature_request.yml).
 - **Fix data** — course, schedule, grade, or prerequisite data lives under
-  `apps/scraper/data/`. Corrections there are very welcome.
+  `apps/scraper/data/uottawa/`. Corrections there are very welcome.
 - **Improve translations** — every user-facing string ships in English and
   French (see [Internationalisation](#internationalisation)).
 - **Send a pull request** — see [Pull requests](#pull-requests) below.

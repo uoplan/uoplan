@@ -56,6 +56,8 @@ import {
   type TrendsOverview,
 } from "./trends-data";
 
+const DEFAULT_SCHOOL_ASSET_PREFIX = "uottawa/";
+
 export interface AppData {
   bundle: AppDataBundle;
   index: ExploreIndex;
@@ -69,8 +71,13 @@ export interface AppData {
 }
 
 async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes): Promise<AppData> {
+  const assetId = (bareId: string): string => {
+    const namespaced = `${DEFAULT_SCHOOL_ASSET_PREFIX}${bareId}`;
+    return namespaced in manifest ? namespaced : bareId;
+  };
+  const resolvedFetchBytes: FetchBytes = (id) => fetchBytes(assetId(id));
   const load = async <T,>(id: string, decode: (b: Uint8Array) => T): Promise<T> =>
-    decode(await fetchBytes(id));
+    decode(await resolvedFetchBytes(id));
 
   const plan = planDataAssets(Object.keys(manifest));
 
@@ -133,23 +140,23 @@ async function buildAppData(manifest: DataAssetManifest, fetchBytes: FetchBytes)
   // DataClient bound to this manifest's transport — used for on-demand loads
   // (e.g. course-description shards) so callers get the exact same transport
   // and byte-cache as the eager loads above.
-  const dataClient = createDataClient({ transport: fetchBytes });
+  const dataClient = createDataClient({ transport: resolvedFetchBytes });
 
   // Background: cache remaining non-description assets for offline use.
   // Description shards (catalogue.descriptions.*.pb) are intentionally excluded
   // — they are fetched on demand via dataClient.loadCourseDescription.
   const eager = new Set<string>([
-    "terms.pb",
-    "disciplines.pb",
-    "grades.pb",
-    "professors.pb",
-    "ratemyprofessors.pb",
-    "catalogue.pb",
-    "feedback.pb",
-    "indices.pb",
-    "catalogue.union.pb",
-    "catalogue.search.pb",
-    ...plan.scheduleTermIds.map((t) => `schedules.${t}.pb`),
+    assetId("terms.pb"),
+    assetId("disciplines.pb"),
+    assetId("grades.pb"),
+    assetId("professors.pb"),
+    assetId("ratemyprofessors.pb"),
+    assetId("catalogue.pb"),
+    assetId("feedback.pb"),
+    assetId("indices.pb"),
+    assetId("catalogue.union.pb"),
+    assetId("catalogue.search.pb"),
+    ...plan.scheduleTermIds.map((t) => assetId(`schedules.${t}.pb`)),
   ]);
   void Promise.allSettled(
     backgroundPrefetchAssetIds(Object.keys(manifest), eager).map((id) => fetchBytes(id)),

@@ -5,6 +5,8 @@
  * routed through the i18n catalogs (`%c`-styled ASCII art doesn't fit the
  * `msgid/msgstr` model). Browser-only and printed at most once per page load.
  */
+import { getSchool } from "@uoplan/domain/school";
+import { getActiveSchool } from "../activeSchool";
 
 const REPO_URL = "https://github.com/uoplan/uoplan";
 
@@ -14,6 +16,8 @@ export function printConsoleGreeting(): void {
   if (printed) return;
   if (typeof window === "undefined" || typeof console === "undefined") return;
   printed = true;
+
+  const school = getSchool(getActiveSchool());
 
   const art = [
     "                    _             ",
@@ -32,8 +36,8 @@ export function printConsoleGreeting(): void {
   console.log(`%c${art}`, headingStyle);
   // oxlint-disable-next-line no-console -- intentional easter-egg console greeting
   console.log(
-    "%cBuilt by students, for students — at the University of Ottawa. 🐺\n" +
-      "Conçu par des étudiants, pour des étudiants — à l'Université d'Ottawa.",
+    `%cBuilt by students, for students — at ${school.nameWithArticleEn}. 🐺\n` +
+      `Conçu par des étudiants, pour des étudiants — à ${school.nameWithArticleFr}.`,
     textStyle,
   );
   // oxlint-disable-next-line no-console -- intentional easter-egg open-source prompt

@@ -7,6 +7,7 @@ import { tr, useTr } from "../../i18n";
 import { seasonalFlourish } from "../../lib/easterEggs/seasonal";
 import { AnalyticsOptOutControl } from "./AnalyticsOptOutControl";
 import { PageContainer } from "./PageContainer";
+import { useSchool } from "../../hooks/useSchool";
 
 const GITHUB_URL = "https://github.com/uoplan/uoplan";
 const FEEDBACK_EMAIL = "admin@uoplan.party";
@@ -29,6 +30,7 @@ const footerLinkStyle = { textDecoration: "none", cursor: "pointer" } as const;
 
 export function AppFooter() {
   useTr();
+  const school = useSchool();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const os = useOs();
@@ -70,7 +72,7 @@ export function AppFooter() {
                 uoplan.party
               </Text>
               <Text size="sm" lh={1.55} style={{ color: "var(--app-text-dim)" }}>
-                {tr("app.footer.tagline")}
+                {tr("app.footer.tagline", { school: school.shortName })}
               </Text>
             </Stack>
 
@@ -250,7 +252,7 @@ export function AppFooter() {
             </Group>
 
             <Text size="sm" lh={1.6} style={{ color: "var(--app-text-dim)" }}>
-              {tr("app.footer.notAffiliated")}
+              {tr("app.footer.notAffiliated", { school: school.nameWithArticleEn })}
             </Text>
           </Stack>
         </Stack>

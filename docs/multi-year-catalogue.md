@@ -4,12 +4,19 @@ Student program requirements are based on the academic year they first enrolled,
 
 ### How it works
 
+> **Multi-school.** Everything below describes uOttawa. Carleton follows the same
+> per-year model against CourseLeaf archives (`calendar.carleton.ca/archives/`,
+> `.../calendars/{year}-{year+1}/undergrad/...`), writing to
+> `apps/scraper/data/carleton/catalogue/`. Pass `--school=carleton` to the
+> catalogue CLI. Archived years are immutable for both schools, so the daily
+> scrape is naturally incremental. See [multi-school.md](./multi-school.md).
+
 **Scraper (`apps/scraper/src/cli/catalogue.ts` → `apps/scraper/src/catalogue/scrape.ts`)** produces one source JSON file per academic year:
 
-- `apps/scraper/data/catalogue/catalogue.{year}.json` — full catalogue (courses + programs) for that year, where `year` is the first calendar year of the academic year range (e.g. `2021` = 2021–2022)
-- `apps/scraper/data/catalogue/catalogue.json` — manifest listing all available years: `{ "years": [2024, 2023, ..., 2017] }`
+- `apps/scraper/data/uottawa/catalogue/catalogue.{year}.json` — full catalogue (courses + programs) for that year, where `year` is the first calendar year of the academic year range (e.g. `2021` = 2021–2022)
+- `apps/scraper/data/uottawa/catalogue/catalogue.json` — manifest listing all available years: `{ "years": [2024, 2023, ..., 2017] }`
 
-`pnpm build:data-proto` converts those committed source JSON files into git-ignored runtime protobuf assets in `apps/web/public/data/` (`catalogue.{year}.pb` and `catalogue.pb`).
+`pnpm build:data-proto` converts those committed source JSON files into git-ignored runtime protobuf assets in `apps/web/src/assets/data/<school>/` (`catalogue.{year}.pb` and `catalogue.pb`).
 
 Course **descriptions** are dropped from the shipped catalogue protos (too large — ~4 MB raw), but the build extracts the newest description per course to feed a compact keyword search index, `catalogue.search.pb`, so explore search can match description text without shipping it. See [`explore-search.md`](./explore-search.md#description-keyword-matching-compact-bm25-index).
 
@@ -57,7 +64,7 @@ Latest aliases are still applied after merge so renumbered courses resolve corre
 - `p-limit` — concurrency control (10 parallel fetches)
 - `zod` — schema validation for scraped output
 - `apps/web/src/store/slices/data.ts` — loads and caches year-specific programme lists
-- `apps/scraper/src/proto/build.ts` — converts `apps/scraper/data/*.json` into `apps/web/public/data/*.pb`
+- `apps/scraper/src/proto/build.ts` — converts `apps/scraper/data/uottawa/*.json` into `apps/web/src/assets/data/<school>/*.pb`
 
 ### Catalogue `.pb` encoding notes (build-time only)
 

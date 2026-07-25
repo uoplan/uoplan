@@ -1,6 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type { SchoolId } from "@uoplan/domain/school";
+import { DEFAULT_SCHOOL_ID, SCHOOLS } from "@uoplan/domain/school";
 import * as DataProto from "@uoplan/proto/data";
 import * as FeedbackProto from "@uoplan/proto/feedback";
 import { toProtoIndices } from "@uoplan/core/dataTypes/indices";
@@ -9,12 +11,14 @@ import type {
   ImportantDatesData,
   ImportantDatesLocale,
 } from "../../../../packages/domain/src/dataTypes/importantDates.ts";
+import { parseSchoolArg } from "../shared/cliSchool.ts";
 import {
-  CATALOGUE_DATA_DIR,
+  catalogueDataDir,
   DATA_MANIFEST_FILE,
-  SCHEDULES_DATA_DIR,
-  SCRAPER_DATA_DIR,
-  WEB_ASSETS_DATA_DIR,
+  schedulesDataDir,
+  scraperDataDir,
+  WEB_ASSETS_DATA_ROOT,
+  webAssetsDataDir,
 } from "../shared/paths.ts";
 import { readJson } from "../shared/json.ts";
 import { buildFeedbackData } from "./feedback.ts";
@@ -29,6 +33,7 @@ import type { YearCatalogue } from "./catalogue-merged.ts";
 import { mapDisciplinesJson, mapGradesJson } from "./grades.ts";
 import {
   buildCourseDescriptionShards,
+  buildShardIdsFromDisciplines,
   collectLatestCourseDescriptions,
   COURSE_DESCRIPTION_SHARD_IDS,
 } from "./description-shards.ts";
@@ -38,7 +43,7 @@ import { mapSchedules } from "./schedules.ts";
 import type { SchedulesJsonInput } from "./schedules.ts";
 import { createResolverFromRegistry } from "../professors/buildRegistry.ts";
 import type { ProfessorRegistryEntry } from "../professors/buildRegistry.ts";
-import { PROFESSORS_FILE } from "../professors/build.ts";
+import { professorsFile } from "../professors/build.ts";
 import {
   buildPredictionContext,
   predictInstructorsForTerm,
@@ -55,77 +60,131 @@ interface RateMyProfessorInput {
   numRatings?: number;
 }
 
-const IMPORTANT_DATES_BUILD_TARGETS = [
-  {
-    locale: "en",
-    sourceFile: path.join(SCRAPER_DATA_DIR, "important-dates.en.json"),
-    assetFile: "important-dates.en.pb",
-  },
-  {
-    locale: "fr-CA",
-    sourceFile: path.join(SCRAPER_DATA_DIR, "important-dates.fr.json"),
-    assetFile: "important-dates.fr.pb",
-  },
-] as const satisfies ReadonlyArray<{
-  locale: ImportantDatesLocale;
-  sourceFile: string;
-  assetFile: string;
-}>;
+interface BuildContext {
+  school: SchoolId;
+  assetNamespace: string;
+  dataDir: string;
+  catalogueDir: string;
+  scheduleDir: string;
+  assetsDir: string;
+}
+
+function createBuildContext(school: SchoolId): BuildContext {
+  return {
+    school,
+    assetNamespace: SCHOOLS[school].assetNamespace,
+    dataDir: scraperDataDir(school),
+    catalogueDir: catalogueDataDir(school),
+    scheduleDir: schedulesDataDir(school),
+    assetsDir: webAssetsDataDir(school),
+  };
+}
+
+async function readJsonOptional<T>(file: string): Promise<T | null> {
+  try {
+    return await readJson<T>(file);
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException)?.code === "ENOENT") return null;
+    throw err;
+  }
+}
+
+function logMissingSource(assetFile: string, sourceFile: string): void {
+  console.log(`Skipping ${assetFile}: missing ${sourceFile}`);
+}
 
 async function writePb(filePath: string, bytes: Uint8Array): Promise<void> {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, bytes);
 }
 
-async function writeImportantDatesAssets(): Promise<readonly string[]> {
-  const assets = await Promise.all(
-    IMPORTANT_DATES_BUILD_TARGETS.map(async ({ locale, sourceFile, assetFile }) => {
-      const data = await readJson<ImportantDatesData>(sourceFile);
-      if (data.locale !== locale) {
-        throw new Error(
-          `Important dates locale mismatch in ${path.basename(sourceFile)}: expected ${locale}, received ${data.locale}`,
-        );
-      }
-      return {
-        assetFile,
-        bytes: DataProto.ImportantDatesData.encode(toProtoImportantDatesData(data)).finish(),
-      };
-    }),
-  );
+async function writeAsset(ctx: BuildContext, assetFile: string, bytes: Uint8Array): Promise<void> {
+  await writePb(path.join(ctx.assetsDir, assetFile), bytes);
+}
 
-  await Promise.all(
-    assets.map(({ assetFile, bytes }) => writePb(path.join(WEB_ASSETS_DATA_DIR, assetFile), bytes)),
-  );
+function importantDatesBuildTargets(ctx: BuildContext): ReadonlyArray<{
+  locale: ImportantDatesLocale;
+  sourceFile: string;
+  assetFile: string;
+}> {
+  return [
+    {
+      locale: "en",
+      sourceFile: path.join(ctx.dataDir, "important-dates.en.json"),
+      assetFile: "important-dates.en.pb",
+    },
+    {
+      locale: "fr-CA",
+      sourceFile: path.join(ctx.dataDir, "important-dates.fr.json"),
+      assetFile: "important-dates.fr.pb",
+    },
+  ];
+}
 
-  return assets.map(({ assetFile }) => assetFile);
+async function writeImportantDatesAssets(ctx: BuildContext): Promise<readonly string[]> {
+  const written: string[] = [];
+  for (const { locale, sourceFile, assetFile } of importantDatesBuildTargets(ctx)) {
+    const data = await readJsonOptional<ImportantDatesData>(sourceFile);
+    if (!data) {
+      logMissingSource(assetFile, sourceFile);
+      continue;
+    }
+    if (data.locale !== locale) {
+      throw new Error(
+        `Important dates locale mismatch in ${path.basename(sourceFile)}: expected ${locale}, received ${data.locale}`,
+      );
+    }
+    await writeAsset(
+      ctx,
+      assetFile,
+      DataProto.ImportantDatesData.encode(toProtoImportantDatesData(data)).finish(),
+    );
+    written.push(assetFile);
+  }
+  return written;
+}
+
+async function collectPbAssetManifest(): Promise<Record<string, string>> {
+  const manifest: Record<string, string> = {};
+  const schoolDirs = (
+    await fs.readdir(WEB_ASSETS_DATA_ROOT, { withFileTypes: true }).catch(() => [])
+  )
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort();
+
+  for (const schoolDir of schoolDirs) {
+    const dir = path.join(WEB_ASSETS_DATA_ROOT, schoolDir);
+    const files = (await fs.readdir(dir).catch(() => [] as string[]))
+      .filter((file) => file.endsWith(".pb"))
+      .sort();
+    for (const file of files) {
+      const id = `${schoolDir}/${file}`;
+      manifest[id] = `/data/${id}`;
+    }
+  }
+  return manifest;
 }
 
 /**
- * Ensure build:data-proto leaves behind the generated data-manifest module when
- * no Vite build has created it yet. Existing manifests are preserved so content-
- * hashed asset URLs from the web build are not clobbered.
+ * Ensure build:data-proto leaves behind a generated data-manifest module when no
+ * Vite build has created one yet. If an older flat placeholder is present, replace
+ * it with the school-namespaced placeholder expected by the runtime data layer.
  */
 async function scaffoldDataManifest(): Promise<void> {
-  if (
-    await fs
-      .access(DATA_MANIFEST_FILE)
-      .then(() => true)
-      .catch(() => false)
-  ) {
-    return;
-  }
-  const entries = (await fs.readdir(WEB_ASSETS_DATA_DIR).catch(() => [] as string[])).filter((f) =>
-    f.endsWith(".pb"),
-  );
-  const manifest: Record<string, string> = {};
-  for (const id of entries.sort()) manifest[id] = `/data/${id}`;
+  const existing = await fs.readFile(DATA_MANIFEST_FILE, "utf-8").catch(() => "");
+  if (existing && !/"[^"/]+\.pb"/.test(existing)) return;
+
+  const manifest = await collectPbAssetManifest();
   const body = Object.keys(manifest)
+    .sort()
     .map((id) => `  ${JSON.stringify(id)}: ${JSON.stringify(manifest[id])},`)
     .join("\n");
   const source = `// AUTO-GENERATED by the data-manifest build. Do not edit.
-// Maps each \`.pb\` asset id (its bare filename) to the URL it is served from.
-// A placeholder is scaffolded by \`pnpm build:data-proto\`; the real, content-
-// hashed URLs are written by the web Vite build (see apps/web/vite/data-manifest-plugin.ts).
+// Maps each \`.pb\` asset id (its path under \`assets/data\`, i.e. \`<school>/<name>.pb\`)
+// to the URL it is served from. A placeholder is scaffolded by \`pnpm build:data-proto\`;
+// the real, content-hashed URLs are written by the web Vite build
+// (see apps/web/vite/data-manifest-plugin.ts).
 
 export const dataManifest: Record<string, string> = {
 ${body}
@@ -143,145 +202,185 @@ function isScheduleJson(name: string): boolean {
   return /^schedules\.\d+\.json$/.test(name);
 }
 
-export async function main(): Promise<void> {
-  await fs.mkdir(WEB_ASSETS_DATA_DIR, { recursive: true });
-
-  // Remove stale per-year full catalogues from earlier builds; the app now ships
-  // the single union catalogue (`catalogue.union.pb`) plus tiny programs-only /
-  // prerequisite-history overlays instead of one full catalogue per year.
-  const staleFullCatalogues = (
-    await fs.readdir(WEB_ASSETS_DATA_DIR).catch(() => [] as string[])
-  ).filter((name) => /^catalogue\.\d{4}\.pb$/.test(name));
-  await Promise.all(
-    staleFullCatalogues.map((name) => fs.rm(path.join(WEB_ASSETS_DATA_DIR, name), { force: true })),
+async function removeStaleFullCatalogues(ctx: BuildContext): Promise<void> {
+  const staleFullCatalogues = (await fs.readdir(ctx.assetsDir).catch(() => [] as string[])).filter(
+    (name) => /^catalogue\.\d{4}\.pb$/.test(name),
   );
+  await Promise.all(
+    staleFullCatalogues.map((name) => fs.rm(path.join(ctx.assetsDir, name), { force: true })),
+  );
+}
 
-  const catalogueEntries = await fs.readdir(CATALOGUE_DATA_DIR).catch(() => [] as string[]);
-  const scheduleEntries = await fs.readdir(SCHEDULES_DATA_DIR).catch(() => [] as string[]);
+/**
+ * Remove any `catalogue.descriptions.*.pb` files from the assets directory
+ * that are NOT in the current `shardIds` set. This prevents stale shard files
+ * from accumulating when the school's faculty structure changes.
+ */
+async function removeStaleDescriptionShards(
+  ctx: BuildContext,
+  shardIds: readonly string[],
+): Promise<void> {
+  const idSet = new Set(shardIds.map((id) => `catalogue.descriptions.${id}.pb`));
+  const stale = (await fs.readdir(ctx.assetsDir).catch(() => [] as string[])).filter(
+    (name) => /^catalogue\.descriptions\..+\.pb$/.test(name) && !idSet.has(name),
+  );
+  await Promise.all(stale.map((name) => fs.rm(path.join(ctx.assetsDir, name), { force: true })));
+}
+
+export async function main(school: SchoolId = DEFAULT_SCHOOL_ID): Promise<void> {
+  const ctx = createBuildContext(school);
+  await fs.mkdir(ctx.assetsDir, { recursive: true });
+  await removeStaleFullCatalogues(ctx);
+
+  const catalogueEntries = await fs.readdir(ctx.catalogueDir).catch(() => [] as string[]);
+  const scheduleEntries = await fs.readdir(ctx.scheduleDir).catch(() => [] as string[]);
   const yearCatalogues = catalogueEntries.filter(isCatalogueYearJson).sort();
   const scheduleFiles = scheduleEntries.filter(isScheduleJson).sort();
 
-  const manifest = await readJson<{ years: number[] }>(
-    path.join(CATALOGUE_DATA_DIR, "catalogue.json"),
-  );
-  await writePb(
-    path.join(WEB_ASSETS_DATA_DIR, "catalogue.pb"),
-    DataProto.CatalogueManifest.encode({
-      years: manifest.years ?? [],
-    }).finish(),
-  );
+  const manifestPath = path.join(ctx.catalogueDir, "catalogue.json");
+  const manifest = await readJsonOptional<{ years: number[] }>(manifestPath);
+  if (manifest) {
+    await writeAsset(
+      ctx,
+      "catalogue.pb",
+      DataProto.CatalogueManifest.encode({
+        years: manifest.years ?? [],
+      }).finish(),
+    );
+  } else {
+    logMissingSource("catalogue.pb", manifestPath);
+  }
 
-  const terms = await readJson<{
+  const termsPath = path.join(ctx.dataDir, "terms.json");
+  const terms = await readJsonOptional<{
     terms: Array<{ termId: string; name: string }>;
-  }>(path.join(SCRAPER_DATA_DIR, "terms.json"));
-  await writePb(
-    path.join(WEB_ASSETS_DATA_DIR, "terms.pb"),
-    DataProto.TermsData.encode({
-      terms: (terms.terms ?? []).map((t) => ({
-        termId: parseTermIdToNumber(String(t.termId ?? "")),
-        name: normalizeTermName(t.name),
-      })),
-    }).finish(),
-  );
+  }>(termsPath);
+  if (terms) {
+    await writeAsset(
+      ctx,
+      "terms.pb",
+      DataProto.TermsData.encode({
+        terms: (terms.terms ?? []).map((t) => ({
+          termId: parseTermIdToNumber(String(t.termId ?? "")),
+          name: normalizeTermName(t.name),
+        })),
+      }).finish(),
+    );
+  } else {
+    logMissingSource("terms.pb", termsPath);
+  }
 
-  const importantDatesAssets = await writeImportantDatesAssets();
+  const importantDatesAssets = await writeImportantDatesAssets(ctx);
 
-  const indices = await readJson<{ courses: string[]; programs: string[]; disciplines?: string[] }>(
-    path.join(SCRAPER_DATA_DIR, "indices.json"),
-  );
-  await writePb(
-    path.join(WEB_ASSETS_DATA_DIR, "indices.pb"),
-    DataProto.Indices.encode(
-      toProtoIndices({
-        courses: indices.courses ?? [],
-        programs: indices.programs ?? [],
-        disciplines: indices.disciplines ?? [],
-      }),
-    ).finish(),
-  );
+  const indicesPath = path.join(ctx.dataDir, "indices.json");
+  const indices = await readJsonOptional<{
+    courses: string[];
+    programs: string[];
+    disciplines?: string[];
+  }>(indicesPath);
+  if (indices) {
+    await writeAsset(
+      ctx,
+      "indices.pb",
+      DataProto.Indices.encode(
+        toProtoIndices({
+          courses: indices.courses ?? [],
+          programs: indices.programs ?? [],
+          disciplines: indices.disciplines ?? [],
+        }),
+      ).finish(),
+    );
+  } else {
+    logMissingSource("indices.pb", indicesPath);
+  }
 
-  const rmp = await readJson<{ resultCount?: number; professors?: RateMyProfessorInput[] }>(
-    path.join(SCRAPER_DATA_DIR, "ratemyprofessors.json"),
+  const rmpPath = path.join(ctx.dataDir, "ratemyprofessors.json");
+  const rmp = await readJsonOptional<{ resultCount?: number; professors?: RateMyProfessorInput[] }>(
+    rmpPath,
   );
-  await writePb(
-    path.join(WEB_ASSETS_DATA_DIR, "ratemyprofessors.pb"),
-    DataProto.RateMyProfessorsData.encode({
-      resultCount: rmp.resultCount ?? 0,
-      professors: (rmp.professors ?? []).map((p) => ({
-        legacyId: p.legacyId,
-        name: p.name ?? "",
-        rating: p.rating ?? undefined,
-        numRatings: p.numRatings,
-      })),
-    }).finish(),
-  );
+  if (rmp) {
+    await writeAsset(
+      ctx,
+      "ratemyprofessors.pb",
+      DataProto.RateMyProfessorsData.encode({
+        resultCount: rmp.resultCount ?? 0,
+        professors: (rmp.professors ?? []).map((p) => ({
+          legacyId: p.legacyId,
+          name: p.name ?? "",
+          rating: p.rating ?? undefined,
+          numRatings: p.numRatings,
+        })),
+      }).finish(),
+    );
+  } else {
+    logMissingSource("ratemyprofessors.pb", rmpPath);
+  }
 
-  const disciplinesJson = await readJson<unknown>(path.join(SCRAPER_DATA_DIR, "disciplines.json"));
-  const disciplinesProto = mapDisciplinesJson(disciplinesJson);
-  await writePb(
-    path.join(WEB_ASSETS_DATA_DIR, "disciplines.pb"),
-    DataProto.DisciplinesData.encode(disciplinesProto).finish(),
-  );
+  const disciplinesPath = path.join(ctx.dataDir, "disciplines.json");
+  const disciplinesJson = await readJsonOptional<unknown>(disciplinesPath);
+  const disciplinesProto = disciplinesJson ? mapDisciplinesJson(disciplinesJson) : null;
+  if (disciplinesProto) {
+    await writeAsset(
+      ctx,
+      "disciplines.pb",
+      DataProto.DisciplinesData.encode(disciplinesProto).finish(),
+    );
+  } else {
+    logMissingSource("disciplines.pb", disciplinesPath);
+  }
 
-  // Canonical professor registry (committed data/professors.json): emit the
-  // dictionary and build the resolver every other dataset uses to reference a
-  // professor by his registry index.
+  const registryPath = professorsFile(ctx.school);
   const registry =
-    (await readJson<{ professors?: ProfessorRegistryEntry[] }>(PROFESSORS_FILE).catch(() => null))
-      ?.professors ?? [];
+    (await readJsonOptional<{ professors?: ProfessorRegistryEntry[] }>(registryPath))?.professors ??
+    [];
   const professorResolver = createResolverFromRegistry(registry);
-  await writePb(
-    path.join(WEB_ASSETS_DATA_DIR, "professors.pb"),
-    DataProto.ProfessorsData.encode({
-      professors: registry.map((p) => ({
-        name: p.name,
-        legacyIds: p.legacyIds,
-        rating: p.rating,
-        numRatings: p.numRatings,
-        aliases: p.aliases,
-      })),
-    }).finish(),
-  );
+  if (registry.length > 0) {
+    await writeAsset(
+      ctx,
+      "professors.pb",
+      DataProto.ProfessorsData.encode({
+        professors: registry.map((p) => ({
+          name: p.name,
+          legacyIds: p.legacyIds,
+          rating: p.rating,
+          numRatings: p.numRatings,
+          aliases: p.aliases,
+        })),
+      }).finish(),
+    );
+  } else {
+    logMissingSource("professors.pb", registryPath);
+  }
 
-  // Merged catalogue: a single union of all courses (latest metadata) shipped
-  // once, plus a compact per-course prerequisite-history overlay for cohort
-  // reconstruction, plus small programs-only assets per cohort year. Replaces
-  // the app's need to fetch two full year catalogues. See docs + @uoplan/core
-  // reconstructCatalogueForYear.
   const yearInputs: YearCatalogue[] = [];
   for (const fileName of yearCatalogues) {
     const match = /catalogue\.(\d{4})\.json$/.exec(fileName);
     if (!match) continue;
     yearInputs.push({
       year: Number(match[1]),
-      data: await readJson<CatalogueJsonInput>(path.join(CATALOGUE_DATA_DIR, fileName)),
+      data: await readJson<CatalogueJsonInput>(path.join(ctx.catalogueDir, fileName)),
     });
   }
   yearInputs.sort((a, b) => a.year - b.year);
   if (yearInputs.length > 0) {
     const unionInput = buildUnionCatalogueInput(yearInputs);
     const unionProto = mapCatalogue(unionInput);
-    await writePb(
-      path.join(WEB_ASSETS_DATA_DIR, "catalogue.union.pb"),
-      DataProto.Catalogue.encode(unionProto).finish(),
-    );
-    await writePb(
-      path.join(WEB_ASSETS_DATA_DIR, "catalogue.history.pb"),
+    await writeAsset(ctx, "catalogue.union.pb", DataProto.Catalogue.encode(unionProto).finish());
+    await writeAsset(
+      ctx,
+      "catalogue.history.pb",
       DataProto.CataloguePrereqHistory.encode(
         buildPrereqHistory(yearInputs, unionInput, unionProto.courseCodes),
       ).finish(),
     );
-    await writePb(
-      path.join(WEB_ASSETS_DATA_DIR, "catalogue.programs.history.pb"),
+    await writeAsset(
+      ctx,
+      "catalogue.programs.history.pb",
       DataProto.CatalogueProgramHistory.encode(
         buildProgramHistory(yearInputs, unionInput, unionProto.courseCodes),
       ).finish(),
     );
 
-    // Compact keyword index over course descriptions (latest description per
-    // course, newest year wins). Never ships the raw description text — only
-    // folded/stemmed keyword tokens + BM25 term frequencies. See
-    // docs/explore-search.md.
     const latestDescriptions = new Map<string, CourseDescriptionInput>();
     for (const { data } of yearInputs) {
       for (const course of data.courses ?? []) {
@@ -293,43 +392,59 @@ export async function main(): Promise<void> {
         });
       }
     }
-    await writePb(
-      path.join(WEB_ASSETS_DATA_DIR, "catalogue.search.pb"),
+    await writeAsset(
+      ctx,
+      "catalogue.search.pb",
       DataProto.CourseSearchIndex.encode(
         buildCourseSearchIndex([...latestDescriptions.values()], { minDf: 2, maxDf: 200 }),
       ).finish(),
     );
+
+    if (disciplinesProto) {
+      const courseDescriptions = collectLatestCourseDescriptions(
+        yearInputs.map(({ data }) => data),
+      );
+      const shardIds =
+        ctx.school === "uottawa"
+          ? COURSE_DESCRIPTION_SHARD_IDS
+          : buildShardIdsFromDisciplines(disciplinesProto);
+      await removeStaleDescriptionShards(ctx, shardIds);
+      const descriptionShards = buildCourseDescriptionShards(
+        courseDescriptions,
+        disciplinesProto,
+        shardIds,
+      );
+      await Promise.all(
+        shardIds.map((shardId) =>
+          writeAsset(
+            ctx,
+            `catalogue.descriptions.${shardId}.pb`,
+            DataProto.CourseDescriptionShard.encode(descriptionShards.get(shardId)!).finish(),
+          ),
+        ),
+      );
+    }
+  } else {
+    console.log(
+      `Skipping catalogue union assets: no catalogue.<year>.json files in ${ctx.catalogueDir}`,
+    );
   }
 
-  // Description shards: 13 faculty-bucketed files shipped to the client on
-  // demand. Collect the latest non-empty description per course across all
-  // catalogue years, then split by faculty using the disciplines map.
-  const courseDescriptions = collectLatestCourseDescriptions(yearInputs.map(({ data }) => data));
-  const descriptionShards = buildCourseDescriptionShards(courseDescriptions, disciplinesProto);
-  await Promise.all(
-    COURSE_DESCRIPTION_SHARD_IDS.map((shardId) =>
-      writePb(
-        path.join(WEB_ASSETS_DATA_DIR, `catalogue.descriptions.${shardId}.pb`),
-        DataProto.CourseDescriptionShard.encode(descriptionShards.get(shardId)!).finish(),
-      ),
-    ),
-  );
+  const gradesPath = path.join(ctx.dataDir, "grades.json");
+  const gradesJson = (await readJsonOptional<unknown[]>(gradesPath)) ?? [];
+  if (gradesJson.length === 0) logMissingSource("grades.pb", gradesPath);
 
-  const gradesJson = await readJson<unknown[]>(path.join(SCRAPER_DATA_DIR, "grades.json"));
-
-  // Load every schedule file once so build-time instructor prediction can draw
-  // candidates from all recent terms; predictions are informational only.
   const scheduleJsonByFile = new Map<string, SchedulesJsonInput>();
   for (const fileName of scheduleFiles) {
     scheduleJsonByFile.set(
       fileName,
-      await readJson<SchedulesJsonInput>(path.join(SCHEDULES_DATA_DIR, fileName)),
+      await readJson<SchedulesJsonInput>(path.join(ctx.scheduleDir, fileName)),
     );
   }
   const predictionContext = buildPredictionContext({
     grades: gradesJson as GradesCourseInput[],
     scheduleFiles: [...scheduleJsonByFile.values()] as ScheduleFileInput[],
-    rmp: rmp.professors ?? [],
+    rmp: rmp?.professors ?? [],
   });
 
   for (const fileName of scheduleFiles) {
@@ -338,33 +453,39 @@ export async function main(): Promise<void> {
     const encoded = DataProto.SchedulesData.encode(
       mapSchedules(data, predictions, professorResolver),
     ).finish();
-    await writePb(path.join(WEB_ASSETS_DATA_DIR, fileName.replace(/\.json$/, ".pb")), encoded);
+    await writeAsset(ctx, fileName.replace(/\.json$/, ".pb"), encoded);
   }
 
-  await writePb(
-    path.join(WEB_ASSETS_DATA_DIR, "grades.pb"),
-    DataProto.GradesData.encode(mapGradesJson(gradesJson, professorResolver)).finish(),
-  );
-
-  const feedback = await buildFeedbackData(professorResolver);
-  if (feedback) {
-    await writePb(
-      path.join(WEB_ASSETS_DATA_DIR, "feedback.pb"),
-      FeedbackProto.FeedbackData.encode(feedback).finish(),
+  if (gradesJson.length > 0) {
+    await writeAsset(
+      ctx,
+      "grades.pb",
+      DataProto.GradesData.encode(mapGradesJson(gradesJson, professorResolver)).finish(),
     );
+  }
+
+  const feedback = await buildFeedbackData(ctx.school, professorResolver);
+  if (feedback) {
+    await writeAsset(ctx, "feedback.pb", FeedbackProto.FeedbackData.encode(feedback).finish());
   }
 
   await scaffoldDataManifest();
 
+  const shardCount =
+    disciplinesProto && yearInputs.length > 0
+      ? ctx.school === "uottawa"
+        ? COURSE_DESCRIPTION_SHARD_IDS.length
+        : buildShardIdsFromDisciplines(disciplinesProto).length
+      : 0;
   console.log(
-    `Generated protobuf data: catalogue.union.pb + catalogue.search.pb + catalogue.history.pb + catalogue.programs.history.pb, ${importantDatesAssets.join(" + ")}, ${COURSE_DESCRIPTION_SHARD_IDS.length} description shards, ${scheduleFiles.length} schedule files, grades.pb, disciplines.pb${feedback ? ", feedback.pb" : ""}`,
+    `Generated ${ctx.assetNamespace} protobuf data: catalogue.union.pb + catalogue.search.pb + catalogue.history.pb + catalogue.programs.history.pb, ${importantDatesAssets.join(" + ") || "no important dates"}, ${shardCount} description shards, ${scheduleFiles.length} schedule files${gradesJson.length > 0 ? ", grades.pb" : ""}, ${disciplinesProto ? "disciplines.pb" : "no disciplines.pb"}${feedback ? ", feedback.pb" : ""}`,
   );
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   void (async () => {
     try {
-      await main();
+      await main(parseSchoolArg(process.argv));
     } catch (err) {
       console.error("Failed to build protobuf data artifacts.");
       console.error(err);

@@ -1,0 +1,8 @@
+{
+  "resultCount": 3,
+  "professors": [
+    { "id": "abc1", "legacyId": 101, "name": "John Smith", "rating": 4.2, "numRatings": 15 },
+    { "id": "abc2", "legacyId": 102, "name": "Jane Doe", "rating": 3.8, "numRatings": 8 },
+    { "id": "abc3", "legacyId": 103, "name": "Carlos Vargas", "rating": null, "numRatings": 0 }
+  ]
+}

@@ -90,6 +90,13 @@ message RequirementWithStatus {
   optional uint32 picked_count = 15;
 }
 
+// Per-school credit conventions. Absent/zero fields fall back to uOttawa's
+// values so existing requests keep working unchanged.
+message CreditConfig {
+  double typical_course_credits = 1; // 0 → 3.0
+  double default_course_credits = 2; // 0 → 3.0
+}
+
 message GenerationRequest {
   // Field 1 was `Mode mode` — generation is now a single unified path (basket
   // requests are modelled as a synthesized `free_elective` requirement pool), so
@@ -157,6 +164,8 @@ message GenerationRequest {
   // source of truth for which soft objectives are active and how they rank;
   // replaces the old per-preference booleans and `compressed_schedule`.
   repeated OptimizationPriority optimization_priorities = 34;
+
+  CreditConfig credit_config = 35;
 }
 
 // Re-timetable a FIXED set of courses (the UI swap feature): given an exact set
@@ -177,6 +186,9 @@ message TimetableRequest {
   // set (timetable-shape + professor-rating objectives; selection objectives are
   // ignored here since the course set is fixed). See GenerationRequest.
   repeated OptimizationPriority optimization_priorities = 11;
+  // Per-school credit conventions — same semantics as GenerationRequest.credit_config.
+  // Absent/zero fields fall back to uOttawa's values.
+  CreditConfig credit_config = 12;
 }
 
 // A component -> section choice for a chosen course. The TS side rebuilds the

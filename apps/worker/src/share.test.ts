@@ -1,4 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
+import { STATE_MAGIC, stateBytesToBase64 } from "@uoplan/core";
+import { ShareableState } from "@uoplan/proto/state";
 import worker from "./index.js";
 import type { Env } from "./index.js";
 
@@ -42,5 +44,26 @@ describe("share route", () => {
     expect(res.status).toBe(200);
     expect(html).toContain('content="https://uoplan.party/api/og-image/QUJD-18?p=not-a-protobuf"');
     expect(html).toContain('window.location.replace("/schedule/?s=QUJD%2B18%3D")');
+  });
+});
+
+describe("share route school prefix", () => {
+  function shareParam(school: number): string {
+    // Decoding an empty buffer yields the all-defaults message, which is the
+    // only public way to obtain a fully-populated ShareableState to tweak.
+    const base = ShareableState.decode(new Uint8Array(0));
+    const bytes = ShareableState.encode({ ...base, magic: STATE_MAGIC, school }).finish();
+    return encodeURIComponent(stateBytesToBase64(bytes));
+  }
+
+  it("redirects a uOttawa state to the unprefixed calendar path", async () => {
+    const html = await (await request(`/api/share/${shareParam(0)}`)).text();
+    expect(html).toContain('window.location.replace("/schedule/?s=');
+    expect(html).not.toContain("/carleton/schedule/");
+  });
+
+  it("redirects a Carleton state to the /carleton-prefixed calendar path", async () => {
+    const html = await (await request(`/api/share/${shareParam(1)}`)).text();
+    expect(html).toContain('window.location.replace("/carleton/schedule/?s=');
   });
 });

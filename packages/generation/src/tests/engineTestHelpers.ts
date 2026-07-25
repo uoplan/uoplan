@@ -13,6 +13,7 @@ import type { ScheduleEngine } from "../engineBridge";
 import { GenerationRequest, GenerationResponse } from "@uoplan/proto/engine";
 import { defaultOptimizationPriorities } from "../optimizationPriorities";
 import { normalizeCourseCode } from "@uoplan/domain/utils/courseUtils";
+import { DEFAULT_SCHOOL_ID } from "@uoplan/domain/school";
 import type { DecodedState } from "../decodedState";
 
 export function generationResponse(over: Partial<GenerationResponseType>): GenerationResponseType {
@@ -139,6 +140,7 @@ export const testGenerationConstraints: GenerationConstraints = {
 
 export function decodedState(over: Partial<DecodedState> = {}): DecodedState {
   return {
+    school: DEFAULT_SCHOOL_ID,
     wizardMode: "basic",
     basketCourses: [],
     additionalElectivesCount: 0,

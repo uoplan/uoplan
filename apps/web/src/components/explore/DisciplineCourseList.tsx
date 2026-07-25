@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { IconExternalLink } from "@tabler/icons-react";
 import type { Catalogue, ProfessorRatingsMap } from "@uoplan/core";
+import { getSchool } from "@uoplan/domain/school";
+import { getActiveSchool } from "../../lib/activeSchool";
 import { normalizeCourseCode, normalizeProfessorName } from "@uoplan/core";
 import { groupOfferingsByCourse, groupOfferingsByProfessor } from "../../lib/explore/gradesSearch";
 import type { CourseOfferingGroup } from "../../lib/explore/gradesSearch";
@@ -37,9 +39,9 @@ type DisciplineCourseEntry =
   | { kind: "offering"; code: string; group: CourseOfferingGroup }
   | { kind: "catalogue"; code: string; course: CatalogueCourseLite };
 
-/** Deep-link to the uOttawa catalogue for a course with no in-app offerings. */
-function catalogueUrlForCode(code: string): string {
-  return `https://catalogue.uottawa.ca/search/?${new URLSearchParams({ P: code }).toString()}`;
+/** Deep-link to the school's public catalogue for a course with no in-app offerings. */
+function catalogueUrlForCode(code: string): string | undefined {
+  return getSchool(getActiveSchool()).courseCatalogueUrl(code) ?? undefined;
 }
 
 /** Shared header layout for a catalogue-only course: code + truncated title. */

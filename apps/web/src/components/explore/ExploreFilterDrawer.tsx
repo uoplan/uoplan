@@ -1,7 +1,8 @@
 import { ActionIcon, Box, Divider, Stack, Text, Tooltip } from "@mantine/core";
 import { IconEraser } from "@tabler/icons-react";
 import { tr, useTr } from "../../i18n";
-import { EXPLORE_FILTER_KEYS, filterSectionLabel } from "../../lib/explore/filterLabels";
+import { exploreFilterKeysFor, filterSectionLabel } from "../../lib/explore/filterLabels";
+import { useSchool } from "../../hooks/useSchool";
 import type { FilterKey } from "../../lib/explore/filterLabels";
 import type { ExploreFilterState } from "../../lib/explore/exploreFilters";
 import { EMPTY_FILTERS } from "../../lib/explore/exploreFilters";
@@ -27,6 +28,7 @@ export function ExploreFilterDrawer({
   termOptions?: TermOption[];
 }) {
   useTr();
+  const school = useSchool();
 
   return (
     <BottomDrawer
@@ -49,7 +51,7 @@ export function ExploreFilterDrawer({
       }
     >
       <Stack gap={0} pb={24} pt={8}>
-        {EXPLORE_FILTER_KEYS.map((key, i) => (
+        {exploreFilterKeysFor(school.features).map((key, i) => (
           <Box key={key} id={`drawer-section-${key}`}>
             {i > 0 && <Divider color="var(--app-border)" my={16} />}
             <Box px={16}>

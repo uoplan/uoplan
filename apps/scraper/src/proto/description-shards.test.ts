@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import * as DataProto from "@uoplan/proto/data";
 import {
   buildCourseDescriptionShards,
+  buildShardIdsFromDisciplines,
   collectLatestCourseDescriptions,
   COURSE_DESCRIPTION_SHARD_IDS,
 } from "./description-shards.ts";
@@ -251,5 +252,122 @@ describe("buildCourseDescriptionShards", () => {
     const decoded = DataProto.CourseDescriptionShard.decode(bytes);
     expect(decoded.courseCodes).toEqual(science.courseCodes);
     expect(decoded.descriptions).toEqual(science.descriptions);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildShardIdsFromDisciplines
+// ---------------------------------------------------------------------------
+
+function makeCarletonDisciplines(): DataProto.DisciplinesData {
+  return {
+    faculties: [
+      {
+        name: "Faculty of Arts and Social Sciences",
+        nameFr: "Faculté des arts et des sciences sociales",
+      },
+      { name: "Faculty of Engineering and Design", nameFr: "Faculté de génie et de conception" },
+      { name: "Faculty of Science", nameFr: "Faculté des sciences" },
+      { name: "Sprott School of Business", nameFr: "École de commerce Sprott" },
+      { name: "Faculty of Public Affairs", nameFr: "Faculté des affaires publiques" },
+    ],
+    disciplines: [
+      { code: "AERO", name: "Aerospace Engineering", nameFr: "Génie aérospatial", facultyRef: 2 },
+      { code: "COMP", name: "Computer Science", nameFr: "Informatique", facultyRef: 3 },
+      { code: "BUSI", name: "Business", nameFr: "Commerce", facultyRef: 4 },
+    ],
+  };
+}
+
+describe("buildShardIdsFromDisciplines", () => {
+  it("derives shard IDs from Carleton faculty names and appends 'other'", () => {
+    const shardIds = buildShardIdsFromDisciplines(makeCarletonDisciplines());
+    expect(shardIds).toContain("arts-and-social-sciences");
+    expect(shardIds).toContain("engineering-and-design");
+    expect(shardIds).toContain("science");
+    expect(shardIds).toContain("sprott-school-of-business");
+    expect(shardIds).toContain("public-affairs");
+    expect(shardIds[shardIds.length - 1]).toBe("other");
+  });
+
+  it("deduplicates slugs that map to the same ID", () => {
+    const disciplines: DataProto.DisciplinesData = {
+      faculties: [
+        { name: "Faculty of Science", nameFr: "Faculté des sciences" },
+        { name: "Faculty of Science", nameFr: "Faculté des sciences" }, // duplicate
+      ],
+      disciplines: [],
+    };
+    const shardIds = buildShardIdsFromDisciplines(disciplines);
+    const scienceCount = shardIds.filter((id) => id === "science").length;
+    expect(scienceCount).toBe(1);
+  });
+
+  it("always appends 'other' as the last shard", () => {
+    const shardIds = buildShardIdsFromDisciplines(makeCarletonDisciplines());
+    expect(shardIds[shardIds.length - 1]).toBe("other");
+  });
+
+  it("produces sorted shard IDs (before 'other')", () => {
+    const shardIds = buildShardIdsFromDisciplines(makeCarletonDisciplines());
+    const withoutOther = shardIds.slice(0, -1);
+    expect(withoutOther).toEqual([...withoutOther].sort());
+  });
+});
+
+describe("buildCourseDescriptionShards with per-school shard IDs", () => {
+  it("uses school-derived shard IDs for Carleton and produces correct shard names", () => {
+    const disciplines = makeCarletonDisciplines();
+    const shardIds = buildShardIdsFromDisciplines(disciplines);
+    const descriptions: ReadonlyMap<string, string> = new Map([
+      ["AERO 1000", "Intro to Aerospace."],
+      ["COMP 2000", "Data structures."],
+      ["BUSI 3000", "Business ethics."],
+    ]);
+    const shards = buildCourseDescriptionShards(descriptions, disciplines, shardIds);
+
+    // Shard map keys should be Carleton faculty slugs, not uOttawa ones.
+    const keys = [...shards.keys()];
+    expect(keys).toContain("engineering-and-design");
+    expect(keys).toContain("science");
+    expect(keys).toContain("sprott-school-of-business");
+    expect(keys).toContain("other");
+
+    // uOttawa-only shards must NOT appear.
+    expect(keys).not.toContain("telfer-school-of-management");
+    expect(keys).not.toContain("vice-rector-academic");
+    expect(keys).not.toContain("medicine");
+    expect(keys).not.toContain("law");
+  });
+
+  it("routes AERO → engineering-and-design shard", () => {
+    const disciplines = makeCarletonDisciplines();
+    const shardIds = buildShardIdsFromDisciplines(disciplines);
+    const descriptions: ReadonlyMap<string, string> = new Map([
+      ["AERO 1000", "Intro to Aerospace."],
+    ]);
+    const shards = buildCourseDescriptionShards(descriptions, disciplines, shardIds);
+    const engineeringShard = shards.get("engineering-and-design");
+    expect(engineeringShard?.courseCodes).toContain("AERO 1000");
+  });
+
+  it("uOttawa shards are byte-identical when called with default (COURSE_DESCRIPTION_SHARD_IDS)", () => {
+    // Using the uOttawa default should produce the same 13 shards as before.
+    const disciplines = makeTestDisciplines(); // MAT→science, PHI→arts
+    const descriptions: ReadonlyMap<string, string> = new Map([
+      ["MAT 1320", "Calculus."],
+      ["PHI 1000", "Logic."],
+    ]);
+    const defaultShards = buildCourseDescriptionShards(descriptions, disciplines);
+    const explicitShards = buildCourseDescriptionShards(
+      descriptions,
+      disciplines,
+      COURSE_DESCRIPTION_SHARD_IDS,
+    );
+
+    for (const id of COURSE_DESCRIPTION_SHARD_IDS) {
+      expect(defaultShards.get(id)?.courseCodes).toEqual(explicitShards.get(id)?.courseCodes);
+      expect(defaultShards.get(id)?.descriptions).toEqual(explicitShards.get(id)?.descriptions);
+    }
   });
 });

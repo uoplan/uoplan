@@ -47,8 +47,8 @@ export function WelcomeScreen() {
           <Badge tone="accent">uoPlan</Badge>
           <Title order={1}>Plan your degree, one term at a time</Title>
           <Text dimmed>
-            Requirement-first course planning for uOttawa students. This screen is written once and
-            runs on both web and native.
+            Requirement-first course planning for university students. This screen is written once
+            and runs on both web and native.
           </Text>
         </Stack>
         <SimpleGrid cols={2} spacing="md">

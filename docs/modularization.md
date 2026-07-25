@@ -100,7 +100,8 @@ Known hotspots to split: native `schedule-settings-sheet.tsx`, web `CalendarPage
 
 ## Guardrails
 
-- `pnpm check:arch` — package layering, web store projection hooks, `@uoplan/app` purity, `@uoplan/store` purity, worker pdfjs purity, `cli.proto` drift.
+- `pnpm check:arch` — package layering, web store projection hooks, `@uoplan/app` purity, `@uoplan/store` purity, worker pdfjs purity, **school purity**, `cli.proto` drift.
+- **School purity** (`checkSchoolPurity`) forbids institution literals (`uottawa.ca`, `carleton.ca`, institution names) anywhere in the shared packages. The only permitted homes are `packages/domain/src/school.ts` (the registry) and `apps/scraper/src/schools/`. If shared code needs a school-specific value, add a registry field or a `SchoolFeatures` flag instead of a conditional. See [multi-school.md](./multi-school.md).
 - `pnpm check:fallow` — dead code + duplication (health/CRAP temporarily skipped).
 - Projection hooks: components/routes/lib must not import raw `useAppStore` from the store factory; use `store/hooks`.
 

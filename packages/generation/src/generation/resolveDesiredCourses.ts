@@ -49,6 +49,7 @@ export function resolveDesiredCourses(
   selectedPerRequirement: Record<string, string[]>,
   prereqEligibleCourses: string[],
   cache: DataCache | null,
+  defaultCourseCredits = DEFAULT_CREDITS_NEEDED,
 ): DesiredCourseResolution {
   const assigned: Record<string, string[]> = {};
   const standalone: string[] = [];
@@ -108,7 +109,7 @@ export function resolveDesiredCourses(
       if (isGroupToken(code)) continue;
       const norm = normalizeCourseCode(code);
       if (set.has(norm)) continue;
-      used += getCourseCredits(norm, cache);
+      used += getCourseCredits(norm, cache, defaultCourseCredits);
       set.add(norm);
     }
     usedCreditsByReq.set(reqId, used);
@@ -165,7 +166,7 @@ export function resolveDesiredCourses(
       ? []
       : metas.filter((m) => m.candidatesNorm.has(norm)).sort(compareReqPreference);
 
-    const courseCredits = getCourseCredits(norm, cache);
+    const courseCredits = getCourseCredits(norm, cache, defaultCourseCredits);
     let placed = false;
     for (const m of candidates) {
       const set = assignedCodesByReq.get(m.reqId) ?? new Set<string>();

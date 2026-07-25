@@ -1,9 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { CATALOGUE_DATA_DIR, SCHEDULES_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { catalogueDataDir, schedulesDataDir, scraperDataDir } from "../shared/paths.ts";
 import { getErrorMessage } from "../shared/errors.ts";
 import { buildGradeLookups, enrichSchedulesPayload, formatGradeEnrichmentLine } from "./enrich.ts";
 import type { GradeLookups } from "./enrich.ts";
+import { scrapeCarletonSchedules } from "../schools/carleton/schedules.ts";
 import type { CourseSchedule, ParsedCourseCode } from "./parse.ts";
 import { parseCourseCode } from "./parse.ts";
 import {
@@ -30,8 +32,11 @@ function getCatalogueYearForTerm(termName: string): number {
   return termName.toLowerCase().includes("fall") ? year : year - 1;
 }
 
-async function loadCatalogue(year: number): Promise<ParsedCourseCode[]> {
-  const raw = await fs.readFile(path.join(CATALOGUE_DATA_DIR, `catalogue.${year}.json`), "utf-8");
+async function loadCatalogue(school: SchoolId, year: number): Promise<ParsedCourseCode[]> {
+  const raw = await fs.readFile(
+    path.join(catalogueDataDir(school), `catalogue.${year}.json`),
+    "utf-8",
+  );
   const data = JSON.parse(raw) as { courses?: CatalogueCourse[] };
   if (!Array.isArray(data.courses)) {
     throw new Error("catalogue.json does not contain a courses array");
@@ -51,8 +56,8 @@ async function loadCatalogue(year: number): Promise<ParsedCourseCode[]> {
   return Array.from(unique.values());
 }
 
-async function tryLoadGradeLookups(): Promise<GradeLookups | null> {
-  const gradesPath = path.join(SCRAPER_DATA_DIR, "grades.json");
+async function tryLoadGradeLookups(school: SchoolId): Promise<GradeLookups | null> {
+  const gradesPath = path.join(scraperDataDir(school), "grades.json");
   try {
     const raw = await fs.readFile(gradesPath, "utf-8");
     return buildGradeLookups(JSON.parse(raw) as unknown);
@@ -81,12 +86,17 @@ function createClientPool(clients: ClientInfo[]) {
   };
 }
 
-export async function main(): Promise<void> {
+export async function main(school: SchoolId): Promise<void> {
+  if (school === "carleton") {
+    await scrapeCarletonSchedules();
+    return;
+  }
+
   const onlySubject = process.env.ONLY_SUBJECT;
   const onlyCatalog = process.env.ONLY_CATALOG;
   const onlyTermId = process.env.ONLY_TERM_ID;
 
-  const termsRaw = await fs.readFile(path.join(SCRAPER_DATA_DIR, "terms.json"), "utf-8");
+  const termsRaw = await fs.readFile(path.join(scraperDataDir(school), "terms.json"), "utf-8");
   let terms: Term[] = (JSON.parse(termsRaw) as { terms: Term[] }).terms;
 
   if (onlyTermId) {
@@ -103,12 +113,12 @@ export async function main(): Promise<void> {
   );
   console.log(`Initialized ${clientInfos.length} PeopleSoft session(s).`);
 
-  const gradeLookups = await tryLoadGradeLookups();
+  const gradeLookups = await tryLoadGradeLookups(school);
 
   for (const term of terms) {
     const catalogueYear = getCatalogueYearForTerm(term.name);
     console.log(`Loading catalogue.${catalogueYear}.json for ${term.name}...`);
-    const allCourses = await loadCatalogue(catalogueYear);
+    const allCourses = await loadCatalogue(school, catalogueYear);
     console.log(`Found ${allCourses.length} unique course codes.`);
 
     const courses =
@@ -197,8 +207,9 @@ export async function main(): Promise<void> {
       console.log(formatGradeEnrichmentLine(`Grades (${term.termId})`, enrichmentStats));
     }
 
-    const outPath = path.join(SCHEDULES_DATA_DIR, `schedules.${term.termId}.json`);
-    await fs.mkdir(SCHEDULES_DATA_DIR, { recursive: true });
+    const scheduleDir = schedulesDataDir(school);
+    const outPath = path.join(scheduleDir, `schedules.${term.termId}.json`);
+    await fs.mkdir(scheduleDir, { recursive: true });
     await fs.writeFile(outPath, JSON.stringify(output, null, 2), "utf-8");
     console.log(
       `Done. Saved schedules for ${results.length} courses (out of ${courses.length}) to ${path.basename(outPath)}`,

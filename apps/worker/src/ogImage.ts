@@ -2,10 +2,13 @@ import { initWasm, Resvg } from "@resvg/resvg-wasm";
 import {
   enrichSchedulesDataWithGrades,
   getGradeLookups,
+  getSchool,
+  peekSchoolFromBase64,
   reconstructScheduleFromPreview,
 } from "@uoplan/core";
+import type { SchoolId } from "@uoplan/core";
 import { SchedulePreview } from "@uoplan/proto/state";
-import { loadGrades, loadSchedules, optional } from "@uoplan/data";
+import { loadGrades, loadSchedules, optional, withAssetNamespace } from "@uoplan/data";
 import { createAssetsTransport } from "@uoplan/data/worker";
 import { renderSchedulePreviewToSvg } from "@uoplan/calendar";
 import type { Env } from "./index.js";
@@ -60,13 +63,17 @@ export async function handleOgImage(
   env: Env,
   origin: string,
 ): Promise<Response> {
-  const cacheId = schedulePayload ?? `nopayload/${stateBase64url}`;
+  // The `?p=` preview payload carries no school, so it is read off the `?s=`
+  // state blob, which does. It also has to be part of the cache key: two schools
+  // can produce identical preview payloads that render different schedules.
+  const school = peekSchoolFromBase64(stateBase64url);
+  const cacheId = `${school}/${schedulePayload ?? `nopayload/${stateBase64url}`}`;
   const cacheKey = new Request(`https://og-cache.internal/v2/${cacheId}`);
 
   const cached = await defaultCache.match(cacheKey);
   if (cached) return cached;
 
-  const png = await generatePng(schedulePayload, env, origin);
+  const png = await generatePng(schedulePayload, env, origin, school);
 
   const response = new Response(png.buffer as ArrayBuffer, {
     headers: {
@@ -83,11 +90,15 @@ async function generatePng(
   schedulePayload: string | undefined,
   env: Env,
   origin: string,
+  school: SchoolId,
 ): Promise<Uint8Array> {
-  const transport = createAssetsTransport(env.ASSETS, origin);
+  const rawTransport = createAssetsTransport(env.ASSETS, origin);
+  // Fonts are absolute paths, which `withAssetNamespace` passes through; the
+  // namespaced transport is only used for the school-scoped `.pb` data assets.
+  const transport = withAssetNamespace(rawTransport, getSchool(school).assetNamespace);
   const [fontRegular, fontBold] = await Promise.all([
-    optional(transport, "/fonts/dm-mono-regular.ttf"),
-    optional(transport, "/fonts/dm-mono-bold.ttf"),
+    optional(rawTransport, "/fonts/dm-mono-regular.ttf"),
+    optional(rawTransport, "/fonts/dm-mono-bold.ttf"),
   ]);
   const fonts = [fontRegular, fontBold].filter(Boolean) as Uint8Array[];
   const fallback = () => svgToPng(fallbackSvg(), fonts);
@@ -103,7 +114,9 @@ async function generatePng(
 
     const [rawSchedules, grades] = await Promise.all([
       loadSchedules(transport, termId),
-      loadGrades(transport).catch(() => null),
+      // Schools without grade data simply have no `grades.pb`; the preview then
+      // renders without the difficulty tint rather than failing.
+      getSchool(school).features.grades ? loadGrades(transport).catch(() => null) : null,
     ]);
 
     const schedulesData = grades

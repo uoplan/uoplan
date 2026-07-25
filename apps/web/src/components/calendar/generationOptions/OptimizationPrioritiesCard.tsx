@@ -38,7 +38,9 @@ import {
   MIN_GOOD_BREAKS_TARGET_MINUTES,
 } from "@uoplan/core";
 import type { OptimizationKind, OptimizationPriority } from "@uoplan/core";
+import { useSchool } from "../../../hooks/useSchool";
 import { tr } from "../../../i18n";
+import { optimizationPrioritySupported } from "./optimizationPriorityFeatures";
 
 export interface OptimizationPrioritiesCardProps {
   priorities: OptimizationPriority[];
@@ -260,13 +262,14 @@ export function OptimizationPrioritiesCard(props: OptimizationPrioritiesCardProp
   const [open, setOpen] = useState(true);
   const [activeKind, setActiveKind] = useState<OptimizationKind | null>(null);
 
-  const indexed: IndexedPriority[] = priorities.map((priority, storedIndex) => ({
-    priority,
-    storedIndex,
-  }));
+  const features = useSchool().features;
+  const indexed: IndexedPriority[] = priorities
+    .map((priority, storedIndex) => ({ priority, storedIndex }))
+    .filter(({ priority }) => optimizationPrioritySupported(priority.kind, features));
+  const visible = indexed.map((entry) => entry.priority);
   const allKinds = priorities.map((p) => p.kind);
-  const enabledLabels = priorities.filter((p) => p.enabled).map((p) => optimizationLabel(p.kind));
-  const disabledLabels = priorities.filter((p) => !p.enabled).map((p) => optimizationLabel(p.kind));
+  const enabledLabels = visible.filter((p) => p.enabled).map((p) => optimizationLabel(p.kind));
+  const disabledLabels = visible.filter((p) => !p.enabled).map((p) => optimizationLabel(p.kind));
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -285,7 +288,7 @@ export function OptimizationPrioritiesCard(props: OptimizationPrioritiesCardProp
     onSetPriorities(arrayMove(priorities, from, to));
   };
 
-  const activePriority = activeKind ? priorities.find((p) => p.kind === activeKind) : null;
+  const activePriority = activeKind ? visible.find((p) => p.kind === activeKind) : null;
 
   return (
     <Paper withBorder radius="md" p="sm" data-testid="optimization-priorities-card">

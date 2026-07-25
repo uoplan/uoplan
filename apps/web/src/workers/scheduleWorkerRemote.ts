@@ -1,4 +1,5 @@
 import * as Comlink from "comlink";
+import { getActiveSchool, WORKER_NAME_SCHOOL_SEPARATOR } from "../lib/activeSchool";
 import type { ScheduleWorkerApi } from "./scheduleWorkerApi";
 
 /** True when a Web Worker can be spawned (browser only, not SSR/prerender/tests). */
@@ -26,9 +27,14 @@ export function createScheduleWorkerHandle(name: string): ScheduleWorkerHandle {
   return {
     getRemote() {
       if (remote) return remote;
+      // Vite only bundles a worker when `new URL("./x.ts", import.meta.url)` appears
+      // literally inside `new Worker(...)` — building the URL in a variable (e.g. to
+      // append a query param) silently stops the worker chunk from being emitted.
+      // So the school rides along on `name` instead, which the worker reads from
+      // `self.name` at module-evaluation time.
       workerInstance = new Worker(new URL("./scheduleWorker.ts", import.meta.url), {
         type: "module",
-        name,
+        name: `${name}${WORKER_NAME_SCHOOL_SEPARATOR}${getActiveSchool()}`,
       });
       remote = Comlink.wrap<ScheduleWorkerApi>(workerInstance);
       return remote;

@@ -5,11 +5,13 @@ import { fileURLToPath } from "node:url";
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const nativeRoot = path.resolve(scriptDir, "..");
 const repoRoot = path.resolve(nativeRoot, "../..");
-const sourceDir = path.join(repoRoot, "apps/web/src/assets/data");
+const sourceRootDir = path.join(repoRoot, "apps/web/src/assets/data");
+const schoolNamespace = "uottawa";
+const sourceDir = path.join(sourceRootDir, schoolNamespace);
 const builtManifestPath = path.join(repoRoot, "apps/web/dist/client/data/manifest.json");
 const destinationDir = path.join(nativeRoot, "assets/data");
 const generatedAssetMapPath = path.join(nativeRoot, "src/data/bundled-data-assets.ts");
-const sourceManifestPath = path.join(sourceDir, "manifest.json");
+const sourceManifestPath = path.join(sourceRootDir, "manifest.json");
 
 const REQUIRED_ASSETS = [
   "terms.pb",
@@ -31,11 +33,16 @@ const REQUIRED_ASSETS = [
  * (`catalogue.history.pb`). Native always uses the latest prerequisites, so it
  * only needs the single union catalogue (`catalogue.union.pb`).
  */
+function bareAssetId(id: string): string {
+  return id.split("/").pop() ?? id;
+}
+
 function isExcludedFromBundle(id: string): boolean {
+  const bareId = bareAssetId(id);
   return (
-    /^catalogue\.\d{4}\.pb$/.test(id) ||
-    /^catalogue\.programs\.\d{4}\.pb$/.test(id) ||
-    id === "catalogue.history.pb"
+    /^catalogue\.\d{4}\.pb$/.test(bareId) ||
+    /^catalogue\.programs\.\d{4}\.pb$/.test(bareId) ||
+    bareId === "catalogue.history.pb"
   );
 }
 
@@ -96,7 +103,7 @@ async function main() {
   const entries = await readdir(sourceDir, { withFileTypes: true });
   const allAssetFiles = entries
     .filter((entry) => entry.isFile() && entry.name.endsWith(".pb"))
-    .map((entry) => entry.name)
+    .map((entry) => `${schoolNamespace}/${entry.name}`)
     .sort();
 
   if (allAssetFiles.length === 0) {
@@ -105,12 +112,14 @@ async function main() {
 
   const assetFiles = allAssetFiles.filter((id) => !isExcludedFromBundle(id));
 
-  const missingRequired = REQUIRED_ASSETS.filter((id) => !assetFiles.includes(id));
+  const missingRequired = REQUIRED_ASSETS.map((id) => `${schoolNamespace}/${id}`).filter(
+    (id) => !assetFiles.includes(id),
+  );
   const catalogueYears = allAssetFiles
-    .map((id) => /^catalogue\.(\d{4})\.pb$/.exec(id)?.[1])
+    .map((id) => /^catalogue\.(\d{4})\.pb$/.exec(bareAssetId(id))?.[1])
     .filter(Boolean)
     .map(Number);
-  const scheduleFiles = assetFiles.filter((id) => /^schedules\..+\.pb$/.test(id));
+  const scheduleFiles = assetFiles.filter((id) => /^schedules\..+\.pb$/.test(bareAssetId(id)));
 
   if (missingRequired.length > 0) {
     throw new Error(`Missing required bundled data assets: ${missingRequired.join(", ")}`);
@@ -126,15 +135,27 @@ async function main() {
   const bundledSet = new Set(assetFiles);
   const existing = await readdir(destinationDir, { withFileTypes: true }).catch(() => []);
   for (const entry of existing) {
-    if (entry.isFile() && entry.name.endsWith(".pb") && !bundledSet.has(entry.name)) {
+    if (entry.isFile() && entry.name.endsWith(".pb")) {
       await rm(path.join(destinationDir, entry.name));
+      continue;
+    }
+    if (entry.isDirectory()) {
+      const nested = await readdir(path.join(destinationDir, entry.name), { withFileTypes: true });
+      for (const nestedEntry of nested) {
+        const id = `${entry.name}/${nestedEntry.name}`;
+        if (nestedEntry.isFile() && nestedEntry.name.endsWith(".pb") && !bundledSet.has(id)) {
+          await rm(path.join(destinationDir, entry.name, nestedEntry.name));
+        }
+      }
     }
   }
 
   let totalBytes = 0;
   for (const id of assetFiles) {
-    const source = path.join(sourceDir, id);
+    const bareId = bareAssetId(id);
+    const source = path.join(sourceDir, bareId);
     const destination = path.join(destinationDir, id);
+    await mkdir(path.dirname(destination), { recursive: true });
     await copyFile(source, destination);
     totalBytes += (await readFile(source)).byteLength;
   }

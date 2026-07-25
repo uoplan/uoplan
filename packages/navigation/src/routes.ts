@@ -8,6 +8,22 @@
  * Paths intentionally mirror the existing web URLs (apps/web/src/routes) so the
  * web adapter can pass them straight to TanStack, and the native route tree can
  * mirror the same structure as pages are ported.
+ *
+ * ## School prefix
+ *
+ * {@link routePath} intentionally produces **basepath-relative** paths with no
+ * school prefix (e.g. `/schedule`, not `/carleton/schedule`). The school
+ * prefix is the **adapter's** responsibility, not the route shape's:
+ *
+ * - **Web** (`WebNavigationProvider`): calls `withBasepath(router.basepath,
+ *   routePath(route))` so TanStack Router's configured basepath (`/carleton`
+ *   for Carleton, `` for uOttawa) is prepended once before pushing to history.
+ * - **Native** (`NativeNavigationProvider`): passes `routePath(route)` directly
+ *   to Expo Router as an `Href`. Native bundles only uOttawa data and the Expo
+ *   file-based routes are uOttawa-only by design, so no prefix is needed.
+ *
+ * uOttawa's `pathSlug` is `""`, making `withBasepath` a no-op — preserving
+ * existing URLs exactly.
  */
 export type AppRoute =
   | { name: "home" }

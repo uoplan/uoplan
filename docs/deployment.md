@@ -65,6 +65,28 @@ In the Cloudflare dashboard → your Worker project → **Settings → Build**:
 Both deploy commands pass the compiled config (`-c apps/web/dist/uoplan/wrangler.json`)
 — see the note at the top of this doc for why that is required.
 
+## Multi-school builds
+
+The Cloudflare build needs **no per-school configuration**:
+
+- `assets.not_found_handling: "single-page-application"` in `wrangler.json`
+  already falls `/carleton/*` back to `index.html`, so the school path prefix
+  routes without a rule.
+- The `run_worker_first` routes are all `/api/*` — school-neutral paths whose
+  handlers read the school out of the state blob.
+- `public/_redirects` only contains legacy uOttawa path migrations
+  (`/step/*`, `/calendar/*`), which never existed under another school and so
+  need no prefixed variants.
+- `public/_headers` caches `/assets/*` immutably; the school-namespaced `.pb`
+  files under `/data/{school}/` keep the default revalidating cache, as before.
+
+The build itself picks schools up from data: `scripts/fetch-data.ts` hydrates
+every school namespace it finds on the `data` branch, and
+`scripts/build-data-proto.ts` runs the proto build once per school that has data
+on disk (skipping, not failing, for schools without it). Sitemap and prerender
+generation iterate the registry the same way. See
+[multi-school.md](./multi-school.md).
+
 ## Notes / caveats
 
 - This is an **unsupported workaround**: it relies on Cloudflare caching a project-root

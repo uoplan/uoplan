@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@uoplan/core": "workspace:*",
+    "@uoplan/domain": "workspace:*",
     "@uoplan/proto": "workspace:*",
     "@uoplan/search": "workspace:*",
     "cheerio": "^1.2.0",

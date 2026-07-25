@@ -39,7 +39,7 @@ export interface GenerationConstraints {
    * (`weights.rs::professor_rating_weight`).
    */
   professorRatings?: ProfessorRatingsMap;
-  /** Max credits from 1000-level courses allowed in the schedule (48 - already completed). */
+  /** Max credits from 1000-level courses allowed in the schedule. */
   maxFirstYearCredits?: number;
   /** Recurring per-weekday windows that no course meeting time may overlap. */
   blockedTimes?: BlockedTimeWindow[];

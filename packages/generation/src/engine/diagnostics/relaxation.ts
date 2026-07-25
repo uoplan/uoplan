@@ -49,6 +49,12 @@ interface RelaxationInput {
   readonly cache: DataCache;
   readonly constraints: GenerationConstraints;
   readonly blacklistedCourses?: readonly string[];
+  /**
+   * Credits assumed for courses missing from the catalogue. Pass the school's
+   * `defaultCourseCredits` so the first-year credit cap uses the right scale
+   * (0.5 for Carleton, 3 for uOttawa). Defaults to uOttawa's value.
+   */
+  readonly defaultCourseCredits?: number;
 }
 
 function makeCtx(cache: DataCache): ConstraintContext {
@@ -84,7 +90,11 @@ function schedulable(pipeline: ConstraintPipeline, input: RelaxationInput): bool
  * timetabled and which user constraint(s) are responsible.
  */
 export function diagnoseByRelaxation(input: RelaxationInput): RelaxationOutcome {
-  const constraintList = buildHardConstraintPipeline(input.constraints, input.blacklistedCourses);
+  const constraintList = buildHardConstraintPipeline(
+    input.constraints,
+    input.blacklistedCourses,
+    input.defaultCourseCredits,
+  );
   const full = new ConstraintPipeline(constraintList);
 
   if (schedulable(full, input)) return { kind: "schedulable" };

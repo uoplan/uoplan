@@ -1,6 +1,6 @@
 /**
  * Stage 2 — parse. Read the raw cache produced by stage 1 and emit the committed
- * per-term dataset `apps/scraper/data/feedback/feedback.<termId>.json`. Runs fully offline.
+ * per-term dataset `apps/scraper/data/<school>/feedback/feedback.<termId>.json`. Runs fully offline.
  *
  * The list titles alone yield the primary prof <-> section <-> course join key; when
  * `stats` is set and report HTML was cached, per-question summary stats are attached.
@@ -8,6 +8,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import type { SchoolId } from "@uoplan/domain/school";
 import {
   cachedTermIds,
   chartPath,
@@ -155,21 +156,21 @@ async function parseTerm(termId: string): Promise<ParsedTerm | null> {
   return { termLabel: meta?.termLabel ?? termId, sectionCount, output, optionLabels };
 }
 
-async function readOptionLabels(): Promise<OptionLabelMap> {
+async function readOptionLabels(school: SchoolId): Promise<OptionLabelMap> {
   try {
-    return JSON.parse(await fs.readFile(optionsPath(), "utf-8")) as OptionLabelMap;
+    return JSON.parse(await fs.readFile(optionsPath(school), "utf-8")) as OptionLabelMap;
   } catch {
     return {};
   }
 }
 
-async function writeOptionLabels(labels: OptionLabelMap): Promise<void> {
+async function writeOptionLabels(labels: OptionLabelMap, school: SchoolId): Promise<void> {
   const sorted: OptionLabelMap = {};
   for (const key of Object.keys(labels).sort()) sorted[key] = labels[key];
-  await writeJsonFile(optionsPath(), sorted);
+  await writeJsonFile(optionsPath(school), sorted);
 }
 
-export async function runParse(options: ParseOptions = {}): Promise<void> {
+export async function runParse(options: ParseOptions = {}, school: SchoolId): Promise<void> {
   const termIds = options.terms && options.terms.length > 0 ? options.terms : await cachedTermIds();
 
   if (termIds.length === 0) {
@@ -180,12 +181,12 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
 
   // Merge newly-discovered labels into the committed sidecar so incremental
   // single-term parses accumulate rather than clobber other terms' questions.
-  const optionLabels = await readOptionLabels();
+  const optionLabels = await readOptionLabels(school);
   let labelsChanged = false;
 
   try {
     for (const termId of termIds) {
-      if (!options.force && (await outputExists(termId))) {
+      if (!options.force && (await outputExists(termId, school))) {
         console.log(`  [${termId}] feedback.${termId}.json already exists, skipping.`);
         continue;
       }
@@ -201,7 +202,7 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
         console.warn(`  [${termId}] no cached list pages found, skipping.`);
         continue;
       }
-      await writeJsonFile(outputPath(termId), parsedTerm.output);
+      await writeJsonFile(outputPath(termId, school), parsedTerm.output);
       for (const [question, labels] of Object.entries(parsedTerm.optionLabels)) {
         if (!optionLabels[question]) {
           optionLabels[question] = labels;
@@ -210,7 +211,7 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
       }
       console.log(
         `  [${termId}] ${parsedTerm.termLabel}: wrote ${String(parsedTerm.output.length)} course(s) / ` +
-          `${String(parsedTerm.sectionCount)} section(s) -> data/feedback/feedback.${termId}.json`,
+          `${String(parsedTerm.sectionCount)} section(s) -> data/<school>/feedback/feedback.${termId}.json`,
       );
     }
   } finally {
@@ -218,7 +219,7 @@ export async function runParse(options: ParseOptions = {}): Promise<void> {
   }
 
   if (labelsChanged) {
-    await writeOptionLabels(optionLabels);
+    await writeOptionLabels(optionLabels, school);
     console.log(
       `  wrote ${String(Object.keys(optionLabels).length)} question option set(s) -> data/feedback/feedback.options.json`,
     );

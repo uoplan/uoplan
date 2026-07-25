@@ -1,5 +1,6 @@
-import { LOCAL_STORAGE_KEY } from "../store/constants";
+import { stateStorageKey } from "../store/constants";
 import { useGraphPlannerStore } from "../store/graphPlannerStore";
+import { getActiveSchool } from "./activeSchool";
 import { getRegisteredAppStore } from "../store/storeRegistry";
 
 /** Write encoded app state to localStorage immediately (no debounce). */
@@ -15,7 +16,7 @@ export function flushPersistedAppState(): void {
   if (linkedTermId !== null && linkedTermId === store.getState().selectedTermId) return;
   const base64 = store.getState().getEncodedStateBase64();
   if (base64) {
-    localStorage.setItem(LOCAL_STORAGE_KEY, base64);
+    localStorage.setItem(stateStorageKey(getActiveSchool()), base64);
     store.setState({ hasPendingSave: false, lastSavedAt: Date.now() });
   }
 }

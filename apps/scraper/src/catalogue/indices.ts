@@ -2,7 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { urlToSlug } from "./links.ts";
 import { CatalogueSchema } from "./schema.ts";
-import { CATALOGUE_DATA_DIR, SCRAPER_DATA_DIR } from "../shared/paths.ts";
+import type { SchoolId } from "@uoplan/domain/school";
+import { catalogueDataDir, scraperDataDir } from "../shared/paths.ts";
 
 function parseIndicesStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
@@ -33,8 +34,10 @@ export function parseCatalogueYears(
     .sort((a, b) => (sortOrder === "ascending" ? a - b : b - a));
 }
 
-export async function generateIndices(): Promise<void> {
-  const indicesPath = path.join(SCRAPER_DATA_DIR, "indices.json");
+export async function generateIndices(school: SchoolId): Promise<void> {
+  const dataDir = scraperDataDir(school);
+  const catalogueDir = catalogueDataDir(school);
+  const indicesPath = path.join(dataDir, "indices.json");
   let existingCourses: string[] = [];
   let existingPrograms: string[] = [];
   try {
@@ -49,7 +52,7 @@ export async function generateIndices(): Promise<void> {
     // Missing or unreadable file — start fresh
   }
 
-  const dirEntries = await fs.readdir(CATALOGUE_DATA_DIR);
+  const dirEntries = await fs.readdir(catalogueDir);
   const catalogueYears = parseCatalogueYears(dirEntries);
 
   const seenCourses = new Set(existingCourses);
@@ -58,7 +61,7 @@ export async function generateIndices(): Promise<void> {
   const programsOut = [...existingPrograms];
 
   for (const y of catalogueYears) {
-    const raw = await fs.readFile(path.join(CATALOGUE_DATA_DIR, `catalogue.${y}.json`), "utf-8");
+    const raw = await fs.readFile(path.join(catalogueDir, `catalogue.${y}.json`), "utf-8");
     const catalogue = CatalogueSchema.parse(JSON.parse(raw) as unknown);
     for (const c of catalogue.courses) {
       const code = c.code;

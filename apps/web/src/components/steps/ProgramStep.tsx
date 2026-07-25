@@ -25,6 +25,7 @@ import { findBestMatchingProgram, parseTranscriptPdf } from "@uoplan/transcript"
 import { isOptCourse, normalizeCourseCode } from "@uoplan/core";
 import { FrenchImmersionProgramOverview } from "../shared/FrenchImmersionProgramOverview";
 import { useAnalytics } from "../../lib/analytics";
+import { useSchool, useSchoolFeature } from "../../hooks/useSchool";
 import { useGraphPlannerStore } from "../../store/graphPlannerStore";
 
 interface ProgramStepProps {
@@ -48,6 +49,9 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
     useYearCatalogue();
   const storeApi = useStoreApi();
   const analytics = useAnalytics();
+  const school = useSchool();
+  const hasFrenchImmersion = useSchoolFeature("frenchImmersion");
+  const hasTranscriptImport = useSchoolFeature("transcriptImport");
   const setPlannerCompletedTerms = useGraphPlannerStore((s) => s.setCompletedCourseTerms);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
   const [transcriptError, setTranscriptError] = useState<string | null>(null);
@@ -294,7 +298,7 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           size="md"
         />
       )}
-      {value && (
+      {value && hasFrenchImmersion && (
         <>
           <Switch
             label={tr("frenchImmersion.toggle.label")}
@@ -310,113 +314,119 @@ export function ProgramStep({ programs: _programs, value, onChange }: ProgramSte
           {frenchImmersionStream ? <FrenchImmersionProgramOverview /> : null}
         </>
       )}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".pdf"
-        onChange={handleTranscriptFile}
-        disabled={transcriptLoading}
-        style={{ display: "none" }}
-        aria-label={tr("programStep.transcript.uploadAria")}
-      />
-      <Group gap="sm" wrap="wrap">
-        <Button
-          size="sm"
-          variant="light"
-          color="gray"
-          radius="md"
-          onClick={() => fileInputRef.current?.click()}
-          disabled={transcriptLoading}
-          leftSection={
-            transcriptLoading ? <Loader size="xs" /> : <IconFileUpload size={15} stroke={1.8} />
-          }
-        >
-          {transcriptLoading
-            ? tr("programStep.transcript.parsing")
-            : tr("programStep.transcript.choose")}
-        </Button>
-        <Button
-          component="a"
-          href="https://www.uocampus.uottawa.ca/psp/csprpr9www/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_TSRQST_UNOFF.GBL?languageCd=ENG"
-          target="_blank"
-          rel="noreferrer"
-          size="sm"
-          variant="subtle"
-          color="gray"
-          radius="md"
-          rightSection={<IconExternalLink size={14} stroke={1.8} />}
-        >
-          {tr("programStep.transcript.request")}
-        </Button>
-      </Group>
-      {transcriptError && (
-        <Alert color="red" variant="light" title={tr("programStep.transcript.uploadFailed")}>
-          {transcriptError}
-        </Alert>
-      )}
-      {transcriptFeedback && !transcriptError && (
-        <Stack gap="xs">
-          <Alert color="green" variant="light">
-            {tr("programStep.transcript.added", {
-              count: transcriptFeedback.added,
-              suffix: transcriptFeedback.added !== 1 ? "s" : "",
-            })}
-            {transcriptFeedback.programMatched && (
-              <div style={{ marginTop: "8px" }}>
-                <Text component="div" size="sm">
-                  {tr("programStep.transcript.programDetected")}{" "}
-                  <Badge color="green" variant="light" style={{ textTransform: "none" }}>
-                    {transcriptFeedback.programMatched.title}
-                  </Badge>
-                  {transcriptFeedback.minorMatched && (
-                    <>
-                      {" "}
-                      {tr("programStep.transcript.withMinor")}{" "}
-                      <Badge color="green" variant="light" style={{ textTransform: "none" }}>
-                        {transcriptFeedback.minorMatched.title}
-                      </Badge>
-                    </>
-                  )}
-                </Text>
-              </div>
-            )}
-          </Alert>
-          {transcriptFeedback.skippedCodes.length > 0 && (
-            <Alert
-              color="yellow"
+      {/* Transcript import is tied to one registrar's PDF layout, so it only
+          exists for schools whose transcripts the parser understands. */}
+      {hasTranscriptImport && (
+        <>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf"
+            onChange={handleTranscriptFile}
+            disabled={transcriptLoading}
+            style={{ display: "none" }}
+            aria-label={tr("programStep.transcript.uploadAria")}
+          />
+          <Group gap="sm" wrap="wrap">
+            <Button
+              size="sm"
               variant="light"
-              title={tr("programStep.transcript.notInCatalogue")}
+              color="gray"
+              radius="md"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={transcriptLoading}
+              leftSection={
+                transcriptLoading ? <Loader size="xs" /> : <IconFileUpload size={15} stroke={1.8} />
+              }
             >
-              <Stack gap="xs">
-                <Text size="sm">
-                  {tr("programStep.transcript.codesNotFound", {
-                    count: transcriptFeedback.skippedCodes.length,
-                    suffix: transcriptFeedback.skippedCodes.length !== 1 ? "s" : "",
-                    codes: transcriptFeedback.skippedCodes.sort().join(", "),
-                  })}
-                </Text>
-                <Button
-                  size="xs"
-                  variant="light"
-                  color="yellow"
-                  onClick={() => {
-                    const merged = [
-                      ...new Set([...completedCourses, ...transcriptFeedback.skippedCodes]),
-                    ];
-                    setCompletedCourses(merged);
-                    analytics.capture("completed_courses_updated", {
-                      count: merged.length,
-                      source: "transcript",
-                    });
-                    setTranscriptFeedback({ ...transcriptFeedback, skippedCodes: [] });
-                  }}
-                >
-                  {tr("programStep.transcript.addAnyway")}
-                </Button>
-              </Stack>
+              {transcriptLoading
+                ? tr("programStep.transcript.parsing")
+                : tr("programStep.transcript.choose")}
+            </Button>
+            <Button
+              component="a"
+              href={school.transcriptRequestUrl ?? undefined}
+              target="_blank"
+              rel="noreferrer"
+              size="sm"
+              variant="subtle"
+              color="gray"
+              radius="md"
+              rightSection={<IconExternalLink size={14} stroke={1.8} />}
+            >
+              {tr("programStep.transcript.request")}
+            </Button>
+          </Group>
+          {transcriptError && (
+            <Alert color="red" variant="light" title={tr("programStep.transcript.uploadFailed")}>
+              {transcriptError}
             </Alert>
           )}
-        </Stack>
+          {transcriptFeedback && !transcriptError && (
+            <Stack gap="xs">
+              <Alert color="green" variant="light">
+                {tr("programStep.transcript.added", {
+                  count: transcriptFeedback.added,
+                  suffix: transcriptFeedback.added !== 1 ? "s" : "",
+                })}
+                {transcriptFeedback.programMatched && (
+                  <div style={{ marginTop: "8px" }}>
+                    <Text component="div" size="sm">
+                      {tr("programStep.transcript.programDetected")}{" "}
+                      <Badge color="green" variant="light" style={{ textTransform: "none" }}>
+                        {transcriptFeedback.programMatched.title}
+                      </Badge>
+                      {transcriptFeedback.minorMatched && (
+                        <>
+                          {" "}
+                          {tr("programStep.transcript.withMinor")}{" "}
+                          <Badge color="green" variant="light" style={{ textTransform: "none" }}>
+                            {transcriptFeedback.minorMatched.title}
+                          </Badge>
+                        </>
+                      )}
+                    </Text>
+                  </div>
+                )}
+              </Alert>
+              {transcriptFeedback.skippedCodes.length > 0 && (
+                <Alert
+                  color="yellow"
+                  variant="light"
+                  title={tr("programStep.transcript.notInCatalogue")}
+                >
+                  <Stack gap="xs">
+                    <Text size="sm">
+                      {tr("programStep.transcript.codesNotFound", {
+                        count: transcriptFeedback.skippedCodes.length,
+                        suffix: transcriptFeedback.skippedCodes.length !== 1 ? "s" : "",
+                        codes: transcriptFeedback.skippedCodes.sort().join(", "),
+                      })}
+                    </Text>
+                    <Button
+                      size="xs"
+                      variant="light"
+                      color="yellow"
+                      onClick={() => {
+                        const merged = [
+                          ...new Set([...completedCourses, ...transcriptFeedback.skippedCodes]),
+                        ];
+                        setCompletedCourses(merged);
+                        analytics.capture("completed_courses_updated", {
+                          count: merged.length,
+                          source: "transcript",
+                        });
+                        setTranscriptFeedback({ ...transcriptFeedback, skippedCodes: [] });
+                      }}
+                    >
+                      {tr("programStep.transcript.addAnyway")}
+                    </Button>
+                  </Stack>
+                </Alert>
+              )}
+            </Stack>
+          )}
+        </>
       )}
     </Stack>
   );

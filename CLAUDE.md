@@ -55,9 +55,13 @@ pnpm lighthouse       # Build the web app + audit 7 routes with Lighthouse CI (@
 # Scraper / data
 # Granular scraper steps run via the scraper workspace (most are order-sensitive — see below):
 pnpm --filter scraper scrape:catalogue        # Scrape per-year course/program data (--force to re-scrape)
-pnpm --filter scraper scrape:schedules        # Scrape PeopleSoft schedule data
-pnpm --filter scraper check:terms             # Sync terms.json from uOttawa's live class-search dropdown
-pnpm build:data-proto                         # Compile apps/scraper/data JSON → runtime .pb assets
+pnpm --filter scraper scrape:schedules        # Scrape schedule data (uOttawa PeopleSoft / Carleton Banner)
+pnpm --filter scraper check:terms             # Sync terms.json from the school's live class-search dropdown
+pnpm build:data-proto                         # Fetch the `data` branch, then compile every school's
+                                              # apps/scraper/data/<school> JSON → runtime .pb assets
+# Every scraper CLI takes `--school=<uottawa|carleton>` (defaults to uottawa), e.g.
+#   pnpm --filter scraper scrape:catalogue -- --school=carleton
+node scripts/check-scraped-data.ts --school=carleton   # Sanity-check scraped data before it lands on `data`
 # Orchestrators (auto-sequenced, unattended — no auth/browser needed):
 pnpm data:grades      # Refresh grades: grades:convert → scrape:grades → enrich:schedules → build:data-proto
 pnpm data:build       # Full derived rebuild from committed JSON: + build:professors before proto
@@ -114,9 +118,9 @@ Apps are leaves (nothing depends on them). The deployed Worker bundle must **nev
 ### Data Flow
 
 ```
-apps/scraper/data/*.json        (source datasets, committed for diffability)
+apps/scraper/data/<school>/*.json       (source datasets, committed to the `data` branch for diffability)
   → proto build (pnpm build:data-proto → apps/scraper/src/cli/proto.ts)
-  → apps/web/public/data/*.pb    (git-ignored build artifacts, regenerated; NOT committed)
+  → apps/web/src/assets/data/<school>/*.pb    (git-ignored build artifacts, regenerated; NOT committed)
   → protobuf decode + DataCache (packages/core) via @uoplan/data client
   → @uoplan/store slices (packages/store; web mounts via apps/web/src/store adapters)
   → React components (apps/web/src/components/ or packages/app screens)
@@ -132,8 +136,8 @@ apps/scraper/data/*.json        (source datasets, committed for diffability)
 - **`packages/ui/`**, **`packages/app/`**, **`packages/navigation/`** — Write-once UI stack (primitives + screens + route contract).
 - **`packages/i18n/`** — Shared Lingui catalogs + `tr` / `useTr` (not under `apps/web/src/locales`).
 - **`packages/proto/`** — `proto/{state,data,cli,engine,feedback}.proto`; generate with `pnpm --filter @uoplan/proto generate`.
-- **`apps/scraper/data/`** — source JSON datasets (committed).
-- **`apps/web/public/data/`** — runtime protobuf `.pb` assets (git-ignored build artifacts).
+- **`apps/scraper/data/<school>/`** — source JSON datasets (live on the `data` branch, hydrated by `scripts/fetch-data.ts`).
+- **`apps/web/src/assets/data/<school>/`** — runtime protobuf `.pb` assets (git-ignored build artifacts).
 
 ### Schedule generation
 
@@ -141,7 +145,13 @@ Generation is implemented in **Rust → WASM / native FFI** (`packages/engine`);
 
 ### Documentation
 
-`docs/` documents non-obvious subsystems (`docs/README.md` is the index). Start with **`docs/modularization.md`** for package boundaries, then store architecture, state/URL encoding, schedule generation, requirements, prerequisites, calendar, multi-year catalogue, explore search, web-push, CLI, native deploy.
+`docs/` documents non-obvious subsystems (`docs/README.md` is the index). Start with **`docs/modularization.md`** for package boundaries and **`docs/multi-school.md`** for the uOttawa/Carleton school dimension, then store architecture, state/URL encoding, schedule generation, requirements, prerequisites, calendar, multi-year catalogue, explore search, web-push, CLI, native deploy.
+
+### Multi-school (uOttawa + Carleton)
+
+The app serves two schools from one deployment. `packages/domain/src/school.ts` is the **single source of truth** (ids, path slugs, asset namespaces, credit config, `SchoolFeatures` flags, catalogue link builders) — `pnpm check:arch` runs `checkSchoolPurity()` and **fails** if an institution name or domain appears anywhere in shared packages outside that file and `apps/scraper/src/schools/`.
+
+Hard compatibility rule: **uOttawa is the unprefixed school and none of its URLs, `?s=` share links, localStorage keys, sitemap entries, or `.pb` bytes may change.** uOttawa's wire id is `0` and proto3 omits zero-valued scalars, so `STATE_MAGIC` was deliberately _not_ bumped. Carleton lives at `/carleton/*` and has **no grade data** (RateMyProfessors only) — gate on `useSchoolFeature(...)`, never on a school-id comparison. See `docs/multi-school.md`.
 
 ### Internationalisation (i18n)
 

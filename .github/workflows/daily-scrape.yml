@@ -12,8 +12,12 @@ on:
         default: ""
 
 concurrency:
-  group: daily-scrape
-  cancel-in-progress: true
+  # Shared with the Carleton scrape: both push to the `data` branch, so they
+  # must not run concurrently. Queue rather than cancel — the uOttawa scrape can
+  # take hours, and cancelling it because the (2-minute) Carleton run came due
+  # would mean it never finishes.
+  group: data-branch-scrape
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -53,7 +57,7 @@ jobs:
         if: inputs.terms != ''
         env:
           TERMS_CONTENT: ${{ inputs.terms }}
-        run: echo "$TERMS_CONTENT" > apps/scraper/data/terms.json
+        run: echo "$TERMS_CONTENT" > apps/scraper/data/uottawa/terms.json
 
       - name: Sync terms from uOttawa class search
         if: inputs.terms == ''
@@ -67,7 +71,7 @@ jobs:
         run: |
           {
             echo 'terms<<EOF'
-            jq -c '[.terms[].termId]' apps/scraper/data/terms.json
+            jq -c '[.terms[].termId]' apps/scraper/data/uottawa/terms.json
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
@@ -75,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: catalogue-data
-          path: apps/scraper/data
+          path: apps/scraper/data/uottawa
           if-no-files-found: error
 
   important_dates:
@@ -111,8 +115,8 @@ jobs:
         with:
           name: important-dates-data
           path: |
-            apps/scraper/data/important-dates.en.json
-            apps/scraper/data/important-dates.fr.json
+            apps/scraper/data/uottawa/important-dates.en.json
+            apps/scraper/data/uottawa/important-dates.fr.json
           if-no-files-found: error
 
   schedule_term:
@@ -148,7 +152,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: catalogue-data
-          path: apps/scraper/data
+          path: apps/scraper/data/uottawa
 
       - name: Clear scraper caches (no cache mode)
         run: rm -rf .cache
@@ -162,7 +166,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: schedule-${{ matrix.term }}
-          path: apps/scraper/data/schedules/schedules.${{ matrix.term }}.json
+          path: apps/scraper/data/uottawa/schedules/schedules.${{ matrix.term }}.json
           if-no-files-found: error
 
   ratemyprofessors:
@@ -200,7 +204,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ratemyprofessors-data
-          path: apps/scraper/data/ratemyprofessors.json
+          path: apps/scraper/data/uottawa/ratemyprofessors.json
           if-no-files-found: error
 
   merge_and_push:
@@ -237,19 +241,19 @@ jobs:
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> "$GITHUB_ENV"
 
           # Manifest and missing log
-          cp apps/scraper/data/catalogue/catalogue.json /tmp/catalogue_manifest_old.json || true
-          cp apps/scraper/data/catalogue/catalogue.missing.json /tmp/catalogue_missing_old.json || true
+          cp apps/scraper/data/uottawa/catalogue/catalogue.json /tmp/catalogue_manifest_old.json || true
+          cp apps/scraper/data/uottawa/catalogue/catalogue.missing.json /tmp/catalogue_missing_old.json || true
 
           # Only the current year is re-scraped every run
-          cp "apps/scraper/data/catalogue/catalogue.${CURRENT_YEAR}.json" "/tmp/catalogue_current_old.json" || true
+          cp "apps/scraper/data/uottawa/catalogue/catalogue.${CURRENT_YEAR}.json" "/tmp/catalogue_current_old.json" || true
 
-          cp apps/scraper/data/important-dates.en.json /tmp/important_dates_en_old.json || true
-          cp apps/scraper/data/important-dates.fr.json /tmp/important_dates_fr_old.json || true
-          cp apps/scraper/data/terms.json /tmp/terms_old.json || true
-          cp apps/scraper/data/ratemyprofessors.json /tmp/ratemyprofessors_old.json || true
+          cp apps/scraper/data/uottawa/important-dates.en.json /tmp/important_dates_en_old.json || true
+          cp apps/scraper/data/uottawa/important-dates.fr.json /tmp/important_dates_fr_old.json || true
+          cp apps/scraper/data/uottawa/terms.json /tmp/terms_old.json || true
+          cp apps/scraper/data/uottawa/ratemyprofessors.json /tmp/ratemyprofessors_old.json || true
           mkdir -p /tmp/schedules_old
           shopt -s nullglob
-          for f in apps/scraper/data/schedules/schedules.*.json; do
+          for f in apps/scraper/data/uottawa/schedules/schedules.*.json; do
             cp "$f" "/tmp/schedules_old/$(basename "$f")"
           done
           shopt -u nullglob
@@ -258,46 +262,46 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: catalogue-data
-          path: apps/scraper/data
+          path: apps/scraper/data/uottawa
 
       - name: Download refreshed important dates data
         if: needs.important_dates.result == 'success'
         uses: actions/download-artifact@v4
         with:
           name: important-dates-data
-          path: apps/scraper/data
+          path: apps/scraper/data/uottawa
 
       - name: Download per-term schedule JSONs
         uses: actions/download-artifact@v4
         with:
           pattern: schedule-*
-          path: apps/scraper/data/schedules
+          path: apps/scraper/data/uottawa/schedules
           merge-multiple: true
 
       - name: Download RateMyProfessors data
         uses: actions/download-artifact@v4
         with:
           name: ratemyprofessors-data
-          path: apps/scraper/data
+          path: apps/scraper/data/uottawa
 
       - name: Show JSON diffs (catalogue and schedules)
         run: |
           echo "::group::Diff catalogue.json (manifest)"
-          diff -u /tmp/catalogue_manifest_old.json apps/scraper/data/catalogue/catalogue.json || true
+          diff -u /tmp/catalogue_manifest_old.json apps/scraper/data/uottawa/catalogue/catalogue.json || true
           echo "::endgroup::"
 
           echo "::group::Diff catalogue.${CURRENT_YEAR}.json (current year)"
-          diff -u /tmp/catalogue_current_old.json "apps/scraper/data/catalogue/catalogue.${CURRENT_YEAR}.json" || true
+          diff -u /tmp/catalogue_current_old.json "apps/scraper/data/uottawa/catalogue/catalogue.${CURRENT_YEAR}.json" || true
           echo "::endgroup::"
 
           echo "::group::New archive catalogue files"
           shopt -s nullglob
-          for f in apps/scraper/data/catalogue/catalogue.*.json; do
+          for f in apps/scraper/data/uottawa/catalogue/catalogue.*.json; do
             base=$(basename "$f")
             # Skip manifest and current year (already diffed above)
             [ "$base" = "catalogue.json" ] && continue
             [ "$base" = "catalogue.${CURRENT_YEAR}.json" ] && continue
-            if ! git show "HEAD:apps/scraper/data/catalogue/$base" &>/dev/null; then
+            if ! git show "HEAD:apps/scraper/data/uottawa/catalogue/$base" &>/dev/null; then
               echo "New file: $f"
             fi
           done
@@ -305,28 +309,28 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Diff catalogue.missing.json"
-          diff -u /tmp/catalogue_missing_old.json apps/scraper/data/catalogue/catalogue.missing.json || true
+          diff -u /tmp/catalogue_missing_old.json apps/scraper/data/uottawa/catalogue/catalogue.missing.json || true
           echo "::endgroup::"
 
           echo "::group::Diff terms.json"
-          diff -u /tmp/terms_old.json apps/scraper/data/terms.json || true
+          diff -u /tmp/terms_old.json apps/scraper/data/uottawa/terms.json || true
           echo "::endgroup::"
 
           echo "::group::Diff important-dates.en.json"
-          diff -u /tmp/important_dates_en_old.json apps/scraper/data/important-dates.en.json || true
+          diff -u /tmp/important_dates_en_old.json apps/scraper/data/uottawa/important-dates.en.json || true
           echo "::endgroup::"
 
           echo "::group::Diff important-dates.fr.json"
-          diff -u /tmp/important_dates_fr_old.json apps/scraper/data/important-dates.fr.json || true
+          diff -u /tmp/important_dates_fr_old.json apps/scraper/data/uottawa/important-dates.fr.json || true
           echo "::endgroup::"
 
           echo "::group::Diff ratemyprofessors.json"
-          diff -u /tmp/ratemyprofessors_old.json apps/scraper/data/ratemyprofessors.json || true
+          diff -u /tmp/ratemyprofessors_old.json apps/scraper/data/uottawa/ratemyprofessors.json || true
           echo "::endgroup::"
 
           echo "::group::Diff schedules.*.json"
           shopt -s nullglob
-          for f in apps/scraper/data/schedules/schedules.*.json; do
+          for f in apps/scraper/data/uottawa/schedules/schedules.*.json; do
             old="/tmp/schedules_old/$(basename "$f")"
             if [ -f "$old" ]; then
               diff -u "$old" "$f" || true
@@ -337,21 +341,29 @@ jobs:
           shopt -u nullglob
           echo "::endgroup::"
 
+      - name: Sanity-check the scraped data
+        run: node scripts/check-scraped-data.ts --school=uottawa
+
       - name: Check for data changes
         id: check_changes
         run: |
           # git status --porcelain detects both modified tracked files and new untracked files
           CHANGED=$(git status --porcelain -- \
-            'apps/scraper/data/catalogue/catalogue.json' \
-            'apps/scraper/data/catalogue/catalogue.missing.json' \
-            apps/scraper/data/catalogue/catalogue.*.json \
-            'apps/scraper/data/indices.json' \
-            apps/scraper/data/terms.json \
-            apps/scraper/data/important-dates.en.json \
-            apps/scraper/data/important-dates.fr.json \
-            apps/scraper/data/ratemyprofessors.json \
-            apps/scraper/data/schedules/schedules.*.json \
+            'apps/scraper/data/uottawa/catalogue/catalogue.json' \
+            'apps/scraper/data/uottawa/catalogue/catalogue.missing.json' \
+            apps/scraper/data/uottawa/catalogue/catalogue.*.json \
+            'apps/scraper/data/uottawa/indices.json' \
+            apps/scraper/data/uottawa/terms.json \
+            apps/scraper/data/uottawa/important-dates.en.json \
+            apps/scraper/data/uottawa/important-dates.fr.json \
+            apps/scraper/data/uottawa/ratemyprofessors.json \
+            apps/scraper/data/uottawa/schedules/schedules.*.json \
           | wc -l)
+          # A pending legacy-layout migration also counts as a change, so the
+          # cleanup isn't blocked on a day where no data happened to move.
+          if [ -f apps/scraper/data/catalogue/catalogue.json ]; then
+            CHANGED=$((CHANGED + 1))
+          fi
           if [ "$CHANGED" -gt 0 ]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
@@ -367,14 +379,31 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # data may advance while scraper runs — rebase our working changes onto latest data
-          git stash push -u -m "daily-scrape pre-sync" -- apps/scraper/data/
+          git stash push -u -m "daily-scrape pre-sync" -- apps/scraper/data/uottawa/
           if ! git pull --rebase origin data; then
             git stash pop
             exit 1
           fi
           git stash pop
 
-          git add apps/scraper/data/catalogue/catalogue.json apps/scraper/data/catalogue/catalogue.missing.json apps/scraper/data/catalogue/catalogue.*.json apps/scraper/data/indices.json apps/scraper/data/terms.json apps/scraper/data/important-dates.en.json apps/scraper/data/important-dates.fr.json apps/scraper/data/ratemyprofessors.json apps/scraper/data/schedules/schedules.*.json
+          # The `data` branch predates multi-school support and stored everything
+          # flat under apps/scraper/data. Move it under the uottawa/ namespace
+          # once, so the stale flat copy doesn't linger beside the new one. Runs
+          # after the rebase so the renames land in this commit cleanly, and is
+          # idempotent: a no-op on every subsequent run.
+          if [ -f apps/scraper/data/catalogue/catalogue.json ]; then
+            echo "Migrating legacy flat data layout into apps/scraper/data/uottawa/"
+            for entry in apps/scraper/data/*; do
+              name=$(basename "$entry")
+              case "$name" in
+                uottawa|carleton) continue ;;
+              esac
+              git rm -r --quiet --cached "$entry"
+              rm -rf "$entry"
+            done
+          fi
+
+          git add apps/scraper/data/uottawa/catalogue/catalogue.json apps/scraper/data/uottawa/catalogue/catalogue.missing.json apps/scraper/data/uottawa/catalogue/catalogue.*.json apps/scraper/data/uottawa/indices.json apps/scraper/data/uottawa/terms.json apps/scraper/data/uottawa/important-dates.en.json apps/scraper/data/uottawa/important-dates.fr.json apps/scraper/data/uottawa/ratemyprofessors.json apps/scraper/data/uottawa/schedules/schedules.*.json
 
           BOT_EMAIL="github-actions[bot]@users.noreply.github.com"
           LAST_AUTHOR_EMAIL=$(git log -1 --format='%ae')

@@ -59,4 +59,30 @@ describe("routePath", () => {
       expect(routePath(route).startsWith("/")).toBe(true);
     }
   });
+
+  describe("school-prefix design", () => {
+    it("produces basepath-relative paths with no school prefix", () => {
+      // routePath is intentionally school-neutral. The school prefix is the
+      // adapter's responsibility:
+      //   - Web (WebNavigationProvider): withBasepath(router.basepath, routePath(route))
+      //   - Native (NativeNavigationProvider): routePath(route) directly as Expo Href
+      //     (native bundles uOttawa-only data, so no prefix is ever needed).
+      // uOttawa's pathSlug is "", so withBasepath is a no-op — existing URLs stay intact.
+      expect(routePath({ name: "schedule" })).toBe("/schedule");
+      expect(routePath({ name: "explore" })).toBe("/explore");
+      expect(routePath({ name: "home" })).toBe("/");
+
+      // Paths must never embed a school slug
+      for (const route of [
+        { name: "schedule" as const },
+        { name: "explore" as const },
+        { name: "trends" as const },
+        { name: "personalize" as const },
+      ]) {
+        const path = routePath(route);
+        expect(path).not.toContain("uottawa");
+        expect(path).not.toContain("carleton");
+      }
+    });
+  });
 });

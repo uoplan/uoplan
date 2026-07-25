@@ -1,9 +1,10 @@
 import { scrapeImportantDates } from "../importantDates/scrape.ts";
+import { parseSchoolArg } from "../shared/cliSchool.ts";
 
 void (async () => {
   try {
     console.log("Fetching important academic dates pages...");
-    const result = await scrapeImportantDates();
+    const result = await scrapeImportantDates(parseSchoolArg(process.argv));
     console.log(
       `Wrote important dates for ${result.termCount} terms and ${result.itemCount} English items.`,
     );
