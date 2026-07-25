@@ -1,6 +1,11 @@
 import * as cheerio from "cheerio";
 import type { DayOfWeekCode } from "@uoplan/domain/dataTypes";
-import { DAY_OF_WEEK_CODES } from "@uoplan/domain/dataTypes";
+// Deep subpath, not the `dataTypes` barrel: this module is loaded by the
+// scraper CLIs, which Node executes directly. The barrel re-exports with
+// extensionless relative specifiers that only a bundler can resolve, so
+// importing a *value* from it crashes `node src/cli/*.ts` with
+// ERR_MODULE_NOT_FOUND. Type-only imports are erased and stay safe either way.
+import { DAY_OF_WEEK_CODES } from "@uoplan/domain/dataTypes/domain";
 
 const MONTHS: Record<string, string> = {
   Apr: "04",

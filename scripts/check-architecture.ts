@@ -552,6 +552,40 @@ function checkSchoolPurity(): string[] {
   return errors;
 }
 
+function checkNodeResolvableScraperImports(): string[] {
+  const errors: string[] = [];
+
+  // Barrels that re-export using extensionless relative specifiers. A bundler
+  // (vite/vitest) resolves those, but `node` does not — so importing a *value*
+  // from one crashes any directly-executed entrypoint with ERR_MODULE_NOT_FOUND.
+  // `import type` is erased before Node ever sees it and stays fine.
+  const bundlerOnlyBarrels = ["@uoplan/domain/dataTypes", "@uoplan/domain"];
+
+  // Every scraper CLI is run as `node src/cli/<name>.ts` by the daily-scrape
+  // workflows, so the whole subtree they reach must be Node-resolvable. This
+  // fails only in CI otherwise: the web app imports the same modules happily.
+  forEachSourceFile(join(repoRoot, "apps/scraper/src"), (src, rel) => {
+    for (const barrel of bundlerOnlyBarrels) {
+      // A value import: `import { x } from "<barrel>"` or `import "<barrel>"`,
+      // but not `import type { x } from "<barrel>"`.
+      const re = new RegExp(
+        String.raw`^import\s+(?!type\s)[^;]*?from\s*"${barrel}"|^import\s*"${barrel}"`,
+        "m",
+      );
+      if (re.test(src)) {
+        errors.push(
+          `Scraper CLIs run under plain \`node\`, which cannot resolve the extensionless ` +
+            `re-exports in "${barrel}": "${rel}" imports a value from it. Import the deep ` +
+            `subpath instead (e.g. "@uoplan/domain/dataTypes/domain"), or make it \`import type\`.`,
+        );
+        break;
+      }
+    }
+  });
+
+  return errors;
+}
+
 function main(): void {
   const pkgs = readWorkspacePackages();
   const errors = [
@@ -562,6 +596,7 @@ function main(): void {
     ...checkProtoDrift(),
     ...checkWorkerBundle(),
     ...checkSchoolPurity(),
+    ...checkNodeResolvableScraperImports(),
   ];
 
   if (errors.length > 0) {
@@ -573,8 +608,8 @@ function main(): void {
 
   console.log(
     "Architecture guardrails passed: package layering is acyclic, the web store is " +
-      "component-free, cli.proto is in sync, the worker bundle is pdfjs-free, and " +
-      "shared code is school-agnostic.",
+      "component-free, cli.proto is in sync, the worker bundle is pdfjs-free, " +
+      "shared code is school-agnostic, and scraper imports are Node-resolvable.",
   );
 }
 
