@@ -38,6 +38,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Fetch existing scraper data from the data branch
+        run: pnpm data:fetch
+        env:
+          DATA_SCHOOLS: uottawa
+
       - name: Check for new terms
         id: check_terms
         run: |

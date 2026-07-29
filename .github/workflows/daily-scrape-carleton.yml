@@ -58,6 +58,11 @@ jobs:
       - name: Clear scraper caches (no cache mode)
         run: rm -rf .cache
 
+      - name: Fetch existing scraper data from the data branch
+        run: pnpm data:fetch
+        env:
+          DATA_SCHOOLS: carleton
+
       - name: Sync terms from Carleton Banner
         run: pnpm --filter scraper check:terms -- --school=carleton
 

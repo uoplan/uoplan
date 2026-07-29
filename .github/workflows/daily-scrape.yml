@@ -53,6 +53,11 @@ jobs:
       - name: Clear scraper caches (no cache mode)
         run: rm -rf .cache
 
+      - name: Fetch existing scraper data from the data branch
+        run: pnpm data:fetch
+        env:
+          DATA_SCHOOLS: uottawa
+
       - name: Write terms override
         if: inputs.terms != ''
         env:
