@@ -212,7 +212,10 @@ jobs:
           path: apps/scraper/data/uottawa/ratemyprofessors.json
           if-no-files-found: error
 
-  merge_and_push:
+  # The `data` branch is JSON-only (no scripts/ or package.json), so the
+  # sanity check must run on a main checkout — same pattern as the Carleton
+  # scrape job. merge_and_push then commits on `data` only after this passes.
+  validate:
     needs:
       - catalogue_and_terms
       - important_dates
@@ -223,6 +226,69 @@ jobs:
       needs.catalogue_and_terms.result == 'success' &&
       needs.schedule_term.result == 'success' &&
       needs.ratemyprofessors.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download catalogue and shared data from setup job
+        uses: actions/download-artifact@v4
+        with:
+          name: catalogue-data
+          path: apps/scraper/data/uottawa
+
+      - name: Download refreshed important dates data
+        if: needs.important_dates.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: important-dates-data
+          path: apps/scraper/data/uottawa
+
+      - name: Download per-term schedule JSONs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: schedule-*
+          path: apps/scraper/data/uottawa/schedules
+          merge-multiple: true
+
+      - name: Download RateMyProfessors data
+        uses: actions/download-artifact@v4
+        with:
+          name: ratemyprofessors-data
+          path: apps/scraper/data/uottawa
+
+      - name: Sanity-check the scraped data
+        run: node scripts/check-scraped-data.ts --school=uottawa
+
+  merge_and_push:
+    needs:
+      - catalogue_and_terms
+      - important_dates
+      - schedule_term
+      - ratemyprofessors
+      - validate
+    if: >-
+      always() &&
+      needs.catalogue_and_terms.result == 'success' &&
+      needs.schedule_term.result == 'success' &&
+      needs.ratemyprofessors.result == 'success' &&
+      needs.validate.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -345,9 +411,6 @@ jobs:
           done
           shopt -u nullglob
           echo "::endgroup::"
-
-      - name: Sanity-check the scraped data
-        run: node scripts/check-scraped-data.ts --school=uottawa
 
       - name: Check for data changes
         id: check_changes
