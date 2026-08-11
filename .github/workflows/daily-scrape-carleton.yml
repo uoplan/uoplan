@@ -163,3 +163,9 @@ jobs:
             git commit -m "chore: update Carleton scrape data"
             git push origin HEAD:data
           fi
+
+      # `data` isn't the Worker's build branch, so pushing to it doesn't
+      # trigger a Workers Build on its own — kick one off for `main` directly.
+      - name: Trigger Workers Build
+        if: steps.check_changes.outputs.changed == 'true'
+        run: curl -sf -X POST "${{ secrets.CF_DEPLOY_HOOK_URL }}"
