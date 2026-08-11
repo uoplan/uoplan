@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0-beta.42](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.41...uoplan-monorepo-v1.0.0-beta.42) (2026-08-11)
+
+
+### Features
+
+* add Carleton University support alongside uOttawa ([a50dac7](https://github.com/uoplan/uoplan/commit/a50dac72a237ba3bf17bcf6498807ccbde8b6d11))
+* **explore:** add a faculty index to the explore landing page ([a41cfe7](https://github.com/uoplan/uoplan/commit/a41cfe7e1798be4ee25b7bee5affdb22dcacb99b))
+
+
+### Bug Fixes
+
+* **ci:** apply description payload budgets per school ([5a1a3f6](https://github.com/uoplan/uoplan/commit/5a1a3f6d3e4f1addb64e81333722978e05a40a0b))
+* **ci:** drop dead legacy flat-layout migration from daily scrape ([5e1d8cc](https://github.com/uoplan/uoplan/commit/5e1d8cc8f0dbab295ff25fa3a117db05d23ace0b))
+* **ci:** hydrate scraper data from the data branch before scraping ([c9a01b9](https://github.com/uoplan/uoplan/commit/c9a01b9abc0f71dd7749a9de356e33ccfa092151))
+* **data:** keep the flat default school when a data branch is mid-migration ([2ef8339](https://github.com/uoplan/uoplan/commit/2ef833912f249620ee8094bf31515af644fff616))
+* **scraper:** resolve domain barrel imports under plain node ([44e16b1](https://github.com/uoplan/uoplan/commit/44e16b160bb762d916f8433233d2d452ba44b952))
+
 ## [1.0.0-beta.41](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.40...uoplan-monorepo-v1.0.0-beta.41) (2026-07-15)
 
 
