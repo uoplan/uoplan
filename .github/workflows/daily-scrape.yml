@@ -427,11 +427,6 @@ jobs:
             apps/scraper/data/uottawa/ratemyprofessors.json \
             apps/scraper/data/uottawa/schedules/schedules.*.json \
           | wc -l)
-          # A pending legacy-layout migration also counts as a change, so the
-          # cleanup isn't blocked on a day where no data happened to move.
-          if [ -f apps/scraper/data/catalogue/catalogue.json ]; then
-            CHANGED=$((CHANGED + 1))
-          fi
           if [ "$CHANGED" -gt 0 ]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
@@ -453,23 +448,6 @@ jobs:
             exit 1
           fi
           git stash pop
-
-          # The `data` branch predates multi-school support and stored everything
-          # flat under apps/scraper/data. Move it under the uottawa/ namespace
-          # once, so the stale flat copy doesn't linger beside the new one. Runs
-          # after the rebase so the renames land in this commit cleanly, and is
-          # idempotent: a no-op on every subsequent run.
-          if [ -f apps/scraper/data/catalogue/catalogue.json ]; then
-            echo "Migrating legacy flat data layout into apps/scraper/data/uottawa/"
-            for entry in apps/scraper/data/*; do
-              name=$(basename "$entry")
-              case "$name" in
-                uottawa|carleton) continue ;;
-              esac
-              git rm -r --quiet --cached "$entry"
-              rm -rf "$entry"
-            done
-          fi
 
           git add apps/scraper/data/uottawa/catalogue/catalogue.json apps/scraper/data/uottawa/catalogue/catalogue.missing.json apps/scraper/data/uottawa/catalogue/catalogue.*.json apps/scraper/data/uottawa/indices.json apps/scraper/data/uottawa/terms.json apps/scraper/data/uottawa/important-dates.en.json apps/scraper/data/uottawa/important-dates.fr.json apps/scraper/data/uottawa/ratemyprofessors.json apps/scraper/data/uottawa/schedules/schedules.*.json
 
