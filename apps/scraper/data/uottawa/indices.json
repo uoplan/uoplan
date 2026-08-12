@@ -13312,7 +13312,9 @@
     "MAT 4347",
     "MAT 4573",
     "MAT 4747",
-    "TMM 4708"
+    "TMM 4708",
+    "CTM 8534",
+    "MED 65332"
   ],
   "programs": [
     "undergrad/ba-specialise-bidisciplinaire-communication-lettres-francaises",
@@ -14218,7 +14220,8 @@
     "undergrad/minor-advanced-english-language-studies",
     "undergrad/minor-english-language-studies",
     "graduate/master-arts-education-concentration-health-education",
-    "graduate/master-education-concentration-health-education"
+    "graduate/master-education-concentration-health-education",
+    "undergrad/honours-bachelor-commerce-licentiate-law-lll"
   ],
   "disciplines": [
     "ACP",
