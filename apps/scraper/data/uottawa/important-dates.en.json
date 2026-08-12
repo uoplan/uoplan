@@ -1,7 +1,7 @@
 {
   "locale": "en",
   "sourceUrl": "https://www.uottawa.ca/study/important-academic-dates-deadlines",
-  "reviewedText": "July 2026",
+  "reviewedText": "August 2026",
   "terms": [
     {
       "sourceId": "9221_158141",
@@ -5662,11 +5662,11 @@
                 {
                   "id": "9221_157941:grades_exams:g0:r1",
                   "topic": "Last day to confirm you will be writing a final adapted exam (if you have an academic accommodation)",
-                  "dateText": "November 16",
+                  "dateText": "November 9",
                   "effect": "deadline",
                   "interval": {
-                    "startDate": "2026-11-16",
-                    "endDate": "2026-11-16"
+                    "startDate": "2026-11-09",
+                    "endDate": "2026-11-09"
                   }
                 },
                 {

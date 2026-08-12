@@ -17701,7 +17701,7 @@
       "title": "Introduction to Biochemistry",
       "credits": 3,
       "description": "The chemistry and biological properties of amino acids, proteins, nucleic acids, lipids, carbohydrates, and vitamins. The course includes laboratory and tutorial sessions. Priority given to students for whom this course is mandatory. Previously BCH 2140 and BCH 2336.",
-      "component": "Discussion Group, Laboratory, LecturePrerequisites: CHM 2120",
+      "component": "Laboratory, Lecture, Discussion GroupPrerequisites: CHM 2120",
       "aliases": [
         "BCH 2140",
         "BCH 2336"
@@ -17796,7 +17796,7 @@
       "title": "Molecular Biology Laboratory",
       "credits": 3,
       "description": "Basic techniques in molecular biology (recombinant DNA, vectors, plasmids, gene screening, protein analysis) and their use in genetic engineering and cloning research. This course cannot be combined for units with BIO 3151. Priority given to students for whom this course is compulsory.",
-      "component": "Discussion Group, LaboratoryPrerequisite: BCH 2333. BCH 3170 or BIO 3170 is corequisite to BCH 3356. The courses BCH 3356, BIO 3151 cannot be combined for units.",
+      "component": "Laboratory, Discussion GroupPrerequisite: BCH 2333. BCH 3170 or BIO 3170 is corequisite to BCH 3356. The courses BCH 3356, BIO 3151 cannot be combined for units.",
       "prereqText": "BCH 2333",
       "prerequisites": {
         "type": "course",
@@ -29723,7 +29723,7 @@
       "title": "Criminal Law and Procedure (Part 2 of 2)",
       "credits": 5,
       "description": "General principles of criminal law; burdens of proof; the physical and mental elements offences; select defences; basic elements of criminal procedure; the impact of the Charter of Rights and Freedoms on both substantive and procedural issues. (Part 2 of 2)",
-      "component": "Lecture, TutorialPrerequisite: CML 11031",
+      "component": "Tutorial, LecturePrerequisite: CML 11031",
       "prereqText": "CML 11031",
       "prerequisites": {
         "type": "course",
@@ -41927,7 +41927,7 @@
       "title": "Measurements I",
       "credits": 4,
       "description": "Principles and analysis of civil engineering measurements. Probability and normal distribution; systematic and random errors; probabilistic principles of errors; statistical treatment of experimental data. Basic theory of mechanical and electrical strain measurement systems. Measurements in water resources and geotechnical engineering.",
-      "component": "Research, Discussion Group, Laboratory, Lecture, Seminar, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
+      "component": "Seminar, Discussion Group, Laboratory, Lecture, Research, Work Term, Theory and Laboratory, TutorialPrerequisites: MAT 1320, MAT 1322, MAT 1341.",
       "prereqText": "MAT 1320, MAT 1322, MAT 1341",
       "prerequisites": {
         "type": "and_group",
@@ -62049,7 +62049,7 @@
       "title": "Circuit Theory I",
       "credits": 3,
       "description": "DC and sinusoidal steady state (AC) analysis of circuits. Basic passive circuit elements (resistors, capacitors, inductors). Voltage and current sources. Kirchoff laws. Loop and nodal analysis. Circuit theorems: Superposition, Maximum power transfer, Thevenin, Norton. Forced and natural responses of RL and RC circuits using the differential equation approach. Sinusoidal signals, complex numbers, phasors and impedance concepts. Average and RMS quantities. Steady state time-domain behaviour of inductors and capacitors. Complex, average and apparent power. Introduction to the use of electrical measurement equipment and Computer-Aided Design tools to support circuit analysis.",
-      "component": "Laboratory, Lecture, TutorialPrerequisites: ITI 1100, MAT 1341, MAT 1322.",
+      "component": "Lecture, Tutorial, LaboratoryPrerequisites: ITI 1100, MAT 1341, MAT 1322.",
       "prereqText": "ITI 1100, MAT 1341, MAT 1322",
       "prerequisites": {
         "type": "and_group",
@@ -64796,7 +64796,7 @@
       "title": "Writing for Digital Media I: Fundamentals of Digital Literacy",
       "credits": 3,
       "description": "Fundamental techniques for evaluating, organizing and presenting information across contemporary media, including interactive hypertext, social media, microblogging, instant messaging, and other platforms.",
-      "component": "Lecture, Discussion GroupPrerequisite: 3 course units from (ENG 1100, ENG 1112, ENG 1120, ENG 1124, ENG 1131).",
+      "component": "Discussion Group, LecturePrerequisite: 3 course units from (ENG 1100, ENG 1112, ENG 1120, ENG 1124, ENG 1131).",
       "prereqText": "3 course units from (ENG 1100, ENG 1112, ENG 1120, ENG 1124, ENG 1131)",
       "prerequisites": {
         "type": "non_course",
@@ -93286,7 +93286,7 @@
       "title": "Introduction au calcul et vecteurs",
       "credits": 3,
       "description": "Taux de variation instantané comme limite, dérivées des polynômes en utilisant les limites, dérivées des sommes, produits, fonctions composées, dérivées des fonctions rationnelles, trigonométriques, logarithmes, et radicales. Applications: maximums, minimums, et représentations graphiques. Concavité et points d'inflexion, la dérivée seconde. Optimisation dans des modèles qui contiennent des fonctions polynômes, rationnelles, et exponentielles. Vecteurs à deux et à trois dimensions. Les formes cartésiennes, polaires, et géométriques. Opérations algébriques sur les vecteurs, produit scalaire, produit vectoriel. Applications aux projections, l'aire des parallélogrammes, le volume des parallélépipèdes. Équations de plans et de droites en forme paramétrique scalaire et vectorielle, dans l'espace à deux et à trois dimensions. Intersections de droites et de plans. Solution de jusqu'à trois équations linéaire à trois inconnues par élimination ou substitution. Interprétation géométrique des solutions. MAT 1739 est un cours de mise à niveau. Il peut être suivi à ce titre ou pour répondre d'une condition d'admission. Dans tous les cas, il ne saurait être retenu pour crédits aux fins des exigences de programmes. Noté S/NS.",
-      "component": "Cours magistral, Groupe de discussionPréalable : Mathématiques 4U de l'Ontario Fonctions avancées (MHF4U) ou MAT 1718 ou l'équivalent. Les cours MAT 1739, Mathématiques 4U de l'Ontario Calcul et vecteurs (MCV4U) ne peuvent être combinés pour l'obtention de crédits.",
+      "component": "Groupe de discussion, Cours magistralPréalable : Mathématiques 4U de l'Ontario Fonctions avancées (MHF4U) ou MAT 1718 ou l'équivalent. Les cours MAT 1739, Mathématiques 4U de l'Ontario Calcul et vecteurs (MCV4U) ne peuvent être combinés pour l'obtention de crédits.",
       "prereqText": "Mathématiques 4U de l'Ontario Fonctions avancées (MHF4U) ou MAT 1718 ou l'équivalent",
       "prerequisites": {
         "type": "or_group",
@@ -286283,11 +286283,6 @@
                 },
                 {
                   "type": "course",
-                  "code": "FSS 1300",
-                  "credits": 3
-                },
-                {
-                  "type": "course",
                   "code": "ANT 2121",
                   "credits": 3
                 },
@@ -286305,13 +286300,7 @@
                   "type": "course",
                   "code": "ANT 4123",
                   "credits": 3
-                }
-              ]
-            },
-            {
-              "type": "and",
-              "title": "Optional courses",
-              "options": [
+                },
                 {
                   "type": "group",
                   "title": "3 course units from:",
@@ -286408,7 +286397,7 @@
         },
         {
           "type": "and",
-          "title": "Sociology (45 course units)",
+          "title": "Sociology (33 course units)",
           "options": [
             {
               "type": "and",
@@ -286438,69 +286427,12 @@
             },
             {
               "type": "and",
-              "title": "Optional courses",
+              "title": "Optional courses - Theory",
               "options": [
                 {
                   "type": "group",
                   "title": "3 course units from:",
                   "credits": 3,
-                  "options": [
-                    {
-                      "type": "course",
-                      "code": "SOC 2103",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2104",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2107",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2151",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2153",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2306",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2309",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2312",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2332",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 2708",
-                      "indented": true
-                    }
-                  ]
-                },
-                {
-                  "type": "group",
-                  "title": "6 course units from:",
-                  "credits": 6,
                   "options": [
                     {
                       "type": "course",
@@ -286518,16 +286450,6 @@
                       "indented": true
                     }
                   ]
-                },
-                {
-                  "type": "discipline_elective",
-                  "title": "3 optional course units in sociology (SOC)",
-                  "credits": 3,
-                  "disciplineLevels": [
-                    {
-                      "discipline": "SOC"
-                    }
-                  ]
                 }
               ]
             },
@@ -286535,6 +286457,11 @@
               "type": "and",
               "title": "Compulsory courses - Methodology",
               "options": [
+                {
+                  "type": "course",
+                  "code": "ANT 4301",
+                  "credits": 3
+                },
                 {
                   "type": "course",
                   "code": "SOC 2316",
@@ -286549,17 +286476,12 @@
                   "type": "course",
                   "code": "SOC 3316",
                   "credits": 3
-                },
-                {
-                  "type": "course",
-                  "code": "SOC 4315",
-                  "credits": 3
                 }
               ]
             },
             {
               "type": "and",
-              "title": "Optional courses",
+              "title": "Optional courses - Methodology",
               "options": [
                 {
                   "type": "group",
@@ -286594,23 +286516,53 @@
                       "indented": true
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "and",
+              "title": "Optional courses",
+              "options": [
                 {
-                  "type": "group",
-                  "title": "3 course units from:",
+                  "type": "discipline_elective",
+                  "title": "3 optional course units in sociology (SOC) at level 2000",
                   "credits": 3,
-                  "options": [
+                  "disciplineLevels": [
                     {
-                      "type": "course",
-                      "code": "ANT 4301",
-                      "indented": true
-                    },
-                    {
-                      "type": "course",
-                      "code": "SOC 4316",
-                      "indented": true
+                      "discipline": "SOC"
                     }
                   ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "3 optional course units in sociology (SOC) at level 3000",
+                  "credits": 3,
+                  "disciplineLevels": [
+                    {
+                      "discipline": "SOC"
+                    }
+                  ]
+                },
+                {
+                  "type": "discipline_elective",
+                  "title": "9 optional course units in sociology (SOC) at level 4000",
+                  "credits": 9,
+                  "disciplineLevels": [
+                    {
+                      "discipline": "SOC"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "and",
+              "title": "Elective courses",
+              "options": [
+                {
+                  "type": "elective",
+                  "title": "30 elective course units",
+                  "credits": 30
                 }
               ]
             },

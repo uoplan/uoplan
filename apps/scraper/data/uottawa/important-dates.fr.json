@@ -1,7 +1,7 @@
 {
   "locale": "fr-CA",
   "sourceUrl": "https://www.uottawa.ca/etudes/dates-importantes-echeances-scolaires",
-  "reviewedText": "Juin 2026",
+  "reviewedText": "Août 2026",
   "terms": [
     {
       "sourceId": "9221_158141",
@@ -5663,11 +5663,11 @@
                 {
                   "id": "9221_157941:grades_exams:g0:r1",
                   "topic": "Dernier jour pour confirmer sa participation aux examens finaux adaptés (si vous êtes une étudiante ou un étudiant avec accommodements scolaires)",
-                  "dateText": "16 novembre",
+                  "dateText": "9 novembre",
                   "effect": "deadline",
                   "interval": {
-                    "startDate": "2026-11-16",
-                    "endDate": "2026-11-16"
+                    "startDate": "2026-11-09",
+                    "endDate": "2026-11-09"
                   }
                 },
                 {
