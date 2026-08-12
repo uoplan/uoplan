@@ -347,7 +347,7 @@
         1524002
       ],
       "rating": 4.2,
-      "numRatings": 31,
+      "numRatings": 32,
       "aliases": []
     },
     {
@@ -538,8 +538,8 @@
       "legacyIds": [
         828833
       ],
-      "rating": 3.5,
-      "numRatings": 73,
+      "rating": 3.6,
+      "numRatings": 74,
       "aliases": []
     },
     {
@@ -1075,8 +1075,8 @@
       "legacyIds": [
         2932205
       ],
-      "rating": 2.1,
-      "numRatings": 12,
+      "rating": 2,
+      "numRatings": 13,
       "aliases": []
     },
     {
@@ -1208,7 +1208,7 @@
         2655333
       ],
       "rating": 3.3,
-      "numRatings": 198,
+      "numRatings": 199,
       "aliases": []
     },
     {
@@ -1361,8 +1361,8 @@
       "legacyIds": [
         1790298
       ],
-      "rating": 4.4,
-      "numRatings": 18,
+      "rating": 4.3,
+      "numRatings": 21,
       "aliases": []
     },
     {
@@ -1862,7 +1862,7 @@
         652350
       ],
       "rating": 2.2,
-      "numRatings": 65,
+      "numRatings": 66,
       "aliases": []
     },
     {
@@ -1877,8 +1877,8 @@
       "legacyIds": [
         1050876
       ],
-      "rating": 2.6,
-      "numRatings": 27,
+      "rating": 3.3,
+      "numRatings": 19,
       "aliases": []
     },
     {
@@ -1955,6 +1955,12 @@
       ],
       "rating": 3.5,
       "numRatings": 37,
+      "aliases": []
+    },
+    {
+      "slug": "amy-caroline-mcclocklin",
+      "name": "Amy-Caroline McClocklin",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -2181,7 +2187,7 @@
         2773783
       ],
       "rating": 2.8,
-      "numRatings": 28,
+      "numRatings": 29,
       "aliases": []
     },
     {
@@ -3260,8 +3266,8 @@
       "legacyIds": [
         2659023
       ],
-      "rating": 1.2,
-      "numRatings": 6,
+      "rating": 1.6,
+      "numRatings": 7,
       "aliases": []
     },
     {
@@ -3309,7 +3315,7 @@
         2780633
       ],
       "rating": 4,
-      "numRatings": 11,
+      "numRatings": 13,
       "aliases": []
     },
     {
@@ -3417,6 +3423,12 @@
       "aliases": []
     },
     {
+      "slug": "augatnaaq-eccles",
+      "name": "Augatnaaq Eccles",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "augustine-park",
       "name": "Augustine Park",
       "legacyIds": [
@@ -3474,8 +3486,14 @@
       "legacyIds": [
         3109387
       ],
-      "rating": 2.8,
-      "numRatings": 4,
+      "rating": 3.2,
+      "numRatings": 6,
+      "aliases": []
+    },
+    {
+      "slug": "aynur-gunenc",
+      "name": "Aynur Gunenc",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -3516,6 +3534,12 @@
       ],
       "rating": 4.5,
       "numRatings": 22,
+      "aliases": []
+    },
+    {
+      "slug": "aziz-al-najjar",
+      "name": "Aziz Al-Najjar",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -3910,7 +3934,13 @@
         3026599
       ],
       "rating": 4.8,
-      "numRatings": 21,
+      "numRatings": 24,
+      "aliases": []
+    },
+    {
+      "slug": "ben-kaufmann",
+      "name": "Ben Kaufmann",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -4326,6 +4356,12 @@
       "aliases": []
     },
     {
+      "slug": "boussad-berrichi",
+      "name": "Boussad Berrichi",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "brad-hutt",
       "name": "Brad Hutt",
       "legacyIds": [
@@ -4380,7 +4416,7 @@
         1920636
       ],
       "rating": 4.9,
-      "numRatings": 121,
+      "numRatings": 122,
       "aliases": []
     },
     {
@@ -4427,6 +4463,8 @@
       "legacyIds": [
         2847673
       ],
+      "rating": 5,
+      "numRatings": 1,
       "aliases": []
     },
     {
@@ -4436,7 +4474,7 @@
         2821375
       ],
       "rating": 5,
-      "numRatings": 3,
+      "numRatings": 4,
       "aliases": []
     },
     {
@@ -4466,7 +4504,7 @@
         2784519
       ],
       "rating": 3.2,
-      "numRatings": 38,
+      "numRatings": 39,
       "aliases": []
     },
     {
@@ -4642,7 +4680,7 @@
         351731
       ],
       "rating": 4,
-      "numRatings": 60,
+      "numRatings": 61,
       "aliases": []
     },
     {
@@ -4673,6 +4711,12 @@
       ],
       "rating": 2.4,
       "numRatings": 5,
+      "aliases": []
+    },
+    {
+      "slug": "bridgette-brown",
+      "name": "Bridgette Brown",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -4721,6 +4765,12 @@
       "legacyIds": [
         2984575
       ],
+      "aliases": []
+    },
+    {
+      "slug": "bronwen-jervis",
+      "name": "Bronwen Jervis",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -5252,7 +5302,7 @@
         1987953
       ],
       "rating": 3.6,
-      "numRatings": 86,
+      "numRatings": 87,
       "aliases": []
     },
     {
@@ -5363,6 +5413,14 @@
       ],
       "rating": 4.2,
       "numRatings": 15,
+      "aliases": []
+    },
+    {
+      "slug": "cassandra-richards",
+      "name": "Cassandra Richards",
+      "legacyIds": [
+        5065288
+      ],
       "aliases": []
     },
     {
@@ -5575,6 +5633,12 @@
       ],
       "rating": 3.7,
       "numRatings": 33,
+      "aliases": []
+    },
+    {
+      "slug": "chantal-nelson",
+      "name": "Chantal Nelson",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -5998,7 +6062,7 @@
         604695
       ],
       "rating": 4.4,
-      "numRatings": 528,
+      "numRatings": 529,
       "aliases": []
     },
     {
@@ -6486,6 +6550,12 @@
       "aliases": []
     },
     {
+      "slug": "christopher-moure",
+      "name": "Christopher Moure",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "christopher-rowley",
       "name": "Christopher Rowley",
       "legacyIds": [
@@ -6599,6 +6669,12 @@
       "legacyIds": [
         2969228
       ],
+      "aliases": []
+    },
+    {
+      "slug": "cindy-cruz",
+      "name": "Cindy Cruz",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -6914,7 +6990,7 @@
         2625206
       ],
       "rating": 4.6,
-      "numRatings": 54,
+      "numRatings": 55,
       "aliases": []
     },
     {
@@ -6934,7 +7010,7 @@
         215537
       ],
       "rating": 2.6,
-      "numRatings": 86,
+      "numRatings": 88,
       "aliases": []
     },
     {
@@ -7021,8 +7097,8 @@
       "legacyIds": [
         119082
       ],
-      "rating": 3.5,
-      "numRatings": 69,
+      "rating": 3.6,
+      "numRatings": 70,
       "aliases": []
     },
     {
@@ -7091,8 +7167,8 @@
       "legacyIds": [
         2735612
       ],
-      "rating": 2.1,
-      "numRatings": 146,
+      "rating": 2.2,
+      "numRatings": 147,
       "aliases": []
     },
     {
@@ -7300,7 +7376,7 @@
         639548
       ],
       "rating": 4.2,
-      "numRatings": 24,
+      "numRatings": 25,
       "aliases": []
     },
     {
@@ -7497,6 +7573,12 @@
       ],
       "rating": 4.5,
       "numRatings": 11,
+      "aliases": []
+    },
+    {
+      "slug": "daniel-stepner",
+      "name": "Daniel Stepner",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -7765,6 +7847,12 @@
       ],
       "rating": 4.6,
       "numRatings": 36,
+      "aliases": []
+    },
+    {
+      "slug": "david-allen",
+      "name": "David Allen",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -8340,7 +8428,7 @@
         1852352
       ],
       "rating": 3.3,
-      "numRatings": 132,
+      "numRatings": 133,
       "aliases": []
     },
     {
@@ -8567,7 +8655,7 @@
         2884959
       ],
       "rating": 2.3,
-      "numRatings": 74,
+      "numRatings": 76,
       "aliases": []
     },
     {
@@ -8809,6 +8897,12 @@
       "aliases": []
     },
     {
+      "slug": "dilara-baysal",
+      "name": "Dilara Baysal",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "dillon-black",
       "name": "Dillon Black",
       "legacyIds": [
@@ -9013,7 +9107,7 @@
         354141
       ],
       "rating": 3.1,
-      "numRatings": 121,
+      "numRatings": 122,
       "aliases": []
     },
     {
@@ -9373,7 +9467,7 @@
         2686790
       ],
       "rating": 3.9,
-      "numRatings": 93,
+      "numRatings": 95,
       "aliases": []
     },
     {
@@ -9446,8 +9540,8 @@
       "legacyIds": [
         609293
       ],
-      "rating": 3.4,
-      "numRatings": 91,
+      "rating": 3.5,
+      "numRatings": 92,
       "aliases": []
     },
     {
@@ -9524,8 +9618,8 @@
       "legacyIds": [
         2757723
       ],
-      "rating": 4,
-      "numRatings": 19,
+      "rating": 3.8,
+      "numRatings": 21,
       "aliases": []
     },
     {
@@ -9779,6 +9873,12 @@
       "aliases": []
     },
     {
+      "slug": "elyse-mccall-thomas",
+      "name": "Elyse McCall-Thomas",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "em-standen",
       "name": "EM Standen",
       "legacyIds": [
@@ -9824,6 +9924,12 @@
       ],
       "rating": 3.3,
       "numRatings": 8,
+      "aliases": []
+    },
+    {
+      "slug": "emilie-foster",
+      "name": "Emilie Foster",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -10013,6 +10119,12 @@
       "aliases": []
     },
     {
+      "slug": "eric-hitsman",
+      "name": "Eric Hitsman",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "eric-hua",
       "name": "Eric Hua",
       "legacyIds": [
@@ -10103,6 +10215,12 @@
     {
       "slug": "erika-fyfe",
       "name": "Erika Fyfe",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
+      "slug": "erika-owens",
+      "name": "Erika Owens",
       "legacyIds": [],
       "aliases": []
     },
@@ -10212,8 +10330,8 @@
       "legacyIds": [
         3008652
       ],
-      "rating": 3.2,
-      "numRatings": 41,
+      "rating": 3.3,
+      "numRatings": 43,
       "aliases": []
     },
     {
@@ -10292,6 +10410,12 @@
       ],
       "rating": 5,
       "numRatings": 5,
+      "aliases": []
+    },
+    {
+      "slug": "eva-kernbauer",
+      "name": "Eva Kernbauer",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -10464,8 +10588,8 @@
       "legacyIds": [
         2157676
       ],
-      "rating": 3.9,
-      "numRatings": 88,
+      "rating": 4,
+      "numRatings": 89,
       "aliases": []
     },
     {
@@ -10552,6 +10676,12 @@
       ],
       "rating": 2.5,
       "numRatings": 3,
+      "aliases": []
+    },
+    {
+      "slug": "fatemeh-mohammadi",
+      "name": "Fatemeh Mohammadi",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -11016,6 +11146,12 @@
       ],
       "rating": 2.6,
       "numRatings": 25,
+      "aliases": []
+    },
+    {
+      "slug": "gabrielle-dupuis",
+      "name": "Gabrielle Dupuis",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -11823,7 +11959,7 @@
         2303259
       ],
       "rating": 4.9,
-      "numRatings": 65,
+      "numRatings": 66,
       "aliases": []
     },
     {
@@ -12068,8 +12204,8 @@
       "legacyIds": [
         503632
       ],
-      "rating": 4.4,
-      "numRatings": 120,
+      "rating": 4.3,
+      "numRatings": 121,
       "aliases": []
     },
     {
@@ -12188,12 +12324,6 @@
       ],
       "rating": 5,
       "numRatings": 7,
-      "aliases": []
-    },
-    {
-      "slug": "hanika-rizo-garza",
-      "name": "Hanika Rizo Garza",
-      "legacyIds": [],
       "aliases": []
     },
     {
@@ -12404,6 +12534,12 @@
       "aliases": []
     },
     {
+      "slug": "hassan-easa",
+      "name": "Hassan Easa",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "hassan-faryaar",
       "name": "Hassan Faryaar",
       "legacyIds": [
@@ -12550,6 +12686,12 @@
     {
       "slug": "helena-merriam",
       "name": "Helena Merriam",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
+      "slug": "helia-mazdarani",
+      "name": "Helia Mazdarani",
       "legacyIds": [],
       "aliases": []
     },
@@ -12884,6 +13026,12 @@
       "aliases": []
     },
     {
+      "slug": "hugh-cairns",
+      "name": "Hugh Cairns",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "hugh-reid",
       "name": "Hugh Reid",
       "legacyIds": [
@@ -13190,6 +13338,12 @@
       "aliases": []
     },
     {
+      "slug": "ilirjan-shehu",
+      "name": "Ilirjan Shehu",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "ilyan-ferrer",
       "name": "Ilyan Ferrer",
       "legacyIds": [
@@ -13428,7 +13582,7 @@
         1071864
       ],
       "rating": 2.9,
-      "numRatings": 38,
+      "numRatings": 39,
       "aliases": []
     },
     {
@@ -13583,7 +13737,7 @@
         1756083
       ],
       "rating": 4.3,
-      "numRatings": 164,
+      "numRatings": 165,
       "aliases": []
     },
     {
@@ -13937,6 +14091,12 @@
       "aliases": []
     },
     {
+      "slug": "james-neumann",
+      "name": "James Neumann",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "james-nguyen",
       "name": "James Nguyen",
       "legacyIds": [
@@ -14103,7 +14263,7 @@
         60258
       ],
       "rating": 3,
-      "numRatings": 246,
+      "numRatings": 247,
       "aliases": []
     },
     {
@@ -14302,8 +14462,8 @@
       "legacyIds": [
         2948692
       ],
-      "rating": 4.2,
-      "numRatings": 5,
+      "rating": 4.3,
+      "numRatings": 6,
       "aliases": []
     },
     {
@@ -14773,7 +14933,9 @@
     {
       "slug": "jeffrey-bradley",
       "name": "Jeffrey Bradley",
-      "legacyIds": [],
+      "legacyIds": [
+        5065287
+      ],
       "aliases": []
     },
     {
@@ -15503,12 +15665,6 @@
       "aliases": []
     },
     {
-      "slug": "jin-sun-bae",
-      "name": "Jin Sun Bae",
-      "legacyIds": [],
-      "aliases": []
-    },
-    {
       "slug": "jinsun-bae",
       "name": "Jinsun Bae",
       "legacyIds": [
@@ -16025,7 +16181,7 @@
         1018427
       ],
       "rating": 3.1,
-      "numRatings": 57,
+      "numRatings": 58,
       "aliases": []
     },
     {
@@ -16159,7 +16315,7 @@
         1102870
       ],
       "rating": 3.9,
-      "numRatings": 109,
+      "numRatings": 110,
       "aliases": []
     },
     {
@@ -16176,6 +16332,12 @@
       ],
       "rating": 3.6,
       "numRatings": 68,
+      "aliases": []
+    },
+    {
+      "slug": "jolene-dione",
+      "name": "Jolene Dione",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -16478,8 +16640,8 @@
       "legacyIds": [
         2303307
       ],
-      "rating": 4.4,
-      "numRatings": 43,
+      "rating": 4.5,
+      "numRatings": 44,
       "aliases": []
     },
     {
@@ -16787,6 +16949,12 @@
     {
       "slug": "julien-greene",
       "name": "Julien Greene",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
+      "slug": "jumie-adebooye",
+      "name": "Jumie Adebooye",
       "legacyIds": [],
       "aliases": []
     },
@@ -17789,6 +17957,12 @@
       "aliases": []
     },
     {
+      "slug": "kelly-salmond",
+      "name": "Kelly Salmond",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "kelly-taylor",
       "name": "Kelly Taylor",
       "legacyIds": [
@@ -17801,6 +17975,12 @@
     {
       "slug": "kelsey-saunders",
       "name": "Kelsey Saunders",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
+      "slug": "kelsey-ulrich-verslycken",
+      "name": "Kelsey Ulrich-Verslycken",
       "legacyIds": [],
       "aliases": []
     },
@@ -17949,6 +18129,12 @@
       "aliases": []
     },
     {
+      "slug": "kevin-brady",
+      "name": "Kevin Brady",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "kevin-cheung",
       "name": "Kevin Cheung",
       "legacyIds": [
@@ -18090,6 +18276,12 @@
       "legacyIds": [
         3074690
       ],
+      "aliases": []
+    },
+    {
+      "slug": "kianoosh-shokri",
+      "name": "Kianoosh Shokri",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -18320,6 +18512,12 @@
       "aliases": []
     },
     {
+      "slug": "kofo-iziomon",
+      "name": "Kofo Iziomon",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "konstantin-petoukhov",
       "name": "konstantin petoukhov",
       "legacyIds": [
@@ -18381,6 +18579,12 @@
       ],
       "rating": 4.2,
       "numRatings": 13,
+      "aliases": []
+    },
+    {
+      "slug": "kristaps-john-balodis",
+      "name": "Kristaps John Balodis",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -19157,8 +19361,8 @@
       "legacyIds": [
         352927
       ],
-      "rating": 2.3,
-      "numRatings": 88,
+      "rating": 2.4,
+      "numRatings": 89,
       "aliases": []
     },
     {
@@ -19360,7 +19564,7 @@
         1986383
       ],
       "rating": 4.1,
-      "numRatings": 26,
+      "numRatings": 27,
       "aliases": []
     },
     {
@@ -19528,7 +19732,7 @@
         1617893
       ],
       "rating": 3.9,
-      "numRatings": 197,
+      "numRatings": 198,
       "aliases": []
     },
     {
@@ -20023,8 +20227,8 @@
       "legacyIds": [
         88842
       ],
-      "rating": 2,
-      "numRatings": 71,
+      "rating": 1.9,
+      "numRatings": 72,
       "aliases": []
     },
     {
@@ -20765,7 +20969,7 @@
         1428592
       ],
       "rating": 4.8,
-      "numRatings": 222,
+      "numRatings": 225,
       "aliases": []
     },
     {
@@ -21407,6 +21611,18 @@
       "aliases": []
     },
     {
+      "slug": "matthew-lee",
+      "name": "Matthew Lee",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
+      "slug": "matthew-lukasik",
+      "name": "Matthew Lukasik",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "matthew-macdonald",
       "name": "Matthew MacDonald",
       "legacyIds": [
@@ -21521,7 +21737,7 @@
         57216
       ],
       "rating": 4.7,
-      "numRatings": 145,
+      "numRatings": 146,
       "aliases": []
     },
     {
@@ -21570,8 +21786,8 @@
       "legacyIds": [
         2658791
       ],
-      "rating": 3.3,
-      "numRatings": 3,
+      "rating": 3.5,
+      "numRatings": 4,
       "aliases": []
     },
     {
@@ -21634,8 +21850,8 @@
       "legacyIds": [
         1958742
       ],
-      "rating": 3.2,
-      "numRatings": 15,
+      "rating": 3.3,
+      "numRatings": 16,
       "aliases": []
     },
     {
@@ -21872,8 +22088,8 @@
       "legacyIds": [
         2428005
       ],
-      "rating": 1.2,
-      "numRatings": 23,
+      "rating": 1.4,
+      "numRatings": 24,
       "aliases": []
     },
     {
@@ -22349,6 +22565,12 @@
       "aliases": []
     },
     {
+      "slug": "michael-karakolis",
+      "name": "Michael Karakolis",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "michael-kent",
       "name": "Michael Kent",
       "legacyIds": [],
@@ -22423,7 +22645,7 @@
         962026
       ],
       "rating": 3.1,
-      "numRatings": 43,
+      "numRatings": 44,
       "aliases": []
     },
     {
@@ -22822,7 +23044,7 @@
         2714364
       ],
       "rating": 1,
-      "numRatings": 3,
+      "numRatings": 4,
       "aliases": [
         "Miguel Quintana"
       ]
@@ -22983,8 +23205,8 @@
       "legacyIds": [
         257126
       ],
-      "rating": 3.3,
-      "numRatings": 89,
+      "rating": 3.4,
+      "numRatings": 90,
       "aliases": []
     },
     {
@@ -23217,8 +23439,8 @@
       "legacyIds": [
         3025119
       ],
-      "rating": 3.5,
-      "numRatings": 4,
+      "rating": 3.8,
+      "numRatings": 5,
       "aliases": []
     },
     {
@@ -23238,7 +23460,7 @@
         104462
       ],
       "rating": 3.5,
-      "numRatings": 65,
+      "numRatings": 67,
       "aliases": []
     },
     {
@@ -23392,6 +23614,12 @@
       "aliases": []
     },
     {
+      "slug": "mohammad-reza-rafsanjani-sadeghi",
+      "name": "Mohammad-Reza Rafsanjani-Sadeghi",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "mohammad-taj",
       "name": "Mohammad Taj",
       "legacyIds": [
@@ -23418,14 +23646,16 @@
       "aliases": []
     },
     {
-      "slug": "mohammed-abuibaid",
-      "name": "Mohammed Abuibaid",
+      "slug": "mohammed-a-a-abuibaid",
+      "name": "Mohammed A.A. Abuibaid",
       "legacyIds": [
         3159526
       ],
       "rating": 1,
       "numRatings": 3,
-      "aliases": []
+      "aliases": [
+        "Mohammed Abuibaid"
+      ]
     },
     {
       "slug": "mohammed-hasan",
@@ -23683,6 +23913,14 @@
       ],
       "rating": 4.5,
       "numRatings": 15,
+      "aliases": []
+    },
+    {
+      "slug": "mouhcine-guennoun",
+      "name": "Mouhcine Guennoun",
+      "legacyIds": [
+        5070207
+      ],
       "aliases": []
     },
     {
@@ -24056,7 +24294,7 @@
         3024841
       ],
       "rating": 4.5,
-      "numRatings": 22,
+      "numRatings": 23,
       "aliases": []
     },
     {
@@ -24286,6 +24524,12 @@
       "aliases": []
     },
     {
+      "slug": "nathalie-tambay",
+      "name": "Nathalie Tambay",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "nawaf-nasser",
       "name": "Nawaf Nasser",
       "legacyIds": [
@@ -24299,8 +24543,8 @@
       "legacyIds": [
         2205351
       ],
-      "rating": 3.5,
-      "numRatings": 17,
+      "rating": 3.6,
+      "numRatings": 18,
       "aliases": []
     },
     {
@@ -24634,7 +24878,7 @@
         790346
       ],
       "rating": 2.2,
-      "numRatings": 161,
+      "numRatings": 165,
       "aliases": []
     },
     {
@@ -24784,7 +25028,7 @@
         3067556
       ],
       "rating": 4.8,
-      "numRatings": 20,
+      "numRatings": 21,
       "aliases": []
     },
     {
@@ -25033,12 +25277,6 @@
       ],
       "rating": 2.8,
       "numRatings": 4,
-      "aliases": []
-    },
-    {
-      "slug": "omid-mozaffari-vala",
-      "name": "Omid Mozaffari Vala",
-      "legacyIds": [],
       "aliases": []
     },
     {
@@ -25316,7 +25554,7 @@
         2586050
       ],
       "rating": 1.8,
-      "numRatings": 20,
+      "numRatings": 21,
       "aliases": []
     },
     {
@@ -25534,7 +25772,7 @@
         433013
       ],
       "rating": 3.6,
-      "numRatings": 60,
+      "numRatings": 61,
       "aliases": []
     },
     {
@@ -25938,8 +26176,14 @@
       "aliases": []
     },
     {
-      "slug": "pavel-aleksey",
-      "name": "Pavel Aleksey",
+      "slug": "pavan-vijay-kumar",
+      "name": "Pavan Vijay Kumar",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
+      "slug": "pavel-aleksey-frank",
+      "name": "Pavel Aleksey Frank",
       "legacyIds": [],
       "aliases": []
     },
@@ -26342,12 +26586,6 @@
       "aliases": []
     },
     {
-      "slug": "pierre-cloutier-de-repentigny",
-      "name": "Pierre Cloutier De Repentigny",
-      "legacyIds": [],
-      "aliases": []
-    },
-    {
       "slug": "pierre-johnston",
       "name": "Pierre Johnston",
       "legacyIds": [
@@ -26534,7 +26772,7 @@
         792690
       ],
       "rating": 2.2,
-      "numRatings": 43,
+      "numRatings": 44,
       "aliases": []
     },
     {
@@ -26796,7 +27034,7 @@
         2502723
       ],
       "rating": 4.6,
-      "numRatings": 69,
+      "numRatings": 71,
       "aliases": []
     },
     {
@@ -27228,6 +27466,12 @@
       "aliases": []
     },
     {
+      "slug": "renee-sloos",
+      "name": "Renee Sloos",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "reyhab-patel",
       "name": "Reyhab Patel",
       "legacyIds": [
@@ -27544,6 +27788,12 @@
       "aliases": []
     },
     {
+      "slug": "rj-cova-cova",
+      "name": "RJ Cova Cova",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "rob-holton",
       "name": "Rob Holton",
       "legacyIds": [
@@ -27660,7 +27910,7 @@
         2057657
       ],
       "rating": 3.5,
-      "numRatings": 201,
+      "numRatings": 202,
       "aliases": []
     },
     {
@@ -28231,7 +28481,7 @@
         2552912
       ],
       "rating": 5,
-      "numRatings": 25,
+      "numRatings": 26,
       "aliases": []
     },
     {
@@ -28392,6 +28642,12 @@
       ],
       "rating": 2.3,
       "numRatings": 45,
+      "aliases": []
+    },
+    {
+      "slug": "ruth-wilkins",
+      "name": "Ruth Wilkins",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -28665,7 +28921,7 @@
         2874160
       ],
       "rating": 3.8,
-      "numRatings": 25,
+      "numRatings": 31,
       "aliases": []
     },
     {
@@ -29118,8 +29374,8 @@
       "legacyIds": [
         791571
       ],
-      "rating": 3,
-      "numRatings": 18,
+      "rating": 3.3,
+      "numRatings": 21,
       "aliases": []
     },
     {
@@ -29148,8 +29404,8 @@
       "legacyIds": [
         1121535
       ],
-      "rating": 4.3,
-      "numRatings": 18,
+      "rating": 4.2,
+      "numRatings": 19,
       "aliases": []
     },
     {
@@ -29484,8 +29740,8 @@
       "legacyIds": [
         2884722
       ],
-      "rating": 2.8,
-      "numRatings": 21,
+      "rating": 2.9,
+      "numRatings": 22,
       "aliases": []
     },
     {
@@ -29496,6 +29752,12 @@
       ],
       "rating": 2.4,
       "numRatings": 9,
+      "aliases": []
+    },
+    {
+      "slug": "sayyed-hossein-sadat-hosseini",
+      "name": "Sayyed Hossein Sadat Hosseini",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -29597,7 +29859,7 @@
         3044361
       ],
       "rating": 4.9,
-      "numRatings": 29,
+      "numRatings": 31,
       "aliases": []
     },
     {
@@ -29852,8 +30114,8 @@
       "legacyIds": [
         3142416
       ],
-      "rating": 2,
-      "numRatings": 4,
+      "rating": 1.8,
+      "numRatings": 5,
       "aliases": []
     },
     {
@@ -30591,7 +30853,7 @@
         2050014
       ],
       "rating": 3.9,
-      "numRatings": 37,
+      "numRatings": 38,
       "aliases": []
     },
     {
@@ -30707,7 +30969,7 @@
         2643703
       ],
       "rating": 5,
-      "numRatings": 20,
+      "numRatings": 21,
       "aliases": []
     },
     {
@@ -31397,6 +31659,12 @@
       "aliases": []
     },
     {
+      "slug": "sunil-achia",
+      "name": "Sunil Achia",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "sunitha-bisan-singh",
       "name": "Sunitha Bisan Singh",
       "legacyIds": [],
@@ -31701,12 +31969,6 @@
       "aliases": []
     },
     {
-      "slug": "t-montague",
-      "name": "T. Montague",
-      "legacyIds": [],
-      "aliases": []
-    },
-    {
       "slug": "taghreed-altamimi",
       "name": "Taghreed Altamimi",
       "legacyIds": [
@@ -31987,6 +32249,12 @@
       "aliases": []
     },
     {
+      "slug": "terhemba-ambe-uva",
+      "name": "Terhemba Ambe-Uva",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "tero-hollo",
       "name": "Tero Hollo",
       "legacyIds": [],
@@ -31998,6 +32266,12 @@
       "legacyIds": [
         5054998
       ],
+      "aliases": []
+    },
+    {
+      "slug": "thankgod-obasi",
+      "name": "ThankGod Obasi",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -32231,7 +32505,7 @@
         1665068
       ],
       "rating": 3.7,
-      "numRatings": 43,
+      "numRatings": 44,
       "aliases": []
     },
     {
@@ -32587,7 +32861,7 @@
         2218342
       ],
       "rating": 2.5,
-      "numRatings": 128,
+      "numRatings": 131,
       "aliases": []
     },
     {
@@ -32735,7 +33009,7 @@
         297405
       ],
       "rating": 4.3,
-      "numRatings": 134,
+      "numRatings": 137,
       "aliases": []
     },
     {
@@ -33191,7 +33465,7 @@
         762811
       ],
       "rating": 4.7,
-      "numRatings": 115,
+      "numRatings": 116,
       "aliases": []
     },
     {
@@ -33478,6 +33752,12 @@
       "legacyIds": [
         2856479
       ],
+      "aliases": []
+    },
+    {
+      "slug": "wameed-alghazali",
+      "name": "Wameed Alghazali",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -33873,6 +34153,12 @@
       "aliases": []
     },
     {
+      "slug": "xiaofei-han",
+      "name": "Xiaofei Han",
+      "legacyIds": [],
+      "aliases": []
+    },
+    {
       "slug": "xiaoming-han",
       "name": "Xiaoming Han",
       "legacyIds": [
@@ -33925,7 +34211,13 @@
         973728
       ],
       "rating": 3.3,
-      "numRatings": 69,
+      "numRatings": 70,
+      "aliases": []
+    },
+    {
+      "slug": "xu-zhang",
+      "name": "Xu Zhang",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -33949,6 +34241,12 @@
       "aliases": [
         "Xun Sun"
       ]
+    },
+    {
+      "slug": "xxx-smithaparvathi",
+      "name": "XXX Smithaparvathi",
+      "legacyIds": [],
+      "aliases": []
     },
     {
       "slug": "y-a-bennett",
@@ -33996,8 +34294,8 @@
       "legacyIds": [
         2994730
       ],
-      "rating": 3.4,
-      "numRatings": 23,
+      "rating": 3.3,
+      "numRatings": 24,
       "aliases": []
     },
     {
@@ -34036,6 +34334,12 @@
       "legacyIds": [
         2978193
       ],
+      "aliases": []
+    },
+    {
+      "slug": "yaroslav-baran",
+      "name": "Yaroslav Baran",
+      "legacyIds": [],
       "aliases": []
     },
     {
@@ -34473,7 +34777,7 @@
         1034661
       ],
       "rating": 3.4,
-      "numRatings": 55,
+      "numRatings": 56,
       "aliases": []
     },
     {
@@ -34591,7 +34895,7 @@
         2953576
       ],
       "rating": 1.6,
-      "numRatings": 41,
+      "numRatings": 42,
       "aliases": []
     },
     {
