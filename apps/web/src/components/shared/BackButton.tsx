@@ -1,17 +1,18 @@
 import { Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
-import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { locationLabel } from "../../lib/navigation/backState";
-import { usePreviousLocation } from "../../lib/navigation/navigationHistory";
 import { useProfessorRegistry } from "@uoplan/store/hooks";
 import styles from "./BackButton.module.css";
 
 type BackButtonProps = {
-  /** Logical parent to navigate to when there is no in-app history to pop. */
+  /** Logical parent this button always navigates to. */
   fallbackTo: string;
   /**
-   * Label for the no-history case. Defaults to the central name for `fallbackTo`,
-   * so callers only override it when the logical parent needs a custom name.
+   * Label to show. Defaults to the central name for `fallbackTo` (with any
+   * `fallbackParams` interpolated into it first, e.g. `$course` -> the actual
+   * code), so callers only override it when the logical parent needs a custom
+   * name that can't be derived from its path alone.
    */
   fallbackLabel?: string;
   fallbackParams?: Record<string, string>;
@@ -24,15 +25,18 @@ type BackButtonProps = {
   emphasis?: "subtle" | "prominent";
 };
 
+function interpolateParams(path: string, params?: Record<string, string>): string {
+  if (!params) return path;
+  return path.replaceAll(/\$(\w+)/g, (match, key: string) => params[key] ?? match);
+}
+
 /**
  * Cohesive back affordance: chevron + label naming the destination.
  *
- * When the current entry was reached via an in-app navigation it pops browser
- * history (`router.history.back()`) so the exact prior URL — query, filters,
- * scroll — is restored. The label is the central name of the globally-tracked
- * previous location (so e.g. arriving at Personalize from Explore reads
- * "Search results for …", not "Home"). Only a deep link / fresh load (no in-app
- * history) navigates to the logical parent instead, labelled from it.
+ * Always navigates to the caller-supplied logical parent (`fallbackTo`) rather
+ * than popping browser history — a page reached via a deep link, a share link,
+ * or an in-app click all back out to the same predictable place. The label
+ * defaults to the central name for that destination.
  */
 export function BackButton({
   fallbackTo,
@@ -41,21 +45,14 @@ export function BackButton({
   fallbackSearch,
   emphasis = "subtle",
 }: BackButtonProps) {
-  const router = useRouter();
   const navigate = useNavigate();
-  const canGoBack = useCanGoBack();
-  const previous = usePreviousLocation();
   const professors = useProfessorRegistry();
 
-  const historyLabel =
-    canGoBack && previous ? locationLabel(previous.pathname, previous.search, professors) : null;
-  const label = historyLabel ?? fallbackLabel ?? locationLabel(fallbackTo);
+  const label =
+    fallbackLabel ??
+    locationLabel(interpolateParams(fallbackTo, fallbackParams), undefined, professors);
 
   const onBack = () => {
-    if (canGoBack) {
-      router.history.back();
-      return;
-    }
     void navigate({
       to: fallbackTo,
       params: fallbackParams as Record<string, string>,

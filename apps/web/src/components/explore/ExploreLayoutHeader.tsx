@@ -6,9 +6,16 @@ import { BackButton } from "../shared/BackButton";
 import { ExploreFilterBar } from "./ExploreFilterBar";
 import { EXPLORE_ACCORDION_PAD_INLINE } from "../../lib/explore/accordionPadding";
 
+export type ExploreBackTarget = {
+  to: string;
+  params?: Record<string, string>;
+  search?: Record<string, unknown>;
+};
+
 type ExploreLayoutHeaderProps = {
   onIndex: boolean;
   showBackButton: boolean;
+  backTarget: ExploreBackTarget;
   query: string;
   onQueryChange: (value: string) => void;
   onSearchFocus: () => void;
@@ -64,6 +71,7 @@ function ExploreSearchInput({
 export function ExploreLayoutHeader({
   onIndex,
   showBackButton,
+  backTarget,
   query,
   onQueryChange,
   onSearchFocus,
@@ -87,7 +95,11 @@ export function ExploreLayoutHeader({
       }}
     >
       <Box mb={8}>
-        <BackButton fallbackTo={onIndex ? "/" : "/explore"} />
+        <BackButton
+          fallbackTo={onIndex ? "/" : backTarget.to}
+          fallbackParams={onIndex ? undefined : backTarget.params}
+          fallbackSearch={onIndex ? undefined : backTarget.search}
+        />
       </Box>
       <Stack gap="md" maw={520}>
         <Title

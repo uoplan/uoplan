@@ -15,7 +15,6 @@ import { LazyMotion, m, useAnimation } from "framer-motion";
 import { usePersistState } from "../hooks/usePersistState";
 import { useIndices } from "@uoplan/store/hooks";
 import { tr, useTr } from "../i18n";
-import { recordLocation } from "../lib/navigation/navigationHistory";
 import { AppFooter } from "../components/shared/AppFooter";
 import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
 import { LazyCommandCenter } from "../components/shortcuts/LazyCommandCenter";
@@ -94,11 +93,9 @@ function RootLayout() {
 
   useEffect(() => {
     const seed = router.history.location;
-    recordLocation(seed.state.__TSR_index, seed.pathname, seed.search);
     analyticsRef.current.capturePageview({ path: seed.pathname });
     return router.history.subscribe(({ action, location }) => {
       lastNavAction.current = action.type;
-      recordLocation(location.state.__TSR_index, location.pathname, location.search);
       analyticsRef.current.capturePageview({ path: location.pathname });
     });
   }, [router.history]);

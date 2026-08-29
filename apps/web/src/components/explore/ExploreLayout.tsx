@@ -1,4 +1,5 @@
 import { useRouterState } from "@tanstack/react-router";
+import type { ExploreBackTarget } from "./ExploreLayoutHeader";
 import { Affix, Box, Group } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { useLingui } from "@lingui/react";
@@ -87,6 +88,9 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   const leafRouteId = useRouterState({
     select: (s) => s.matches[s.matches.length - 1]?.routeId as string | undefined,
   });
+  const leafParams = useRouterState({
+    select: (s) => s.matches[s.matches.length - 1]?.params as Record<string, string> | undefined,
+  });
   const onIndex = leafRouteId === EXPLORE_INDEX_ROUTE_ID;
   const showBackButton = !onIndex;
 
@@ -133,6 +137,21 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     handleQueryChange,
     handleFilterChange,
   } = useExploreSearch(onIndex);
+
+  const backTarget: ExploreBackTarget = useMemo(() => {
+    if (
+      leafRouteId === "/explore/course/$course/feedback" ||
+      leafRouteId === "/explore/course/$course/schedule"
+    ) {
+      const params: Record<string, string> = { course: leafParams?.course ?? "" };
+      return { to: "/explore/course/$course", params };
+    }
+    if (leafRouteId === "/explore/professor/$slug/feedback") {
+      const params: Record<string, string> = { slug: leafParams?.slug ?? "" };
+      return { to: "/explore/professor/$slug", params };
+    }
+    return { to: "/explore", search: currentSearchParams };
+  }, [leafRouteId, leafParams, currentSearchParams]);
 
   const {
     loading,
@@ -215,6 +234,7 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
         <ExploreLayoutHeader
           onIndex={onIndex}
           showBackButton={showBackButton}
+          backTarget={backTarget}
           query={query}
           onQueryChange={handleQueryChange}
           onSearchFocus={() => setSearchEngaged(true)}
