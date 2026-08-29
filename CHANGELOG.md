@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0-beta.43](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.42...uoplan-monorepo-v1.0.0-beta.43) (2026-08-29)
+
+
+### Bug Fixes
+
+* **nav:** make back button navigate to logical parent, not browser history ([d4a4c50](https://github.com/uoplan/uoplan/commit/d4a4c50ebd8bda676718a9fe3a3a7405d9a726d0))
+
 ## [1.0.0-beta.42](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.41...uoplan-monorepo-v1.0.0-beta.42) (2026-08-11)
 
 
