@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0-beta.44](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.43...uoplan-monorepo-v1.0.0-beta.44) (2026-09-27)
+
+
+### Bug Fixes
+
+* correct course eligibility, swaps, and Explore results ([f8c5e7d](https://github.com/uoplan/uoplan/commit/f8c5e7dd617fbec7e2a7cbd78bbc56fc31cbf798))
+* honor prerequisites and diversify schedule selection ([57af018](https://github.com/uoplan/uoplan/commit/57af018aec38438c52bad20a84d4966aa5c46efe))
+* label calendar grade fallback sources ([de273b1](https://github.com/uoplan/uoplan/commit/de273b1b08cf7b06233c37ff0e0c39e9ddcb7ca1))
+
 ## [1.0.0-beta.43](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.42...uoplan-monorepo-v1.0.0-beta.43) (2026-09-08)
 
 
