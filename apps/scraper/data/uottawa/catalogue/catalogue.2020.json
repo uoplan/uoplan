@@ -1142,7 +1142,13 @@
       "title": "Taxation I",
       "credits": 3,
       "description": "Provides a general knowledge of the Canadian Federal Income Tax system as it relates to individual taxpayers. The course includes the tax provisions for calculating all sources of taxpayer income to arrive at taxable income and the calculation of income taxes payable by an individual taxpayer.",
-      "component": "LecturePrerequisite or Corequisite: ADM 3340."
+      "component": "Lecture",
+      "prereqText": "ADM 3340",
+      "prerequisites": {
+        "type": "course",
+        "code": "ADM 3340",
+        "text": "ADM 3340"
+      }
     },
     {
       "code": "ADM 3346",
@@ -1162,7 +1168,13 @@
       "title": "Auditing Theory",
       "credits": 3,
       "description": "Definition of auditing. Concepts of management assertions, audit objectives, evidence, materiality and risk, internal control, audit planning, and reporting as applied to financial statements. Professional ethics, legal liability, and the responsibilities of auditors to society are also addressed.",
-      "component": "LecturePrerequisite or Corequisite: ADM 3340."
+      "component": "Lecture",
+      "prereqText": "ADM 3340",
+      "prerequisites": {
+        "type": "course",
+        "code": "ADM 3340",
+        "text": "ADM 3340"
+      }
     },
     {
       "code": "ADM 3350",
