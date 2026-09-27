@@ -11,18 +11,21 @@ import { testScheduledCourse } from "../../test/courseScheduleFixtures";
 
 class RecordingEngine implements ScheduleEngine {
   requests: GenerationRequest[] = [];
+  response: GenerationResponse | null = null;
 
   generate(request: Uint8Array): Uint8Array {
     this.requests.push(GenerationRequest.decode(request));
-    return GenerationResponse.encode({
-      hasSchedule: false,
-      courses: [],
-      optionalPool: [],
-      pinned: [],
-      chosenCourseToRequirement: {},
-      poolDiagnostics: undefined,
-      error: undefined,
-    }).finish();
+    return GenerationResponse.encode(
+      this.response ?? {
+        hasSchedule: false,
+        courses: [],
+        optionalPool: [],
+        pinned: [],
+        chosenCourseToRequirement: {},
+        poolDiagnostics: undefined,
+        error: undefined,
+      },
+    ).finish();
   }
 
   timetable_fixed_set(_request: Uint8Array): Uint8Array {
@@ -120,6 +123,25 @@ describe("generateSchedulesAction review fixes", () => {
     // N ("Courses this semester") is the engine target sent verbatim; the user's
     // constrained group-token picks no longer silently inflate it.
     expect(engine.requests[0]?.coursesThisSemester).toBe(3);
+  });
+
+  it("retains the engine's selected pool for calendar swaps", async () => {
+    const engine = new RecordingEngine();
+    engine.response = {
+      hasSchedule: true,
+      courses: [{ courseCode: "CSI 2110", components: [] }],
+      optionalPool: ["CSI 2110"],
+      pinned: [],
+      chosenCourseToRequirement: { "CSI 2110": "__additional_electives__" },
+      poolDiagnostics: undefined,
+      error: undefined,
+    };
+
+    const result = await generateSchedulesAction(baseInput(), cache, engine);
+    expect(result?.chosenCourseToRequirementId).toEqual({
+      "CSI 2110": "__additional_electives__",
+    });
+    expect(result?.currentPoolMap).toEqual(result?.chosenCourseToRequirementId);
   });
 
   it("clamps stale basic additional electives before sending the engine request", async () => {

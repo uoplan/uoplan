@@ -47,6 +47,7 @@ type ProfessorSearchScored = {
 export function searchProfessorsScored(
   entries: ProfessorSearchEntry[],
   rawQuery: string,
+  unlimited = false,
 ): ProfessorSearchScored {
   const q = rawQuery.trim().toLowerCase();
   if (!q) return { items: [], topRank: null };
@@ -57,7 +58,7 @@ export function searchProfessorsScored(
     const rank = rankProfessorSearchMatch(entry, q);
     if (rank == null) continue;
     scored.push({ entry, rank });
-    if (scored.length >= MATCH_COLLECT_CAP) break;
+    if (!unlimited && scored.length >= MATCH_COLLECT_CAP) break;
   }
 
   scored.sort((a, b) => {
@@ -65,7 +66,7 @@ export function searchProfessorsScored(
     return a.entry.displayName.localeCompare(b.entry.displayName, "en");
   });
 
-  const slice = scored.slice(0, PROFESSOR_GRAPH_SEARCH_MAX);
+  const slice = unlimited ? scored : scored.slice(0, PROFESSOR_GRAPH_SEARCH_MAX);
   return {
     items: slice.map((s) => s.entry),
     topRank: slice[0]?.rank ?? null,

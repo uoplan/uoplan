@@ -31,7 +31,11 @@ export function tryApplyOneSwap(
 
   const oldCode = oldEnrollment.courseCode;
   const reqId = poolMap[oldCode] ?? chosenCourseToRequirementId[oldCode];
-  const reqType = remainingRequirements.find((r) => r.requirementId === reqId)?.type;
+  const reqType =
+    reqId === "__additional_electives__"
+      ? "free_elective"
+      : (remainingRequirements.find((r) => r.requirementId === reqId)?.type ??
+        findRequirementType(state.requirementTreeWithStatus, reqId));
 
   const exempt = buildExplicitExemptSet(
     state.constrainedPerRequirement,
@@ -65,6 +69,19 @@ export function tryApplyOneSwap(
     poolMap: transferPoolEntry(poolMap, oldCode, newCourseCode, reqId),
     colorMap: transferSwapColor(colorMap, oldCode, newCourseCode),
   };
+}
+
+function findRequirementType(
+  nodes: AppStore["requirementTreeWithStatus"],
+  requirementId: string | undefined,
+): string | undefined {
+  if (!requirementId) return undefined;
+  for (const node of nodes) {
+    if (node.requirementId === requirementId) return node.type;
+    const childType = findRequirementType(node.options ?? [], requirementId);
+    if (childType) return childType;
+  }
+  return undefined;
 }
 
 export function applySwapsToResult(

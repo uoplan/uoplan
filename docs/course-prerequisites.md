@@ -34,6 +34,14 @@ type Course = {
 
 - Normalized prerequisite sentence extracted from the catalogue page.
 - Sourced from the `.courseblockextra.highlight` paragraph, with the leading label removed.
+- `extractPrereqSentence` also recognizes a combined `Prerequisite or Corequisite:` label. For
+  example, `ADM 3349` yields `ADM 3340` and a course node. The current AST and eligibility
+  evaluator do not distinguish the concurrent-enrolment option: they require the referenced
+  course to be completed. If concurrent eligibility is added, extend the AST/protobuf and both
+  prerequisite evaluation and timetable selection before treating the label as satisfied by a
+  course in the same schedule.
+- `scrapeCourses` reads the component from non-highlight `.courseblockextra` elements, so a
+  highlighted prerequisite label cannot be appended to a component such as `Lecture`.
 - Examples:
   - `"ADM 1300, ENG 1131 and 24 university course units"`
   - `"(ADM 1705 ou MAT 1702), (ADM 1770 ou ITI 1520)"`
@@ -41,6 +49,9 @@ type Course = {
   - `"ANT 1101 or 18 university units"`
 
 Use this as the “ground truth” text for debugging or for any future parsing refinements.
+Changes to the scraper affect future scrapes. The companion `data` branch change backfills
+`ADM 3345` and `ADM 3349` for the affected 2018–2026 catalogue years; rebuild the derived `.pb`
+assets after hydrating that branch so the corrected prerequisite appears in the app.
 
 #### `CoursePrereqNode`
 

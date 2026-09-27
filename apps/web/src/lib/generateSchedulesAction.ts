@@ -274,6 +274,7 @@ export async function generateSchedulesAction(
     schedule: foundSchedule,
     optionalPool: filteredOptionalPool,
     pinned,
+    chosenCourseToRequirementId,
     poolDiagnostics,
   } = result;
 
@@ -337,8 +338,8 @@ export async function generateSchedulesAction(
   return {
     currentSchedule: foundSchedule,
     swapPool,
-    chosenCourseToRequirementId: {},
-    currentPoolMap: {},
+    chosenCourseToRequirementId,
+    currentPoolMap: chosenCourseToRequirementId,
     currentColorMap: buildColorMap(foundSchedule),
     generationError: null,
   };

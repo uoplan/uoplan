@@ -16,6 +16,12 @@ Accepts a `?q=` URL param. As the user types, the URL is updated via `replace` (
 - **Professor cards** — name, RateMyProfessors rating, course count, most common grade, % passing, grade distribution bar
 
 Section order (courses first vs professors first) mirrors the relevance logic in `searchExplore`.
+All matching cards are available after search/filter and alias deduplication. Each horizontal
+section uses `@tanstack/react-virtual` once it exceeds 20 cards, rendering only the visible cards
+plus overscan as the user scrolls. Change `SearchCardSection` in
+`apps/web/src/components/explore/ExploreSearchResults.tsx` if card widths or virtualization
+thresholds change; its 200px step matches the 190px card and 10px gap. The search and filter
+paths are in `gradesSearch.ts` and `useExploreResults.ts`. No environment setting is involved.
 
 #### Delivery filter
 
@@ -74,8 +80,8 @@ compact keyword index and ships only that:
   (`1 − fuseScore`) and its description relevance (BM25 normalized to the top hit, scaled
   by `DESCRIPTION_MERGE_WEIGHT = 0.5`). A course matching in both is lifted; a strong
   description-only hit can interleave above weaker/fuzzier code/title matches, while strong
-  code/title matches still dominate. Deduped by alias-component id, capped at
-  `EXPLORE_MAX_COURSE_RESULTS`. (Fuse runs with `includeScore` so per-item scores drive the
+  code/title matches still dominate. Deduped by alias-component id without a result cap.
+  (Fuse runs with `includeScore` so per-item scores drive the
   blend and the professors-vs-courses ordering.)
 - **Native wiring:** bundled with the app (`catalogue.search.pb` in the native asset
   bundle) and decoded in `data-provider.tsx#buildAppData` (best-effort — a missing or

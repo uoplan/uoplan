@@ -13,7 +13,11 @@ export async function scrapeCourses(url: string): Promise<Course[]> {
   $(".courseblock").each((_, el) => {
     const titleBlock = $(el).find(".courseblocktitle").text().replaceAll(/\s+/g, " ").trim();
     const descBlock = $(el).find(".courseblockdesc").text().replaceAll(/\s+/g, " ").trim();
-    const extraBlock = $(el).find(".courseblockextra").text().replaceAll(/\s+/g, " ").trim();
+    const extraBlock = $(el)
+      .find(".courseblockextra:not(.highlight)")
+      .text()
+      .replaceAll(/\s+/g, " ")
+      .trim();
 
     const prereqHighlight = $(el).find(".courseblockextra.highlight").first();
     let prereqText: string | undefined;

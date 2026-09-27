@@ -1,6 +1,7 @@
 import { Box, Button, Group, Loader, Stack, Text } from "@mantine/core";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { AnimatePresence, m } from "framer-motion";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import type {
   Discipline,
   Faculty,
@@ -71,6 +72,8 @@ type ExploreSearchResultsProps = {
 };
 
 type SearchCardItem = { key: string; node: ReactNode };
+const CARD_STEP_PX = 200;
+const VIRTUALIZE_CARDS_AFTER = 20;
 
 function DeliveryStatusNotice({
   tone,
@@ -120,6 +123,17 @@ function SearchCardSection({
   delay?: number;
   items: SearchCardItem[];
 }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const virtualize = items.length > VIRTUALIZE_CARDS_AFTER;
+  const virtualizer = useVirtualizer({
+    count: items.length,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: () => CARD_STEP_PX,
+    horizontal: true,
+    overscan: 3,
+    getItemKey: (index) => items[index].key,
+  });
+
   return (
     <m.div
       className="explore-search-section"
@@ -134,6 +148,8 @@ function SearchCardSection({
           </Text>
         </Box>
         <Box
+          data-testid="explore-card-scroll"
+          ref={scrollRef}
           style={{
             paddingLeft: EXPLORE_ACCORDION_PAD_INLINE.xs,
             overflowX: "auto",
@@ -141,22 +157,41 @@ function SearchCardSection({
             paddingBottom: 10,
           }}
         >
-          <Box style={{ display: "flex", gap: 10, width: "max-content" }}>
-            <AnimatePresence mode="popLayout" initial={false}>
-              {items.map((item) => (
-                <m.div
-                  key={item.key}
-                  initial={{ opacity: 0, scale: 0.94 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.94 }}
-                  transition={{ duration: 0.14, ease: "easeOut" }}
-                  style={{ flexShrink: 0 }}
+          {virtualize ? (
+            <Box style={{ width: virtualizer.getTotalSize(), height: 155, position: "relative" }}>
+              {virtualizer.getVirtualItems().map((virtualItem) => (
+                <Box
+                  key={virtualItem.key}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: 190,
+                    transform: `translateX(${virtualItem.start}px)`,
+                  }}
                 >
-                  {item.node}
-                </m.div>
+                  {items[virtualItem.index].node}
+                </Box>
               ))}
-            </AnimatePresence>
-          </Box>
+            </Box>
+          ) : (
+            <Box style={{ display: "flex", gap: 10, width: "max-content" }}>
+              <AnimatePresence mode="popLayout" initial={false}>
+                {items.map((item) => (
+                  <m.div
+                    key={item.key}
+                    initial={{ opacity: 0, scale: 0.94 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.94 }}
+                    transition={{ duration: 0.14, ease: "easeOut" }}
+                    style={{ flexShrink: 0 }}
+                  >
+                    {item.node}
+                  </m.div>
+                ))}
+              </AnimatePresence>
+            </Box>
+          )}
         </Box>
       </Stack>
     </m.div>

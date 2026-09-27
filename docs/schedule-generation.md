@@ -46,6 +46,14 @@ maps the engine's response back into UI/store shapes.
 5. **Response mapping (engine → TS)** — `mapGenerationResponse` / `mapTimetableResponse` in
    `engineBridge.ts` turn the proto response back into the existing `GeneratedSchedule` /
    `CourseEnrollment` shapes the store, calendar, ICS export, swap flow, and seed navigation rely on.
+   The web adapter also retains `chosenCourseToRequirementId`: each generated course's actual
+   requirement pool. Calendar swaps use that pool's candidate list and the generation filters
+   (including elective level, excluded subjects, prerequisites, blacklist, and virtual sections).
+   The synthesized `__additional_electives__` pool is rebuilt from the catalogue with its elective
+   filters; `__cart__` uses the cart. An unattributed course has no trustworthy alternatives.
+   When extending pool types or filters, update the Rust pool construction in `advanced.rs` /
+   `electives.rs` and the swap candidate logic in `packages/store/src/slices/schedules/` together.
+   These swaps use the existing store and core helpers; there is no extra configuration or service.
 
 6. **Constraints** — `GenerationConstraints` (time window, days, professor rating, first-year credit
    cap, compressed schedule) are carried in the request and applied inside the Rust engine.

@@ -35,9 +35,6 @@ import { useExploreOfferings } from "./exploreOfferingsContext";
 
 const EMPTY_COURSE_ENTRIES: ExploreCourseSearchEntry[] = [];
 const EMPTY_PROFESSOR_ENTRIES: ExploreProfessorSearchEntry[] = [];
-const DISCIPLINE_MAX_RESULTS = 8;
-const FACULTY_MAX_RESULTS = 6;
-
 type UseExploreResultsArgs = {
   query: string;
   debouncedQuery: string;
@@ -233,14 +230,13 @@ export function useExploreResults({
         deliverySets,
       ),
     );
-    if (filters.sortKey === "relevance") return filtered.slice(0, 24);
-    if (filters.sortKey === "rating") return filtered.slice(0, 24);
+    if (filters.sortKey === "relevance") return filtered;
+    if (filters.sortKey === "rating") return filtered;
     return filtered
       .slice()
       .sort((a, b) =>
         compareCourseEntries(a, b, filters.sortKey, filters.sortDir, sentimentSets?.courseByNorm),
-      )
-      .slice(0, 24);
+      );
   }, [
     isFilterOnlyMode,
     courseEntries,
@@ -265,28 +261,25 @@ export function useExploreResults({
             filters.sortDir,
             sentimentSets?.professorByGroupId,
           ),
-        )
-        .slice(0, 24);
+        );
     }
-    return filtered.slice(0, 24);
+    return filtered;
   }, [isFilterOnlyMode, professorEntries, filters, termSets, sentimentSets]);
 
   const disciplineCourseCount = useMemo(() => buildDisciplineCourseCount(catalogue), [catalogue]);
   const disciplineResults = useMemo(() => {
     const q = debouncedQuery.trim().toLowerCase();
     if (!q || !disciplines) return [];
-    return disciplines
-      .filter(
-        (d) =>
-          d.code.toLowerCase().includes(q) ||
-          d.name.toLowerCase().includes(q) ||
-          (d.nameFr?.toLowerCase().includes(q) ?? false),
-      )
-      .slice(0, DISCIPLINE_MAX_RESULTS);
+    return disciplines.filter(
+      (d) =>
+        d.code.toLowerCase().includes(q) ||
+        d.name.toLowerCase().includes(q) ||
+        (d.nameFr?.toLowerCase().includes(q) ?? false),
+    );
   }, [debouncedQuery, disciplines]);
 
   const facultyResults = useMemo(
-    () => filterFaculties(faculties, debouncedQuery, FACULTY_MAX_RESULTS),
+    () => filterFaculties(faculties, debouncedQuery, Number.POSITIVE_INFINITY),
     [debouncedQuery, faculties],
   );
 
@@ -299,7 +292,8 @@ export function useExploreResults({
     [programEntries],
   );
   const programResults = useMemo(
-    () => searchExplorePrograms(programFuse, programEntries, debouncedQuery),
+    () =>
+      searchExplorePrograms(programFuse, programEntries, debouncedQuery, Number.POSITIVE_INFINITY),
     [programFuse, programEntries, debouncedQuery],
   );
 

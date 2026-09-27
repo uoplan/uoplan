@@ -25,12 +25,17 @@ import {
   courseFitsAroundOthers,
   isSwapCandidateEligible,
 } from "@uoplan/core/generation/swapCandidates";
-import {
-  applyOptionSelections,
-  collectRequirementIdsWithCandidateCourse,
-  courseMatchesElectiveLevelBuckets,
-} from "../../requirements/selectionUtils";
+import { courseMatchesElectiveLevelBuckets } from "../../requirements/selectionUtils";
 import { buildExplicitExemptSet, buildSwapConstraints } from "./swapContext";
+
+function isGenericElectivePool(type: string | undefined): boolean {
+  return (
+    type === "free_elective" ||
+    type === "non_discipline_elective" ||
+    type === "faculty_elective" ||
+    type === "elective"
+  );
+}
 
 export function getSwapCandidates(
   enrollmentIndex: number,
@@ -53,12 +58,11 @@ export function getSwapCandidates(
     electiveLevelBuckets,
     includeClosedComponents,
     virtualSectionsOnly,
-    filteredPrereqEligibleCourses,
     constrainedPerRequirement,
     selectedPerRequirement,
     generationLimitFirstYearCredits,
     requirementTreeWithStatus,
-    selectedOptionsPerRequirement,
+    blacklistedCourses,
     school,
   } = get();
   if (!cache || !currentSchedule) {
@@ -82,6 +86,7 @@ export function getSwapCandidates(
     const excludedPrefixes = basicExcludedCategories.map((c) => c.toLowerCase());
     const prereqCtx = buildPrereqContext(completedCourses, cache, studentPrograms);
     const basicFilters = { levels: levelBuckets, languageBuckets };
+    const blacklisted = new Set(blacklistedCourses.map(normalizeCourseCode));
     const alreadyInSchedule = new Set(schedule.enrollments.map((e) => e.courseCode));
     const swapConstraints: GenerationConstraints = buildSwapConstraints(get());
     // The other courses keep their currently-assigned sections; a candidate is
@@ -111,6 +116,7 @@ export function getSwapCandidates(
       )
         continue;
       if (basketCourses.includes(code)) continue;
+      if (blacklisted.has(code)) continue;
       if (alreadyInSchedule.has(code)) continue;
       if (
         !courseFitsAroundOthers(
@@ -155,8 +161,17 @@ export function getSwapCandidates(
     return null;
   }
 
-  if (poolId) {
-    // Check remaining requirements first; if already satisfied (complete), fall back to the full tree
+  if (poolId === "__additional_electives__") {
+    poolRequirementType = "free_elective";
+    requirementTitle = "Electives";
+    for (const course of cache.getAllCourses()) candidateSet.add(course.code);
+  } else if (poolId === "__cart__") {
+    poolRequirementType = "course";
+    requirementTitle = "Cart";
+    for (const code of basketCourses) candidateSet.add(normalizeCourseCode(code));
+  } else if (poolId) {
+    // The engine attributes the selected course to one exact requirement pool.
+    // Use its candidate list even when other requirements also contain the course.
     const req = remainingRequirements.find((r) => r.requirementId === poolId);
     if (req?.candidateCourses?.length) {
       poolRequirementType = req.type;
@@ -171,35 +186,10 @@ export function getSwapCandidates(
       }
     }
   }
+  // An unattributed or empty pool has no reliable swap alternatives. Widening
+  // this to every eligible course silently changes the slot's requirements.
   if (candidateSet.size === 0) {
-    const oldCodeNorm = oldCode;
-    // Search remaining requirements
-    for (const req of remainingRequirements) {
-      if (!req.candidateCourses?.length) continue;
-      const hasOld = req.candidateCourses.some((c) => normalizeCourseCode(c) === oldCodeNorm);
-      if (hasOld) {
-        for (const c of req.candidateCourses) candidateSet.add(normalizeCourseCode(c));
-      }
-    }
-    // Also search the full tree (includes completed requirements)
-    if (candidateSet.size === 0) {
-      const flattened = applyOptionSelections(
-        requirementTreeWithStatus,
-        selectedOptionsPerRequirement,
-      );
-      const reqIds = collectRequirementIdsWithCandidateCourse(flattened, oldCodeNorm);
-      for (const reqId of reqIds) {
-        const node = findReqNodeById(flattened, reqId);
-        if (node?.candidateCourses?.length) {
-          if (!poolRequirementType) poolRequirementType = node.type;
-          if (!requirementTitle) requirementTitle = node.title;
-          for (const c of node.candidateCourses) candidateSet.add(normalizeCourseCode(c));
-        }
-      }
-    }
-  }
-  if (candidateSet.size === 0) {
-    for (const c of filteredPrereqEligibleCourses) candidateSet.add(normalizeCourseCode(c));
+    return { candidates: [], poolCourses: [], rejectedWithConflict: [] };
   }
 
   const explicitExemptNormalized = buildExplicitExemptSet(
@@ -240,6 +230,13 @@ export function getSwapCandidates(
     : Infinity;
 
   const prereqEligibleSet = new Set(prereqEligibleCourses);
+  const completedSet = new Set(completedCourses.map(normalizeCourseCode));
+  const blacklistedSet = new Set(blacklistedCourses.map(normalizeCourseCode));
+  const excludedPrefixes = new Set(basicExcludedCategories.map((prefix) => prefix.toLowerCase()));
+  const additionalPrereqCtx =
+    poolId === "__additional_electives__"
+      ? buildPrereqContext(completedCourses, cache, studentPrograms)
+      : null;
   const swapConstraints: GenerationConstraints = buildSwapConstraints(get());
 
   function getValidEnrollmentsFor(code: string): CourseEnrollment[] {
@@ -271,12 +268,27 @@ export function getSwapCandidates(
     conflictsWith: NormalizedCourseCode;
   }> = [];
   for (const code of candidateSet) {
-    if (!prereqEligibleSet.has(code)) continue;
+    if (additionalPrereqCtx) {
+      const course = cache.getCourse(code);
+      if (
+        !course ||
+        !isSwapCandidateEligible(course, cache, additionalPrereqCtx, completedCourses.length > 0, [
+          ...excludedPrefixes,
+        ])
+      )
+        continue;
+    } else if (poolId !== "__cart__" && !prereqEligibleSet.has(code)) continue;
     if (code === oldCode) continue;
-    if (completedCourses.includes(code)) continue;
+    if (completedSet.has(code)) continue;
+    if (blacklistedSet.has(code)) continue;
     if (alreadyInSchedule.has(code)) continue;
     if (isHonoursProject(code, cache)) continue;
     if (!courseMatchesFilters(code, filters)) continue;
+    if (
+      isGenericElectivePool(poolRequirementType) &&
+      excludedPrefixes.has(code.split(" ")[0].toLowerCase())
+    )
+      continue;
     if (
       isFirstYear(code) &&
       (cache.getCourse(code)?.credits ?? SCHOOLS[school].credits.defaultCourseCredits) >
@@ -285,11 +297,7 @@ export function getSwapCandidates(
       continue;
 
     const isElectiveType = isElectiveRequirementType(poolRequirementType);
-    const isGenericElective =
-      poolRequirementType === "free_elective" ||
-      poolRequirementType === "non_discipline_elective" ||
-      poolRequirementType === "faculty_elective" ||
-      poolRequirementType === "elective";
+    const isGenericElective = isGenericElectivePool(poolRequirementType);
     if (isElectiveType && !isWithinElectiveLevelCap(code)) continue;
     if (isGenericElective && !courseMatchesElectiveLevelBuckets(code, electiveLevelBuckets))
       continue;

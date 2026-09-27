@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { buildDataCache } from "@uoplan/core";
 import { testCourseCode } from "./brands";
+import { testCatalogue, testSchedule, testSchedulesData } from "./scheduleBuilders";
 import { resetSwapStore, testStore } from "./scheduleStoreHelpers";
 
 describe("swapCourseInSchedule (advanced mode)", () => {
@@ -37,5 +39,38 @@ describe("swapCourseInSchedule (advanced mode)", () => {
 
   it("does nothing when the target course has no schedule data", async () => {
     await expectSwapLeavesScheduleUnchanged("ZZZ 9999");
+  });
+
+  it("keeps the additional-electives virtual filter when applying a swap", async () => {
+    const catalogue = testCatalogue(["OLD 1100", "FIX 1100", "NEW 1100"]);
+    testStore.setState({
+      cache: buildDataCache(
+        catalogue,
+        testSchedulesData([
+          testSchedule("OLD 1100", {
+            day: "Mo",
+            startMinutes: 540,
+            endMinutes: 600,
+            virtual: true,
+          }),
+          testSchedule("FIX 1100", {
+            day: "Tu",
+            startMinutes: 540,
+            endMinutes: 600,
+            virtual: false,
+          }),
+          testSchedule("NEW 1100", {
+            day: "We",
+            startMinutes: 540,
+            endMinutes: 600,
+            virtual: false,
+          }),
+        ]),
+      ),
+      virtualSectionsOnly: true,
+      currentPoolMap: { "OLD 1100": "__additional_electives__" },
+    });
+
+    await expectSwapLeavesScheduleUnchanged("NEW 1100");
   });
 });

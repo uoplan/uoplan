@@ -181,4 +181,22 @@ describe("ExploreSearchResults delivery states", () => {
     await page.getByRole("button", { name: "Try again" }).click();
     expect(retrySchedules).toHaveBeenCalledTimes(1);
   });
+
+  test("renders a bounded set of cards and can scroll to later course results", async () => {
+    const displayedCourses = Array.from({ length: 50 }, (_, index) => {
+      const code = norm(`CSI ${1000 + index}`);
+      return makeCourseEntry({ normCode: code, courseCode: code, componentId: code });
+    });
+    await renderWithProviders(
+      <ExploreSearchResults {...makeProps({ hasResults: true, displayedCourses })} />,
+    );
+
+    await expect.element(page.getByText("Course CSI 1000")).toBeInTheDocument();
+    expect(page.getByText(/^Course CSI /).elements().length).toBeLessThan(50);
+
+    const scroll = page.getByTestId("explore-card-scroll").element() as HTMLDivElement;
+    scroll.scrollLeft = scroll.scrollWidth;
+    scroll.dispatchEvent(new Event("scroll"));
+    await expect.element(page.getByText("Course CSI 1049")).toBeInTheDocument();
+  });
 });

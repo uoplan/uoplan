@@ -7,7 +7,7 @@ import {
   testSchedule,
   testSchedulesData,
 } from "./scheduleBuilders";
-import { testStore } from "./scheduleStoreHelpers";
+import { resetSwapStore, testStore } from "./scheduleStoreHelpers";
 
 describe("basic getSwapCandidates", () => {
   beforeEach(() => {
@@ -70,5 +70,78 @@ describe("basic getSwapCandidates", () => {
 
     expect(result.candidates).toContain("GOOD 1100");
     expect(result.candidates).not.toContain("BAD 1100");
+  });
+});
+
+describe("advanced getSwapCandidates", () => {
+  beforeEach(() => resetSwapStore("advanced"));
+
+  it("keeps alternatives in the attributed pool even when the course belongs to another pool", () => {
+    testStore.setState({
+      prereqEligibleCourses: ["OLD 1100", "NEW 1100", "BAD 1100"],
+      remainingRequirements: [
+        {
+          requirementId: "req-a",
+          type: "course",
+          candidateCourses: ["OLD 1100", "NEW 1100"],
+          creditsNeeded: 3,
+          satisfiedBy: [],
+        },
+        {
+          requirementId: "req-b",
+          type: "elective",
+          candidateCourses: ["OLD 1100", "BAD 1100"],
+          creditsNeeded: 3,
+          satisfiedBy: [],
+        },
+      ],
+    });
+
+    const result = testStore.getState().getSwapCandidates(0);
+    expect(result.candidates).toEqual(["NEW 1100"]);
+    expect(result.poolCourses).toEqual(["OLD 1100", "NEW 1100"]);
+  });
+
+  it("does not widen an unattributed slot to the full prerequisite eligible list", () => {
+    testStore.setState({
+      currentPoolMap: {},
+      chosenCourseToRequirementId: {},
+      prereqEligibleCourses: ["OLD 1100", "NEW 1100"],
+      filteredPrereqEligibleCourses: ["OLD 1100", "NEW 1100"],
+    });
+
+    expect(testStore.getState().getSwapCandidates(0).candidates).toEqual([]);
+  });
+
+  it("applies the virtual filter to the generated additional-electives pool", () => {
+    const virtualTime = { ...testMeetingTime("We", 540, 600), virtual: true };
+    const cache = buildDataCache(
+      testCatalogue(["OLD 1100", "FIX 1100", "NEW 1100", "BAD 1100"]),
+      testSchedulesData([
+        testSchedule("OLD 1100", virtualTime),
+        testSchedule("FIX 1100", testMeetingTime("Tu", 540, 600)),
+        testSchedule("NEW 1100", virtualTime),
+        testSchedule("BAD 1100", testMeetingTime("We", 540, 600)),
+      ]),
+    );
+    testStore.setState({
+      cache,
+      completedCourses: [],
+      studentPrograms: [],
+      basketCourses: [],
+      levelBuckets: ["undergrad"],
+      languageBuckets: ["en"],
+      electiveLevelBuckets: [1000],
+      virtualSectionsOnly: true,
+      currentPoolMap: { "OLD 1100": "__additional_electives__" },
+      currentSchedule: {
+        enrollments: [
+          testEnrollment("OLD 1100", virtualTime),
+          testEnrollment("FIX 1100", testMeetingTime("Tu", 540, 600)),
+        ],
+      },
+    });
+
+    expect(testStore.getState().getSwapCandidates(0).candidates).toEqual(["NEW 1100"]);
   });
 });

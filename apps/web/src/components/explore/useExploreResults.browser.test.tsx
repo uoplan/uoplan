@@ -303,6 +303,24 @@ function virtualCourseComponents(): string[] {
 }
 
 describe("useExploreResults delivery filtering", () => {
+  test("filter-only browsing keeps every matching course", async () => {
+    setOfferingsState();
+    const manyCourses = Array.from({ length: 40 }, (_, index) => {
+      const code = norm(`CSI ${1000 + index}`);
+      return makeCourseEntry({ normCode: code, courseCode: code, componentId: code });
+    });
+    mocks.offerings.getCourseEntries = () => manyCourses;
+    mocks.offerings.getCourseFuse = () => createExploreCourseFuse(manyCourses);
+
+    await render(
+      <Harness
+        {...makeProps({ activeFilters: true, filters: { ...EMPTY_FILTERS, sortKey: "code" } })}
+      />,
+    );
+
+    expect(displayedCourseCodes()).toHaveLength(40);
+  });
+
   test("a virtual delivery filter keeps a course whose component is present for the selected term", async () => {
     setOfferingsState();
 

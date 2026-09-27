@@ -53,9 +53,6 @@ export {
 /** Max section rows returned when searching all offerings (legacy / tests). */
 const EXPLORE_MAX_RESULTS = 120;
 
-/** Max distinct courses returned from course-only explore search. */
-const EXPLORE_MAX_COURSE_RESULTS = 24;
-
 /**
  * Weight of a normalized description (BM25) relevance relative to a code/title
  * (Fuse) relevance when the two are blended into one ranked course list. Kept
@@ -569,13 +566,9 @@ function narrowCoursesBySubstring(
   needle: string,
 ): ExploreCourseSearchEntry[] {
   const pool: ExploreCourseSearchEntry[] = [];
-  let scanned = 0;
   for (const e of entries) {
-    if (scanned >= SUBSTRING_MAX_SCAN) break;
-    scanned += 1;
     if (e.fuseText.includes(needle)) {
       pool.push(e);
-      if (pool.length >= SUBSTRING_POOL_MAX) break;
     }
   }
   return pool;
@@ -604,7 +597,7 @@ function searchExploreCoursesScored(
   const engine = pool.length > 0 ? new Fuse(pool, EXPLORE_COURSE_FUSE_OPTIONS) : fuse;
 
   // Dedupe in score order so each alias group surfaces once via its closest-matched
-  // (i.e. the user-requested) member code, then cap the result count.
+  // (i.e. the user-requested) member code.
   const rawResults = engine.search(q);
   const seen = new Set<string>();
   const scored: ExploreCourseScoredItem[] = [];
@@ -612,7 +605,6 @@ function searchExploreCoursesScored(
     if (seen.has(r.item.componentId)) continue;
     seen.add(r.item.componentId);
     scored.push({ entry: r.item, score: r.score ?? 0 });
-    if (scored.length >= EXPLORE_MAX_COURSE_RESULTS) break;
   }
   return { scored, topScore: scored[0]?.score ?? null };
 }
@@ -638,7 +630,7 @@ function searchExploreProfessorsScored(
 ): { items: ExploreProfessorSearchEntry[]; topRank: number | null } {
   const graphEntries = entries.map(exploreProfessorToGraphEntry);
   const byGroupId = new Map(entries.map((e) => [e.groupId, e]));
-  const { items, topRank } = searchProfessorsScored(graphEntries, rawQuery);
+  const { items, topRank } = searchProfessorsScored(graphEntries, rawQuery, true);
   return {
     items: items
       .map((p) => byGroupId.get(p.id))
@@ -665,7 +657,7 @@ export function exploreProfessorsSectionFirst(
  * top hit, then scaled by {@link DESCRIPTION_MERGE_WEIGHT}). A course matching in
  * both is lifted; a strong description-only hit can interleave above weaker
  * code/title matches, while strong code/title matches still dominate. Results are
- * deduped by alias-component id and capped at {@link EXPLORE_MAX_COURSE_RESULTS}.
+ * deduped by alias-component id.
  */
 function mergeDescriptionMatches(
   fuseScored: ExploreCourseScoredItem[],
@@ -700,10 +692,7 @@ function mergeDescriptionMatches(
     }
   }
 
-  return [...combined.values()]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, EXPLORE_MAX_COURSE_RESULTS)
-    .map((x) => x.entry);
+  return [...combined.values()].sort((a, b) => b.score - a.score).map((x) => x.entry);
 }
 
 export function searchExplore(

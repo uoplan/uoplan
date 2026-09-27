@@ -161,6 +161,19 @@ describe("buildExploreOfferings", () => {
 });
 
 describe("searchExploreCourses", () => {
+  it("returns every matching course after alias deduplication", () => {
+    const titles = new Map(
+      Array.from({ length: 40 }, (_, index) => [
+        `CSI ${String(1000 + index)}`,
+        "Shared computing topic",
+      ]),
+    );
+    const entries = buildCourseSearchEntries([], titles);
+    const fuse = createExploreCourseFuse(entries);
+
+    expect(searchExploreCourses(fuse, entries, "shared computing")).toHaveLength(40);
+  });
+
   it("includes catalogue courses without grade or schedule offerings", () => {
     const entries = buildCourseSearchEntries(
       [],

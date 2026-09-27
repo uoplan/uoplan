@@ -1,7 +1,7 @@
 // Extraction of the prerequisite sentence from bilingual catalogue prose (the
 // "Prerequisites: … / Préalables : …" fragment) plus first-sentence trimming.
 
-const EN_PREREQ_LABEL_SOURCE = String.raw`(?:P?Prerequisites?|Prererequisites?|Prerequistes?)`;
+const EN_PREREQ_LABEL_SOURCE = String.raw`(?:P?Prerequisites?|Prererequisites?|Prerequistes?)(?:\s+or\s+Corequisites?)?`;
 const FR_PREREQ_LABEL_SOURCE = String.raw`(?:P?Pr[ée]alables?|Pr[ée]requis?s?)`;
 const ANY_PREREQ_LABEL_SOURCE = String.raw`(?:${EN_PREREQ_LABEL_SOURCE}|${FR_PREREQ_LABEL_SOURCE})`;
 

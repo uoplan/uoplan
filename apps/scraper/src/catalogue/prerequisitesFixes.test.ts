@@ -375,3 +375,15 @@ describe("F5 prerequisite label typos", () => {
     });
   });
 });
+
+describe("prerequisite or corequisite labels", () => {
+  it("extracts ADM 3349's course requirement after the combined label", () => {
+    const sentence = extractPrereqSentence("Prerequisite or Corequisite: ADM 3340.");
+    expect(sentence).toBe("ADM 3340");
+    expect(parseCoursePrerequisites(sentence ?? "")).toEqual({
+      type: "course",
+      code: "ADM 3340",
+      text: "ADM 3340",
+    });
+  });
+});
