@@ -24,6 +24,10 @@ CalendarView (apps/web/src/components/calendar/CalendarView.tsx)
 2. `WeekCalendar` groups events by `day` and passes each day's events through `assignLanes()` in `weekCalendarLayout.ts` to handle side-by-side rendering of overlapping events.
 3. Each `WeekCalendarEvent` is absolutely positioned within its column using `minutesToPercent()` to convert minute offsets to CSS percentages.
 
+### Grade chart provenance
+
+`enrichSchedulesDataWithGrades()` resolves each section from the matching instructor in the schedule's term. If none matches, it uses the course aggregate from all recorded professor rows across terms. The runtime section carries `gradeSource`, and `scheduleToEvents()` combines the selected sections' sources for the chart. The calendar detail view explains course-wide fallback data; when a chart combines matched and fallback sections, it says that fallback data is included. A chart with no grade data remains hidden.
+
 ### Time grid geometry
 
 Defined in `weekCalendarLayout.ts`:
@@ -51,6 +55,7 @@ Defined in `weekCalendarLayout.ts`:
 - **Swap overlay anchoring / performance**: `WeekCalendarEvent` is wrapped in `React.memo` and receives its active/overlay state (`isActive`, `isMobile`, `isFullscreen`, `onRequestClose`) as props from `WeekCalendar` rather than reading the swap context directly. This keeps a click from re-rendering every event's Mantine `Popover` — only the previously- and newly-active events re-render. The popover dropdown content (`CalendarEventDetails`) still reads the swap context itself and mounts lazily for the active event only. Don't reintroduce a `useSwapContext()` call inside `WeekCalendarEvent`'s render path.
 - **Column headers or day ordering**: Edit `DAY_LABELS` / `WEEKDAY_CODES` / `WEEKEND_CODES` in `weekCalendarLayout.ts`.
 - **Swap modal**: `useSwapModal` hook + `SwapModalContent.tsx` — these are unrelated to the calendar grid.
+- **Grade fallback copy**: Edit `EventInfoSection.tsx` and the `calendar.grade.*Fallback` translations. Keep `packages/grades/src/gradeLookup.ts` as the source of the section's grade provenance; do not infer it from the chart values.
 
 ## Configuration
 
@@ -60,5 +65,7 @@ No env vars or flags. Weekend columns appear automatically when any event has `d
 
 - `CalendarEventFace.tsx` — shared with swap modal preview cards
 - `GradeDistributionViz.tsx` — grade bar at the bottom of each event
+- `packages/grades/src/gradeLookup.ts` — resolves matched section grades and course-wide fallback data
+- `@uoplan/i18n` — English and French grade provenance labels
 - `calendarEventDisplayUtils.ts` — `formatTimeRange`, `componentKindOnly`
 - `schedule` package — `DayOfWeekCode`, color utils, rating utils, `GradeVizData`

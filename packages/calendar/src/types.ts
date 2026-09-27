@@ -56,5 +56,7 @@ export interface CalendarEvent {
     numRatings: number;
   }>;
   gradeViz?: GradeVizData | null;
+  /** Whether the displayed grade chart uses matched sections or course-wide fallback data. */
+  gradeSource?: "matched" | "fallback" | "mixed" | null;
   meetingDates?: [string, string] | null;
 }

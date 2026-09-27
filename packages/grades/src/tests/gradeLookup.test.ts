@@ -177,7 +177,9 @@ describe("enrichSchedulesDataWithGrades", () => {
     );
     const [matched, fallback] = enriched.schedules[0].components.LEC;
     expect(matched.distribution).toEqual({ "A+": 15, B: 2 });
+    expect(matched.gradeSource).toBe("matched");
     expect(fallback.distribution).toEqual({ "A+": 16, B: 2, C: 4 });
+    expect(fallback.gradeSource).toBe("fallback");
   });
 
   it("does not mutate the input or share section objects", () => {
@@ -206,6 +208,7 @@ describe("enrichSchedulesDataWithGrades", () => {
               {
                 ...baseSchedules.schedules[0].components.LEC[0],
                 distribution: { "A+": 999 },
+                gradeSource: "fallback",
               },
             ],
           },
@@ -218,5 +221,6 @@ describe("enrichSchedulesDataWithGrades", () => {
       Number(withStale.termId),
     );
     expect(enriched.schedules[0].components.LEC[0].distribution).toBeUndefined();
+    expect(enriched.schedules[0].components.LEC[0].gradeSource).toBeUndefined();
   });
 });

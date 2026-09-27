@@ -625,6 +625,12 @@ msgstr "{passing} % de reussite · {aPlus} % A+"
 msgid "calendar.grade.distribution"
 msgstr "Distribution des notes"
 
+msgid "calendar.grade.courseFallback"
+msgstr "Aucune note ne correspond à l'enseignant et à la session de cette section. Affichage des notes de ce cours, tous enseignants et toutes sessions confondus."
+
+msgid "calendar.grade.mixedFallback"
+msgstr "Comprend les notes de ce cours, tous enseignants et toutes sessions confondus, lorsque les notes propres à une section ne sont pas disponibles."
+
 #: apps/web/src/components/calendar/GradeDistributionViz.tsx:37
 msgid "calendar.grade.dropLabel"
 msgstr "Abandon"

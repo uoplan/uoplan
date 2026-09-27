@@ -35,9 +35,13 @@ export function scheduleToEvents(
   const professorByName = sentiment?.professorByName ?? null;
   return schedule.enrollments.flatMap((enrollment, enrollIdx) => {
     const aggregateDistribution: Record<string, number> = {};
+    let hasMatchedGrades = false;
+    let hasFallbackGrades = false;
     for (const { section } of Object.values(enrollment.sectionCombo)) {
       const distribution = section.distribution;
       if (!distribution) continue;
+      if (section.gradeSource === "matched") hasMatchedGrades = true;
+      if (section.gradeSource === "fallback") hasFallbackGrades = true;
       for (const [grade, countRaw] of Object.entries(distribution)) {
         const count = Number(countRaw);
         if (!Number.isFinite(count) || count <= 0) continue;
@@ -45,6 +49,13 @@ export function scheduleToEvents(
       }
     }
     const gradeViz = normalizeGradeVizDistribution(aggregateDistribution);
+    const gradeSource = hasFallbackGrades
+      ? hasMatchedGrades
+        ? "mixed"
+        : "fallback"
+      : hasMatchedGrades
+        ? "matched"
+        : null;
 
     const courseSentiment = courseByNorm
       ? (courseByNorm.get(normalizeCourseCode(enrollment.courseCode)) ?? null)
@@ -124,6 +135,7 @@ export function scheduleToEvents(
           professorSentiment,
           ...(predictedInstructors ? { predictedInstructors, predictedRatingDetails } : {}),
           gradeViz,
+          gradeSource,
           meetingDates: t.meetingDates ?? null,
         });
         timeIdx += 1;

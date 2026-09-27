@@ -151,6 +151,8 @@ export type ComponentSection = {
   times: MeetingTime[];
   status: string | null;
   distribution?: GradeDistribution;
+  /** Origin of the runtime grade distribution; absent when no source is known. */
+  gradeSource?: "matched" | "fallback";
   /** Guessed instructors; present only for sections with no known instructor. */
   predictedInstructors?: PredictedInstructor[];
 };

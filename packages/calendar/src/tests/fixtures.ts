@@ -33,6 +33,7 @@ export interface SectionFixture {
   sectionCode?: string | null;
   times: TimeFixture[];
   distribution?: GradeDistribution;
+  gradeSource?: ComponentSection["gradeSource"];
   predictedInstructors?: PredictedInstructor[];
 }
 
@@ -61,6 +62,7 @@ export function makeSchedule(
           times: sectionTimes,
           status: null,
           ...(sectionFixture.distribution ? { distribution: sectionFixture.distribution } : {}),
+          ...(sectionFixture.gradeSource ? { gradeSource: sectionFixture.gradeSource } : {}),
           ...(sectionFixture.predictedInstructors
             ? { predictedInstructors: sectionFixture.predictedInstructors }
             : {}),

@@ -78,6 +78,28 @@ describe("scheduleToEvents", () => {
     expect(events.map((event) => event.day)).not.toContain("We");
   });
 
+  it("marks course-wide fallback and mixed grade charts without labeling matched data as fallback", () => {
+    const makeGradeEvent = (sources: Array<"matched" | "fallback">) =>
+      scheduleToEvents(
+        makeSchedule([
+          {
+            courseCode: "CSI 2101",
+            sections: sources.map((gradeSource, index) => ({
+              component: `LEC${index}`,
+              distribution: { A: 2 },
+              gradeSource,
+              times: [{ day: "Mo", startMinutes: 540 + index * 60, endMinutes: 600 + index * 60 }],
+            })),
+          },
+        ]),
+        null,
+      )[0];
+
+    expect(makeGradeEvent(["fallback"]).gradeSource).toBe("fallback");
+    expect(makeGradeEvent(["matched", "fallback"]).gradeSource).toBe("mixed");
+    expect(makeGradeEvent(["matched"]).gradeSource).toBe("matched");
+  });
+
   it("uses the unassigned professor sentinel and exposes predicted instructors only for unknown staff", () => {
     const schedule = makeSchedule([
       {

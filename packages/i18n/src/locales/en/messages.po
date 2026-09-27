@@ -625,6 +625,12 @@ msgstr "{passing}% passing · {aPlus}% A+"
 msgid "calendar.grade.distribution"
 msgstr "Grade distribution"
 
+msgid "calendar.grade.courseFallback"
+msgstr "No grades match this section's instructor and term. Showing this course's grades across instructors and terms."
+
+msgid "calendar.grade.mixedFallback"
+msgstr "Includes this course's grades across instructors and terms where section-specific grades are unavailable."
+
 #: apps/web/src/components/calendar/GradeDistributionViz.tsx:37
 msgid "calendar.grade.dropLabel"
 msgstr "Drop"

@@ -329,6 +329,13 @@ export function EventInfoSection({ event }: EventInfoSectionProps) {
               {tr("calendar.grade.distribution")}
             </Text>
             <GradeDistributionExpanded gradeViz={event.gradeViz} />
+            {event.gradeSource === "fallback" || event.gradeSource === "mixed" ? (
+              <Text size="xs" c="dimmed" mt={6}>
+                {event.gradeSource === "fallback"
+                  ? tr("calendar.grade.courseFallback")
+                  : tr("calendar.grade.mixedFallback")}
+              </Text>
+            ) : null}
           </Box>
         </>
       ) : null}

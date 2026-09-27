@@ -264,8 +264,10 @@ export function enrichSchedulesDataWithGrades(
         const next: ComponentSection = { ...section };
         if (distribution && kind !== "none") {
           next.distribution = distribution;
+          next.gradeSource = kind;
         } else {
           delete next.distribution;
+          delete next.gradeSource;
         }
         return next;
       });
