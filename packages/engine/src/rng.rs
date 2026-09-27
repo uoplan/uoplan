@@ -68,19 +68,6 @@ pub fn weighted_shuffle<T>(items: Vec<T>, weights: &[f64], rng: &mut Rng) -> Vec
     keyed.into_iter().map(|(_, item)| item).collect()
 }
 
-/// Weighted random pick; returns the chosen index. Mirrors `weightedRandomPick`.
-pub fn weighted_random_pick_index(weights: &[f64], rng: &mut Rng) -> usize {
-    let total: f64 = weights.iter().sum();
-    let mut r = rng.next_f64() * total;
-    for (i, &w) in weights.iter().enumerate() {
-        r -= w;
-        if r <= 0.0 {
-            return i;
-        }
-    }
-    weights.len().saturating_sub(1)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

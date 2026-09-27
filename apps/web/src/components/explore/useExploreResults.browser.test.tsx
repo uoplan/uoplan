@@ -277,6 +277,8 @@ function makeProps(overrides: Partial<HarnessProps> = {}): HarnessProps {
     faculties,
     remainingRequirements: [],
     completedCourses: [],
+    cache: null,
+    studentPrograms: [],
     ...overrides,
   };
 }

@@ -112,6 +112,16 @@ Selection is now **feasibility-aware** (`run_pool_pick_pass` in `advanced.rs`): 
 **randomized-restart greedy** fill in which a candidate is accepted only when the whole
 selection (pinned + already-selected + candidate) still timetables.
 
+For each seed, advanced course selection gives every eligible course in a pool an equal chance
+of appearing early in a Fisher–Yates shuffled order. The seed is scrambled before the draw,
+and the course-selection RNG is separate from section-combo selection. This removes the former
+implicit weighting by course level, bucket size, and prerequisite kind. If the student enables
+an explicit easier-course or sentiment preference, its weight biases the permutation. Pinned
+courses, prerequisite and level filters, virtual-only offerings, and timetable feasibility still
+restrict which combinations can be returned. `packages/engine/src/advanced.rs` owns the
+permutation; `packages/engine/src/rng.rs` owns seed scrambling and shuffling. The store's Next
+control accepts the first different generated timetable and does not scan ahead for a course set.
+
 - **Feasibility probe (`Search::try_place`)** — accepting a candidate must keep the set
   timetable-able, i.e. equivalent to a full re-solve (`arrange_prebuilt`) over the set. But the
   common case has slack, so we first try the **cheap path**: keep every placed section fixed and
@@ -123,8 +133,8 @@ selection (pinned + already-selected + candidate) still timetables.
   target (a greedy local maximum). Instead of exhaustive backtracking, we **reshuffle and retry**
   (`SELECTION_RESTARTS`); independent reshuffles drive the chance that _every_ restart stalls to
   effectively zero, so a feasible set is found for every seed. The first restart keeps the
-  preference-weighted order (level / prefer-easier biases shape the result); later restarts use
-  uniform reshuffles purely to find feasibility.
+  seed-shuffled order (biased only by enabled course preferences); later restarts use uniform
+  reshuffles purely to find feasibility.
 - **Deterministic budgets** — each restart caps the **expensive** re-solve fallbacks
   (`SELECTION_RESOLVE_BUDGET`) separately from the overall probe budget
   (`SELECTION_PLACEMENT_BUDGET`); cheap placements stay unlimited. A descent that keeps needing

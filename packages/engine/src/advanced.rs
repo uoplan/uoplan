@@ -14,14 +14,13 @@ use crate::model::{
 };
 use crate::objectives::Objectives;
 use crate::pools::{
-    build_pool_caps, build_requirement_pools, candidate_pool_weight, canonical_group_token,
-    compute_courses_per_pool, enumerate_single_redistributions, group_token_prefix,
-    is_broad_elective_pool_type, is_elective_requirement_type, is_group_token,
-    is_within_elective_level_cap, pool_course_cap, virtual_schedule_filter_applies,
-    RemainingRequirement, RequirementPool, ADDITIONAL_ELECTIVES_ID, CART_POOL_ID,
+    build_pool_caps, build_requirement_pools, canonical_group_token, compute_courses_per_pool,
+    enumerate_single_redistributions, group_token_prefix, is_broad_elective_pool_type,
+    is_elective_requirement_type, is_group_token, is_within_elective_level_cap, pool_course_cap,
+    virtual_schedule_filter_applies, RemainingRequirement, RequirementPool,
+    ADDITIONAL_ELECTIVES_ID, CART_POOL_ID,
 };
-use crate::prereq::prerequisites_contain_non_course;
-use crate::rng::{scramble_seed, shuffle_in_place, weighted_random_pick_index, Rng};
+use crate::rng::{scramble_seed, shuffle_in_place, weighted_shuffle, Rng};
 use crate::timetable::{
     allows_enrollment, arrange_prebuilt_with_budget, best_seeded_arrangement,
     build_timetable_course, first_seeded_arrangement, has_valid_section_combos, passes_final,
@@ -860,7 +859,9 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             break;
         }
         let seed = derive_attempt_seed(effective_seed, attempt);
-        let mut rng = Rng::new(scramble_seed(seed));
+        // Keep course selection independent of section-combo RNG consumption.
+        // Scrambling the full seed makes adjacent navigation seeds unrelated.
+        let mut selection_rng = Rng::new(scramble_seed(seed ^ 0x4352_5345));
         let mut arrangement_rng = Rng::new(scramble_seed(seed) ^ 0x9e37_79b9);
         let mut attempt_schedule: Option<Vec<Enrollment>> = None;
         let mut attempt_chosen: BTreeMap<String, String> = BTreeMap::new();
@@ -871,7 +872,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
             let mut candidates = sel_candidates.clone();
             for list in candidates.values_mut() {
                 if !french_immersion_stream {
-                    shuffle_in_place(list, &mut rng);
+                    shuffle_in_place(list, &mut selection_rng);
                 }
             }
             let mut arena = ComboArena::new(
@@ -903,7 +904,7 @@ pub fn generate_advanced(params: AdvancedParams) -> AdvancedResult {
                     params.course_sentiment,
                     &vo_for,
                     &mut arena,
-                    &mut rng,
+                    &mut selection_rng,
                     &mut work_budget,
                 ) {
                     attempt_filtered = chosen_map
@@ -1483,18 +1484,17 @@ impl<'a> Search<'a> {
     }
 }
 
-/// Builds a weighted-random permutation of `items` (each `(cand, weight)`), so
-/// higher-weighted candidates tend to appear earlier and are therefore preferred
-/// by the place-first search — preserving the level / prefer-easier soft biases
-/// while keeping per-seed variety.
-fn weighted_permutation(mut items: Vec<(Cand, f64)>, rng: &mut Rng) -> Vec<Cand> {
-    let mut out: Vec<Cand> = Vec::with_capacity(items.len());
-    while !items.is_empty() {
-        let weights: Vec<f64> = items.iter().map(|x| x.1).collect();
-        let pick = weighted_random_pick_index(&weights, rng);
-        out.push(items.remove(pick).0);
+/// Every eligible candidate gets equal standing unless a course preference is
+/// active. Explicit preferences use a weighted random permutation instead.
+fn candidate_permutation<T>(items: Vec<(T, f64)>, prefer_courses: bool, rng: &mut Rng) -> Vec<T> {
+    if prefer_courses {
+        let (candidates, weights): (Vec<T>, Vec<f64>) = items.into_iter().unzip();
+        weighted_shuffle(candidates, &weights, rng)
+    } else {
+        let mut candidates: Vec<T> = items.into_iter().map(|(candidate, _)| candidate).collect();
+        shuffle_in_place(&mut candidates, rng);
+        candidates
     }
-    out
 }
 
 /// Runs one feasibility-aware selection pass for a single per-pool allocation.
@@ -1561,14 +1561,9 @@ fn run_pool_pick_pass(
         }
     }
 
-    let weight_of = |code: &str, level_counts: &HashMap<i64, usize>| -> f64 {
-        let level = course_level_sort_key(code);
-        let has_non_course_prereq = prerequisites_contain_non_course(
-            data.get_course(code).and_then(|c| c.prerequisites.as_ref()),
-        );
-        let bucket_size = *level_counts.get(&level).unwrap_or(&1) as f64;
-        (candidate_pool_weight(level, has_non_course_prereq) / bucket_size)
-            * easier_weight(code, prefer_easier, course_aplus)
+    let prefer_courses = prefer_easier || prefer_higher_sentiment;
+    let weight_of = |code: &str| -> f64 {
+        easier_weight(code, prefer_easier, course_aplus)
             * sentiment_weight(code, prefer_higher_sentiment, course_sentiment)
     };
 
@@ -1635,10 +1630,6 @@ fn run_pool_pick_pass(
 
         let req_type = pool.req_type.clone();
         let mut build_cands = |codes: &[String], is_s: bool| -> Vec<Cand> {
-            let mut level_counts: HashMap<i64, usize> = HashMap::new();
-            for code in codes {
-                *level_counts.entry(course_level_sort_key(code)).or_insert(0) += 1;
-            }
             let mut weighted: Vec<(Cand, f64)> = Vec::new();
             for code in codes {
                 let vo = vo_for(code, Some(req_type.as_str()));
@@ -1653,10 +1644,10 @@ fn run_pool_pick_pass(
                         prefix: subject_prefix(code),
                         is_s,
                     },
-                    weight_of(code, &level_counts),
+                    weight_of(code),
                 ));
             }
-            weighted_permutation(weighted, rng)
+            candidate_permutation(weighted, prefer_courses, rng)
         };
 
         let mut order = build_cands(&s_avail, true);
@@ -1690,8 +1681,8 @@ fn run_pool_pick_pass(
     // and try again. Independent reshuffles drive the probability that *every*
     // restart stalls to effectively zero, so a feasible schedule is found for
     // every seed while total work stays bounded. The first restart keeps the
-    // preference-weighted order (so the level / prefer-easier biases still shape
-    // the result); later restarts use uniform reshuffles purely to find feasibility.
+    // seed-shuffled order (biased only by enabled course preferences); later
+    // restarts use uniform reshuffles purely to find feasibility.
     //
     // Total work is hard-bounded by ONE global work budget shared across all
     // restarts (`SELECTION_GLOBAL_WORK_BUDGET`, charged per overlap-check so it
@@ -1978,6 +1969,92 @@ mod tests {
             title: Some(id.to_string()),
             candidate_courses: candidates.into_iter().map(str::to_string).collect(),
             credits_needed: 3.0,
+        }
+    }
+
+    #[test]
+    fn unpreferred_candidate_order_is_uniform_and_seeded() {
+        let items = vec![(0, 100.0), (1, 0.01), (2, 1.0), (3, 1.0)];
+        let mut first_counts = [0usize; 4];
+        for seed in 1..=4000 {
+            let mut rng = Rng::new(scramble_seed(seed ^ 0x4352_5345));
+            let order = candidate_permutation(items.clone(), false, &mut rng);
+            first_counts[order[0]] += 1;
+            if seed == 42 {
+                let mut repeated = Rng::new(scramble_seed(seed ^ 0x4352_5345));
+                assert_eq!(
+                    order,
+                    candidate_permutation(items.clone(), false, &mut repeated)
+                );
+            }
+        }
+        for count in first_counts {
+            assert!(
+                (850..=1150).contains(&count),
+                "uniform first-pick count: {count}"
+            );
+        }
+    }
+
+    #[test]
+    fn explicit_course_preference_still_biases_selection() {
+        let items = vec![("favoured", 8.0), ("other", 1.0)];
+        let favoured_first = (1..=1000)
+            .filter(|seed| {
+                let mut rng = Rng::new(scramble_seed(seed ^ 0x4352_5345));
+                candidate_permutation(items.clone(), true, &mut rng)[0] == "favoured"
+            })
+            .count();
+        assert!(favoured_first > 750);
+        assert!(favoured_first < 1000);
+    }
+
+    #[test]
+    fn two_virtual_electives_vary_across_seeds() {
+        let codes = ["ART 1100", "BIO 2100", "CSI 3100", "HIS 1100", "MAT 2100"];
+        let data = scheduled_data(&[
+            (codes[0], Some((9 * 60, 10 * 60, true))),
+            (codes[1], Some((10 * 60, 11 * 60, true))),
+            (codes[2], Some((11 * 60, 12 * 60, true))),
+            (codes[3], Some((12 * 60, 13 * 60, true))),
+            (codes[4], Some((13 * 60, 14 * 60, true))),
+        ]);
+        let constraints = constraints();
+        let course_aplus = HashMap::new();
+        let course_sentiment = HashMap::new();
+        let mut pairs = HashSet::new();
+        let mut counts = HashMap::<String, usize>::new();
+        for seed in 1..=200 {
+            let mut params = base_params(&data, &constraints, &course_aplus, &course_sentiment);
+            params.current_seed = seed;
+            params.courses_this_semester = 2;
+            params.virtual_sections_only = true;
+            params.prereq_eligible_courses = codes.iter().map(|code| (*code).to_string()).collect();
+            let mut pool = remaining("free", "free_elective", codes.to_vec());
+            pool.credits_needed = 6.0;
+            params.remaining_requirements = vec![pool];
+            let result = generate_advanced(params);
+            let mut picked: Vec<String> = result
+                .schedule
+                .expect("two virtual electives should timetable")
+                .iter()
+                .map(|enrollment| enrollment.course_code.clone())
+                .collect();
+            picked.sort();
+            assert_eq!(picked.len(), 2);
+            for code in &picked {
+                *counts.entry(code.clone()).or_default() += 1;
+            }
+            pairs.insert(picked);
+        }
+        assert!(
+            pairs.len() >= 9,
+            "only {} distinct elective pairs",
+            pairs.len()
+        );
+        for code in codes {
+            let count = counts.get(code).copied().unwrap_or(0);
+            assert!((55..=105).contains(&count), "{code} appeared {count} times");
         }
     }
 

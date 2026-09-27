@@ -14,9 +14,11 @@ import { formatTermLabel } from "../../lib/term/termLabel";
 import {
   useCatalogue,
   useCompletedCourses,
+  useDataCache,
   useDisciplines,
   useFaculties,
   useProfessorRatings,
+  useProgramSelection,
   useRequirementState,
   useTerms,
 } from "@uoplan/store/hooks";
@@ -103,6 +105,8 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
   );
 
   const catalogue = useCatalogue();
+  const cache = useDataCache();
+  const { studentPrograms } = useProgramSelection();
   const professorRatings = useProfessorRatings();
   const disciplines = useDisciplines();
   const faculties = useFaculties();
@@ -178,6 +182,8 @@ export function ExploreLayout({ children }: ExploreLayoutProps) {
     faculties,
     remainingRequirements,
     completedCourses,
+    cache,
+    studentPrograms,
   });
 
   const showResults = searchEngaged && (debouncedQuery.trim().length > 0 || activeFilters);

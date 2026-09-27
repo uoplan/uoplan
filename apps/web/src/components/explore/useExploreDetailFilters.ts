@@ -5,7 +5,12 @@ import {
   normalizeProfessorName,
   professorSentimentByName,
 } from "@uoplan/core";
-import { useCompletedCourses, useRequirementState } from "@uoplan/store/hooks";
+import {
+  useCompletedCourses,
+  useDataCache,
+  useProgramSelection,
+  useRequirementState,
+} from "@uoplan/store/hooks";
 import { useFeedbackData } from "../../hooks/useFeedbackData";
 import {
   buildRequirementCandidateSet,
@@ -40,6 +45,8 @@ export function useExploreDetailFilters() {
   const { getProfessorEntries } = useExploreOfferings();
   const { remainingRequirements } = useRequirementState();
   const { completedCourses } = useCompletedCourses();
+  const cache = useDataCache();
+  const { studentPrograms } = useProgramSelection();
 
   const feedbackActive = filters.minFeedback !== null;
   const { data: feedbackIndex } = useFeedbackData(feedbackActive);
@@ -58,8 +65,19 @@ export function useExploreDetailFilters() {
 
   const requirementCandidateSet = useMemo<Set<string> | null>(() => {
     if (!filters.contributesToRequirements) return null;
-    return buildRequirementCandidateSet(remainingRequirements, completedCourses);
-  }, [filters.contributesToRequirements, remainingRequirements, completedCourses]);
+    return buildRequirementCandidateSet(
+      remainingRequirements,
+      completedCourses,
+      cache,
+      studentPrograms,
+    );
+  }, [
+    filters.contributesToRequirements,
+    remainingRequirements,
+    completedCourses,
+    cache,
+    studentPrograms,
+  ]);
 
   const linkSearch = useMemo<ExploreSearchParams>(
     () => ({ ...EMPTY_EXPLORE_SEARCH, ...serializeExploreFiltersSearch(filters) }),

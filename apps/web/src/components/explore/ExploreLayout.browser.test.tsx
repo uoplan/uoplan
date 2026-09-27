@@ -72,9 +72,11 @@ vi.mock("@tanstack/react-router", () => ({
 vi.mock("@uoplan/store/hooks", () => ({
   useCatalogue: () => null,
   useCompletedCourses: () => ({ completedCourses: [] }),
+  useDataCache: () => null,
   useDisciplines: () => null,
   useFaculties: () => null,
   useProfessorRatings: () => null,
+  useProgramSelection: () => ({ studentPrograms: [] }),
   useRequirementState: () => ({ remainingRequirements: [] }),
   useTerms: () => [],
 }));

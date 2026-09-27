@@ -102,6 +102,40 @@ describe("computePersonalizeRequirements", () => {
     ]);
   });
 
+  it("filters native Explore candidates by prerequisites met with completed courses", () => {
+    const prerequisiteCatalogue: Catalogue = {
+      courses: [
+        course("CSI 1100"),
+        {
+          ...course("CSI 2110"),
+          prerequisites: { type: "course", code: normalizeCourseCode("CSI 1100") },
+        },
+      ],
+      programs: [
+        {
+          title: "Prerequisite program",
+          url: PROGRAM_URL,
+          requirements: [{ type: "course", code: normalizeCourseCode("CSI 2110"), credits: 3 }],
+        },
+      ],
+    };
+    const withoutPrerequisite = computePersonalizeRequirements({
+      catalogue: prerequisiteCatalogue,
+      schedules,
+      programUrl: PROGRAM_URL,
+      completedCourses: [],
+    });
+    const withPrerequisite = computePersonalizeRequirements({
+      catalogue: prerequisiteCatalogue,
+      schedules,
+      programUrl: PROGRAM_URL,
+      completedCourses: ["CSI 1100"],
+    });
+
+    expect([...withoutPrerequisite!.requirementCandidateSet!]).toEqual([]);
+    expect([...withPrerequisite!.requirementCandidateSet!]).toEqual(["CSI 2110"]);
+  });
+
   it("matches a renumbered/aliased completed course to a requirement under its old code", () => {
     // STA 2391 is the canonical course; MAT 2377 is its former code (an alias). The program
     // still lists the requirement under the old code, while the student completed it under

@@ -56,10 +56,7 @@ import {
   searchExplore,
 } from "@/data/explore-index";
 import { useScheduleOptions } from "@/data/schedule-options-provider";
-import {
-  buildRequirementCandidateSet,
-  computePersonalizeRequirements,
-} from "@/lib/personalize-requirements";
+import { computePersonalizeRequirements } from "@/lib/personalize-requirements";
 import { useAdaptiveLayout } from "@/lib/adaptive-layout";
 import { useAnalytics } from "@/lib/analytics";
 
@@ -421,9 +418,9 @@ export default function ExploreScreen() {
   const requirementCandidateSet = useMemo(
     () =>
       filters.contributesToRequirements && requirements
-        ? buildRequirementCandidateSet(requirements.remaining, completed.codes)
+        ? requirements.requirementCandidateSet
         : null,
-    [completed.codes, filters.contributesToRequirements, requirements],
+    [filters.contributesToRequirements, requirements],
   );
 
   const searchFilters = useMemo<ExploreSearchFilters>(

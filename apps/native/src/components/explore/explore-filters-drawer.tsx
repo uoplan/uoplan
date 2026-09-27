@@ -398,7 +398,7 @@ export function ExploreFiltersDrawer({
             <OptionRow
               key="requirements"
               label="Fits my requirements"
-              helper="Courses that can satisfy your remaining selected program requirements"
+              helper="Courses that meet your remaining requirements and prerequisites based on courses marked as completed"
               selected={draft.contributesToRequirements}
               role="switch"
               onPress={() =>

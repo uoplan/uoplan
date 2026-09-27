@@ -1834,7 +1834,7 @@ msgstr "Fits my requirements"
 
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:192
 msgid "explore.filter.requirements.hint"
-msgstr "Add your program in Personalize to filter courses that count toward what's left."
+msgstr "Show courses that count toward remaining requirements and whose prerequisites you meet with courses marked as taken."
 
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:59
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:61

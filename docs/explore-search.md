@@ -29,6 +29,12 @@ Mixed components match both Virtual and In-person. If a **Term** filter is selec
 
 Delivery matching is alias-component aware, so historical grade aggregates still stay attached to the retained course card even when newer offerings only match through an alias component. While Delivery is active, the search page hides professor, discipline, faculty, and program result sections because delivery is offering-specific and only meaningfully filters course results.
 
+#### Fits my requirements filter
+
+This filter keeps courses in a remaining requirement pool that the student can currently take. It excludes completed courses and checks prerequisites with `buildPrereqContext` and `canTakeCourse`, using only the planner's completed-course list and selected programs. Courses sitting in the basket do not satisfy prerequisites. Until the course cache loads, the enabled filter returns no matches.
+
+Change the web candidate logic in `apps/web/src/lib/explore/exploreFilters.ts` and keep both the search results hook and detail-page hook supplied with the same cache, completed courses, and program list. Native Explore uses `requirementCandidateSet` from `computePersonalizeRequirements` in `packages/store/src/personalizeRequirements.ts`; update its candidate builder alongside the web one. Both depend on the decoded course catalogue and the shared prerequisite evaluator; there are no additional flags or environment variables.
+
 ### Description keyword matching (compact BM25 index)
 
 Course search also matches **course descriptions**, without ever shipping the raw

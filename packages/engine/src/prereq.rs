@@ -257,19 +257,6 @@ fn credits_matching_non_course(node: &CoursePrereqNode, ctx: &PrereqContext) -> 
 }
 
 /// True if the prereq tree contains any non-soft `non_course` node.
-pub fn prerequisites_contain_non_course(node: Option<&CoursePrereqNode>) -> bool {
-    let node = match node {
-        Some(n) => n,
-        None => return false,
-    };
-    if node.r#type == CoursePrereqNodeType::NonCourse as i32 && !is_soft_non_course(node) {
-        return true;
-    }
-    node.children
-        .iter()
-        .any(|c| prerequisites_contain_non_course(Some(c)))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -474,7 +461,7 @@ mod tests {
     }
 
     #[test]
-    fn conservative_non_course_gates_block_and_are_reported_for_weighting() {
+    fn conservative_non_course_gates_block() {
         let hard_gate = soft_non_course(CoursePrereqKind::Standing);
         let soft_gate = soft_non_course(CoursePrereqKind::Recommended);
         let data = data_with_prereqs(vec![
@@ -484,7 +471,5 @@ mod tests {
 
         assert!(!can_take_course("ADV 3000", &data, &ctx(&data, &[])));
         assert!(can_take_course("ADV 3001", &data, &ctx(&data, &[])));
-        assert!(prerequisites_contain_non_course(Some(&hard_gate)));
-        assert!(!prerequisites_contain_non_course(Some(&soft_gate)));
     }
 }

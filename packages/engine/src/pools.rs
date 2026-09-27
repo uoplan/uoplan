@@ -26,10 +26,6 @@ pub const ADDITIONAL_ELECTIVES_ID: &str = "__additional_electives__";
 /// become a highest-priority capped candidate pool instead of hard pins, so the
 /// engine selects a conflict-feasible `N`-subset.
 pub const CART_POOL_ID: &str = "__cart__";
-pub const LEVEL_WEIGHT_BASE: f64 = 2.0;
-const NON_COURSE_PREREQ_PENALTY: f64 = 0.3;
-const UNKNOWN_LEVEL_FLOOR: f64 = 0.01;
-const UNKNOWN_COURSE_LEVEL: i64 = 999_000;
 const MAX_ELECTIVE_LEVEL: i64 = 4000;
 
 #[derive(Clone)]
@@ -336,18 +332,6 @@ pub fn compute_courses_per_pool(
     result
 }
 
-pub fn candidate_pool_weight(level: i64, has_non_course_prereq: bool) -> f64 {
-    if level >= UNKNOWN_COURSE_LEVEL {
-        return UNKNOWN_LEVEL_FLOOR;
-    }
-    let tier = (level / 1000).max(1);
-    let mut w = 1.0 / LEVEL_WEIGHT_BASE.powi((tier - 1) as i32);
-    if has_non_course_prereq {
-        w *= NON_COURSE_PREREQ_PENALTY;
-    }
-    w
-}
-
 // --- Group tokens ---
 
 const GROUP: &str = "group:";
@@ -496,18 +480,6 @@ mod tests {
 
         assert!(is_within_elective_level_cap("CSI 4100"));
         assert!(!is_within_elective_level_cap("CSI 5100"));
-    }
-
-    #[test]
-    fn candidate_pool_weight_prefers_lower_level_and_penalizes_hard_prerequisites() {
-        let first_year = candidate_pool_weight(1000, false);
-        let second_year = candidate_pool_weight(2000, false);
-        let hard_prereq = candidate_pool_weight(1000, true);
-        let unknown = candidate_pool_weight(999_000, false);
-
-        assert!(first_year > second_year);
-        assert!(hard_prereq < first_year);
-        assert!(unknown < hard_prereq);
     }
 
     #[test]

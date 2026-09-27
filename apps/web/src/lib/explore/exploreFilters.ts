@@ -1,5 +1,5 @@
-import { gradeVizGpa, normalizeCourseCode } from "@uoplan/core";
-import type { RemainingRequirement } from "@uoplan/core";
+import { buildPrereqContext, canTakeCourse, gradeVizGpa, normalizeCourseCode } from "@uoplan/core";
+import type { DataCache, RemainingRequirement } from "@uoplan/core";
 import type { ExploreDeliveryMode, ExploreDeliverySets } from "./deliveryMode";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 
@@ -327,17 +327,25 @@ export type ExploreSentimentSets = {
  * student's transcript are excluded: a partially-satisfied requirement still lists every
  * course in its pool (including ones already taken), and the filter exists to surface
  * courses the student could still take, not ones they have already completed.
+ * Prerequisites use completed courses and selected programs; basket courses do not
+ * count. An unloaded cache yields no candidates until eligibility can be checked.
  */
 export function buildRequirementCandidateSet(
   remainingRequirements: RemainingRequirement[],
   completedCourses: readonly string[] = [],
+  cache?: DataCache | null,
+  studentPrograms: readonly string[] = [],
 ): Set<string> {
   const completed = new Set(completedCourses.map((code) => normalizeCourseCode(code)));
+  const prereqContext = cache
+    ? buildPrereqContext([...completedCourses], cache, [...studentPrograms])
+    : null;
   const set = new Set<string>();
   for (const req of remainingRequirements) {
     for (const candidate of req.candidateCourses ?? []) {
       const norm = normalizeCourseCode(candidate);
       if (completed.has(norm)) continue;
+      if (!cache || !prereqContext || !canTakeCourse(norm, cache, prereqContext)) continue;
       set.add(norm);
     }
   }

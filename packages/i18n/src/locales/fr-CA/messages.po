@@ -1834,7 +1834,7 @@ msgstr "Comble mes exigences"
 
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:192
 msgid "explore.filter.requirements.hint"
-msgstr "Ajoutez votre programme dans Personnaliser pour filtrer les cours qui comptent pour ce qu'il reste."
+msgstr "Affichez les cours qui comblent vos exigences restantes et dont vous remplissez les préalables avec les cours indiqués comme terminés."
 
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:59
 #: apps/web/src/components/explore/ExploreFilterBar.tsx:61

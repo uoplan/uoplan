@@ -84,6 +84,8 @@ export const DEFAULT_REQUIREMENT_SELECTIONS: PersonalizeRequirementSelections = 
 export interface PersonalizeRequirementsReadout {
   programTitle: string;
   remaining: RemainingRequirement[];
+  /** Remaining courses whose prerequisites are met by completed courses. */
+  requirementCandidateSet: Set<string>;
   completed: CompletedRequirementItem[];
   remainingCount: number;
   /**
@@ -132,13 +134,23 @@ const scheduleRequirementListeners = new Set<() => void>();
 export function buildRequirementCandidateSet(
   remainingRequirements: RemainingRequirement[],
   completedCourses: readonly string[] = [],
+  cache?: DataCache,
+  studentPrograms: readonly string[] = [],
 ): Set<string> {
   const completed = new Set(completedCourses.map((code) => normalizeCourseCode(code)));
+  const context = cache
+    ? buildPrereqContext([...completedCourses], cache, [...studentPrograms])
+    : null;
   const candidates = new Set<string>();
   for (const requirement of remainingRequirements) {
     for (const candidate of requirement.candidateCourses ?? []) {
       const normalized = normalizeCourseCode(candidate);
-      if (!completed.has(normalized)) candidates.add(normalized);
+      if (
+        !completed.has(normalized) &&
+        (!cache || (context && canTakeCourse(normalized, cache, context)))
+      ) {
+        candidates.add(normalized);
+      }
     }
   }
   return candidates;
@@ -606,6 +618,12 @@ export function computePersonalizeRequirements(
   return {
     programTitle: program.title,
     remaining: adjusted.remaining,
+    requirementCandidateSet: buildRequirementCandidateSet(
+      adjusted.remaining,
+      input.completedCourses,
+      cache,
+      getDisciplineCodesForProgram(program),
+    ),
     completed: adjusted.completed,
     remainingCount: adjusted.remaining.length,
     unassignedCompletedCourses: autoAssignment.unassignedCompletedCourses,

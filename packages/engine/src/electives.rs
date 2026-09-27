@@ -41,7 +41,7 @@ pub struct ElectivePoolParams<'a> {
 /// Build the eligible, schedulable elective candidate pool for a pure-basket
 /// request. Mirrors the old `generate_basic` candidate scan (filters + prereq
 /// eligibility + schedulability); the returned order is catalogue order — the
-/// advanced selector applies its own seeded / preference-weighted ordering, so
+/// advanced selector applies its own seeded uniform shuffle (or explicit preference weights), so
 /// no reordering is done here.
 pub fn expand_elective_pool(p: &ElectivePoolParams) -> Vec<String> {
     let blacklisted: Vec<String> = p

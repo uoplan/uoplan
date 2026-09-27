@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Catalogue, Discipline, Faculty, RemainingRequirement } from "@uoplan/core";
+import type { Catalogue, DataCache, Discipline, Faculty, RemainingRequirement } from "@uoplan/core";
 import {
   courseSentimentByNorm,
   normalizeProfessorName,
@@ -48,6 +48,8 @@ type UseExploreResultsArgs = {
   faculties: Faculty[] | null;
   remainingRequirements: RemainingRequirement[];
   completedCourses: string[];
+  cache: DataCache | null;
+  studentPrograms: string[];
 };
 
 export function useExploreResults({
@@ -60,6 +62,8 @@ export function useExploreResults({
   faculties,
   remainingRequirements,
   completedCourses,
+  cache,
+  studentPrograms,
 }: UseExploreResultsArgs) {
   const {
     loading: gradeLoading,
@@ -142,8 +146,19 @@ export function useExploreResults({
 
   const requirementCandidateSet = useMemo<Set<string> | null>(() => {
     if (!filters.contributesToRequirements) return null;
-    return buildRequirementCandidateSet(remainingRequirements, completedCourses);
-  }, [filters.contributesToRequirements, remainingRequirements, completedCourses]);
+    return buildRequirementCandidateSet(
+      remainingRequirements,
+      completedCourses,
+      cache,
+      studentPrograms,
+    );
+  }, [
+    filters.contributesToRequirements,
+    remainingRequirements,
+    completedCourses,
+    cache,
+    studentPrograms,
+  ]);
 
   const searchResults = useMemo(() => {
     if (!rawSearchResults) return null;

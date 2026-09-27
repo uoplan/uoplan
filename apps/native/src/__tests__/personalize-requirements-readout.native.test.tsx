@@ -8,6 +8,7 @@ describe("PersonalizeRequirementsReadoutView", () => {
     const readout: PersonalizeRequirementsReadout = {
       programTitle: "Test program",
       remainingCount: 2,
+      requirementCandidateSet: new Set(),
       unassignedCompletedCourses: [],
       remaining: [
         {
@@ -40,6 +41,7 @@ describe("PersonalizeRequirementsReadoutView", () => {
     const readout: PersonalizeRequirementsReadout = {
       programTitle: "Test program",
       remainingCount: 0,
+      requirementCandidateSet: new Set(),
       unassignedCompletedCourses: [],
       remaining: [],
       completed: [{ title: "Compulsory courses", satisfiedBy: ["CSI 2110"] }],

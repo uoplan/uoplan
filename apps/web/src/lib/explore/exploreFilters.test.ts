@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { GradeVizData, RemainingRequirement } from "@uoplan/core";
-import { slugifyProfessor } from "@uoplan/core";
+import type { DataCache, GradeVizData, RemainingRequirement } from "@uoplan/core";
+import { normalizeCourseCode, slugifyProfessor } from "@uoplan/core";
 import { buildTermPresenceIndex } from "./gradesSearch";
 import type { ExploreCourseSearchEntry, ExploreProfessorSearchEntry } from "./gradesSearch";
 import {
@@ -306,6 +306,23 @@ describe("filterCourseEntries contributes-to-requirements", () => {
 });
 
 describe("buildRequirementCandidateSet", () => {
+  const courses = [
+    { code: normalizeCourseCode("CSI 1100"), credits: 3, title: "Intro", description: "" },
+    {
+      code: normalizeCourseCode("CSI 2110"),
+      credits: 3,
+      title: "Next",
+      description: "",
+      prerequisites: { type: "course" as const, code: normalizeCourseCode("CSI 1100") },
+    },
+    { code: normalizeCourseCode("MAT 1320"), credits: 3, title: "Math", description: "" },
+    { code: normalizeCourseCode("CSI 2120"), credits: 3, title: "Other", description: "" },
+  ];
+  const cache = {
+    getCourse: (code: string) =>
+      courses.find((course) => course.code === normalizeCourseCode(code)),
+    resolveToCanonical: normalizeCourseCode,
+  } as DataCache;
   const req = (requirementId: string, candidateCourses: string[]): RemainingRequirement => ({
     requirementId,
     type: "course",
@@ -314,10 +331,11 @@ describe("buildRequirementCandidateSet", () => {
   });
 
   it("collects normalized candidate codes across requirements", () => {
-    const set = buildRequirementCandidateSet([
-      req("req-1", ["CSI 2110", "MAT 1320"]),
-      req("req-2", ["csi2120"]),
-    ]);
+    const set = buildRequirementCandidateSet(
+      [req("req-1", ["CSI 2110", "MAT 1320"]), req("req-2", ["csi2120"])],
+      ["CSI 1100"],
+      cache,
+    );
     expect([...set].sort()).toEqual(["CSI 2110", "CSI 2120", "MAT 1320"]);
   });
 
@@ -325,13 +343,23 @@ describe("buildRequirementCandidateSet", () => {
     const set = buildRequirementCandidateSet(
       [req("req-1", ["CSI 2110", "MAT 1320", "CSI 2120"])],
       ["csi2110", "MAT1320"],
+      cache,
     );
     expect([...set]).toEqual(["CSI 2120"]);
   });
 
   it("returns an empty set when every candidate is already completed", () => {
-    const set = buildRequirementCandidateSet([req("req-1", ["CSI 2110"])], ["CSI 2110"]);
+    const set = buildRequirementCandidateSet([req("req-1", ["CSI 2110"])], ["CSI 2110"], cache);
     expect(set.size).toBe(0);
+  });
+
+  it("requires completed prerequisites and never counts a course merely placed in the cart", () => {
+    const requirement = [req("req-1", ["CSI 2110", "MAT 1320"])];
+    expect([...buildRequirementCandidateSet(requirement, [], cache)]).toEqual(["MAT 1320"]);
+    expect([...buildRequirementCandidateSet(requirement, ["CSI 1100"], cache)]).toEqual([
+      "CSI 2110",
+      "MAT 1320",
+    ]);
   });
 });
 

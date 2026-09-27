@@ -24,6 +24,7 @@ function renderWithSafeArea(element: ReactElement) {
 const incompleteReadout: PersonalizeRequirementsReadout = {
   programTitle: "Test program",
   remainingCount: 1,
+  requirementCandidateSet: new Set(),
   unassignedCompletedCourses: ["ENG 1100"],
   remaining: [
     {
@@ -41,6 +42,7 @@ const incompleteReadout: PersonalizeRequirementsReadout = {
 const completeReadout: PersonalizeRequirementsReadout = {
   programTitle: "Test program",
   remainingCount: 0,
+  requirementCandidateSet: new Set(),
   unassignedCompletedCourses: [],
   remaining: [],
   completed: [],
