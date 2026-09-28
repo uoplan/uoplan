@@ -23923,7 +23923,7 @@
       "title": "Data Collection and Interpretation",
       "credits": 3,
       "description": "Combinatorial analysis; probability and random variables; discrete and continuous densities and distribution functions; expectation and variance; normal (Gaussian), distributions; statistical estimation and hypothesis testing; method of least squares, correlation and regression. Basic principles and techniques for the efficient design of experiments and effective analysis of data. Topics include: the nature and analysis of process variability, comparing processes, blocking and randomization, empirical model building for quantifying relationships between process inputs and outputs, two-level factorial and fractional factorial designs for screening out inert input variables, other designs, a practical approach to experimental design.",
-      "component": "Lecture, Tutorial",
+      "component": "Tutorial, Lecture",
       "prereqText": "CHG 1125, CHG 1371, MAT 2384",
       "prerequisites": {
         "type": "and_group",
@@ -47115,21 +47115,21 @@
       "title": "Compétences des juristes I : Introduction au droit",
       "credits": 3,
       "description": "Introduction à l’étude du droit. Introduction aux aspects juridiques de l’organisation de l’État canadien, y compris le fédéralisme, le partage des compétences législatives, et les pouvoirs législatif, exécutif et judiciaire. Introduction au droit civil, à la common law et aux ordres juridiques autochtones. Introduction aux compétences éthiques des juristes, y compris l’intégrité intellectuelle, le savoir-être et le savoir-faire. Initiation aux techniques de recherche et de rédaction juridiques.",
-      "component": "Cours magistral, Séminaire, Théorie et laboratoire, Tutoriel"
+      "component": "Cours magistral"
     },
     {
       "code": "DRC 15001",
       "title": "Compétences des juristes I : Introduction au droit (Partie 1 de 2)",
       "credits": 0,
       "description": "Introduction à l’étude du droit. Introduction aux aspects juridiques de l’organisation de l’État canadien, y compris le fédéralisme, le partage des compétences législatives, et les pouvoirs législatif, exécutif et judiciaire. Introduction au droit civil, à la common law et aux ordres juridiques autochtones. Introduction aux compétences éthiques des juristes, y compris l’intégrité intellectuelle, le savoir-être et le savoir-faire. Initiation aux techniques de recherche et de rédaction juridiques. (Partie 1 de 2)",
-      "component": "Séminaire, Théorie et laboratoire"
+      "component": "Cours magistral"
     },
     {
       "code": "DRC 15002",
       "title": "Compétences des juristes I : Introduction au droit (Partie 2 de 2)",
       "credits": 3,
       "description": "Introduction à l’étude du droit. Introduction aux aspects juridiques de l’organisation de l’État canadien, y compris le fédéralisme, le partage des compétences législatives, et les pouvoirs législatif, exécutif et judiciaire. Introduction au droit civil, à la common law et aux ordres juridiques autochtones. Introduction aux compétences éthiques des juristes, y compris l’intégrité intellectuelle, le savoir-être et le savoir-faire. Initiation aux techniques de recherche et de rédaction juridiques. (Partie 2 de 2)",
-      "component": "Cours magistral, Séminaire, Théorie et laboratoire, Tutoriel",
+      "component": "Cours magistral",
       "prereqText": "DRC 15001",
       "prerequisites": {
         "type": "course",
@@ -47432,6 +47432,65 @@
       "credits": 3,
       "description": "Étude des règles juridiques relatives aux transactions commerciales internationales, notamment la vente internationale de marchandises. Contrats internationaux. Financement et garanties. Règlement des différends, dont l'arbitrage international.",
       "component": "Cours magistral"
+    },
+    {
+      "code": "DRC 4502",
+      "title": "Défi interdisciplinaire",
+      "credits": 1.5,
+      "description": "Atelier intensif qui permet l'acquisition de compétences ou de savoirs spécialisés en droit. Thèmes variés. Le cours peut être répété si la thématique abordée est différente. L'évaluation se fait sur la base S (satisfaisant) ou NS (non satisfaisant).",
+      "component": "Séminaire",
+      "prereqText": "33 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "33 crédits de cours universitaires",
+        "credits": 33
+      }
+    },
+    {
+      "code": "DRC 4503",
+      "title": "Cours ou projet de groupe autodirigé",
+      "credits": 1.5,
+      "description": "Réalisation, individuellement ou en petit groupe, d’une activité expérientielle autodirigée supervisée et encadrée par les principes de l’apprentissage expérientiel. Les étudiantes et étudiants seront amenés à réfléchir sur les compétences transversales, notamment les uOCompétences, acquises durant l’activité expérientielle tout en tissant des liens avec les apprentissages académiques de leur parcours.",
+      "component": "Séminaire",
+      "prereqText": "33 crédits de cours universitaires",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "33 crédits de cours universitaires",
+        "credits": 33
+      }
+    },
+    {
+      "code": "DRC 4504",
+      "title": "Concours interfacultaire",
+      "credits": 3,
+      "description": "Préparation et participation en équipe à un concours interfacultaire de plaidoirie, de négociation ou de simulation juridique agréé par la Faculté. L’activité comprend la recherche et l’analyse juridiques, la préparation de documents écrits et la présentation d’arguments oraux devant un tribunal-école, une instance ou un forum national ou international.",
+      "component": "Tutoriel"
+    },
+    {
+      "code": "DRC 4505",
+      "title": "Clinique de droit notarial de l’Outaouais",
+      "credits": 4.5,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique de droit notariale de l’Outaouais auprès d’une clientèle présentant des besoins variés dans différents domaines du droit civil. Mise en pratique de connaissances en droit et développement de compétences professionnelles, relationnelles et déontologies dans le cadre d’une expérience d’apprentissage expérientiel favorisant l’accès à la justice. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication de renseignements juridiques. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques.",
+      "component": "Expérience pratique",
+      "prereqText": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 60
+      }
+    },
+    {
+      "code": "DRC 4506",
+      "title": "Clinique interdisciplinaire de droit social de l’Outaouais",
+      "credits": 4.5,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique interdisciplinaire en droit social de l’Outaouais auprès de personnes marginalisées ou en situation d’itinérance. Mise en pratique de connaissances en droit civil, administratif, criminel et pénal, ainsi qu’en droits de la personne dans un contexte d’apprentissage expérientiel favorisant l’accès à la justice. Développement des compétences professionnelles, relationnelles et déontologiques, notamment par la rencontre et l’accompagnement de personnes dans les systèmes de justice, de santé et de services sociaux. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication d’information juridique. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques.",
+      "component": "Expérience pratique",
+      "prereqText": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 60
+      }
     },
     {
       "code": "DRC 4509",
@@ -48509,6 +48568,117 @@
       "credits": 3,
       "description": "Travail au sein du Centre de justice de proximité de l’Outaouais.",
       "component": "Stage"
+    },
+    {
+      "code": "DRC 4824",
+      "title": "Clinique de droit notarial de l’Outaouais – annuel",
+      "credits": 9,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique de droit notariale de l’Outaouais auprès d’une clientèle présentant des besoins variés dans différents domaines du droit civil. Mise en pratique de connaissances en droit et développement de compétences professionnelles, relationnelles et déontologies dans le cadre d’une expérience d’apprentissage expérientiel favorisant l’accès à la justice. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication de renseignements juridiques. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques.",
+      "component": "Expérience pratique",
+      "prereqText": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 60
+      }
+    },
+    {
+      "code": "DRC 48241",
+      "title": "Clinique de droit notarial de l’Outaouais – annuel (Partie 1 de 2)",
+      "credits": 0,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique de droit notariale de l’Outaouais auprès d’une clientèle présentant des besoins variés dans différents domaines du droit civil. Mise en pratique de connaissances en droit et développement de compétences professionnelles, relationnelles et déontologies dans le cadre d’une expérience d’apprentissage expérientiel favorisant l’accès à la justice. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication de renseignements juridiques. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques. (Partie 1 de 2)",
+      "component": "Expérience pratique",
+      "prereqText": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 60
+      }
+    },
+    {
+      "code": "DRC 48242",
+      "title": "Clinique de droit notarial de l’Outaouais – annuel (Partie 2 de 2)",
+      "credits": 9,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique de droit notariale de l’Outaouais auprès d’une clientèle présentant des besoins variés dans différents domaines du droit civil. Mise en pratique de connaissances en droit et développement de compétences professionnelles, relationnelles et déontologies dans le cadre d’une expérience d’apprentissage expérientiel favorisant l’accès à la justice. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication de renseignements juridiques. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques. (Partie 2 de 2)",
+      "component": "Expérience pratique",
+      "prereqText": "DRC 48241",
+      "prerequisites": {
+        "type": "course",
+        "code": "DRC 48241",
+        "text": "DRC 48241"
+      }
+    },
+    {
+      "code": "DRC 4826",
+      "title": "Clinique interdisciplinaire de droit social de l’Outaouais – annuel",
+      "credits": 9,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique interdisciplinaire en droit social de l’Outaouais auprès de personnes marginalisées ou en situation d’itinérance. Mise en pratique de connaissances en droit civil, administratif, criminel et pénal, ainsi qu’en droits de la personne dans un contexte d’apprentissage expérientiel favorisant l’accès à la justice. Développement des compétences professionnelles, relationnelles et déontologiques, notamment par la rencontre et l’accompagnement de personnes dans les systèmes de justice, de santé et de services sociaux. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication d’information juridique. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques.",
+      "component": "Expérience pratique",
+      "prereqText": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 60
+      }
+    },
+    {
+      "code": "DRC 48261",
+      "title": "Clinique interdisciplinaire de droit social de l’Outaouais – annuel (Partie 1 de 2)",
+      "credits": 0,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique interdisciplinaire en droit social de l’Outaouais auprès de personnes marginalisées ou en situation d’itinérance. Mise en pratique de connaissances en droit civil, administratif, criminel et pénal, ainsi qu’en droits de la personne dans un contexte d’apprentissage expérientiel favorisant l’accès à la justice. Développement des compétences professionnelles, relationnelles et déontologiques, notamment par la rencontre et l’accompagnement de personnes dans les systèmes de justice, de santé et de services sociaux. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication d’information juridique. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques. (Partie 1 de 2)",
+      "component": "Expérience pratique",
+      "prereqText": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "60 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 60
+      }
+    },
+    {
+      "code": "DRC 48262",
+      "title": "Clinique interdisciplinaire de droit social de l’Outaouais – annuel (Partie 2 de 2)",
+      "credits": 9,
+      "description": "Stage d’enseignement clinique réalisé à la Clinique interdisciplinaire en droit social de l’Outaouais auprès de personnes marginalisées ou en situation d’itinérance. Mise en pratique de connaissances en droit civil, administratif, criminel et pénal, ainsi qu’en droits de la personne dans un contexte d’apprentissage expérientiel favorisant l’accès à la justice. Développement des compétences professionnelles, relationnelles et déontologiques, notamment par la rencontre et l’accompagnement de personnes dans les systèmes de justice, de santé et de services sociaux. Analyse de situations juridiques réelles, recherche juridique, identification des enjeux et communication d’information juridique. Réflexion sur le rôle social du juriste et les dimensions humaines des problématiques juridiques. (Partie 2 de 2)",
+      "component": "Expérience pratique",
+      "prereqText": "DRC 48261",
+      "prerequisites": {
+        "type": "course",
+        "code": "DRC 48261",
+        "text": "DRC 48261"
+      }
+    },
+    {
+      "code": "DRC 4827",
+      "title": "Observatoire des droits humains de l’ONU",
+      "credits": 6,
+      "description": "Expérience d'apprentissage alliant recherche appliquée, leadership académique et engagement citoyen ancrée dans les travaux de l'Observatoire des droits humains de l’Organisation des Nations Unies (ONU). Initiation aux défis contemporains du système onusien, en particulier les organes de traités, tout en contribuant activement à la production et à la diffusion du savoir de manière accessible, rigoureuse et percutante. Apprentissages sur les droits humains et exercice d’un leadership pour les façonner, notamment grâce à un engagement direct auprès des organes conventionnels des Nations Unies, des praticien.nes expert.es et des initiatives communautaires.",
+      "component": "Expérience pratique",
+      "prereqText": "33 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "33 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 33
+      }
+    },
+    {
+      "code": "DRC 48271",
+      "title": "Observatoire des droits humains de l’ONU (Partie 1 de 2)",
+      "credits": 0,
+      "description": "Expérience d'apprentissage alliant recherche appliquée, leadership académique et engagement citoyen ancrée dans les travaux de l'Observatoire des droits humains de l’Organisation des Nations Unies (ONU). Initiation aux défis contemporains du système onusien, en particulier les organes de traités, tout en contribuant activement à la production et à la diffusion du savoir de manière accessible, rigoureuse et percutante. Apprentissages sur les droits humains et exercice d’un leadership pour les façonner, notamment grâce à un engagement direct auprès des organes conventionnels des Nations Unies, des praticien.nes expert.es et des initiatives communautaires. (Partie 1 de 2)",
+      "component": "Expérience pratique",
+      "prereqText": "33 crédits de cours du programme de Licence en droit (LL.L.)",
+      "prerequisites": {
+        "type": "non_course",
+        "text": "33 crédits de cours du programme de Licence en droit (LL.L.)",
+        "credits": 33
+      }
+    },
+    {
+      "code": "DRC 48272",
+      "title": "Observatoire des droits humains de l’ONU (Partie 2 de 2)",
+      "credits": 6,
+      "description": "Expérience d'apprentissage alliant recherche appliquée, leadership académique et engagement citoyen ancrée dans les travaux de l'Observatoire des droits humains de l’Organisation des Nations Unies (ONU). Initiation aux défis contemporains du système onusien, en particulier les organes de traités, tout en contribuant activement à la production et à la diffusion du savoir de manière accessible, rigoureuse et percutante. Apprentissages sur les droits humains et exercice d’un leadership pour les façonner, notamment grâce à un engagement direct auprès des organes conventionnels des Nations Unies, des praticien.nes expert.es et des initiatives communautaires. (Partie 2 de 2)",
+      "component": "Expérience pratique"
     },
     {
       "code": "DRC 4830",
@@ -61668,6 +61838,132 @@
       }
     },
     {
+      "code": "EHA 5140",
+      "title": "Financial Accounting",
+      "credits": 1.5,
+      "description": "Introduction to the foundations of financial accounting including theoretical aspects, the principles of financial reporting and preparation of financial statements and accounting for inventory and capital assets. Creation and interpretation of financial performance measurements.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 5160",
+      "title": "Financial Analytics for Healthcare",
+      "credits": 3,
+      "description": "This course introduces key accounting and financial management concepts in healthcare, covering key topics such as financial reporting, budgeting, cost allocation, and decision-making as these apply specifically to healthcare organizations. Students will learn how healthcare executives use financial data to improve performance, through experiential learning involving case studies, real-life examples, and guest speakers.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 5300",
+      "title": "Fundamentals of Data Analytics: Making Data Useful for Health Care Managers",
+      "credits": 3,
+      "description": "Analysis and data modelling skills, develop the ability to interpret large amounts of data and draw sound implications for the health care problem at hand, and to exhibit the usefulness of data analytics in health care problem solving and decision-making.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 5330",
+      "title": "Human Resource Management in Health Care",
+      "credits": 3,
+      "description": "Focus on the major issues unique to effective health human resources management. Measuring needs and planning for the current and future supply of human resources. Recruitment, retention and development strategies to meet changing workforce conditions. Understanding the unique regulatory environments where professions are regulated by provincial laws and professional colleges. Labor relation issues and approaches in unionized environment. Funding, team work and inter-professional practice, scope of practice issues and organizational design. Interactions of organizational and professional accreditation mechanisms (such as professional colleges and associations, and accreditation bodies).",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6203",
+      "title": "Program Evaluation for Health Care Managers",
+      "credits": 1.5,
+      "description": "Provides students with an overview of planning, designing and conducting applied program evaluations, which are applicable in health care organizations and community settings. Topics include: types of evaluations; formulation of evaluation questions; evaluation designs, methodologies, and tools; evaluation results to different stakeholders, and critical appraisal of evaluation research and reports.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6212",
+      "title": "Governance and Ethical Management in Healthcare",
+      "credits": 1.5,
+      "description": "This course is designed to increase the understanding and skills of students in identifying and thinking through issues related to the governance of healthcare organizations and the ethical issues and practices required to ensure safe and effective healthcare delivery. Students will consider the relationship and accountabilities between governance structures such as the Board of Directors and executive leaders. The importance of an ethical framework to provide and ensure ethical approaches to decision making and problem solving in healthcare organizations will be explored. The impact of failure to create an ethical culture and its impact on employee engagement and organizational goals and outcomes will be considered through readings and case examples",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6250",
+      "title": "Health Care Finance",
+      "credits": 1.5,
+      "description": "",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6260",
+      "title": "Project Planning and Management",
+      "credits": 1.5,
+      "description": "Introduction to program planning and management of health management projects. Program planning and management methods including management of a project throughout its life cycle (identification, design, planning, realization and close-out).",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6281",
+      "title": "Leadership and Innovation in Health Care",
+      "credits": 1.5,
+      "description": "Introduction to various leadership styles and concepts of innovation in complex health care environments. Topics include leadership behavior and innovation, relationship between leadership and resilience, knowledge and skills for effective team leadership and supporting innovation.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6312",
+      "title": "Strategy, Governance, and Ethical Management in Health",
+      "credits": 3,
+      "description": "",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6315",
+      "title": "Quality and Performance Management in Health Care",
+      "credits": 3,
+      "description": "This course will apply concepts from the literature to analyze and understand quality management and patient safety issues, and discuss these concepts in relation to accountability. It will prepare students for the health care workplace by exposing them to practices and aspects related to patient safety and quality in health care, and by identifying contemporary approaches to address them. Various models and approaches for assessing and improving quality will be discussed, including evidence-based medicine and management, systematic reviews, clinical practice guidelines, and quality improvement approaches. Various quality initiatives and quality improvement tools will be discussed and evaluated.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6351",
+      "title": "Health Economics",
+      "credits": 3,
+      "description": "An economists’ perspective illuminating the systems behavior of Health-Care. Such insights inform strategies for managing/improving Health-care. The survey course introduces key concepts from economics (e.g., micro-economics, trade-offs, opportunity costs, efficiency, equity) that are pivotal to this illumination. The unique attributes of health-care (e.g., uncertainty of demand and information asymmetry) and the incentives (some perverse) that ensue are discussed. Indices of population health impact and their links to health economic valuation are covered, including cost-effectiveness and benefit-cost analysis.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6360",
+      "title": "Health Care in Canada in a Comparative Context",
+      "credits": 3,
+      "description": "Overview of the Canadian health care system including its history and evolution with an emphasis on the relationship between federal government and the provincial/territorial systems. Current forces (e.g. societal, political, economic) that influence health care policy. Canadian system compared to international health care systems.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6361",
+      "title": "Organizational Behavior and Change in Health Care",
+      "credits": 3,
+      "description": "Overview of organizational behavior and change in the health care context. Motivation, stress and stress management, group dynamics, power and negotiation. Leadership of change and different types of change that can be pursued in various contexts are considered.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6370",
+      "title": "Health Informatics",
+      "credits": 3,
+      "description": "Overview of current developments, issues and challenges in the emerging field of health informatics, with an emphasis on the role it plays in health care transformation initiatives. Historical development and basic foundations of health informatics including theoretical, methodological and ethical/legal underpinnings will be studied. Management implications of health informatics.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6380",
+      "title": "Quantitative Methods and Their Applications to Health Care",
+      "credits": 3,
+      "description": "Provide health care decision makers with an overview of several useful quantitative methods that can provide insight and support for complex decisions. Mathematical model formulation, linear programming and optimization, queuing theory and simulation modeling. Mathematical tools available to help optimally utilize the resources.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6381",
+      "title": "Leadership, Strategy and Innovation",
+      "credits": 3,
+      "description": "Exercising leadership and developing a culture of innovation are critical foundational aspects of an executive’s role in any C-Suite of complex healthcare organizations. The course offers students an opportunity to understand the key aspects of Leadership and how leaders can foster a culture of Innovation based on research, theory and practice. Students will apply learned aspects in case studies that place them in the role of a chief executive in the C-suite, enabling them to experience first-hand the impact of their decisions and apply their learning.",
+      "component": "Lecture"
+    },
+    {
+      "code": "EHA 6990",
+      "title": "Capstone in Health Care Management",
+      "credits": 4.5,
+      "description": "Designed to allow students to demonstrate and apply the skills and knowledge that they gained in the Executive Master of Health Administration program. The Capstone course offers students the opportunity to conduct thorough analysis and critical thinking, and research and present innovative ideas and solutions that address current challenges and needs in health care",
+      "component": "Cours magistral / Lecture"
+    },
+    {
       "code": "ELA 1102",
       "title": "Latin American Cultures I",
       "credits": 3,
@@ -62975,7 +63271,7 @@
       "title": "Projet de design en génie électrique : Partie II / Electrical Engineering Design Project: Part II",
       "credits": 3,
       "description": "Lectures and tutorials on product design and development methodology, and the role of the professional engineer in this regard. Completion of work started in ELG 4912. Deliverables include written documentationand presentations in class.",
-      "component": "Laboratoire / Laboratory, Cours magistral / Lecture",
+      "component": "Cours magistral / Lecture, Laboratoire / Laboratory",
       "prereqText": "ELG 4912",
       "prerequisites": {
         "type": "course",
@@ -101811,7 +102107,7 @@
       "title": "Fluid Mechanics II",
       "credits": 3,
       "description": "External flows, aerodynamics. Differential treatment of fluid motion. Computational fluid dynamics. Fluid machinery. Compressible flow. Laboratory experiments.",
-      "component": "Laboratory, Lecture, Tutorial",
+      "component": "Tutorial, Laboratory, Lecture",
       "prereqText": "MAT 3320, (MCG 3139 or MCG 3340)",
       "prerequisites": {
         "type": "and_group",
@@ -166335,7 +166631,7 @@
           "options": [
             {
               "type": "course",
-              "code": "SOC 8511",
+              "code": "SOC 8111",
               "credits": 3
             },
             {
@@ -188688,11 +188984,6 @@
             {
               "type": "course",
               "code": "EHA 6315",
-              "credits": 3
-            },
-            {
-              "type": "course",
-              "code": "EHA 6351",
               "credits": 3
             },
             {
