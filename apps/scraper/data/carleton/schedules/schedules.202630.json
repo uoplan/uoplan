@@ -46983,7 +46983,7 @@
                 "startMinutes": 605,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Pamela Walker",
+                "instructor": "Jill St. Germain",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -46994,7 +46994,7 @@
                 "startMinutes": 605,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Pamela Walker",
+                "instructor": "Jill St. Germain",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -52109,7 +52109,7 @@
                 "startMinutes": 785,
                 "endMinutes": 865,
                 "virtual": false,
-                "instructor": "Pamela Walker",
+                "instructor": "Jill St. Germain",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -52120,7 +52120,7 @@
                 "startMinutes": 785,
                 "endMinutes": 865,
                 "virtual": false,
-                "instructor": "Pamela Walker",
+                "instructor": "Jill St. Germain",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -56675,7 +56675,7 @@
                 "startMinutes": 545,
                 "endMinutes": 775,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Kaan Bayulken",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -56706,7 +56706,7 @@
                 "startMinutes": 845,
                 "endMinutes": 1015,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Sarah Taylor",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -56737,7 +56737,7 @@
                 "startMinutes": 845,
                 "endMinutes": 1075,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Rodolfo Cossovich",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77390,7 +77390,7 @@
                 "startMinutes": 485,
                 "endMinutes": 595,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Sherif Toulan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77421,7 +77421,7 @@
                 "startMinutes": 785,
                 "endMinutes": 955,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Amir Andaliby Joghataie",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77439,9 +77439,9 @@
             "session": null,
             "times": [
               {
-                "day": "Mo",
-                "startMinutes": 965,
-                "endMinutes": 1135,
+                "day": "We",
+                "startMinutes": 1085,
+                "endMinutes": 1255,
                 "virtual": false,
                 "instructor": null,
                 "meetingDates": [
@@ -77459,9 +77459,9 @@
             "session": null,
             "times": [
               {
-                "day": "We",
-                "startMinutes": 1085,
-                "endMinutes": 1255,
+                "day": "Fr",
+                "startMinutes": 905,
+                "endMinutes": 1075,
                 "virtual": false,
                 "instructor": null,
                 "meetingDates": [
@@ -77587,7 +77587,7 @@
                 "startMinutes": 905,
                 "endMinutes": 1015,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Lurie Guzun",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77609,7 +77609,7 @@
                 "startMinutes": 605,
                 "endMinutes": 715,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Lurie Guzun",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77629,7 +77629,7 @@
                 "startMinutes": 725,
                 "endMinutes": 835,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Lurie Guzun",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77649,7 +77649,7 @@
                 "startMinutes": 965,
                 "endMinutes": 1075,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Lurie Guzun",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77806,7 +77806,7 @@
                 "startMinutes": 995,
                 "endMinutes": 1165,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Mejdi Eraslan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77828,7 +77828,7 @@
                 "startMinutes": 785,
                 "endMinutes": 955,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Mejdi Eraslan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77848,7 +77848,7 @@
                 "startMinutes": 605,
                 "endMinutes": 775,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Mejdi Eraslan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77868,7 +77868,7 @@
                 "startMinutes": 725,
                 "endMinutes": 895,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Mejdi Eraslan",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77899,7 +77899,7 @@
                 "startMinutes": 485,
                 "endMinutes": 595,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Laith Mayyahi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77921,7 +77921,7 @@
                 "startMinutes": 665,
                 "endMinutes": 835,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Laith Mayyahi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77941,7 +77941,7 @@
                 "startMinutes": 665,
                 "endMinutes": 835,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Laith Mayyahi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -77961,7 +77961,7 @@
                 "startMinutes": 665,
                 "endMinutes": 835,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Laith Mayyahi",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-11"
@@ -92296,8 +92296,8 @@
             "times": [
               {
                 "day": "Fr",
-                "startMinutes": 1115,
-                "endMinutes": 1165,
+                "startMinutes": 1055,
+                "endMinutes": 1105,
                 "virtual": false,
                 "instructor": null,
                 "meetingDates": [
