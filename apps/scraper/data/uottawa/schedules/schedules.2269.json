@@ -1,7 +1,7 @@
 {
   "termId": "2269",
   "totalCourses": 11116,
-  "totalWithSchedules": 3244,
+  "totalWithSchedules": 3246,
   "schedules": [
     {
       "subject": "ADM",
@@ -982,7 +982,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 235,
               "A": 649,
@@ -1170,7 +1170,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 235,
               "A": 649,
@@ -1979,7 +1979,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 448,
               "A": 502,
@@ -3439,7 +3439,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 480,
               "A": 590,
@@ -3501,7 +3501,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 413,
               "A": 478,
@@ -3552,7 +3552,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 413,
               "A": 478,
@@ -3603,7 +3603,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 413,
               "A": 478,
@@ -3745,7 +3745,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 413,
               "A": 478,
@@ -4231,7 +4231,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 361,
               "A": 529,
@@ -4282,7 +4282,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 361,
               "A": 529,
@@ -4770,7 +4770,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 234,
               "A": 368,
@@ -4883,7 +4883,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 159,
               "A": 523,
@@ -4974,7 +4974,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 159,
               "A": 523,
@@ -5382,7 +5382,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 402,
               "A": 686,
@@ -6074,7 +6074,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 790,
               "A": 744,
@@ -6595,7 +6595,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 451,
               "A": 960,
@@ -6761,7 +6761,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -6801,7 +6801,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -6881,7 +6881,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -6921,7 +6921,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -7001,7 +7001,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -7041,7 +7041,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -7121,7 +7121,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -7161,7 +7161,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -7201,7 +7201,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 269,
               "A": 784,
@@ -7303,7 +7303,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 267,
               "A": 285,
@@ -7354,7 +7354,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 267,
               "A": 285,
@@ -7589,7 +7589,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 355,
               "A": 375,
@@ -7640,7 +7640,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 355,
               "A": 375,
@@ -7691,7 +7691,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 355,
               "A": 375,
@@ -7864,7 +7864,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 370,
               "A": 196,
@@ -8030,7 +8030,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 168,
               "A": 409,
@@ -8336,7 +8336,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 79,
               "A": 258,
@@ -8478,7 +8478,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 211,
               "A": 181,
@@ -8961,7 +8961,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 268,
               "A": 427,
@@ -9094,7 +9094,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 236,
               "A": 423,
@@ -9174,7 +9174,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 236,
               "A": 423,
@@ -9254,7 +9254,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 236,
               "A": 423,
@@ -9374,7 +9374,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 236,
               "A": 423,
@@ -9487,7 +9487,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 343,
               "A": 610,
@@ -11336,7 +11336,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 123,
               "A": 90,
@@ -12641,7 +12641,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 180,
               "A": 229,
@@ -12989,7 +12989,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 71,
               "A": 229,
@@ -13233,7 +13233,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 451,
               "A": 596,
@@ -13437,7 +13437,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 32,
               "A": 80,
@@ -14483,7 +14483,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 20,
               "A": 114,
@@ -14971,7 +14971,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 24,
               "A": 112,
@@ -15197,7 +15197,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 348,
               "A": 295,
@@ -15860,7 +15860,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 121,
               "A": 144,
@@ -18527,7 +18527,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 28,
               "A": 26,
@@ -19121,7 +19121,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 68,
               "A": 29,
@@ -19216,7 +19216,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1290,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-16",
                   "2026-10-16"
@@ -19227,7 +19227,7 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-17",
                   "2026-10-17"
@@ -19238,7 +19238,7 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-18",
                   "2026-10-18"
@@ -19249,7 +19249,7 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-17",
                   "2026-10-17"
@@ -19260,14 +19260,14 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-18",
                   "2026-10-18"
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -19298,7 +19298,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 4,
               "A": 10,
@@ -19382,7 +19382,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1290,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-16",
                   "2026-10-16"
@@ -19393,7 +19393,7 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-17",
                   "2026-10-17"
@@ -19404,7 +19404,7 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-18",
                   "2026-10-18"
@@ -19415,7 +19415,7 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-17",
                   "2026-10-17"
@@ -19426,7 +19426,7 @@
                 "startMinutes": 540,
                 "endMinutes": 1020,
                 "virtual": false,
-                "instructor": "Staff",
+                "instructor": "Cristian Zaelzer-Perez",
                 "meetingDates": [
                   "2026-10-18",
                   "2026-10-18"
@@ -19759,7 +19759,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 485,
               "A": 249,
@@ -21713,7 +21713,18 @@
                 "instructor": "Nathan Pécout--Le Bras",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-09"
+                  "2026-10-01"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Nathan Pécout--Le Bras",
+                "meetingDates": [
+                  "2026-10-07",
+                  "2026-12-02"
                 ]
               }
             ],
@@ -24083,7 +24094,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 63,
               "A": 61,
@@ -24715,7 +24726,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 26,
               "A": 50,
@@ -24963,7 +24974,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 26,
               "A": 50,
@@ -25587,7 +25598,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 34,
               "A": 35,
@@ -25649,7 +25660,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 35,
@@ -26858,7 +26869,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 10,
               "A": 25,
@@ -28852,7 +28863,7 @@
                 "startMinutes": 690,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Tiago Duarte",
+                "instructor": "Diane Mary Culver",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -29733,7 +29744,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 18,
               "A": 124,
@@ -30516,7 +30527,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 25,
               "A": 218,
@@ -30986,7 +30997,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1040,
                 "virtual": false,
-                "instructor": "Sara Ali",
+                "instructor": "Areej Tayem",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -30997,7 +31008,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Sara Ali",
+                "instructor": "Areej Tayem",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -31157,7 +31168,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 963,
               "A": 341,
@@ -31474,7 +31485,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 127,
               "A": 159,
@@ -31525,7 +31536,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 67,
               "A": 104,
@@ -32063,7 +32074,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 38,
               "A": 83,
@@ -32561,7 +32572,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 13,
               "A": 24,
@@ -34366,7 +34377,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 161,
               "A": 118,
@@ -34577,7 +34588,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 277,
               "A": 279,
@@ -39015,7 +39026,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 82,
               "A": 93,
@@ -39066,7 +39077,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 60,
               "A": 60,
@@ -41984,7 +41995,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 49,
               "A": 40,
@@ -42334,7 +42345,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "C00-SEM FullSess.",
@@ -43361,7 +43372,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 141,
               "A": 190,
@@ -50917,7 +50928,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2180,
               "A": 1732,
@@ -51107,7 +51118,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2180,
               "A": 1732,
@@ -52163,7 +52174,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 37,
               "A": 33,
@@ -53330,7 +53341,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1137,
               "A": 777,
@@ -56083,7 +56094,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 30,
               "A": 25,
@@ -57738,7 +57749,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 412,
               "A": 165,
@@ -58292,7 +58303,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 139,
               "A": 114,
@@ -58602,7 +58613,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 76,
               "A": 42,
@@ -59230,7 +59241,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 14,
               "A": 19,
@@ -59615,7 +59626,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 161,
               "A": 88,
@@ -59739,7 +59750,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 22,
               "A": 22,
@@ -62362,7 +62373,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 106,
               "A": 175,
@@ -68015,7 +68026,7 @@
                 "startMinutes": 960,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Kelly Keenan",
+                "instructor": "KELLY KEENAN",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -68904,7 +68915,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -68923,7 +68934,7 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -71533,7 +71544,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 93,
               "A": 79,
@@ -71904,7 +71915,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 487,
               "A": 336,
@@ -72396,7 +72407,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 309,
               "A": 283,
@@ -72447,7 +72458,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 29,
               "A": 14,
@@ -73162,7 +73173,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 62,
               "A": 90,
@@ -73640,7 +73651,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 319,
               "A": 185,
@@ -75944,7 +75955,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1,
               "A": 4,
@@ -77492,7 +77503,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 86,
               "A": 105,
@@ -77729,7 +77740,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 39,
               "A": 85,
@@ -78008,7 +78019,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 104,
               "A": 107,
@@ -78400,7 +78411,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 12,
               "A": 46,
@@ -78513,7 +78524,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 10,
               "A": 65,
@@ -78907,7 +78918,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 203,
               "A": 193,
@@ -79691,7 +79702,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 107,
               "A": 188,
@@ -80874,7 +80885,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2,
               "A": 6,
@@ -86920,7 +86931,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 101,
               "A": 97,
@@ -87137,7 +87148,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 28,
               "A": 42,
@@ -87341,7 +87352,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 28,
               "A": 42,
@@ -88532,7 +88543,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 67,
               "A": 49,
@@ -88729,7 +88740,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 38,
               "A": 45,
@@ -89825,7 +89836,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 82,
               "A": 104,
@@ -92754,7 +92765,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "C00-SEM FullSess.",
@@ -94827,7 +94838,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -95423,7 +95434,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 2,
@@ -96665,7 +96676,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 84,
               "A": 187,
@@ -97997,7 +98008,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3,
               "A": 8,
@@ -100417,7 +100428,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 9,
               "A": 8,
@@ -100849,7 +100860,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3,
               "A": 0,
@@ -104347,7 +104358,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 34,
               "A": 40,
@@ -110666,7 +110677,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 843,
               "A": 935,
@@ -110694,7 +110705,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 843,
               "A": 935,
@@ -110722,7 +110733,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 843,
               "A": 935,
@@ -110750,7 +110761,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 843,
               "A": 935,
@@ -115612,7 +115623,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 114,
               "A": 105,
@@ -119197,7 +119208,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1,
               "A": 3,
@@ -120105,6 +120116,25 @@
     },
     {
       "subject": "EMP",
+      "catalogNumber": "5910",
+      "courseCode": "EMP 5910",
+      "title": "Directed Studies",
+      "timeZone": "America/Toronto",
+      "components": {
+        "REC": [
+          {
+            "section": "F00-REC FullSess.",
+            "sectionCode": "F00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "EMP",
       "catalogNumber": "6362",
       "courseCode": "EMP 6362",
       "title": "Project Management",
@@ -120293,7 +120323,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -120599,7 +120629,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -120701,7 +120731,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -121007,7 +121037,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -121160,7 +121190,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -121976,7 +122006,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -122016,7 +122046,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -122056,7 +122086,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -122496,7 +122526,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -122576,7 +122606,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -122696,7 +122726,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -122878,7 +122908,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -123220,7 +123250,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -123260,7 +123290,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -123460,7 +123490,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3096,
               "A": 4304,
@@ -123504,14 +123534,14 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -123711,7 +123741,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -123744,7 +123774,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -123784,7 +123814,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -123824,7 +123854,7 @@
                 "startMinutes": 870,
                 "endMinutes": 950,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -123866,14 +123896,14 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -123906,14 +123936,14 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -123946,7 +123976,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124193,7 +124223,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -124513,7 +124543,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1503,
               "A": 1803,
@@ -124586,7 +124616,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124626,7 +124656,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124666,7 +124696,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124706,7 +124736,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124746,7 +124776,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124786,7 +124816,7 @@
                 "startMinutes": 690,
                 "endMinutes": 770,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124826,7 +124856,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124866,7 +124896,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124906,7 +124936,7 @@
                 "startMinutes": 780,
                 "endMinutes": 860,
                 "virtual": false,
-                "instructor": "Ila Ahlawat",
+                "instructor": "ILA AHLAWAT",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -124975,7 +125005,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1194,
               "A": 1808,
@@ -125128,7 +125158,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1194,
               "A": 1808,
@@ -125179,7 +125209,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1194,
               "A": 1808,
@@ -125383,7 +125413,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 50,
               "A": 165,
@@ -125525,7 +125555,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -125807,7 +125837,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -126047,7 +126077,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -126087,7 +126117,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 390,
               "A": 894,
@@ -126309,7 +126339,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 43,
               "A": 52,
@@ -126903,7 +126933,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 18,
               "A": 16,
@@ -127160,7 +127190,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 159,
               "A": 273,
@@ -127475,7 +127505,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 17,
               "A": 28,
@@ -127712,7 +127742,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -127754,7 +127784,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 4,
               "A": 6,
@@ -128350,7 +128380,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 17,
               "A": 30,
@@ -129222,6 +129252,28 @@
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Trudy Wohlleben",
+                "meetingDates": [
+                  "2026-09-29",
+                  "2026-10-09"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Trudy Wohlleben",
+                "meetingDates": [
+                  "2026-09-29",
+                  "2026-10-09"
                 ]
               }
             ],
@@ -131475,6 +131527,17 @@
                 "instructor": "Sandra Houle",
                 "meetingDates": [
                   "2026-09-11",
+                  "2026-11-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Lissa Pacheco-Brousseau",
+                "meetingDates": [
+                  "2026-11-07",
                   "2026-12-04"
                 ]
               }
@@ -132976,7 +133039,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -133056,7 +133119,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -133176,7 +133239,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -133296,7 +133359,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -133376,7 +133439,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -133536,7 +133599,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -133576,7 +133639,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -133696,7 +133759,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1463,
               "A": 752,
@@ -134006,7 +134069,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Gabriela Romero",
+                "instructor": "GABRIELA ROMERO",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -134017,7 +134080,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1130,
                 "virtual": false,
-                "instructor": "Gabriela Romero",
+                "instructor": "GABRIELA ROMERO",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -136496,6 +136559,17 @@
                 "instructor": "Sadjo Paquita",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-09-28"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 690,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Sadjo Paquita",
+                "meetingDates": [
+                  "2026-10-05",
                   "2026-12-09"
                 ]
               }
@@ -137372,7 +137446,7 @@
                 "instructor": "Georges Y Lafortune",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-09"
+                  "2026-11-29"
                 ]
               },
               {
@@ -137383,6 +137457,28 @@
                 "instructor": "Georges Y Lafortune",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-11-29"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Georges Y Lafortune",
+                "meetingDates": [
+                  "2026-11-30",
+                  "2026-12-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 780,
+                "endMinutes": 860,
+                "virtual": false,
+                "instructor": "Georges Y Lafortune",
+                "meetingDates": [
+                  "2026-11-30",
                   "2026-12-09"
                 ]
               }
@@ -138861,7 +138957,7 @@
                 "instructor": "Georges Y Lafortune",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-09"
+                  "2026-12-02"
                 ]
               },
               {
@@ -138872,6 +138968,28 @@
                 "instructor": "Georges Y Lafortune",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-12-02"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 510,
+                "endMinutes": 590,
+                "virtual": false,
+                "instructor": "Georges Y Lafortune",
+                "meetingDates": [
+                  "2026-12-03",
+                  "2026-12-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 600,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Georges Y Lafortune",
+                "meetingDates": [
+                  "2026-12-03",
                   "2026-12-09"
                 ]
               }
@@ -140236,7 +140354,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 679,
               "A": 1103,
@@ -140602,7 +140720,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 679,
               "A": 1103,
@@ -141213,7 +141331,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 362,
               "A": 365,
@@ -142767,7 +142885,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 242,
               "A": 137,
@@ -143700,6 +143818,28 @@
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Trudy Wohlleben",
+                "meetingDates": [
+                  "2026-09-29",
+                  "2026-10-09"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 950,
+                "virtual": false,
+                "instructor": "Trudy Wohlleben",
+                "meetingDates": [
+                  "2026-09-29",
+                  "2026-10-09"
                 ]
               }
             ],
@@ -146004,7 +146144,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 53,
               "A": 67,
@@ -146044,7 +146184,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 53,
               "A": 67,
@@ -148653,7 +148793,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 433,
               "A": 784,
@@ -149397,11 +149537,11 @@
                 "instructor": "Martin Noël",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-09"
+                  "2026-12-08"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 842,
               "A": 588,
@@ -150522,7 +150662,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 111,
               "A": 210,
@@ -151072,7 +151212,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 180,
               "A": 177,
@@ -151849,7 +151989,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 446,
               "A": 502,
@@ -152204,7 +152344,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 152,
               "A": 216,
@@ -152244,7 +152384,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 152,
               "A": 216,
@@ -152324,7 +152464,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 152,
               "A": 216,
@@ -153598,7 +153738,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 37,
               "A": 65,
@@ -153959,7 +154099,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 86,
               "A": 71,
@@ -154021,7 +154161,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 127,
               "A": 73,
@@ -154145,7 +154285,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 32,
               "A": 86,
@@ -154320,7 +154460,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 29,
               "A": 91,
@@ -154382,7 +154522,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 33,
               "A": 162,
@@ -154506,7 +154646,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 7,
               "A": 14,
@@ -154692,7 +154832,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 16,
               "A": 18,
@@ -155363,7 +155503,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 35,
               "A": 79,
@@ -155832,7 +155972,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 51,
               "A": 65,
@@ -156760,7 +156900,7 @@
                 "startMinutes": 1140,
                 "endMinutes": 1310,
                 "virtual": true,
-                "instructor": "Galaxia Maria Rodriguez",
+                "instructor": "Galaxia Rodriguez Dangond",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -156920,7 +157060,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 976,
               "A": 956,
@@ -157504,7 +157644,7 @@
                 "instructor": "Jason Steffener",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-09"
+                  "2026-12-08"
                 ]
               }
             ],
@@ -158368,7 +158508,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 332,
               "A": 405,
@@ -158430,7 +158570,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 201,
               "A": 170,
@@ -160722,6 +160862,17 @@
                 "instructor": "Channarong Intahchomphoo",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-10-01"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Channarong Intahchomphoo",
+                "meetingDates": [
+                  "2026-09-09",
                   "2026-12-09"
                 ]
               }
@@ -161152,7 +161303,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 473,
               "A": 267,
@@ -161693,7 +161844,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1270,
               "A": 722,
@@ -161813,7 +161964,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1270,
               "A": 722,
@@ -162568,7 +162719,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 509,
               "A": 302,
@@ -164655,7 +164806,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 283,
               "A": 160,
@@ -165021,7 +165172,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 66,
               "A": 37,
@@ -165592,7 +165743,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 88,
               "A": 74,
@@ -166839,7 +166990,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 54,
               "A": 39,
@@ -167812,7 +167963,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1878,
               "A": 839,
@@ -168092,7 +168243,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1878,
               "A": 839,
@@ -168372,7 +168523,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1878,
               "A": 839,
@@ -169029,7 +169180,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1268,
               "A": 708,
@@ -169071,7 +169222,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1268,
               "A": 708,
@@ -169151,7 +169302,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1268,
               "A": 708,
@@ -169191,7 +169342,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1268,
               "A": 708,
@@ -170833,7 +170984,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -170873,7 +171024,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -170913,7 +171064,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -171313,7 +171464,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -171353,7 +171504,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1542,
               "A": 864,
@@ -172093,7 +172244,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 760,
               "A": 332,
@@ -177016,7 +177167,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1,
               "A": 2,
@@ -177184,7 +177335,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -177195,7 +177346,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -177870,7 +178021,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -177881,7 +178032,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Dingke Tang",
+                "instructor": "DINGKE TANG",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -179812,7 +179963,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 26,
               "A": 75,
@@ -180156,7 +180307,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 60,
               "A": 47,
@@ -180905,7 +181056,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 89,
               "A": 111,
@@ -181224,7 +181375,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 85,
               "A": 60,
@@ -181266,7 +181417,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 85,
               "A": 60,
@@ -181370,7 +181521,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 49,
               "A": 32,
@@ -182700,7 +182851,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 38,
               "A": 61,
@@ -190419,7 +190570,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 121,
               "A": 166,
@@ -192083,7 +192234,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -193102,7 +193253,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           }
         ]
       }
@@ -194478,7 +194629,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "AB00-LAB FullSess.",
@@ -194498,7 +194649,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "AC00-LAB FullSess.",
@@ -194645,19 +194796,7 @@
             "sectionCode": "AJ00",
             "component": "LAB",
             "session": null,
-            "times": [
-              {
-                "day": "Th",
-                "startMinutes": 1020,
-                "endMinutes": 1190,
-                "virtual": false,
-                "instructor": "Jane Jessica Tyerman",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
+            "times": [],
             "status": "Closed"
           },
           {
@@ -194922,19 +195061,7 @@
             "sectionCode": "AI00",
             "component": "LAB",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 1020,
-                "endMinutes": 1190,
-                "virtual": false,
-                "instructor": "Brandi Lynn Vanderspank",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
+            "times": [],
             "status": "Closed"
           },
           {
@@ -199771,7 +199898,7 @@
                 "startMinutes": 1050,
                 "endMinutes": 1220,
                 "virtual": false,
-                "instructor": "Hélène Laperrière",
+                "instructor": "Vincent Martin-Schreiber",
                 "meetingDates": [
                   "2026-10-20",
                   "2026-10-20"
@@ -200661,6 +200788,28 @@
                 "instructor": "Crystal Graham",
                 "meetingDates": [
                   "2026-09-26",
+                  "2026-11-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Crystal Graham",
+                "meetingDates": [
+                  "2026-11-06",
+                  "2026-11-06"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 510,
+                "endMinutes": 680,
+                "virtual": false,
+                "instructor": "Crystal Graham",
+                "meetingDates": [
+                  "2026-11-07",
                   "2026-12-09"
                 ]
               }
@@ -202251,6 +202400,17 @@
                 "instructor": "Christine Gloade",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-10-04"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Christine Gloade",
+                "meetingDates": [
+                  "2026-10-05",
                   "2026-12-09"
                 ]
               }
@@ -202291,6 +202451,50 @@
                 "instructor": "Brenda Halabisky",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-11-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Brenda Halabisky",
+                "meetingDates": [
+                  "2026-11-02",
+                  "2026-11-09"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Brenda Halabisky",
+                "meetingDates": [
+                  "2026-11-10",
+                  "2026-11-22"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Brenda Halabisky",
+                "meetingDates": [
+                  "2026-11-23",
+                  "2026-11-23"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Brenda Halabisky",
+                "meetingDates": [
+                  "2026-11-24",
                   "2026-12-09"
                 ]
               }
@@ -202331,6 +202535,50 @@
                 "instructor": "Joanna Binch",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-11-01"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Joanna Binch",
+                "meetingDates": [
+                  "2026-11-02",
+                  "2026-11-09"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Joanna Binch",
+                "meetingDates": [
+                  "2026-11-10",
+                  "2026-11-22"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Joanna Binch",
+                "meetingDates": [
+                  "2026-11-23",
+                  "2026-11-23"
+                ]
+              },
+              {
+                "day": "Mo",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Joanna Binch",
+                "meetingDates": [
+                  "2026-11-24",
                   "2026-12-09"
                 ]
               }
@@ -202869,7 +203117,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -202955,7 +203203,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -202982,6 +203230,17 @@
                 "instructor": "Émilie Isabelle Beké",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-10-05"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Émilie Isabelle Beké",
+                "meetingDates": [
+                  "2026-10-06",
                   "2026-12-09"
                 ]
               }
@@ -203022,6 +203281,17 @@
                 "instructor": "Julie Massicotte",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-10-05"
+                ]
+              },
+              {
+                "day": "Tu",
+                "startMinutes": 1050,
+                "endMinutes": 1220,
+                "virtual": false,
+                "instructor": "Julie Massicotte",
+                "meetingDates": [
+                  "2026-10-06",
                   "2026-12-09"
                 ]
               }
@@ -204386,6 +204656,28 @@
                 "instructor": "Jean-François Mauger",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-11-05"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Jean-François Mauger",
+                "meetingDates": [
+                  "2026-11-06",
+                  "2026-11-06"
+                ]
+              },
+              {
+                "day": "Fr",
+                "startMinutes": 870,
+                "endMinutes": 1040,
+                "virtual": false,
+                "instructor": "Jean-François Mauger",
+                "meetingDates": [
+                  "2026-11-07",
                   "2026-12-09"
                 ]
               }
@@ -207711,7 +208003,7 @@
                 "startMinutes": 510,
                 "endMinutes": 590,
                 "virtual": false,
-                "instructor": "Mohammad Habibur Rahman",
+                "instructor": "Mohammed Habibur Rahman",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -207722,7 +208014,7 @@
                 "startMinutes": 600,
                 "endMinutes": 680,
                 "virtual": false,
-                "instructor": "Mohammad Habibur Rahman",
+                "instructor": "Mohammed Habibur Rahman",
                 "meetingDates": [
                   "2026-09-09",
                   "2026-12-09"
@@ -208028,7 +208320,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 47,
               "A": 87,
@@ -209213,7 +209505,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1,
               "A": 1,
@@ -209404,7 +209696,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -210027,20 +210319,8 @@
             "sectionCode": "F140",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Marie-Josée Bourget",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-04"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 147,
               "A": 304,
@@ -210067,20 +210347,8 @@
             "sectionCode": "F150",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "We",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Cécile L R Catalfo",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-04"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 147,
               "A": 304,
@@ -210107,20 +210375,8 @@
             "sectionCode": "F160",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Tu",
-                "startMinutes": 1050,
-                "endMinutes": 1220,
-                "virtual": false,
-                "instructor": "Cécile L R Catalfo",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-04"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 147,
               "A": 304,
@@ -213937,7 +214193,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "E02-DGD Term",
@@ -214719,20 +214975,8 @@
             "sectionCode": "OV10",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": true,
-                "instructor": "Lise Charlebois",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-04"
-                ]
-              }
-            ],
-            "status": "Open"
+            "times": [],
+            "status": "Closed"
           }
         ]
       }
@@ -216309,7 +216553,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 290,
               "A": 1198,
@@ -216349,7 +216593,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 290,
               "A": 1198,
@@ -216708,7 +216952,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 196,
               "A": 312,
@@ -217423,53 +217667,8 @@
             "sectionCode": "V06",
             "component": "DGD",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 1080,
-                "endMinutes": 1200,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-10-02",
-                  "2026-10-02"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1200,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-10-28",
-                  "2026-10-28"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1200,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-11-18",
-                  "2026-11-18"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 1080,
-                "endMinutes": 1200,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-12-09",
-                  "2026-12-09"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -217617,7 +217816,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Closed"
           },
           {
             "section": "T02-DGD Term",
@@ -218562,40 +218761,16 @@
             "sectionCode": "I00",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-04"
-                ]
-              }
-            ],
-            "status": "Open"
+            "times": [],
+            "status": "Closed"
           },
           {
             "section": "OV10-LEC Term",
             "sectionCode": "OV10",
             "component": "LEC",
             "session": null,
-            "times": [
-              {
-                "day": "Fr",
-                "startMinutes": 510,
-                "endMinutes": 680,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-09-09",
-                  "2026-12-04"
-                ]
-              }
-            ],
-            "status": "Open"
+            "times": [],
+            "status": "Closed"
           }
         ]
       }
@@ -218677,7 +218852,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 98,
               "A": 173,
@@ -219867,7 +220042,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 337,
               "A": 1062,
@@ -223617,42 +223792,8 @@
             "sectionCode": "V02",
             "component": "DGD",
             "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 1080,
-                "endMinutes": 1200,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-10-05",
-                  "2026-10-05"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1080,
-                "endMinutes": 1200,
-                "virtual": false,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-11-12",
-                  "2026-11-12"
-                ]
-              },
-              {
-                "day": "Th",
-                "startMinutes": 1080,
-                "endMinutes": 1200,
-                "virtual": true,
-                "instructor": "Staff",
-                "meetingDates": [
-                  "2026-12-10",
-                  "2026-12-10"
-                ]
-              }
-            ],
-            "status": "Open",
+            "times": [],
+            "status": "Closed",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -223900,7 +224041,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 0,
               "A": 0,
@@ -224225,7 +224366,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 66,
               "A": 13,
@@ -224697,7 +224838,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2834,
               "A": 1951,
@@ -226210,7 +226351,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 2191,
               "A": 1688,
@@ -226757,7 +226898,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 864,
               "A": 443,
@@ -228543,8 +228684,8 @@
               },
               {
                 "day": "Mo",
-                "startMinutes": 750,
-                "endMinutes": 920,
+                "startMinutes": 810,
+                "endMinutes": 990,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -228576,8 +228717,8 @@
               },
               {
                 "day": "Mo",
-                "startMinutes": 750,
-                "endMinutes": 920,
+                "startMinutes": 810,
+                "endMinutes": 980,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -228609,8 +228750,8 @@
               },
               {
                 "day": "Mo",
-                "startMinutes": 750,
-                "endMinutes": 920,
+                "startMinutes": 810,
+                "endMinutes": 980,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -228675,8 +228816,8 @@
               },
               {
                 "day": "Mo",
-                "startMinutes": 750,
-                "endMinutes": 920,
+                "startMinutes": 810,
+                "endMinutes": 980,
                 "virtual": false,
                 "instructor": "Staff",
                 "meetingDates": [
@@ -229275,8 +229416,8 @@
               },
               {
                 "day": "Tu",
-                "startMinutes": 660,
-                "endMinutes": 830,
+                "startMinutes": 780,
+                "endMinutes": 960,
                 "virtual": false,
                 "instructor": "Philippe Comtois",
                 "meetingDates": [
@@ -235721,7 +235862,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 95,
               "A": 38,
@@ -236051,7 +236192,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 65,
               "A": 57,
@@ -236135,7 +236276,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 65,
               "A": 57,
@@ -237768,7 +237909,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -238272,7 +238413,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -239112,7 +239253,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -239280,7 +239421,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 693,
               "A": 369,
@@ -239937,7 +240078,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -240347,7 +240488,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -240431,7 +240572,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -240599,7 +240740,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -240935,7 +241076,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -241271,7 +241412,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -241355,7 +241496,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -241439,7 +241580,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -241943,7 +242084,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -242111,7 +242252,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -242195,7 +242336,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 275,
               "A": 181,
@@ -243904,7 +244045,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 378,
               "A": 169,
@@ -245244,7 +245385,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 40,
               "A": 36,
@@ -247669,7 +247810,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 217,
               "A": 454,
@@ -247731,7 +247872,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 545,
               "A": 1017,
@@ -247997,7 +248138,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 821,
               "A": 541,
@@ -248389,7 +248530,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 226,
               "A": 188,
@@ -248673,6 +248814,17 @@
                 "instructor": "Jacqueline Best",
                 "meetingDates": [
                   "2026-09-09",
+                  "2026-09-30"
+                ]
+              },
+              {
+                "day": "We",
+                "startMinutes": 690,
+                "endMinutes": 770,
+                "virtual": false,
+                "instructor": "Jacqueline Best",
+                "meetingDates": [
+                  "2026-10-01",
                   "2026-12-09"
                 ]
               }
@@ -250343,7 +250495,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 44,
               "A": 71,
@@ -250445,7 +250597,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 8,
               "A": 31,
@@ -250660,7 +250812,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 77,
               "A": 96,
@@ -250711,7 +250863,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 15,
               "A": 38,
@@ -250824,7 +250976,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 5,
               "A": 54,
@@ -251549,7 +251701,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 30,
               "A": 45,
@@ -253057,11 +253209,19 @@
             "component": "REC",
             "session": null,
             "times": [],
-            "status": "Closed"
+            "status": "Open"
           },
           {
             "section": "B00-REC FullSess.",
             "sectionCode": "B00",
+            "component": "REC",
+            "session": null,
+            "times": [],
+            "status": "Closed"
+          },
+          {
+            "section": "C00-REC FullSess.",
+            "sectionCode": "C00",
             "component": "REC",
             "session": null,
             "times": [],
@@ -253707,7 +253867,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 3043,
               "A": 2673,
@@ -253933,7 +254093,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1241,
               "A": 1139,
@@ -254227,7 +254387,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1954,
               "A": 1394,
@@ -254433,7 +254593,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 844,
               "A": 507,
@@ -254633,7 +254793,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 844,
               "A": 507,
@@ -254775,7 +254935,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1374,
               "A": 1013,
@@ -254866,7 +255026,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1374,
               "A": 1013,
@@ -255174,7 +255334,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 470,
               "A": 491,
@@ -255460,7 +255620,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 470,
               "A": 491,
@@ -257085,7 +257245,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 835,
               "A": 545,
@@ -257497,7 +257657,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -257663,7 +257823,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 596,
               "A": 227,
@@ -257849,7 +258009,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 479,
               "A": 416,
@@ -257940,7 +258100,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 479,
               "A": 416,
@@ -259070,7 +259230,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 474,
               "A": 409,
@@ -259110,7 +259270,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 474,
               "A": 409,
@@ -259653,7 +259813,7 @@
                 ]
               }
             ],
-            "status": "Open",
+            "status": "Closed",
             "distribution": {
               "A+": 439,
               "A": 186,
@@ -262146,7 +262306,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 36,
               "A": 148,
@@ -262732,7 +262892,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 120,
               "A": 122,
@@ -263993,6 +264153,25 @@
     },
     {
       "subject": "SED",
+      "catalogNumber": "3100",
+      "courseCode": "SED 3100",
+      "title": "Topics in Multidisciplinary Design",
+      "timeZone": "America/Toronto",
+      "components": {
+        "LEC": [
+          {
+            "section": "A00-LEC FullSess.",
+            "sectionCode": "A00",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "SED",
       "catalogNumber": "3111",
       "courseCode": "SED 3111",
       "title": "Multidisciplinary Design I",
@@ -264627,7 +264806,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 952,
               "A": 679,
@@ -264909,7 +265088,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 952,
               "A": 679,
@@ -265028,7 +265207,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 952,
               "A": 679,
@@ -267113,7 +267292,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 1101,
               "A": 1027,
@@ -267423,7 +267602,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 43,
               "A": 94,
@@ -268688,11 +268867,22 @@
                 "instructor": "Patricia Kmiec",
                 "meetingDates": [
                   "2026-09-09",
-                  "2026-12-09"
+                  "2026-10-02"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 1140,
+                "endMinutes": 1310,
+                "virtual": false,
+                "instructor": "Patricia Kmiec",
+                "meetingDates": [
+                  "2026-10-08",
+                  "2026-12-03"
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 26,
               "A": 43,
@@ -270056,7 +270246,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 18,
               "A": 15,
@@ -278489,7 +278679,7 @@
                 ]
               }
             ],
-            "status": "Closed",
+            "status": "Open",
             "distribution": {
               "A+": 180,
               "A": 61,
@@ -279508,7 +279698,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }
@@ -279594,7 +279784,7 @@
                 ]
               }
             ],
-            "status": "Closed"
+            "status": "Open"
           }
         ]
       }

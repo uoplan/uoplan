@@ -1,7 +1,7 @@
 {
   "termId": "202710",
-  "totalCourses": 2071,
-  "totalWithSchedules": 2071,
+  "totalCourses": 2070,
+  "totalWithSchedules": 2070,
   "schedules": [
     {
       "subject": "ACSE",
@@ -790,7 +790,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -863,7 +863,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -1020,7 +1020,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -1208,7 +1208,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A03-DG",
@@ -1248,7 +1248,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A05-DG",
@@ -1412,7 +1412,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "FS": [
@@ -1422,7 +1422,7 @@
             "component": "FS",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -1450,7 +1450,7 @@
       "subject": "AFRI",
       "catalogNumber": "4000",
       "courseCode": "AFRI 4000",
-      "title": "Socialism vis-a-vis Capitalism",
+      "title": "Ethnopolitics Sub-Saharan Afri",
       "timeZone": "America/Toronto",
       "components": {
         "SEM": [
@@ -1906,7 +1906,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -2199,7 +2199,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -2392,7 +2392,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -2671,7 +2671,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "DG": [
@@ -2733,7 +2733,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "C05-DG",
@@ -2866,7 +2866,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B03-DG",
@@ -3689,7 +3689,7 @@
                 "startMinutes": 515,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Tonya Davidson",
+                "instructor": "Blair Rutherford",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -4287,7 +4287,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -5547,6 +5547,99 @@
               }
             ],
             "status": "Open"
+          },
+          {
+            "section": "B-STG",
+            "sectionCode": "B",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 725,
+                "endMinutes": 955,
+                "virtual": false,
+                "instructor": "Janine Debanne",
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 725,
+                "endMinutes": 955,
+                "virtual": false,
+                "instructor": "Janine Debanne",
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Full, No Waitlist"
+          },
+          {
+            "section": "C-STG",
+            "sectionCode": "C",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 725,
+                "endMinutes": 955,
+                "virtual": false,
+                "instructor": "Honorata Pienkowska-Roseman",
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 725,
+                "endMinutes": 955,
+                "virtual": false,
+                "instructor": "Honorata Pienkowska-Roseman",
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Full, No Waitlist"
+          },
+          {
+            "section": "D-STG",
+            "sectionCode": "D",
+            "component": "STG",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 725,
+                "endMinutes": 955,
+                "virtual": false,
+                "instructor": "Jay Sze-Leon Lim",
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              },
+              {
+                "day": "Th",
+                "startMinutes": 725,
+                "endMinutes": 955,
+                "virtual": false,
+                "instructor": "Jay Sze-Leon Lim",
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -5807,7 +5900,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -5960,7 +6053,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B07-TUT",
@@ -6000,7 +6093,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B09-TUT",
@@ -6133,7 +6226,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B04-TUT",
@@ -6273,7 +6366,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -6428,7 +6521,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -6850,7 +6943,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -7304,7 +7397,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "F-SEM",
@@ -7997,7 +8090,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ],
         "LAB": [
@@ -8039,7 +8132,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -8193,7 +8286,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B-LEC",
@@ -8286,7 +8379,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A07-LAB",
@@ -8479,6 +8572,14 @@
       "timeZone": "America/Toronto",
       "components": {
         "LEC": [
+          {
+            "section": "E-LEC",
+            "sectionCode": "E",
+            "component": "LEC",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          },
           {
             "section": "W-LEC",
             "sectionCode": "W",
@@ -8813,7 +8914,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A10-LAB",
@@ -9225,7 +9326,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           }
         ]
       }
@@ -9362,7 +9463,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -9426,7 +9527,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A02-LAB",
@@ -9466,7 +9567,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -9855,7 +9956,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ],
         "LAB": [
@@ -9897,7 +9998,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -11814,7 +11915,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           }
         ],
         "TUT": [
@@ -11896,7 +11997,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "T05-TUT",
@@ -11956,7 +12057,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "T08-TUT",
@@ -12076,7 +12177,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "T14-TUT",
@@ -12329,7 +12430,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "D02-TUT",
@@ -12906,7 +13007,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -13343,7 +13444,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Open"
           }
         ]
       }
@@ -13445,7 +13546,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           },
           {
             "section": "D-LEC",
@@ -13465,7 +13566,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           },
           {
             "section": "E-LEC",
@@ -13485,7 +13586,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ],
         "TUT": [
@@ -13845,7 +13946,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           },
           {
             "section": "F-LEC",
@@ -14457,7 +14558,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B02-TUT",
@@ -14617,7 +14718,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B13-TUT",
@@ -14772,7 +14873,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -14803,7 +14904,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -15711,7 +15812,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Open"
           }
         ]
       }
@@ -15742,7 +15843,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -15886,7 +15987,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           },
           {
             "section": "G-LEC",
@@ -15906,7 +16007,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Open"
           }
         ]
       }
@@ -15977,7 +16078,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           },
           {
             "section": "I-LEC",
@@ -18087,7 +18188,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B3-TUT",
@@ -18138,7 +18239,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -18202,7 +18303,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B2-TUT",
@@ -18315,7 +18416,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           },
           {
             "section": "D-SEM",
@@ -19801,7 +19902,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L4-LAB",
@@ -21383,7 +21484,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A02-DG",
@@ -21403,7 +21504,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A03-DG",
@@ -21547,7 +21648,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -21895,7 +21996,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B-LEC",
@@ -22192,7 +22293,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B-LEC",
@@ -23564,7 +23665,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -23606,7 +23707,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -24114,7 +24215,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B1-TUT",
@@ -24495,7 +24596,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B1-TUT",
@@ -25199,7 +25300,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B2-TUT",
@@ -25418,7 +25519,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A2-TUT",
@@ -25817,7 +25918,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A3-TUT",
@@ -26114,7 +26215,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A3-TUT",
@@ -26134,7 +26235,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A4-TUT",
@@ -26535,7 +26636,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Open"
           }
         ]
       }
@@ -27307,7 +27408,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "LEC": [
@@ -28304,7 +28405,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -28408,7 +28509,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B03-LAB",
@@ -28519,7 +28620,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -29168,7 +29269,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           }
         ]
       }
@@ -29611,7 +29712,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "C-LEC",
@@ -29661,7 +29762,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B03-TUT",
@@ -30067,7 +30168,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -30841,7 +30942,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -30872,7 +30973,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -31435,7 +31536,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A03-DG",
@@ -31595,7 +31696,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           },
           {
             "section": "B03-DG",
@@ -31615,7 +31716,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B04-DG",
@@ -32955,7 +33056,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -33207,7 +33308,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -33238,7 +33339,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -33362,7 +33463,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -34317,7 +34418,7 @@
                 "startMinutes": 995,
                 "endMinutes": 1075,
                 "virtual": false,
-                "instructor": "Lynn Marshall",
+                "instructor": "Jerome Talim",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -34328,7 +34429,7 @@
                 "startMinutes": 995,
                 "endMinutes": 1075,
                 "virtual": false,
-                "instructor": "Lynn Marshall",
+                "instructor": "Jerome Talim",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -34450,7 +34551,7 @@
                 "startMinutes": 695,
                 "endMinutes": 865,
                 "virtual": false,
-                "instructor": "Lynn Marshall",
+                "instructor": "Jerome Talim",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -34470,7 +34571,7 @@
                 "startMinutes": 695,
                 "endMinutes": 865,
                 "virtual": false,
-                "instructor": "Lynn Marshall",
+                "instructor": "Jerome Talim",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -34490,14 +34591,14 @@
                 "startMinutes": 515,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Lynn Marshall",
+                "instructor": "Jerome Talim",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "D4-LAB",
@@ -34510,7 +34611,7 @@
                 "startMinutes": 515,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Lynn Marshall",
+                "instructor": "Jerome Talim",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -34672,7 +34773,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L4-LAB",
@@ -34692,7 +34793,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L5-LAB",
@@ -34712,7 +34813,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L6-LAB",
@@ -35373,7 +35474,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "E1-LAB",
@@ -35852,7 +35953,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B-LEC",
@@ -35905,7 +36006,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L2-LAB",
@@ -35925,7 +36026,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L3-LAB",
@@ -35945,7 +36046,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L4-LAB",
@@ -36025,7 +36126,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L8-LAB",
@@ -36045,7 +36146,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L9-LAB",
@@ -36180,7 +36281,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L3-LAB",
@@ -36280,7 +36381,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -36532,7 +36633,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B2-LAB",
@@ -37041,7 +37142,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L2E-PA",
@@ -37187,7 +37288,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "LAB": [
@@ -37209,7 +37310,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -37251,7 +37352,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ],
         "PA": [
@@ -37273,7 +37374,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -39057,7 +39158,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           }
         ],
         "W": [
@@ -39716,7 +39817,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -39997,7 +40098,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -40829,7 +40930,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -41332,7 +41433,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A2-DG",
@@ -41372,7 +41473,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A4-DG",
@@ -41992,7 +42093,7 @@
                 "startMinutes": 875,
                 "endMinutes": 955,
                 "virtual": false,
-                "instructor": "Elisabeth Gilmore",
+                "instructor": null,
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -42003,7 +42104,7 @@
                 "startMinutes": 875,
                 "endMinutes": 955,
                 "virtual": false,
-                "instructor": "Elisabeth Gilmore",
+                "instructor": null,
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -42025,7 +42126,7 @@
                 "startMinutes": 695,
                 "endMinutes": 775,
                 "virtual": false,
-                "instructor": "Elisabeth Gilmore",
+                "instructor": null,
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -42474,7 +42575,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ],
         "LAB": [
@@ -42516,7 +42617,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -42733,7 +42834,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "E4-LAB",
@@ -43721,7 +43822,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -44787,7 +44888,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "FS": [
@@ -44797,7 +44898,7 @@
             "component": "FS",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -45380,7 +45481,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -45840,7 +45941,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B-LEC",
@@ -46781,7 +46882,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "D-SEM",
@@ -46812,7 +46913,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -47071,7 +47172,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -47095,7 +47196,7 @@
                 "startMinutes": 605,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Pamela Walker",
+                "instructor": "Jill St. Germain",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -47106,7 +47207,7 @@
                 "startMinutes": 605,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Pamela Walker",
+                "instructor": "Jill St. Germain",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -48026,7 +48127,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A04-LAB",
@@ -48130,7 +48231,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A03-LAB",
@@ -48582,7 +48683,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -48682,7 +48783,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -49019,7 +49120,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -49880,48 +49981,6 @@
       }
     },
     {
-      "subject": "GERM",
-      "catalogNumber": "2020",
-      "courseCode": "GERM 2020",
-      "title": "Second-Year German II",
-      "timeZone": "America/Toronto",
-      "components": {
-        "SEM": [
-          {
-            "section": "W-SEM",
-            "sectionCode": "W",
-            "component": "SEM",
-            "session": null,
-            "times": [
-              {
-                "day": "Mo",
-                "startMinutes": 695,
-                "endMinutes": 805,
-                "virtual": true,
-                "instructor": "Thomas Polkinghorne",
-                "meetingDates": [
-                  "2027-01-06",
-                  "2027-04-09"
-                ]
-              },
-              {
-                "day": "We",
-                "startMinutes": 695,
-                "endMinutes": 805,
-                "virtual": true,
-                "instructor": "Thomas Polkinghorne",
-                "meetingDates": [
-                  "2027-01-06",
-                  "2027-04-09"
-                ]
-              }
-            ],
-            "status": "Full, No Waitlist"
-          }
-        ]
-      }
-    },
-    {
       "subject": "GINS",
       "catalogNumber": "1000",
       "courseCode": "GINS 1000",
@@ -50433,7 +50492,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -51069,7 +51128,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A06-DG",
@@ -51158,7 +51217,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -51665,7 +51724,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -52586,25 +52645,6 @@
     },
     {
       "subject": "HIST",
-      "catalogNumber": "5703",
-      "courseCode": "HIST 5703",
-      "title": "Public History Internship",
-      "timeZone": "America/Toronto",
-      "components": {
-        "FP": [
-          {
-            "section": "W-FP",
-            "sectionCode": "W",
-            "component": "FP",
-            "session": null,
-            "times": [],
-            "status": "Open"
-          }
-        ]
-      }
-    },
-    {
-      "subject": "HIST",
       "catalogNumber": "5709",
       "courseCode": "HIST 5709",
       "title": "Photography and Public History",
@@ -53493,7 +53533,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -53978,6 +54018,25 @@
     },
     {
       "subject": "HLTH",
+      "catalogNumber": "5820",
+      "courseCode": "HLTH 5820",
+      "title": "Clinical Trials Practicum",
+      "timeZone": "America/Toronto",
+      "components": {
+        "P": [
+          {
+            "section": "B-P",
+            "sectionCode": "B",
+            "component": "P",
+            "session": null,
+            "times": [],
+            "status": "Open"
+          }
+        ]
+      }
+    },
+    {
+      "subject": "HLTH",
       "catalogNumber": "5902",
       "courseCode": "HLTH 5902",
       "title": "Interdisciplinary Hlth Sci",
@@ -54397,7 +54456,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A02-DG",
@@ -54437,7 +54496,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A04-DG",
@@ -54612,7 +54671,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -56186,7 +56245,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -56825,7 +56884,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -56856,7 +56915,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -56949,7 +57008,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -57042,7 +57101,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -57104,7 +57163,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -57228,7 +57287,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -57290,7 +57349,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -57507,7 +57566,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -57802,7 +57861,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "DG": [
@@ -57884,7 +57943,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -59222,7 +59281,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B-SEM",
@@ -60488,7 +60547,7 @@
                 "startMinutes": 575,
                 "endMinutes": 685,
                 "virtual": true,
-                "instructor": "Kaori Sugimura",
+                "instructor": "Orie Ando",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60499,7 +60558,7 @@
                 "startMinutes": 575,
                 "endMinutes": 685,
                 "virtual": true,
-                "instructor": "Kaori Sugimura",
+                "instructor": "Orie Ando",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60519,7 +60578,7 @@
                 "startMinutes": 695,
                 "endMinutes": 805,
                 "virtual": true,
-                "instructor": "Yoriko Aizu",
+                "instructor": "Kaori Sugimura",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60530,7 +60589,7 @@
                 "startMinutes": 695,
                 "endMinutes": 805,
                 "virtual": true,
-                "instructor": "Yoriko Aizu",
+                "instructor": "Kaori Sugimura",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60654,7 +60713,7 @@
                 "startMinutes": 575,
                 "endMinutes": 685,
                 "virtual": true,
-                "instructor": null,
+                "instructor": "Yoriko Aizu",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60665,7 +60724,7 @@
                 "startMinutes": 575,
                 "endMinutes": 685,
                 "virtual": true,
-                "instructor": null,
+                "instructor": "Yoriko Aizu",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60696,7 +60755,7 @@
                 "startMinutes": 785,
                 "endMinutes": 865,
                 "virtual": true,
-                "instructor": null,
+                "instructor": "Yoriko Aizu",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60707,7 +60766,7 @@
                 "startMinutes": 785,
                 "endMinutes": 865,
                 "virtual": true,
-                "instructor": null,
+                "instructor": "Yoriko Aizu",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -60955,7 +61014,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -60997,7 +61056,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -61039,7 +61098,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -61058,7 +61117,7 @@
             "component": "P",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -61603,7 +61662,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -62507,7 +62566,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "DG": [
@@ -62669,7 +62728,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "D09-DG",
@@ -63042,7 +63101,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "C05-DG",
@@ -63142,7 +63201,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "C10-DG",
@@ -63255,7 +63314,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -63574,7 +63633,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -63946,7 +64005,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -64183,7 +64242,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -64245,7 +64304,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           },
           {
             "section": "C-SEM",
@@ -65461,7 +65520,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -65616,7 +65675,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -65784,7 +65843,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -65866,7 +65925,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -66079,7 +66138,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -66846,7 +66905,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L3-LAB",
@@ -66886,7 +66945,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L5-LAB",
@@ -67041,7 +67100,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L3-LAB",
@@ -67163,7 +67222,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "D-LEC",
@@ -67757,7 +67816,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L3-LAB",
@@ -67777,7 +67836,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -69153,7 +69212,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "I-LEC",
@@ -69308,7 +69367,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "IT-TUT",
@@ -71927,7 +71986,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "LAB": [
@@ -71949,7 +72008,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L2-LAB",
@@ -71969,7 +72028,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -76859,7 +76918,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -77067,7 +77126,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A6-LAB",
@@ -78221,7 +78280,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "LAB": [
@@ -78243,7 +78302,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -78685,7 +78744,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -78860,7 +78919,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -79758,7 +79817,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -79935,7 +79994,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B04-TUT",
@@ -80185,7 +80244,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           }
         ]
       }
@@ -80342,7 +80401,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -81461,7 +81520,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L6B-LAB",
@@ -81581,7 +81640,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L9B-LAB",
@@ -81602,6 +81661,46 @@
               }
             ],
             "status": "Full, No Waitlist"
+          },
+          {
+            "section": "L9C-LAB",
+            "sectionCode": "L9C",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "Mo",
+                "startMinutes": 1085,
+                "endMinutes": 1255,
+                "virtual": false,
+                "instructor": null,
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
+          },
+          {
+            "section": "L9D-LAB",
+            "sectionCode": "L9D",
+            "component": "LAB",
+            "session": null,
+            "times": [
+              {
+                "day": "We",
+                "startMinutes": 1085,
+                "endMinutes": 1255,
+                "virtual": false,
+                "instructor": null,
+                "meetingDates": [
+                  "2027-01-06",
+                  "2027-04-09"
+                ]
+              }
+            ],
+            "status": "Open"
           }
         ]
       }
@@ -82814,7 +82913,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -83048,7 +83147,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -83386,7 +83485,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B04-TUT",
@@ -83466,7 +83565,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B08-TUT",
@@ -83599,7 +83698,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B03-TUT",
@@ -83719,7 +83818,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B09-TUT",
@@ -83943,7 +84042,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Open"
           }
         ],
         "TUT": [
@@ -84005,7 +84104,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A04-TUT",
@@ -84289,7 +84388,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Open"
           }
         ],
         "DG": [
@@ -84371,7 +84470,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A05-DG",
@@ -84484,7 +84583,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A04-DG",
@@ -84843,7 +84942,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A03-DG",
@@ -85209,7 +85308,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A05-DG",
@@ -85320,7 +85419,7 @@
                 ]
               }
             ],
-            "status": "Waitlist Open"
+            "status": "Waitlist Full"
           }
         ]
       }
@@ -85858,14 +85957,14 @@
                 "startMinutes": 695,
                 "endMinutes": 865,
                 "virtual": false,
-                "instructor": "Sophie Marcotte-Chenard",
+                "instructor": null,
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
                 ]
               }
             ],
-            "status": "Waitlist Full"
+            "status": "Waitlist Open"
           }
         ]
       }
@@ -86684,7 +86783,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "M-LEC",
@@ -86828,7 +86927,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "E-LEC",
@@ -86937,7 +87036,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -87099,7 +87198,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           }
         ]
       }
@@ -87157,7 +87256,7 @@
             "component": "LEC",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "C-LEC",
@@ -87270,7 +87369,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "C1-TUT",
@@ -87557,7 +87656,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -88729,7 +88828,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "D-SEM",
@@ -88749,7 +88848,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "E-SEM",
@@ -88829,7 +88928,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -88900,7 +88999,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "D-SEM",
@@ -88920,7 +89019,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "E-SEM",
@@ -89000,7 +89099,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -89637,7 +89736,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -90992,7 +91091,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "C-LEC",
@@ -91393,7 +91492,7 @@
                 "startMinutes": 515,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": "Blair Rutherford",
+                "instructor": "Tonya Davidson",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -91824,7 +91923,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -91886,7 +91985,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "D-LEC",
@@ -92982,7 +93081,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B-SEM",
@@ -93013,7 +93112,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "C-SEM",
@@ -93909,7 +94008,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A3-LAB",
@@ -94336,7 +94435,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "E7-LAB",
@@ -94356,7 +94455,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "E8-LAB",
@@ -94376,7 +94475,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "F1-LAB",
@@ -94840,7 +94939,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B6-LAB",
@@ -95005,7 +95104,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "D3-LAB",
@@ -95167,7 +95266,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "LAB": [
@@ -95229,7 +95328,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B4-LAB",
@@ -95461,7 +95560,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A2-LAB",
@@ -97272,7 +97371,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L2O-LAB",
@@ -97427,7 +97526,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ],
         "LAB": [
@@ -97617,7 +97716,7 @@
                 "startMinutes": 875,
                 "endMinutes": 985,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Wafa Hasanain",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -97639,7 +97738,7 @@
                 "startMinutes": 875,
                 "endMinutes": 1045,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Wafa Hasanain",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -97659,7 +97758,7 @@
                 "startMinutes": 875,
                 "endMinutes": 1045,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Wafa Hasanain",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -98106,7 +98205,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "L3O-LAB",
@@ -98146,7 +98245,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -98389,7 +98488,7 @@
                 "startMinutes": 695,
                 "endMinutes": 775,
                 "virtual": false,
-                "instructor": "Jerome Talim",
+                "instructor": null,
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -98400,14 +98499,14 @@
                 "startMinutes": 695,
                 "endMinutes": 775,
                 "virtual": false,
-                "instructor": "Jerome Talim",
+                "instructor": null,
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -98705,7 +98804,7 @@
                 "startMinutes": 1085,
                 "endMinutes": 1255,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Jean Ngoie",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
@@ -98727,7 +98826,7 @@
                 "startMinutes": 515,
                 "endMinutes": 685,
                 "virtual": false,
-                "instructor": null,
+                "instructor": "Jean Ngoie",
                 "meetingDates": [
                   "2027-01-11",
                   "2027-04-09"
@@ -99202,7 +99301,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "L3E-LAB",
@@ -100881,7 +100980,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B-LEC",
@@ -100951,7 +101050,7 @@
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "A04-DG",
@@ -100987,7 +101086,7 @@
             "component": "DG",
             "session": null,
             "times": [],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "B03-DG",
@@ -101003,7 +101102,7 @@
             "component": "DG",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B05-DG",
@@ -101011,7 +101110,7 @@
             "component": "DG",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           },
           {
             "section": "B06-DG",
@@ -101019,7 +101118,7 @@
             "component": "DG",
             "session": null,
             "times": [],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
@@ -101173,7 +101272,7 @@
                 ]
               }
             ],
-            "status": "Open"
+            "status": "Full, No Waitlist"
           },
           {
             "section": "A02-DG",
@@ -101257,14 +101356,14 @@
                 "startMinutes": 875,
                 "endMinutes": 1045,
                 "virtual": false,
-                "instructor": "Patricia Kmiec",
+                "instructor": "Alessia Mastrorillo",
                 "meetingDates": [
                   "2027-01-06",
                   "2027-04-09"
                 ]
               }
             ],
-            "status": "Full, No Waitlist"
+            "status": "Open"
           }
         ]
       }
