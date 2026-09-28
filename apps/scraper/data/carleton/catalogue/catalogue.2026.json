@@ -11282,10 +11282,10 @@
       "title": "Organizational Behaviour",
       "credits": 0.5,
       "description": "Models of individual and small group behaviour in organizations. Topics include motivation, communication, job design, leadership and group dynamics to provide systematic explanations of employee and managerial behaviour in organizations.",
-      "prereqText": "second-year standing. Restricted to B.Com. students.",
+      "prereqText": "second-year standing. Restricted to B.Acc. and B.Com. students.",
       "prerequisites": {
         "type": "non_course",
-        "text": "second-year standing. Restricted to B.Com. students"
+        "text": "second-year standing. Restricted to B.Acc. and B.Com. students"
       }
     },
     {
@@ -11464,7 +11464,7 @@
       "code": "BUSI 2503",
       "title": "Introduction to Finance",
       "credits": 0.5,
-      "description": "Basic issues and practices in finance. Survey of business firms' financing, investment, and payout decisions. Emphasis on understanding the principles, resources and trade-offs in the financial area of a business.",
+      "description": "Basic issues and practices in finance. Survey of business firms' financing, investment, and payout decisions. Emphasis on understanding the principals, resources and trade-offs in the financial area of a business.",
       "prereqText": "second-year standing.",
       "prerequisites": {
         "type": "non_course",
@@ -16072,6 +16072,12 @@
       }
     },
     {
+      "code": "CHEM 0999",
+      "title": "CHEM4U",
+      "credits": 0,
+      "description": ""
+    },
+    {
       "code": "CHEM 1001",
       "title": "General Chemistry I",
       "credits": 0.5,
@@ -18251,6 +18257,12 @@
         "text": "fourth-year standing in Childhood and Youth Studies and IIS Co-Director approval",
         "kind": "permission"
       }
+    },
+    {
+      "code": "CIED 0999",
+      "title": "Academic Prep",
+      "credits": 0,
+      "description": ""
     },
     {
       "code": "CIED 1001",
@@ -26310,7 +26322,7 @@
       "code": "ECON 3460",
       "title": "Introduction to Health Economics",
       "credits": 0.5,
-      "description": "Health as an economic good: demand and need; supply and cost. Public health and personal health care. Alternative health-care delivery systems: financing, performance, quality, and cost effectiveness.",
+      "description": "Preclusion: credit will not be given if taken concurrently with or after ECON 4460.",
       "prereqText": "ECON 1001 or ECON 1000 or FYSM 1003.",
       "prerequisites": {
         "type": "or_group",
