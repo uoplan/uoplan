@@ -2128,6 +2128,43 @@ msgstr "uoPlan vs {name}"
 msgid "features.vs.title"
 msgstr "Comparaisons individuelles"
 
+#: apps/web/src/components/shared/FeedbackSurveyModal.tsx:42
+msgid "feedbackSurvey.description"
+msgstr "Dites-nous ce qui fonctionne, ce qui vous pose problème et ce qui faciliterait la planification de vos cours."
+
+#: apps/web/src/components/shared/FeedbackSurveyModal.tsx:45
+msgid "feedbackSurvey.details"
+msgstr "3 à 5 minutes · Questions facultatives · S’ouvre dans un nouvel onglet"
+
+#: apps/web/src/components/shared/FeedbackSurveyModal.tsx:35
+#: apps/web/src/components/shared/FeedbackSurveyModal.tsx:49
+msgid "feedbackSurvey.dismiss"
+msgstr "Non merci"
+
+#: apps/web/src/components/shared/FeedbackSurveyModal.tsx:46
+msgid "feedbackSurvey.invitation"
+msgstr "Vos idées guident la suite"
+
+#: apps/web/src/components/shared/FeedbackSurveyModal.tsx:58
+msgid "feedbackSurvey.open"
+msgstr "Donner mon avis"
+
+#: apps/web/src/components/shared/FeedbackSurveyModal.tsx:34
+msgid "feedbackSurvey.title"
+msgstr "Aidez-nous à faire mieux"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.survey.cta"
+msgstr "Donner mon avis"
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.survey.text"
+msgstr "Aidez-nous à faire mieux — dites-nous ce qui faciliterait la planification de vos cours."
+
+#: scripts/i18n/dynamic-keys.ts
+msgid "landing.banner.survey.textShort"
+msgstr "Aidez-nous à faire mieux."
+
 msgid "frenchImmersion.fls3500.body"
 msgstr "Vous devez réussir le test de certification FLS 3500 avant d’obtenir le diplôme avec la mention immersion française."
 

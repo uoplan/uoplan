@@ -1,0 +1,91 @@
+.header.header {
+  padding: 24px 24px 16px;
+}
+
+.header .title {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+
+.body.body {
+  padding: 24px;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px;
+  gap: 12px;
+  align-items: end;
+}
+
+.copy {
+  align-self: start;
+}
+
+.hero .badge {
+  align-self: start;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mantine-color-accentBlue-5) 12%, transparent);
+  color: var(--mantine-color-accentBlue-5);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.illustration {
+  width: 132px;
+  height: auto;
+  color: var(--mantine-color-accentBlue-5);
+}
+
+.paper {
+  fill: var(--app-bg);
+}
+
+.bubbleLines {
+  stroke: white;
+}
+
+.details {
+  padding-top: 4px;
+}
+
+.actions {
+  padding-top: 16px;
+  border-top: 1px solid var(--app-border);
+}
+
+.primary {
+  flex: 1;
+}
+
+@media (max-width: 400px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    gap: 8px;
+  }
+
+  .illustration {
+    width: 96px;
+  }
+
+  .header.header {
+    padding: 20px 20px 16px;
+  }
+
+  .body.body {
+    padding: 20px;
+  }
+
+  .header .title {
+    font-size: 23px;
+  }
+
+  .actions {
+    gap: 4px;
+  }
+}

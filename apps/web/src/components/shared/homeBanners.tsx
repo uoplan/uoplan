@@ -7,6 +7,7 @@ import {
   IconMessageDots,
 } from "@tabler/icons-react";
 import type { TopBannerVariant } from "./TopBanner";
+import { FEEDBACK_SURVEY_URL } from "../../lib/feedbackSurvey";
 
 /** Where interested testers email to join the Android closed test. */
 const ANDROID_TESTER_MAILTO = "mailto:admin@uoplan.party?subject=Android%20closed%20test";
@@ -71,5 +72,12 @@ export const HOME_BANNERS: readonly HomeBannerConfig[] = [
     icon: <IconMessageDots size={ICON_SIZE} />,
     idBase: "landing.banner.feedback",
     href: FEEDBACK_MAILTO,
+  },
+  {
+    id: "survey",
+    variant: "info",
+    icon: <IconMessageDots size={ICON_SIZE} />,
+    idBase: "landing.banner.survey",
+    href: FEEDBACK_SURVEY_URL,
   },
 ];

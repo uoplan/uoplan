@@ -28,7 +28,7 @@ export const DYNAMIC_TR_IDS: string[] = [
   // plus the shared dismiss label.
   ...cross(
     "landing.banner.",
-    ["donate", "android", "ios", "github", "feedback"],
+    ["donate", "android", "ios", "github", "feedback", "survey"],
     ["text", "textShort", "cta"],
   ),
   "landing.banner.dismiss",

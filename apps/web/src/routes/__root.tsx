@@ -17,6 +17,7 @@ import { useIndices } from "@uoplan/store/hooks";
 import { tr, useTr } from "../i18n";
 import { AppFooter } from "../components/shared/AppFooter";
 import { SharedScheduleModal } from "../components/shared/SharedScheduleModal";
+import { FeedbackSurveyModal } from "../components/shared/FeedbackSurveyModal";
 import { LazyCommandCenter } from "../components/shortcuts/LazyCommandCenter";
 import { HotkeysHelpModal } from "../components/shortcuts/HotkeysHelpModal";
 import { BasketFab } from "../components/basket/BasketFab";
@@ -153,6 +154,7 @@ function RootLayout() {
         <NavigationProgress color="var(--app-focus-ring)" aria-label="Page loading progress" />
         <HeadContent />
         <SharedScheduleModal />
+        <FeedbackSurveyModal />
         <LazyCommandCenter />
         {showBasketFab && <BasketFab desktopPlacement={basketDesktopPlacement} />}
         <HotkeysHelpModal />
