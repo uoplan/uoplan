@@ -71,7 +71,7 @@
     "zustand": "^5.1.0"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.14.0",
+    "@axe-core/playwright": "^4.11.3",
     "@cloudflare/vite-plugin": "^1.70.1",
     "@napi-rs/canvas": "^0.1.99",
     "@playwright/test": "^1.65.1",
