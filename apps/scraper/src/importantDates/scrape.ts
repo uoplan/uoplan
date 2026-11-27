@@ -6,6 +6,8 @@ import { fetchHtml } from "../shared/http.ts";
 import { scraperDataDir } from "../shared/paths.ts";
 import { writeCarletonImportantDates } from "../schools/carleton/importantDates.ts";
 import { parseImportantDatesPages } from "./parse.ts";
+import { extractTermPageLinks } from "./parseExtract.ts";
+import type { TermPageInput } from "./parseTypes.ts";
 
 const IMPORTANT_DATES_EN_URL = "https://www.uottawa.ca/study/important-academic-dates-deadlines";
 const IMPORTANT_DATES_FR_URL =
@@ -29,14 +31,32 @@ export async function scrapeImportantDates(school: SchoolId): Promise<ImportantD
     };
   }
 
-  const [enHtml, frHtml] = await Promise.all([
+  const [enIndexHtml, frIndexHtml] = await Promise.all([
     fetchHtml(IMPORTANT_DATES_EN_URL),
     fetchHtml(IMPORTANT_DATES_FR_URL),
   ]);
 
+  // uOttawa publishes one page per term; pair the EN/FR pages by (season, year).
+  const enLinks = extractTermPageLinks(enIndexHtml, IMPORTANT_DATES_EN_URL);
+  const frLinks = extractTermPageLinks(frIndexHtml, IMPORTANT_DATES_FR_URL);
+  const frByKey = new Map(frLinks.map((url) => [termKeyFromUrl(url), url]));
+
+  const enPages: TermPageInput[] = [];
+  const frPages: TermPageInput[] = [];
+  await Promise.all(
+    enLinks.map(async (enUrl) => {
+      const key = termKeyFromUrl(enUrl);
+      const frUrl = frByKey.get(key);
+      if (!frUrl) throw new Error(`No French important-dates page for ${enUrl}`);
+      const [enHtml, frHtml] = await Promise.all([fetchHtml(enUrl), fetchHtml(frUrl)]);
+      enPages.push({ sourceId: key, sourceUrl: enUrl, html: enHtml });
+      frPages.push({ sourceId: key, sourceUrl: frUrl, html: frHtml });
+    }),
+  );
+
   const parsed = parseImportantDatesPages({
-    enHtml,
-    frHtml,
+    enPages,
+    frPages,
     enSourceUrl: IMPORTANT_DATES_EN_URL,
     frSourceUrl: IMPORTANT_DATES_FR_URL,
   });
@@ -54,6 +74,20 @@ export async function scrapeImportantDates(school: SchoolId): Promise<ImportantD
     termCount: parsed.en.terms.length,
     itemCount: countItems(parsed.en),
   };
+}
+
+const FR_SEASON_TO_EN: Record<string, string> = {
+  hiver: "winter",
+  automne: "fall",
+  "printemps-ete": "spring-summer",
+};
+
+/** Locale-independent term key from a page URL: `fall-2026`, `spring-summer-2027`, … */
+function termKeyFromUrl(url: string): string {
+  const slug = new URL(url).pathname.split("/").pop() ?? "";
+  const match = /^(.+)-(\d{4})$/.exec(slug);
+  if (!match) throw new Error(`Unrecognised important-dates term page URL: ${url}`);
+  return `${FR_SEASON_TO_EN[match[1]] ?? match[1]}-${match[2]}`;
 }
 
 function countItems(data: ImportantDatesData): number {

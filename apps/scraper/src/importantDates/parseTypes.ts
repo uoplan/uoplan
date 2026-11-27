@@ -3,9 +3,17 @@ import type { ImportantDateSection, ImportantDateTerm } from "@uoplan/core/dataT
 
 export type SourceLocale = "en" | "fr";
 
+/** One fetched per-term page. `sourceId` is shared by the EN/FR pair of the same term. */
+export type TermPageInput = {
+  sourceId: string;
+  sourceUrl: string;
+  html: string;
+};
+
 export type ParseImportantDatesPagesInput = {
-  enHtml: string;
-  frHtml: string;
+  enPages: TermPageInput[];
+  frPages: TermPageInput[];
+  /** Index page URLs (recorded as the dataset `sourceUrl`). */
   enSourceUrl: string;
   frSourceUrl: string;
 };

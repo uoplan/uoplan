@@ -4,14 +4,19 @@
 // Implementation is split across cohesive siblings:
 //   parseTypes.ts     — shared Localized*/Canonical* types
 //   parseText.ts      — text normalization + error/context helpers
-//   parseExtract.ts   — HTML → LocalizedPage extraction
+//   parseExtract.ts   — per-term HTML → LocalizedTerm extraction
 //   parseCanonical.ts — LocalizedTerm → CanonicalTerm (dates, identity, categories)
 //   parseSessions.ts  — named-session extraction/validation
 //   parseLocalized.ts — French-onto-canonical structural merge
 
 import type { ImportantDatesData, ImportantDateTerm } from "@uoplan/core/dataTypes";
-import type { ParseImportantDatesPagesInput } from "./parseTypes.ts";
-import { extractLocalizedPage } from "./parseExtract.ts";
+import type {
+  LocalizedPage,
+  ParseImportantDatesPagesInput,
+  SourceLocale,
+  TermPageInput,
+} from "./parseTypes.ts";
+import { extractLocalizedTermPage } from "./parseExtract.ts";
 import {
   buildCanonicalTerm,
   compareTermsChronologically,
@@ -19,20 +24,37 @@ import {
 } from "./parseCanonical.ts";
 import { buildLocalizedTerm } from "./parseLocalized.ts";
 
+function buildLocalizedPage(
+  locale: SourceLocale,
+  sourceUrl: string,
+  pages: TermPageInput[],
+): LocalizedPage {
+  if (pages.length === 0) {
+    throw new Error(`No important-dates term pages found at ${sourceUrl}`);
+  }
+  const extracted = pages.map((page) =>
+    extractLocalizedTermPage({
+      html: page.html,
+      locale,
+      sourceUrl: page.sourceUrl,
+      sourceId: page.sourceId,
+    }),
+  );
+  const reviewedText = extracted.find((e) => e.reviewedText)?.reviewedText;
+  return {
+    locale,
+    sourceUrl,
+    ...(reviewedText ? { reviewedText } : {}),
+    terms: extracted.map((e) => e.term),
+  };
+}
+
 export function parseImportantDatesPages(input: ParseImportantDatesPagesInput): {
   en: ImportantDatesData;
   fr: ImportantDatesData;
 } {
-  const englishPage = extractLocalizedPage({
-    html: input.enHtml,
-    locale: "en",
-    sourceUrl: input.enSourceUrl,
-  });
-  const frenchPage = extractLocalizedPage({
-    html: input.frHtml,
-    locale: "fr",
-    sourceUrl: input.frSourceUrl,
-  });
+  const englishPage = buildLocalizedPage("en", input.enSourceUrl, input.enPages);
+  const frenchPage = buildLocalizedPage("fr", input.frSourceUrl, input.frPages);
 
   const canonicalTerms = englishPage.terms
     .map((term) => buildCanonicalTerm(term, englishPage.sourceUrl))

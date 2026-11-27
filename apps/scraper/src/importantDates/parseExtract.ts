@@ -1,11 +1,10 @@
-// HTML → LocalizedPage extraction: walks the uOttawa important-dates tab
-// components/panels and pulls topic/date rows out of the overview + FAQ tables.
+// HTML → LocalizedTerm extraction: reads a uOttawa per-term important-dates page
+// and pulls topic/date rows out of the overview + FAQ tables.
 
 import * as cheerio from "cheerio";
 import type {
   CheerioNode,
   LocalizedGroup,
-  LocalizedPage,
   LocalizedRow,
   LocalizedSection,
   LocalizedTerm,
@@ -29,81 +28,58 @@ const OVERVIEW_LABELS = {
   fr: "Aperçu",
 } as const;
 
-export function extractLocalizedPage(input: {
+/**
+ * Parse one per-term page (e.g. `/study/important-academic-dates-deadlines/fall-2026`).
+ * uOttawa publishes one page per term; each has an overview table plus FAQ
+ * accordions, the same structure the old single-page tab panels used.
+ */
+export function extractLocalizedTermPage(input: {
   html: string;
   locale: SourceLocale;
   sourceUrl: string;
-}): LocalizedPage {
+  sourceId: string;
+}): { term: LocalizedTerm; reviewedText: string | undefined } {
   const $ = cheerio.load(input.html);
-  const components = $("section.js-tabs")
-    .toArray()
-    .filter((component) => componentContainsImportantDatesTables($, component, input.locale));
+  const main = $("main").first();
+  const root = main.length > 0 ? main : $("body");
 
-  if (components.length === 0) {
-    throw new Error(`No relevant important-dates tab components found at ${input.sourceUrl}`);
-  }
-
-  const terms: LocalizedTerm[] = [];
-  for (const [componentIndex, component] of components.entries()) {
-    const tabLabelsBySourceId = new Map<string, string>();
-    $(component)
-      .find('[role="tab"]')
-      .each((_, tab) => {
-        const sourceId = $(tab).attr("data-tab");
-        if (!sourceId) return;
-        tabLabelsBySourceId.set(sourceId, normalizeText($(tab).text()));
-      });
-
-    $(component)
-      .find('[role="tabpanel"]')
-      .each((_, panel) => {
-        if (!panelContainsImportantDatesTables($, panel, input.locale)) {
-          return;
-        }
-        const sourceId = getPanelSourceId($, panel);
-        const label = tabLabelsBySourceId.get(sourceId);
-        if (!label) {
-          throw new Error(`Missing tab label for sourceId=${sourceId} at ${input.sourceUrl}`);
-        }
-
-        terms.push({
-          sourceId,
-          label,
-          sourcePublished: componentIndex === 0 ? "true" : "false",
-          sections: extractPanelSections($, panel, input.locale, input.sourceUrl, sourceId),
-        });
-      });
+  const heading = normalizeText(root.find("h1").first().text());
+  const label = heading.includes(" - ") ? heading.slice(heading.lastIndexOf(" - ") + 3).trim() : "";
+  if (!label) {
+    throw new Error(`Missing term label in page heading "${heading}" at ${input.sourceUrl}`);
   }
 
   return {
-    locale: input.locale,
-    sourceUrl: input.sourceUrl,
-    reviewedText: extractReviewedText($("body").text(), input.locale),
-    terms,
+    term: {
+      sourceId: input.sourceId,
+      label,
+      sourcePublished: "true",
+      sections: extractPanelSections($, root[0], input.locale, input.sourceUrl, input.sourceId),
+    },
+    reviewedText: extractReviewedText(root.text(), input.locale),
   };
 }
 
-function componentContainsImportantDatesTables(
-  $: cheerio.CheerioAPI,
-  component: CheerioNode,
-  locale: SourceLocale,
-): boolean {
-  return $(component)
-    .find('[role="tabpanel"]')
-    .toArray()
-    .some((panel) => panelContainsImportantDatesTables($, panel, locale));
+/** Collect the per-term page links from the important-dates index page. */
+export function extractTermPageLinks(html: string, indexUrl: string): string[] {
+  const $ = cheerio.load(html);
+  const index = new URL(indexUrl);
+  const links = new Set<string>();
+  $("main a[href]").each((_, a) => {
+    const href = $(a).attr("href");
+    if (!href) return;
+    const url = new URL(href, index);
+    if (url.origin !== index.origin || url.pathname === index.pathname) return;
+    if (!url.pathname.startsWith(`${index.pathname}/`)) return;
+    const slug = url.pathname.slice(index.pathname.length + 1);
+    if (!TERM_SLUG_RE.test(slug)) return;
+    links.add(url.toString());
+  });
+  return [...links];
 }
 
-function panelContainsImportantDatesTables(
-  $: cheerio.CheerioAPI,
-  panel: CheerioNode,
-  locale: SourceLocale,
-): boolean {
-  return $(panel)
-    .find("table")
-    .toArray()
-    .some((table) => tableHasExpectedHeaders($, table, locale));
-}
+/** e.g. `fall-2026`, `spring-summer-2027`, `automne-2026`, `printemps-ete-2027`. */
+const TERM_SLUG_RE = /^(?:winter|fall|spring-summer|hiver|automne|printemps-ete)-\d{4}$/;
 
 function tableHasExpectedHeaders(
   $: cheerio.CheerioAPI,
@@ -122,18 +98,6 @@ function tableHasExpectedHeaders(
     headerCells[0] === HEADER_LABELS[locale][0] &&
     headerCells[1] === HEADER_LABELS[locale][1]
   );
-}
-
-function getPanelSourceId($: cheerio.CheerioAPI, panel: CheerioNode): string {
-  const dataTab = $(panel).attr("data-tab");
-  if (dataTab) {
-    return dataTab;
-  }
-  const panelId = $(panel).attr("id");
-  if (panelId?.startsWith("tabpanel_")) {
-    return panelId.slice("tabpanel_".length);
-  }
-  throw new Error("Important dates panel is missing a usable source identifier");
 }
 
 function extractPanelSections(
@@ -197,6 +161,14 @@ function extractFaqGroups($: cheerio.CheerioAPI, wrapper: CheerioNode): Localize
   return groups;
 }
 
+/**
+ * uOttawa marks mid-term corrections as "Revised - November 27, 2026" /
+ * "Date révisée - 27 novembre 2026". The date itself is what we want.
+ */
+function stripRevisedPrefix(dateText: string): string {
+  return dateText.replace(/^(?:revised|date révisée)\s*-\s*/i, "");
+}
+
 function extractTableRows($: cheerio.CheerioAPI, table: CheerioNode): LocalizedRow[] {
   const tbodyRows = $(table).find("tbody tr").toArray();
   const rows = (
@@ -220,7 +192,7 @@ function extractTableRows($: cheerio.CheerioAPI, table: CheerioNode): LocalizedR
       }
 
       const topic = cells[0];
-      const dateText = cells[1];
+      const dateText = stripRevisedPrefix(cells[1]);
       if (!topic && !dateText) {
         return null;
       }

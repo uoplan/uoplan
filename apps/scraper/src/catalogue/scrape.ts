@@ -6,7 +6,7 @@ import { SCHOOLS } from "@uoplan/domain/school";
 import { parseSchoolArg } from "../shared/cliSchool.ts";
 import { catalogueDataDir } from "../shared/paths.ts";
 import { scrapeCarletonCatalogueCli } from "../schools/carleton/catalogue.ts";
-import { getErrorMessage, NotFoundError } from "../shared/errors.ts";
+import { BotChallengeError, getErrorMessage, NotFoundError } from "../shared/errors.ts";
 import { generateIndices, parseCatalogueYears, parseMissingByYear } from "./indices.ts";
 import {
   buildBaseUrl,
@@ -185,7 +185,23 @@ export async function main(school: SchoolId): Promise<void> {
 
   // Always re-scrape the live (non-archived) site for the current academic year.
   // Write it under the academic year filename (e.g. catalogue.2025.json).
-  const liveMissing = await scrapeYear(academicYear, dataDir, true);
+  // If the live site serves a bot challenge, keep the previously scraped file
+  // (hydrated from the data branch) rather than failing or overwriting it with nothing.
+  let liveMissing: string[] | null;
+  try {
+    liveMissing = await scrapeYear(academicYear, dataDir, true);
+  } catch (e: unknown) {
+    const livePath = path.join(dataDir, `catalogue.${academicYear}.json`);
+    const hasPrevious = await fs.access(livePath).then(
+      () => true,
+      () => false,
+    );
+    if (!(e instanceof BotChallengeError) || !hasPrevious) throw e;
+    console.warn(
+      `::warning title=Catalogue live scrape blocked::${e.message}. Keeping existing catalogue.${academicYear}.json.`,
+    );
+    liveMissing = missingByYear[String(academicYear)] ?? [];
+  }
   if (liveMissing !== null && liveMissing.length > 0) {
     missingByYear[String(academicYear)] = liveMissing.sort();
   } else {
