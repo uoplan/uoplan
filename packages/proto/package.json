@@ -36,11 +36,11 @@
     "typecheck": "tsgo -b tsconfig.json"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.11.0"
+    "@bufbuild/protobuf": "^2.17.0"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
     "protoc": "^34.0.0",
-    "ts-proto": "^2.11.6"
+    "ts-proto": "^2.23.4"
   }
 }

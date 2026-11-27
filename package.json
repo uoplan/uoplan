@@ -53,19 +53,19 @@
     "check:bulk-files": "node scripts/check-bulk-files.ts"
   },
   "devDependencies": {
-    "@lhci/cli": "^0.15.1",
+    "@lhci/cli": "^0.16.1",
     "@types/node": "^25.5.0",
-    "@typescript/native-preview": "7.0.0-dev.20260512.1",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
     "@uoplan/domain": "workspace:*",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.2",
     "fallow": "^2.88.2",
-    "lefthook": "^2.1.4",
+    "lefthook": "^2.2.2",
     "oxfmt": "^0.48.0",
     "oxlint": "^1.64.0",
     "oxlint-tsgolint": "^0.22.1",
     "pofile": "^1.1.4",
     "typescript": "^5.9.3",
-    "wrangler": "^4.96.0"
+    "wrangler": "^4.166.0"
   },
   "packageManager": "pnpm@10.27.0"
 }
