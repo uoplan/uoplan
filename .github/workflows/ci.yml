@@ -219,7 +219,8 @@ jobs:
   # it serves the production bundle via `vite preview` (no engine rebuild, no
   # dev server, no Rust toolchain).
   a11y:
-    runs-on: ubuntu-latest
+    # Playwright does not support ubuntu-latest (26.04) yet; keep on 24.04.
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Checkout repository
