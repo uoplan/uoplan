@@ -55,7 +55,7 @@
   "devDependencies": {
     "@lhci/cli": "^0.16.1",
     "@types/node": "^25.5.0",
-    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "@typescript/native-preview": "7.0.0-dev.20260512.1",
     "@uoplan/domain": "workspace:*",
     "esbuild": "^0.28.2",
     "fallow": "^2.88.2",

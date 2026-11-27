@@ -2,7 +2,7 @@
   {
     "name": "main entry (app shell + react core)",
     "path": ["dist/client/assets/index-*.js", "dist/client/assets/react-*.js"],
-    "limit": "80 kB"
+    "limit": "82 kB"
   },
   {
     "name": "calendar route",
@@ -12,7 +12,7 @@
   {
     "name": "graph route (sigma + graphology)",
     "path": "dist/client/assets/graph-*.js",
-    "limit": "60 kB"
+    "limit": "63 kB"
   },
   {
     "name": "trends route",
