@@ -43,7 +43,18 @@ codegen-units = 1
 panic = "abort"
 
 [package.metadata.wasm-pack.profile.release]
-wasm-opt = ["-Oz"]
+# Recent nightly rustc/LLVM emit post-MVP wasm features (multiple tables via
+# reference-types, bulk-memory, ...). wasm-pack's bundled wasm-opt rejects them
+# unless enabled, which broke CI with "Only 1 table definition allowed in MVP".
+wasm-opt = [
+  "-Oz",
+  "--enable-reference-types",
+  "--enable-bulk-memory",
+  "--enable-nontrapping-float-to-int",
+  "--enable-sign-ext",
+  "--enable-mutable-globals",
+  "--enable-multivalue",
+]
 
 [lints.clippy]
 pedantic = "warn"
