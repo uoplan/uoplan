@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0-beta.44](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.43...uoplan-monorepo-v1.0.0-beta.44) (2026-11-27)
+
+
+### Features
+
+* invite students to share feedback through survey ([ab55782](https://github.com/uoplan/uoplan/commit/ab55782776ef9c7f5a96db5542f836407c579fda))
+
+
+### Bug Fixes
+
+* **a11y:** meet contrast for survey badge; hold back axe-core playwright ([1231ed2](https://github.com/uoplan/uoplan/commit/1231ed2632bcf1829ecbca3bb56eb6a7f593dc38))
+* correct course eligibility, swaps, and Explore results ([f8c5e7d](https://github.com/uoplan/uoplan/commit/f8c5e7dd617fbec7e2a7cbd78bbc56fc31cbf798))
+* **engine:** enable post-MVP features for wasm-opt (newer nightly rustc) ([7df8803](https://github.com/uoplan/uoplan/commit/7df8803110de594390cc8f5409358079d639bda9))
+* honor prerequisites and diversify schedule selection ([57af018](https://github.com/uoplan/uoplan/commit/57af018aec38438c52bad20a84d4966aa5c46efe))
+* label calendar grade fallback sources ([de273b1](https://github.com/uoplan/uoplan/commit/de273b1b08cf7b06233c37ff0e0c39e9ddcb7ca1))
+* **scraper:** handle per-term important-dates pages and WAF-blocked catalogue ([cebeb18](https://github.com/uoplan/uoplan/commit/cebeb18816cf7a2dd23baef9b414ffbd3254ff59))
+
 ## [1.0.0-beta.43](https://github.com/uoplan/uoplan/compare/uoplan-monorepo-v1.0.0-beta.42...uoplan-monorepo-v1.0.0-beta.43) (2026-09-08)
 
 
